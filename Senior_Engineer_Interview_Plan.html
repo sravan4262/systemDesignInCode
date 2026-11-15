@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senior Engineer Interview Plan</title>
+<style>
+:root{
+  --bg:#f7f9fc; --paper:#ffffff; --ink:#1c2533; --muted:#5b6678; --line:#dde4ee;
+  --navy:#17365D; --blue:#4472C4; --tint:#EAF2F8; --row:#F2F6FA; --accent:#2f6fb3;
+  --newbg:#e3f4e6; --newfg:#1d6b2c; --notebg:#fff7e6; --notebd:#c98a12; --fixbg:#fdecec; --fixfg:#a12a2a;
+  --ckbg:#efeafd; --ckbd:#5b3fb5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141c; --paper:#151c27; --ink:#e3e9f2; --muted:#9aa6b8; --line:#283345;
+    --navy:#9cc3f0; --blue:#7fa7e6; --tint:#1b2a3d; --row:#18212e; --accent:#7fb2ec;
+    --newbg:#173322; --newfg:#8fdba2; --notebg:#2b2414; --notebd:#e0b25a; --fixbg:#351a1c; --fixfg:#f2a3a3;
+    --ckbg:#231d3a; --ckbd:#b3a1f0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141c; --paper:#151c27; --ink:#e3e9f2; --muted:#9aa6b8; --line:#283345;
+  --navy:#9cc3f0; --blue:#7fa7e6; --tint:#1b2a3d; --row:#18212e; --accent:#7fb2ec;
+  --newbg:#173322; --newfg:#8fdba2; --notebg:#2b2414; --notebd:#e0b25a; --fixbg:#351a1c; --fixfg:#f2a3a3;
+  --ckbg:#231d3a; --ckbd:#b3a1f0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Aptos,Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent)}
+.layout{display:grid;grid-template-columns:290px minmax(0,1fr);max-width:1260px;margin:0 auto}
+nav.toc{position:sticky;top:0;height:100vh;overflow:auto;padding:24px 16px 40px;border-right:1px solid var(--line)}
+nav.toc .brand{font-weight:700;color:var(--navy);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0 8px 16px}
+nav.toc a{display:block;text-decoration:none;color:var(--muted);padding:3px 8px;border-radius:6px;font-size:13px;line-height:1.35}
+nav.toc a:hover{background:var(--tint);color:var(--ink)}
+nav.toc a.t1{color:var(--ink);font-weight:600;margin-top:10px}
+nav.toc a.t2{padding-left:18px}
+nav.toc a.t2 b{color:var(--navy);font-weight:700;display:inline-block;min-width:34px}
+nav.toc a.t2.ck b{color:var(--ckbd)}
+nav.toc a.active{background:var(--tint);color:var(--ink)}
+main{padding:32px 40px 80px;min-width:0}
+.cover{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:40px 32px;text-align:center;margin-bottom:28px}
+.kicker{color:var(--blue);font-weight:700;letter-spacing:.08em;font-size:14px}
+.cover h1{color:var(--navy);font-size:clamp(26px,4vw,38px);line-height:1.2;margin:10px 0 8px}
+.sub{color:var(--muted);font-style:italic;margin:0 0 22px}
+.commit{font-weight:700;margin:18px 0 0}
+section{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 32px;margin-bottom:24px}
+h2{color:var(--navy);font-size:24px;margin:0 0 14px;padding-bottom:8px;border-bottom:2px solid var(--tint)}
+h3{color:var(--navy);font-size:18px;margin:22px 0 8px}
+h4{color:var(--navy);font-size:15px;margin:16px 0 4px}
+.phase{color:var(--blue);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin:34px 0 0;padding-top:14px;border-top:3px solid var(--tint)}
+.phase:first-of-type{margin-top:6px}
+.week{border-top:1px solid var(--line);padding-top:6px;margin-top:18px}
+.week h3{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.wk{background:var(--navy);color:var(--paper);font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.done{margin-left:auto;font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;gap:6px;align-items:center;cursor:pointer;white-space:nowrap}
+.done input{accent-color:var(--navy)}
+.new{display:inline-block;background:var(--newbg);color:var(--newfg);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:0 6px;border-radius:4px;margin-right:4px;vertical-align:1px}
+ul,ol{padding-left:22px;margin:6px 0 12px}
+li{margin:3px 0;overflow-wrap:anywhere}
+ul.checks{list-style:none;padding-left:0}
+ul.checks label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+ul.checks input{margin-top:5px;accent-color:var(--navy)}
+ul.checks input:checked + span{color:var(--muted);text-decoration:line-through}
+.callout{background:var(--tint);border-left:4px solid var(--navy);border-radius:8px;padding:12px 16px;margin:12px 0 8px;text-align:left}
+.callout .label{display:block;font-weight:700;color:var(--navy);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.callout p{margin:0}
+.callout ul{margin:4px 0 0}
+.callout.notes{background:var(--notebg);border-left-color:var(--notebd)}
+.callout.notes .label{color:var(--notebd)}
+.callout.ckpt{background:var(--ckbg);border-left-color:var(--ckbd)}
+.callout.ckpt .label{color:var(--ckbd)}
+.fix{color:var(--fixfg);font-weight:600}
+.tablewrap{overflow-x:auto;margin:12px 0 16px;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{background:var(--navy);color:var(--paper);text-align:left;padding:8px 10px;font-weight:600;white-space:nowrap}
+td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(odd) td{background:var(--row)}
+td.bad{color:var(--fixfg)}
+.topbar{display:none}
+.themebtn{position:fixed;right:16px;bottom:16px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:13px;color:var(--muted);margin-top:14px}
+@media (max-width:900px){
+  .layout{display:block}
+  nav.toc{display:none;position:fixed;inset:0;z-index:10;background:var(--paper);height:100%;border:0}
+  nav.toc.open{display:block}
+  .topbar{display:flex;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px;border-bottom:1px solid var(--line);justify-content:space-between;align-items:center}
+  .topbar button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit}
+  main{padding:16px}
+  section,.cover{padding:20px 16px}
+  .done{margin-left:0}
+}
+@media print{
+  nav.toc,.topbar,.themebtn{display:none}
+  .layout{display:block}
+  section,.cover{border:0;padding:0}
+  .week{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><strong style="color:var(--navy)">Interview Plan</strong><button id="menu">Contents</button></div>
+<div class="layout">
+<nav class="toc" id="toc">
+<div class="brand">Contents</div>
+<a class="t1" href="#s-overview">1. Program overview</a>
+<a class="t1" href="#s-method">2. How to work through a module</a>
+<a class="t1" href="#s-curriculum">3. Curriculum (32 modules)</a>
+<a class="t2" href="#m1"><b>M1</b> OOP, SOLID, clean design</a>
+<a class="t2" href="#m2"><b>M2</b> Design patterns</a>
+<a class="t2" href="#m3"><b>M3</b> LLD interview problems</a>
+<a class="t2" href="#m4"><b>M4</b> Concurrent LLD &amp; machine coding</a>
+<a class="t2" href="#m5"><b>M5</b> .NET platform internals</a>
+<a class="t2 ck" href="#ck1"><b>CP1</b> Checkpoint: LLD &amp; .NET</a>
+<a class="t2" href="#m6"><b>M6</b> Database internals &amp; sharding</a>
+<a class="t2" href="#m7"><b>M7</b> NoSQL, storage engines, search</a>
+<a class="t2" href="#m8"><b>M8</b> Redis &amp; distributed caching</a>
+<a class="t2" href="#m9"><b>M9</b> Messaging &amp; queue reliability</a>
+<a class="t2" href="#m10"><b>M10</b> Kafka, event sourcing, CQRS</a>
+<a class="t2" href="#m11"><b>M11</b> Outbox, inbox, retries, DLQ</a>
+<a class="t2" href="#m12"><b>M12</b> Multiple DBs, 2PC, Saga</a>
+<a class="t2" href="#m13"><b>M13</b> Concurrency &amp; resilience</a>
+<a class="t2" href="#m14"><b>M14</b> Security &amp; API design</a>
+<a class="t2" href="#m15"><b>M15</b> Observability, testing, ops</a>
+<a class="t2 ck" href="#ck2"><b>CP2</b> Checkpoint: distributed systems</a>
+<a class="t2" href="#m16"><b>M16</b> HLD fundamentals &amp; real-time</a>
+<a class="t2" href="#m17"><b>M17</b> Distributed systems theory</a>
+<a class="t2" href="#m18"><b>M18</b> Architecture &amp; domain design</a>
+<a class="t2" href="#m19"><b>M19</b> HLD patterns &amp; case studies I</a>
+<a class="t2" href="#m20"><b>M20</b> HLD case studies II</a>
+<a class="t2" href="#m21"><b>M21</b> Advanced architecture &amp; cloud ops</a>
+<a class="t2 ck" href="#ck3"><b>CP3</b> Checkpoint: HLD</a>
+<a class="t2" href="#m22"><b>M22</b> LLM apps &amp; RAG</a>
+<a class="t2" href="#m23"><b>M23</b> LLM internals, inference, adaptation</a>
+<a class="t2" href="#m24"><b>M24</b> Agents &amp; evals</a>
+<a class="t2" href="#m25"><b>M25</b> Production AI &amp; AI system design</a>
+<a class="t2 ck" href="#ck4"><b>CP4</b> Checkpoint: AI design</a>
+<a class="t2" href="#m26"><b>M26</b> AI coding, code review, comprehension</a>
+<a class="t2" href="#m27"><b>M27</b> Agentic tickets &amp; live debugging</a>
+<a class="t2" href="#m28"><b>M28</b> Capstone integration</a>
+<a class="t2 ck" href="#ck5"><b>CP5</b> Checkpoint: AI coding</a>
+<a class="t2" href="#m29"><b>M29</b> Story bank &amp; question bank</a>
+<a class="t2" href="#m30"><b>M30</b> Deep dives, motivation, leveling</a>
+<a class="t2 ck" href="#ck6"><b>CP6</b> Checkpoint: behavioral</a>
+<a class="t2" href="#m31"><b>M31</b> Resume &amp; positioning</a>
+<a class="t2 ck" href="#ck7"><b>CP7</b> Checkpoint: recruiter screen</a>
+<a class="t2" href="#m32"><b>M32</b> Final mock interviews</a>
+<a class="t1" href="#s-failure">4. Failure-engineering checklist</a>
+<a class="t1" href="#s-deep">5. Deep-dive requirements</a>
+<a class="t1" href="#s-capstone">6. Capstone: distributed order platform</a>
+<a class="t1" href="#s-stack">7. Technology stack</a>
+<a class="t1" href="#s-criteria">8. Completion criteria</a>
+<a class="t1" href="#s-journal">9. Engineering journal template</a>
+<a class="t1" href="#s-fixes">10. Corrections to your notes</a>
+<a class="t1" href="#s-appendix">11. Appendix: review-only notes</a>
+<a class="t1" href="#s-refs">12. References</a>
+<a class="t1" href="#s-final">Final guiding principle</a>
+</nav>
+<main>
+<header class="cover">
+<div class="kicker">SENIOR SOFTWARE ENGINEER</div>
+<h1>Interview &amp;<br>Distributed Systems Mastery Plan</h1>
+<p class="sub">A self-paced, code-first curriculum for experienced .NET / C# engineers</p>
+<div class="callout"><span class="label">Core Method</span><p>Understand the problem → study the internals → implement it → test it → deliberately break it → measure it → explain the trade-offs.</p></div>
+<p class="commit">Self-paced: 32 modules in 8 phases • a checkpoint mock after each phase • a final mock module</p>
+<div class="legend"><span><span class="new">New</span> added in this revision</span><span>🟧 From your notes: review it before starting the module</span><span>🟪 Checkpoint mock</span></div>
+</header>
+
+<section id="s-overview"><h2>1. Program overview</h2>
+<p>This program covers Low-Level Design (LLD), .NET platform internals, distributed systems implementation, High-Level Design (HLD) and architecture, AI engineering (LLM applications, RAG, inference, agents and evals), AI-assisted coding and the newer round types, behavioral and leadership preparation, resume positioning, and mock interviews. It assumes professional experience with C#, .NET, APIs, cloud services and microservices, and it puts engineering decisions and failure handling ahead of beginner CRUD material. DSA is out of scope.</p>
+<p>There is no calendar. Finish each module when its exit deliverable is met, then move on. A short checkpoint mock closes each phase so weak areas show up early, not in the last module.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Phase</th><th>Modules</th><th>Focus</th><th>Primary outcome</th></tr></thead><tbody>
+<tr><td>1. LLD &amp; .NET</td><td>M1–M5 + CP1</td><td>OOP, SOLID, patterns, LLD problems, concurrent machine coding, .NET runtime, ASP.NET Core and EF Core internals</td><td>Design extensible, testable, thread-safe components and explain how .NET executes them.</td></tr>
+<tr><td>2. Distributed Systems Engineering</td><td>M6–M15 + CP2</td><td>Databases, NoSQL, search, Redis, RabbitMQ, NServiceBus/MassTransit, Kafka, event sourcing, outbox/inbox, Saga, concurrency, resilience, security, API design, observability, testing</td><td>Build and fault-test reliable, secure distributed components.</td></tr>
+<tr><td>3. HLD &amp; Architecture</td><td>M16–M21 + CP3</td><td>Fundamentals, real-time delivery, distributed theory, DDD and decomposition, migrations, classic and real-world cases, multi-region, cloud operations</td><td>Design systems under realistic scale and reliability constraints, and defend the architecture.</td></tr>
+<tr><td>4. AI Engineering</td><td>M22–M25 + CP4</td><td>LLM apps, RAG, vector index internals, inference and fine-tuning, ranking, agents, evals, production AI, LLM security</td><td>Design, evaluate, secure and operate production LLM systems.</td></tr>
+<tr><td>5. AI Coding + Capstone</td><td>M26–M28 + CP5</td><td>Unfamiliar repos, code review, code comprehension, AI-assisted coding, live debugging, capstone</td><td>Solve unfamiliar engineering tasks and ship a portfolio-grade capstone.</td></tr>
+<tr><td>6. Behavioral &amp; Leadership</td><td>M29–M30 + CP6</td><td>STAR story bank, full question bank, resume-specific questions, deep dives, leveling, negotiation</td><td>Demonstrate senior-level scope, ownership and influence.</td></tr>
+<tr><td>7. <span class="new">New</span> Resume &amp; Positioning</td><td>M31 + CP7</td><td>Target lanes, bullet rewrite, defend-every-line, profiles, search logistics</td><td>A resume that matches what you can defend, and a working application pipeline.</td></tr>
+<tr><td>8. Final Mock Interviews</td><td>M32</td><td>Every round type, including code review, debugging and product architecture</td><td>Perform consistently across every round type.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s-method"><h2>2. How to work through a module</h2>
+<ol>
+<li><strong>Review your notes first.</strong> The 🟧 box lists the matching Apple Notes. Read them, then read <a href="#s-fixes">section 10</a> for any corrections that apply.</li>
+<li><span class="new">New</span> <strong>Concept first, for every topic</strong> (each principle, pattern, LLD problem, distributed-systems concept, HLD pattern or case, AI topic), before any code:
+  <ol>
+  <li><strong>In plain words:</strong> what it is, in one or two sentences.</li>
+  <li><strong>The problem it solves:</strong> what goes wrong without it, as a concrete scenario.</li>
+  <li><strong>An analogy</strong> that makes it stick.</li>
+  <li><strong>A small diagram:</strong> the happy path, then the failure path.</li>
+  <li><strong>Variations and alternatives</strong> (e.g., orchestration vs. choreography; Saga vs. 2PC).</li>
+  <li><strong>When not to use it.</strong></li>
+  <li><strong>Quick check:</strong> answer 2–3 questions in your own words, then write the topic's entry in the module README's <em>Concepts</em> section.</li>
+  </ol>
+  For an LLD problem, steps 1–2 are the requirements and the hard part, and step 4 is the class diagram. For an HLD case, steps 1–2 are the product and its core scaling problem, and step 4 is the architecture.</li>
+<li><strong>Understand the internals:</strong> study how it works, its guarantees and trade-offs in depth.</li>
+<li><strong>Implement:</strong> write C#, configure infrastructure, build data access, add tests.</li>
+<li><strong>Experiment:</strong> inject failures, concurrency, delays, restarts, duplicates and load. Tick the matching items in <a href="#s-failure">section 4</a>.</li>
+<li><strong>Interview practice:</strong> draw the design, explain decisions, answer follow-ups out loud.</li>
+<li><strong>Journal it</strong> using <a href="#s-journal">section 9</a>, then tick the module's <em>Done</em> box. The box is only for when the exit deliverable is met.</li>
+</ol>
+<div class="callout ckpt"><span class="label">Checkpoint mocks</span><p>At the end of each phase, do one short (30–45 min) mock covering that phase. Use a peer, a platform, or record yourself. Score it against the rubric in M32. If a checkpoint shows a gap, go back to that module before starting the next phase.</p></div>
+</section>
+
+<section id="s-curriculum"><h2>3. Curriculum</h2>
+
+<div class="phase">Phase 1: Low-Level Design &amp; .NET</div>
+
+<article class="week" id="m1"><h3><span class="wk">M1</span>OOP, SOLID, and clean design<label class="done"><input type="checkbox" data-k="m1">Done</label></h3>
+<ul>
+<li>Review encapsulation, abstraction, inheritance, polymorphism, composition, and dependency inversion.</li>
+<li>Implement a payment processing engine with card, wallet, and bank-transfer providers.</li>
+<li>Add validation, refunds, failure handling, and provider-specific behavior.</li>
+<li>Refactor a tightly coupled implementation to follow SOLID principles.</li>
+<li>Write xUnit tests; use mocks/fakes only where they improve isolation.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>SOLID Principles</em>, <em>C#/C#.Net8</em> (OOP sections). Behavioral → <em>.NET</em>: “refactor a tightly coupled ASP.NET MVC application” is a ready story for this module.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Add a new payment provider without modifying the core payment workflow. Explain where abstractions help and where they become overengineering.</p></div>
+</article>
+
+<article class="week" id="m2"><h3><span class="wk">M2</span>Design patterns through implementation<label class="done"><input type="checkbox" data-k="m2">Done</label></h3>
+<ul>
+<li>Implement Strategy for pricing/discount rules; Factory for provider selection; Builder for complex configuration.</li>
+<li>Implement Adapter for incompatible external APIs and Decorator for caching, logging, and timing.</li>
+<li>Implement Observer for domain events, Command for operations, Chain of Responsibility for validation, and State for order lifecycle.</li>
+<li>Combine patterns in an e-commerce checkout engine.</li>
+<li>Compare patterns with simpler alternatives such as functions, composition, and ordinary dependency injection.</li>
+<li><span class="new">New</span> Critique Repository + Unit of Work on top of EF Core: DbContext is already a unit of work and DbSet is already a repository. Know when the extra layer earns its keep.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>DESIGN PATTERNS</em> (you have names and one-liners for most of the GoF list; this module adds runnable implementations). Behavioral → <em>.NET</em> (patterns you claim: Repository, UoW, MediatR, Singleton, Factory, Proxy, Decorator).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Explain why a pattern is appropriate, what complexity it adds, and when you would not use it.</p></div>
+</article>
+
+<article class="week" id="m3"><h3><span class="wk">M3</span>LLD interview problems<label class="done"><input type="checkbox" data-k="m3">Done</label></h3>
+<ul>
+<li>Build Parking Lot: floors, vehicle types, allocation, tickets, pricing, and concurrent entry.</li>
+<li>Build Elevator System: dispatching, scheduling, priorities, and failures.</li>
+<li>Build ATM: authentication, withdrawals, cash inventory, transaction states, and rollback behavior.</li>
+<li>Build Expense Sharing: groups, expense splits, balances, and settlement.</li>
+<li>Build Movie Ticket Booking: seat holds, expiry, payment, and simultaneous booking attempts.</li>
+<li>Build additional classics: library management, vending machine (State pattern), chess or snake-and-ladder, and an in-memory file system.</li>
+<li>Practice each problem in both formats: a design discussion with diagrams, and machine coding with runnable, tested code.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Class diagrams, API contracts, tests, and a 45–60 minute verbal design walkthrough for each problem.</p></div>
+</article>
+
+<article class="week" id="m4"><h3><span class="wk">M4</span>Concurrent LLD and machine coding<label class="done"><input type="checkbox" data-k="m4">Done</label></h3>
+<ul>
+<li>Build a thread-safe LRU cache with O(1) get/put; compare a single lock, ReaderWriterLockSlim, and striped locking.</li>
+<li>Build token-bucket, <span class="new">New</span> leaky-bucket, and sliding-window rate limiters that stay correct under concurrent callers.</li>
+<li>Build a bounded blocking queue and an in-memory pub/sub using Channels; handle backpressure, slow subscribers, and shutdown.</li>
+<li>Build an in-memory key-value store with nested transactions (BEGIN, COMMIT, ROLLBACK) and a thread-safe logger.</li>
+<li>Practice the machine-coding format: produce runnable, tested code for an LLD prompt in 60–90 minutes.</li>
+<li>Use Channels, IAsyncEnumerable, CancellationToken propagation, Interlocked, and ConcurrentDictionary correctly; identify where ConcurrentDictionary is not enough (compound operations, GetOrAdd factory races).</li>
+<li><span class="new">New</span> Know your primitives: <code>lock</code>/Monitor vs. SemaphoreSlim (async-friendly) vs. Mutex (cross-process kernel object) vs. ReaderWriterLockSlim.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>MultiThreading</em> (ThreadPool, Mutex, RWLockSlim, Task vs. Thread, CancellationTokenSource, WhenAll/WhenAny, MaxDegreeOfParallelism). <span class="fix">Fix:</span> Mutex is not “locking without a lock”. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Concurrency-tested implementations of each problem, each produced within a 60–90 minute machine-coding window.</p></div>
+</article>
+
+<article class="week" id="m5"><h3><span class="wk">M5</span><span class="new">New</span> .NET platform internals<label class="done"><input type="checkbox" data-k="m5">Done</label></h3>
+<h4>Runtime</h4>
+<ul>
+<li>Study the async/await state machine, SynchronizationContext, ConfigureAwait, ThreadPool starvation, and sync-over-async deadlocks.</li>
+<li>Study GC generations, the large object heap, server vs. workstation GC, Span&lt;T&gt;/Memory&lt;T&gt;, ArrayPool, and allocation profiling.</li>
+<li>Task vs. ValueTask, IAsyncEnumerable/async streams, <code>async void</code> (event handlers only).</li>
+</ul>
+<h4>ASP.NET Core</h4>
+<ul>
+<li>Middleware pipeline and ordering; filters vs. middleware; minimal APIs vs. controllers.</li>
+<li>DI lifetimes (singleton, scoped, transient), captive dependencies, scope validation, creating scopes in background services.</li>
+<li>Options pattern (IOptions, IOptionsSnapshot, IOptionsMonitor), configuration providers, Key Vault configuration.</li>
+<li>IHostedService/BackgroundService, graceful shutdown, Kestrel basics.</li>
+<li>IHttpClientFactory and typed clients; why <code>new HttpClient()</code> per call causes socket exhaustion; resilience handlers.</li>
+<li>Model validation and FluentValidation; ProblemDetails error contracts; MediatR and when it is overkill.</li>
+</ul>
+<h4>EF Core</h4>
+<ul>
+<li>Change tracking vs. AsNoTracking; projections vs. Include; N+1 queries and why lazy loading causes them; split queries; compiled queries.</li>
+<li>DbContext lifetime: scoped per request, IDbContextFactory for background work, never singleton. Per-tenant connection strings resolved inside a scope.</li>
+<li>Global query filters (soft delete, tenant filters), raw SQL safely (FromSql with parameters), concurrency tokens, migrations in CI (idempotent scripts, expand/contract).</li>
+<li>When to drop to Dapper.</li>
+</ul>
+<h4>C# language</h4>
+<ul>
+<li>Value vs. reference types (and why “value types live on the stack” is a myth), boxing, records, structs, equality (<code>==</code> vs. <code>Equals</code>), LINQ deferred execution, IDisposable/IAsyncDisposable, generics variance, default interface methods.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>C#/C#.Net8</em>, <em>EntityFramework</em>, <em>Web API</em>, <em>Rest/SOAP</em>. Behavioral → <em>.NET</em> (minimal APIs, EF optimization, soft deletes, DbContext lifetime, Swagger, FluentValidation, typed HttpClient + Polly). <span class="fix">Several fixes apply</span> (lazy loading, DbContext lifetime, HttpClient, equality, partial classes, namespaces, ConfigureAwait). See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Find and fix a seeded ThreadPool-starvation bug and a seeded N+1 bug using dotnet-counters and dotnet-trace. Explain in writing how a request flows through Kestrel → middleware → DI scope → EF Core.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck1"><span class="label">Checkpoint 1: LLD &amp; .NET<label class="done" style="float:right"><input type="checkbox" data-k="ck1">Done</label></span><p>A 45-minute machine-coding mock (e.g., thread-safe rate limiter or parking lot), then 10 minutes of .NET rapid-fire: DI lifetimes, async internals, EF tracking, HttpClientFactory.</p></div>
+
+<div class="phase">Phase 2: Distributed Systems Engineering</div>
+
+<article class="week" id="m6"><h3><span class="wk">M6</span>Database internals, transactions, and sharding<label class="done"><input type="checkbox" data-k="m6">Done</label></h3>
+<ul>
+<li>Study indexes, composite-index order, execution plans, scans/seeks, query tuning, connection pooling, and transactions.</li>
+<li>Experiment with isolation levels: dirty reads, non-repeatable reads, phantom reads, lost updates, and write skew. Cover all of them: Read Uncommitted, Read Committed, RCSI, Repeatable Read, Snapshot, Serializable.</li>
+<li>Implement optimistic concurrency with SQL Server rowversion and pessimistic locking with appropriate lock hints.</li>
+<li>Build multiple SQL Server databases locally using Docker Compose.</li>
+<li>Implement range-based, hash-based and directory-based sharding, shard keys, shard maps, a C# shard resolver, and database-per-shard routing.</li>
+<li>Implement cross-shard reads, pagination, uneven distribution tests, hot partitions, and shard rebalancing/migration.</li>
+<li>Compare replication, partitioning, and sharding; understand when sharding is premature.</li>
+<li><span class="new">New</span> Replication modes: synchronous, asynchronous, semi-synchronous; replica vs. snapshot vs. backup; read-your-writes with replicas.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>SQLServer</em>. SystemDesign/Sudo Code → <em>Database sharding</em>, <em>Database Replication</em>, <em>Database Types</em>. Behavioral → <em>Data</em> (query tuning, Query Store, the <strong>consumer vs. Web API deadlock</strong> story). <span class="fix">Fixes:</span> stored-proc “precompiled” myth, CROSS JOIN, DISTINCT + GROUP BY, UNION, missing isolation levels. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A working C# data-access/routing layer that sends tenants/customers to the correct shard, plus measurements and a migration/rebalancing exercise.</p></div>
+</article>
+
+<article class="week" id="m7"><h3><span class="wk">M7</span>NoSQL, storage engines, and search<label class="done"><input type="checkbox" data-k="m7">Done</label></h3>
+<ul>
+<li>Compare B-tree and LSM-tree storage engines: write/read/space amplification, compaction, memtables, SSTables, and Bloom filters.</li>
+<li>Model data around access patterns in Cosmos DB or DynamoDB: partition-key design, hot partitions, single-table design, secondary indexes, and RU/WCU cost.</li>
+<li><span class="new">New</span> Cosmos DB in depth: the five consistency levels and their multi-region limits, partition-key choice from query patterns (not a random GUID), RU cost, composite indexes and indexing policy, the <strong>change feed</strong>, and transactional batches within a partition.</li>
+<li>Study Cassandra-style wide-column modeling, tunable consistency, and query-first table design.</li>
+<li>Implement the same order-history query in SQL Server and a NoSQL store; compare latency, cost, and consistency.</li>
+<li>Study Elasticsearch: inverted index, analyzers, BM25 relevance scoring, near-real-time refresh, shards/replicas, and keeping the index in sync through events. Compare with Solr and Azure AI Search, both of which you have used.</li>
+<li>Decide when to choose relational, document, wide-column, key-value, or search engines and defend the choice.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Azure cosmos db</em>, <em>Azure Search vs Azure AI Search</em>. Sudo Code → <em>Database Types</em>. Behavioral → <em>SOLR</em>, <em>Azure &amp; DevOps</em> (Cosmos partition keys, consistency, change-feed Function). <span class="fix">Fixes:</span> GUID partition key, strong consistency with multi-region writes, “document DBs have no ACID”, column-DB read claim. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A NoSQL data model for the capstone's order history and a search index fed from domain events, with a written comparison against the SQL design.</p></div>
+</article>
+
+<article class="week" id="m8"><h3><span class="wk">M8</span>Redis and distributed caching<label class="done"><input type="checkbox" data-k="m8">Done</label></h3>
+<ul>
+<li>Implement cache-aside, write-through, TTL, invalidation, and a distributed cache shared by multiple API instances.</li>
+<li><span class="new">New</span> Also compare read-through, write-around, and write-behind; LRU vs. LFU vs. FIFO eviction; measure <strong>hit ratio</strong> as the primary cache health metric.</li>
+<li>Use Redis strings, hashes, sets, sorted sets, and atomic operations where appropriate.</li>
+<li>Simulate cache stampede (dogpile), cache penetration, stale data, and invalidation races.</li>
+<li>Implement distributed rate limiting and a fallback strategy when Redis is unavailable.</li>
+<li>Test Redis restart/failover behavior and compare database-only versus cached latency and throughput.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Sudo Code → <em>Caching</em>. Azure → <em>Azure Devops</em> (dogpile effect). <span class="fix">Fix:</span> a high eviction rate is <em>not</em> a sign of a healthy cache. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Demonstrate measurable latency/throughput differences and explain consistency and invalidation trade-offs.</p></div>
+</article>
+
+<article class="week" id="m9"><h3><span class="wk">M9</span>Messaging and queue reliability<label class="done"><input type="checkbox" data-k="m9">Done</label></h3>
+<ul>
+<li>Use RabbitMQ to implement exchanges (direct, topic, fanout), routing keys, queues, pub/sub, competing consumers, and consumer scaling.</li>
+<li>Implement publisher confirms and distinguish them from consumer acknowledgements.</li>
+<li>Test durable queues/messages, unroutable messages, manual ACK, redelivery, prefetch, and requeue behavior.</li>
+<li>Simulate broker outage, lost publisher confirmation, consumer crash before ACK, and consumer crash after DB commit but before ACK.</li>
+<li>Test duplicate delivery, per-aggregate ordering, ordered-queue head-of-line blocking, queue backlog, backpressure, and poison messages.</li>
+<li>Compare RabbitMQ with Kafka partitions/offsets and Azure Service Bus locks, sessions, settlement, and dead-letter behavior.</li>
+<li><span class="new">New</span> NServiceBus and MassTransit over RabbitMQ: endpoints, recoverability (immediate and delayed retries, error queue), ServiceControl/ServicePulse monitoring, routing configuration. Compare with what raw RabbitMQ gives you.</li>
+<li><span class="new">New</span> Claim-check pattern for large payloads (blob reference in the message).</li>
+<li><span class="new">New</span> RabbitMQ classic vs. quorum queues; federation and shovel for DR replication between clusters.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>RabbitMQ/MSMQ</em> (exchanges, federation for DR, heartbeats). Sudo Code → <em>Message Queues</em>. Behavioral → <em>Messaging</em> (NServiceBus retries, ServicePulse, tenant-partitioned consumers, region routing, claim-check, <strong>MSMQ silently dropping messages</strong> story, MSMQ → RabbitMQ → Service Bus history). <span class="fix">Fixes:</span> “data is never lost”, “round robin avoids duplication”, “priority queue gives ordering”. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A reliable order-event pipeline with duplicate-safe consumers, built once on raw RabbitMQ and once on NServiceBus or MassTransit, plus a written explanation of each delivery guarantee and its limits.</p></div>
+</article>
+
+<article class="week" id="m10"><h3><span class="wk">M10</span>Kafka, stream processing, event sourcing, and CQRS<label class="done"><input type="checkbox" data-k="m10">Done</label></h3>
+<ul>
+<li>Run Kafka locally; implement producers and consumers with the Confluent .NET client.</li>
+<li>Study partitions, partition-key choice, consumer groups, rebalancing, and per-key ordering.</li>
+<li>Compare offset-commit strategies (before vs. after processing) and map each to at-most-once or at-least-once behavior.</li>
+<li>Implement the idempotent producer and Kafka transactions; understand what exactly-once does and does not cover beyond Kafka.</li>
+<li>Study compacted topics, retention, consumer lag, and schema registry with backward/forward compatibility.</li>
+<li><span class="new">New</span> Message-contract versioning in .NET: shared contract libraries, additive changes, publishing v1 and v2 side by side during migration, consumer tolerance.</li>
+<li>Study stream-processing concepts: windowing, late events, watermarks, and stateful aggregation.</li>
+<li>Implement event sourcing for an aggregate: event store, projections, snapshots, and read-model rebuild.</li>
+<li>Implement CQRS with separate read models; explain when CQRS is worth the complexity and when it is overkill.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Behavioral → <em>Messaging</em> (message contract design and versioning), <em>Architecture</em> (event sourcing/CQRS claims). SystemDesign → <em>Most used Architecture patterns</em> (CQRS, event-driven).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A Kafka-based order-event stream with an event-sourced aggregate, a rebuildable read model, and a written comparison of RabbitMQ and Kafka delivery semantics.</p></div>
+</article>
+
+<article class="week" id="m11"><h3><span class="wk">M11</span>Outbox, inbox, retries, and DLQ operations<label class="done"><input type="checkbox" data-k="m11">Done</label></h3>
+<ul>
+<li>Implement transactional outbox: write business data and an event record in the same local database transaction.</li>
+<li>Build a background relay with retry count, status, leases/claims, and safe concurrent workers.</li>
+<li>Run multiple application instances and test two relays claiming work concurrently.</li>
+<li>Crash the relay before publish, after publish, after broker confirmation, and during outbox status update.</li>
+<li>Implement inbox/idempotent consumer: store message identity and business changes in the same local DB transaction (not in a separate Redis cache).</li>
+<li>Implement transient/permanent error classification, exponential backoff, jitter, retry budgets, delayed retries, max attempts, and retry exhaustion.</li>
+<li>Build DLQ inspection, failure metadata, selective replay, replay throttling, audit trail, and poison-message quarantine.</li>
+<li>Compare polling publisher with CDC/transaction-log tailing; study event ordering, schema evolution, and outbox cleanup.</li>
+<li><span class="new">New</span> Compare your hand-built outbox/inbox with the NServiceBus Outbox and MassTransit transactional outbox: what each guarantees, where deduplication data lives, and the cleanup it requires.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Behavioral → <em>Messaging</em> (outbox, retries, DLQ, poison-message contract-mismatch story, Redis-based dedup). <span class="fix">Fix:</span> your outbox explanation describes the order of operations incorrectly, and Redis dedup is not atomic with the business write. See section 10. This is a high-probability interview probe.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>An outbox/inbox pipeline that tolerates duplicate publication and delivery, plus safe DLQ replay and observable backlog.</p></div>
+</article>
+
+<article class="week" id="m12"><h3><span class="wk">M12</span>Multiple databases, distributed transactions, and Saga<label class="done"><input type="checkbox" data-k="m12">Done</label></h3>
+<ul>
+<li>Distinguish one local transaction across tables from independent transactions across databases and services.</li>
+<li>Demonstrate partial commit: Database A commits while Database B fails.</li>
+<li>Study two-phase commit (2PC), coordinator/participant roles, prepare/commit, timeouts, in-doubt outcomes, and operational trade-offs.</li>
+<li>Experiment with .NET TransactionScope and SQL Server only where provider/platform support is valid; understand distributed transaction configuration constraints.</li>
+<li>Implement Saga orchestration with persistent workflow state and local transactions.</li>
+<li>Implement choreography using events and compare coupling, visibility, and recovery.</li>
+<li>Implement compensating actions such as refund payment and release inventory; make compensation idempotent.</li>
+<li>Crash the orchestrator mid-workflow and recover from persisted state.</li>
+<li><span class="new">New</span> Rebuild the orchestrator with NServiceBus sagas or MassTransit state machines: correlation, saga persistence, timeouts (<code>RequestTimeout</code>), concurrency control on saga state, and saga completion.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Behavioral → <em>Messaging</em> (“Have you created a saga in NServiceBus?”), <em>Personal and Personality</em> (<strong>patient/member sync Saga: ~20 min → under a minute across millions of entries</strong>). Re-tell this story with M12 vocabulary: correlation, persisted state, compensation, timeouts.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A multi-service order Saga that recovers from partial completion and failed compensation without pretending compensation is a database rollback, built once by hand and once on a saga framework.</p></div>
+</article>
+
+<article class="week" id="m13"><h3><span class="wk">M13</span>Concurrency, coordination, and resilience<label class="done"><input type="checkbox" data-k="m13">Done</label></h3>
+<ul>
+<li>Study thread safety, race conditions, locks, semaphores, optimistic/pessimistic concurrency, and backpressure.</li>
+<li>Build a ticket booking system and simulate thousands of users competing for a limited number of seats.</li>
+<li>Reproduce SQL Server deadlocks, error 1205 handling, lock escalation, long-transaction blocking, and connection-pool exhaustion.</li>
+<li><span class="new">New</span> Reproduce your real incident: a message consumer and an API deadlocking on the same rows. Fix it with consistent lock ordering, shorter transactions, RCSI and a 1205 retry, not by adding more exclusive locks.</li>
+<li>Implement Redis-based leases/locks, owner identity, renewal, expiry, safe release, and fencing tokens.</li>
+<li>Implement timeouts, exponential backoff, jitter, circuit breakers, bulkheads, fallbacks, load shedding, and graceful degradation (Polly v8 / Microsoft.Extensions.Resilience).</li>
+<li>Test nested retries across HTTP, database, and message-processing layers; calculate retry amplification and enforce an overall deadline/budget.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>AKS_Docker → <em>.Net with Kubernetes</em> (Polly: retries, exponential backoff, circuit breaker). Sudo Code → <em>Fault and Failure in distributed systems</em>. Behavioral → <em>Data</em> (deadlock story).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A concurrency-safe booking workflow and a resilient service that behaves predictably when dependencies slow down or fail.</p></div>
+</article>
+
+<article class="week" id="m14"><h3><span class="wk">M14</span>Security and API design<label class="done"><input type="checkbox" data-k="m14">Done</label></h3>
+<ul>
+<li>Implement OAuth2/OIDC: authorization code with PKCE (never implicit), client credentials for service-to-service calls, token validation, scopes, and claims.</li>
+<li>Study JWT pitfalls: signature validation, algorithm confusion, expiry, revocation, refresh-token rotation, and key rotation.</li>
+<li><span class="new">New</span> Browser token handling: the BFF pattern, server-set HttpOnly/Secure/SameSite cookies, why SPAs are public clients without secrets, MSAL cache choices.</li>
+<li><span class="new">New</span> Entra ID in practice: app registrations, exposed API scopes, service principals vs. managed identity vs. workload identity, DefaultAzureCredential, Key Vault data-plane RBAC (Secrets User), B2C user flows.</li>
+<li><span class="new">New</span> SAML vs. OIDC; SP-initiated vs. IdP-initiated flows; assertion signature/audience/expiry validation.</li>
+<li>Secure service-to-service traffic with mTLS; manage secrets with Key Vault or AWS Secrets Manager and managed identities.</li>
+<li>Implement tenant-aware authorization with RBAC/ABAC and policy-based authorization in ASP.NET Core.</li>
+<li>Review the OWASP API Security Top 10 and test the capstone APIs for broken object-level authorization. <span class="new">New</span> Write a STRIDE threat model.</li>
+<li>Compare REST, gRPC, and GraphQL; design resource models, error contracts (ProblemDetails), and contract-first OpenAPI specifications.</li>
+<li>Implement cursor-based pagination, API versioning, and Stripe-style idempotency keys with stored responses.</li>
+<li>Implement webhook delivery: HMAC signing, retries with backoff, deduplication, and replay protection.</li>
+<li>CORS: what it actually is (a browser relaxation of same-origin policy) and what it is not.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>OID/OAuth → <em>OID/OAuth</em>, <em>Implementation workflow and Code</em>. Azure → <em>Azure Security</em>, <em>AzureKeyVault</em>. C#.Net/SQL → <em>SSO/SAML</em>, <em>Web API</em>. Sudo Code → <em>REST API</em>, <em>API</em>. Behavioral → <em>Authentication</em>, <em>Protocols</em>. <span class="fix">Fixes:</span> implicit grant, client-credentials description, HttpOnly from JS, client secret in SPA, Key Vault Reader, AzureServiceTokenProvider, CORS, JSONP, “silent refresh like polling”. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>An authenticated, versioned, idempotent public API with secure webhooks and a short written threat model.</p></div>
+</article>
+
+<article class="week" id="m15"><h3><span class="wk">M15</span>Observability, testing strategy, and production operations<label class="done"><input type="checkbox" data-k="m15">Done</label></h3>
+<ul>
+<li>Instrument ASP.NET Core services with OpenTelemetry traces and context propagation over HTTP and messaging.</li>
+<li>Add structured logs, correlation/trace IDs, metrics, and service-level indicators.</li>
+<li>Use Prometheus/Grafana and Jaeger to inspect latency, errors, and cross-service traces.</li>
+<li><span class="new">New</span> Map what you know from AppDynamics and Application Insights onto OpenTelemetry concepts (business transactions ↔ traces, tiers ↔ services). Use App Insights connection strings, not instrumentation keys.</li>
+<li>Track queue depth, oldest message age, consumer throughput/lag, redelivery, DLQ depth, retry rate, outbox backlog, and oldest pending outbox record.</li>
+<li>Track database deadlocks, connection-pool use, Saga duration, compensation failures, and service saturation.</li>
+<li>Define SLIs, SLOs (as p95/p99 latency, not averages), alert thresholds, dashboards, and incident runbooks.</li>
+<li>Run an incident exercise: broker outage, growing backlog, slow database, and cascading service latency.</li>
+<li>Define a testing strategy: unit tests, integration tests with Testcontainers, consumer-driven contract tests (Pact), and end-to-end tests.</li>
+<li>Use property-based testing (FsCheck) for invariants such as balances, inventory counts, and idempotency.</li>
+<li>Add automated failure/chaos tests to CI so recovery behavior does not regress.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>AppDynamics</em>. Azure → <em>AzureAppInsights</em>. Sudo Code → <em>Performance metrics</em>. Behavioral → <em>Personal and Personality</em> (<strong>weekend search-latency incident</strong>: walk it as a telemetry-driven diagnosis).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A useful operational dashboard and the ability to diagnose a failure from telemetry rather than guesswork.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck2"><span class="label">Checkpoint 2: Distributed systems<label class="done" style="float:right"><input type="checkbox" data-k="ck2">Done</label></span><p>A 45-minute deep-dive mock. The interviewer picks one of outbox/inbox, Saga, or idempotent consumers, asks you to whiteboard it, then injects failures (“the relay crashes after publish”, “compensation times out”). Grade yourself on precise guarantees, not vocabulary.</p></div>
+
+<div class="phase">Phase 3: High-Level Design &amp; Architecture</div>
+
+<article class="week" id="m16"><h3><span class="wk">M16</span>HLD fundamentals and real-time delivery<label class="done"><input type="checkbox" data-k="m16">Done</label></h3>
+<ul>
+<li>Review DNS, TCP, TLS, HTTP, HTTP/2/3, load balancing, forward vs. reverse proxies, API gateways, CDNs, and stateless scaling.</li>
+<li>Study capacity estimation, throughput, latency, storage growth, bandwidth, and peak traffic.</li>
+<li>Compare SQL/NoSQL, indexing, replication, partitioning, sharding, caching, CDN, and object storage.</li>
+<li>Explain CAP theorem (and PACELC), consistency models, availability, replication lag, and failure domains.</li>
+<li>Practice drawing architecture and data-flow diagrams, defining APIs, and identifying bottlenecks.</li>
+<li><span class="new">New</span> Merge your own 5-step approach with this plan's into <strong>one</strong> delivery framework and use it every time: requirements (functional + non-functional) → core entities → API → high-level design → deep dives → bottlenecks/scale → wrap-up.</li>
+<li>Build a back-of-envelope cheat sheet: latency numbers, QPS, storage, bandwidth, and server-count math.</li>
+<li>Practice leading the conversation: clarify scope, state non-functional requirements, and raise failure modes before being asked.</li>
+<li><span class="new">New</span> <strong>Real-time delivery:</strong> short polling, long polling, SSE, and WebSockets, and when each fits. Connection gateways, sticky sessions, connection limits per node.</li>
+<li><span class="new">New</span> SignalR at scale: hubs, groups, Redis backplane vs. Azure SignalR Service, reconnect behavior and reconnect storms, missed-message resync, presence and heartbeats.</li>
+<li><span class="new">New</span> Mobile push (APNs/FCM): device tokens, fan-out, best-effort delivery, stale tokens.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>SystemDesign/QuestionBased → <em>Approach for System Design</em>, <em>Why is system design important</em>, <em>Core Idea</em>, <em>Capacity Planning</em>, <em>What happens when we type in a URL</em>, <em>Process vs thread</em>. Sudo Code → <em>Capacity estimation</em>, <em>Scaling</em>, <em>Proxies</em>, <em>Client Server Architecture</em>, <em>Components of System design</em>, <em>Anatomy of Applications</em>, <em>Data and Data flow</em>, <em>Performance metrics</em>. C#.Net/SQL → <em>TCP vs HTTP</em>, <em>SignalR</em>. <span class="fix">Fixes:</span> thin vs. thick client, “&lt; 2 sec” response time. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Timed designs with requirements, estimates, architecture, data model, scaling strategy, and trade-offs, plus a one-page explanation of how you would scale SignalR to 1M concurrent connections.</p></div>
+</article>
+
+<article class="week" id="m17"><h3><span class="wk">M17</span>Distributed systems theory<label class="done"><input type="checkbox" data-k="m17">Done</label></h3>
+<ul>
+<li>Study consensus with Raft: leader election, log replication, terms, commit index, and membership changes.</li>
+<li>Study quorums (R + W &gt; N), sloppy quorums, hinted handoff, read repair, and anti-entropy with Merkle trees.</li>
+<li>Implement consistent hashing with virtual nodes in C#; measure key redistribution when nodes join or leave.</li>
+<li>Study Lamport clocks, vector clocks, hybrid logical clocks, and clock skew; explain why wall-clock ordering is unsafe (and why “use timestamps to order messages” is a weak answer).</li>
+<li>Study CRDTs, gossip protocols, failure detectors, and split-brain prevention.</li>
+<li>Study probabilistic data structures: Bloom filters, HyperLogLog, and Count-Min Sketch.</li>
+<li>Explain linearizability, serializability, causal consistency, read-your-writes, and eventual consistency precisely.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>QuestionBased → <em>Consistent hashing</em>, <em>Bloom Filters</em>, <em>Algorithms in system designs</em>. Sudo Code → <em>Hashing</em>, <em>CAP</em>. <span class="fix">Fix:</span> virtual nodes are for even distribution, not lookup speed. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Explain Raft, quorums, consistent hashing, and vector clocks from memory, backed by a working consistent-hashing implementation.</p></div>
+</article>
+
+<article class="week" id="m18"><h3><span class="wk">M18</span><span class="new">New</span> Architecture and domain design<label class="done"><input type="checkbox" data-k="m18">Done</label></h3>
+<ul>
+<li>DDD strategic design: bounded contexts, context maps, ubiquitous language, aggregates and their consistency boundaries, anti-corruption layers.</li>
+<li>Layered vs. clean/hexagonal vs. vertical-slice architecture; where each fits in a .NET solution.</li>
+<li>Modular monolith vs. microservices: decomposition by capability, database-per-service, and distributed-monolith smells (shared DB, chatty sync calls, lockstep deploys).</li>
+<li>Service communication: sync vs. async, API gateway (Azure API Management policies: inbound/outbound processing, JWT validation, rate limits), BFF, service discovery (Kubernetes DNS vs. registries), service mesh, and why you should not retry at both the mesh and the client.</li>
+<li>Micro-frontends: shell + remotes, shared state, versioning, style isolation. Only go deep if this is genuinely your experience.</li>
+<li>Migrations: strangler fig, branch by abstraction, parallel run, dual writes + backfill, CDC-based sync, expand/contract schema changes. Practice by re-telling <strong>on-prem search → Azure AI Search</strong>, <strong>Windows VMs → Linux Kubernetes pods</strong>, and <strong>WCF → ASP.NET Core Web API</strong> in this vocabulary.</li>
+<li>Design docs (RFCs) and Architecture Decision Records (ADRs); presenting options with trade-offs.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>C#.Net/SQL → <em>Microservices</em>. QuestionBased → <em>Most used Architecture patterns</em>. AKS_Docker → <em>.Net with Kubernetes</em> (API Management setup). Behavioral → <em>Architecture</em> (micro-frontends, microDB, service discovery), <em>.NET</em> (WCF → Web API migration and versioning). <span class="fix">Fixes:</span> service discovery ≠ API gateway; circuit-breaker definition. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>An RFC that decomposes the capstone into bounded contexts with ADRs, plus a strangler-fig migration plan for a legacy monolith.</p></div>
+</article>
+
+<article class="week" id="m19"><h3><span class="wk">M19</span>HLD patterns and case studies I<label class="done"><input type="checkbox" data-k="m19">Done</label></h3>
+<h4><span class="new">New</span> Part A: The 7 recurring HLD patterns</h4>
+<p>Most HLD questions are built from a few reusable patterns. Learn each one on its own, then spot them inside the cases.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Pattern</th><th>Core techniques</th><th>Where it shows up in this plan</th></tr></thead><tbody>
+<tr><td>Real-time updates</td><td>Polling, SSE, WebSockets, pub/sub fan-out, connection gateways</td><td>M16, WhatsApp, live comments, chat over company data</td></tr>
+<tr><td>Dealing with contention</td><td>Atomic conditional updates, optimistic/pessimistic locking, holds with TTL, queues</td><td>M13, Ticketmaster, hotel reservation</td></tr>
+<tr><td>Multi-step processes</td><td>Saga, workflow engines (Temporal, Durable Functions, Step Functions), state machines</td><td>M12, payment, hotel booking</td></tr>
+<tr><td>Scaling reads</td><td>Caching, read replicas, CDN, denormalized read models</td><td>M8, feeds, hotel availability search</td></tr>
+<tr><td>Scaling writes</td><td>Sharding, write batching, sharded counters, queues to absorb bursts</td><td>M6, ad-click aggregation, metrics</td></tr>
+<tr><td>Handling large blobs</td><td>Presigned URLs, chunked/resumable upload, claim-check</td><td>Dropbox, M9</td></tr>
+<tr><td><strong>Managing long-running tasks</strong></td><td>202 + job ID, job/chunk tables, worker pools, checkpoints, progress, DLQ</td><td>The two worked examples below</td></tr>
+</tbody></table></div>
+
+<h4><span class="new">New</span> Worked example 1: one change applied to 100k users (Azure)</h4>
+<ul>
+<li><strong>First, avoid the fan-out if you can</strong> (interviewers listen for this): apply the change at a higher level, such as Entra group-based assignment, dynamic groups, Conditional Access, or role assignments at a broader scope. In your own app, set a tenant-level default with per-user overrides and resolve the effective value at read time. Or migrate lazily on next read/login, with a background sweep for inactive users.</li>
+<li><strong>API:</strong> submit a job, return <code>202 Accepted</code> with a job ID, then poll a progress endpoint or push status (SignalR/SSE/webhook). Support dry run and cancel.</li>
+<li><strong>Orchestration:</strong> Durable Functions fan-out/fan-in, or a Service Bus queue with a worker pool. Chunk users (e.g., 500 per chunk) and checkpoint every chunk.</li>
+<li><strong>Graph limits:</strong> use JSON <code>$batch</code> (up to 20 requests per call). Graph throttles per app and per tenant, so honor <code>Retry-After</code>, add jitter, and use adaptive concurrency. Throttling, not compute, is the real bottleneck.</li>
+<li><strong>Idempotency:</strong> each item must be safe to apply twice (“set to X”, never “toggle”). Store status per user so a rerun only touches failures.</li>
+<li><strong>Rollout and verification:</strong> dry run → canary 1% → waves. Verify with a delta query. Keep an audit log, a per-user error report, and a kill switch. Rollback is the same job run in reverse.</li>
+</ul>
+
+<h4><span class="new">New</span> Worked example 2: one schema change across 10k tenant databases</h4>
+<ul>
+<li><strong>Tenant catalog:</strong> a central list of every tenant DB, each with a <code>schema_version</code> and wave/region/size tags.</li>
+<li><strong>Expand/contract:</strong> the app must work with schema N and N+1 while the rollout is in flight. Only expand (add columns or tables) during the rollout; contract (drop the old shape) in a later release once every DB is migrated.</li>
+<li><strong>Execution:</strong> Azure SQL Elastic Jobs or your own orchestrator, running idempotent migration scripts (DbUp, EF migration bundles, or DACPAC) recorded in a per-DB version table.</li>
+<li><strong>Concurrency limits:</strong> cap how many DBs migrate at once per elastic pool/server so tenants on the same pool don't starve. Use <code>ONLINE=ON</code> and resumable index operations, and schedule in each region's off-hours.</li>
+<li><strong>Waves:</strong> internal tenants → 1% → 10% → all, with an automatic halt on error-rate or latency thresholds. Migrate the largest tenants separately.</li>
+<li><strong>Failures:</strong> retry transient errors; quarantine persistent ones in a “failed DBs” list. Prefer rolling forward; keep rollback scripts only for the expand step.</li>
+<li><strong>Observability:</strong> a dashboard of DB count per version, stragglers, and per-migration duration.</li>
+</ul>
+<p>Practice the variants too: CSV bulk import with a per-row report (and conflicts with live edits), a live column backfill, async export/report generation, a GDPR delete across services, and a zero-downtime search reindex (your Azure AI Search migration).</p>
+
+<h4>Part B: Case studies</h4>
+<p>For each case: do a 45-minute timed attempt using your framework, then a 45-minute review against a reference design.</p>
+<ul>
+<li>URL shortener: ID generation, collision handling, cache, redirects, analytics, and scaling.</li>
+<li>WhatsApp: WebSockets, delivery state, presence, offline users, ordering, and fan-out.</li>
+<li>Netflix/YouTube: ingestion/transcoding, object storage, CDN, streaming, and recommendation boundaries.</li>
+<li><span class="new">New</span> Live streaming (Twitch-style): RTMP/SRT ingest, PoPs, real-time transcoding, HLS/DASH packaging, adaptive bitrate, CDN, glass-to-glass latency.</li>
+<li>Uber: geospatial indexing, driver location, matching, dispatch, and hot location updates.</li>
+<li><span class="new">New</span> Yelp/proximity search: geohash vs. quadtree, read-heavy scaling, ranking.</li>
+<li>Twitter/X: feed generation, fan-out-on-write/read, hot users, timelines, and cache strategy.</li>
+<li><span class="new">New</span> Dropbox/Google Drive: chunked and resumable upload, presigned URLs, dedup, metadata vs. blob storage, sync conflicts.</li>
+<li><span class="new">New</span> Facebook live comments: fan-out to viewers of a live object, SSE/WebSockets, hot streams.</li>
+<li><span class="new">New</span> <strong>Non-AI chat over company/customer data</strong> (the AI version is in M25):
+  <ul>
+  <li>Shared foundation (used by the AI version too): conversation service with sessions and history, SignalR/SSE delivery, multiple channels (web, Teams, WhatsApp), auth with tenant and user scoping, audit trail and transcripts.</li>
+  <li>Intent detection with rules or keywords, guided decision-tree flows (button-driven), and form-style slot filling.</li>
+  <li>Templated answers backed by parameterized queries to typed APIs (e.g., “order status”); FAQ answers through BM25 search.</li>
+  <li>Live-agent chat: queues, skill-based routing, an agent console with the customer's full context, SLAs, canned responses.</li>
+  </ul></li>
+<li>Amazon-style commerce: catalog, cart, inventory, checkout, payment, and order orchestration.</li>
+<li><span class="new">New</span> Product-architecture drill (Meta-style): pick one product feature and define its API, data model, client–server contract, pagination, and real-time updates.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>QuestionBased → <em>How does live streaming work</em>, <em>Capacity Planning</em> (Twitter estimate). Behavioral → <em>System Design</em> prompts that belong here: e-commerce, real-time chat, bulk file uploads. Your existing answers there are lists of Azure services. Redo each one with requirements, estimates, a data model, and failure modes.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Explain each of the 7 patterns with an example, whiteboard both worked examples end to end, and for each case: requirements, APIs, data model, estimates, architecture, bottlenecks, failure modes, security, and cost.</p></div>
+</article>
+
+<article class="week" id="m20"><h3><span class="wk">M20</span>Real-world HLD case studies II<label class="done"><input type="checkbox" data-k="m20">Done</label></h3>
+<ul>
+<li>Rate limiter: algorithms (token bucket, leaky bucket, sliding window), distributed counters, multi-region limits, and fail-open vs. fail-closed behavior.</li>
+<li>Distributed key-value store and distributed cache: partitioning, replication, consistency, and eviction.</li>
+<li>Notification system: channels, templates, user preferences, retries, deduplication, and priority.</li>
+<li>Typeahead/autocomplete and web crawler: tries, ranking, politeness, deduplication, and freshness.</li>
+<li>Ticketmaster: seat holds, flash-sale contention, virtual waiting rooms, and fairness.</li>
+<li>Payment system: double-entry ledger, idempotency, reconciliation, and external payment-provider uncertainty.</li>
+<li><span class="new">New</span> <strong>Deep dive: making sure a payment never happens twice</strong>
+  <ul>
+  <li>Client: generate the idempotency key once per checkout attempt, <em>before</em> the first try, and reuse it on every retry. Disabling the button is not enough.</li>
+  <li>Server: store <code>key → request hash, status, response</code> with a unique constraint, inserting an “in progress” row first. Same key while in flight → <code>409</code>; same key with a different payload → <code>422</code>; completed key → return the stored response.</li>
+  <li>Business guard: a unique constraint allowing only one <em>successful</em> payment per order.</li>
+  <li>Pass your key through to the payment provider (e.g., Stripe's <code>Idempotency-Key</code>) so it deduplicates too.</li>
+  <li>State machine (created → authorized → captured) with conditional updates so each transition happens exactly once.</li>
+  <li>Unknown outcome after a timeout: never retry with a <em>new</em> key. Query the provider for status, or retry with the same key.</li>
+  <li>Safety nets: webhook dedup by event ID, outbox/inbox, a reconciliation job against provider settlement reports, a double-entry ledger, and an automatic-refund path for any duplicate that slips through.</li>
+  </ul></li>
+<li><span class="new">New</span> <strong>Hotel or meeting-room reservation</strong>
+  <ul>
+  <li>Inventory rows per (hotel, room type, date) with <code>total</code> and <code>reserved</code> counts; assign specific rooms only at check-in.</li>
+  <li>Hold (with TTL) → payment → confirm; an expiry job releases holds that time out.</li>
+  <li>Concurrency: one atomic conditional update across the whole date range in a single transaction (<code>reserved + n &lt;= total × overbook_factor</code>), or optimistic version checks. The date range is all-or-nothing.</li>
+  <li>An idempotency key on each reservation request, so a double click or retry doesn't create two bookings.</li>
+  <li>Cached, eventually consistent availability search; strongly consistent booking path. Shard by <code>hotel_id</code>.</li>
+  <li>Meeting-room variant: prevent overlapping time intervals (time-slot rows or an exclusion constraint), recurring bookings, time zones, and auto-release on no-show.</li>
+  </ul></li>
+<li>Distributed job scheduler, top-K / ad-click aggregation, Google Docs-style collaborative editing, metrics/logging platform, and leaderboard.</li>
+<li><span class="new">New</span> Distributed message queue (“design Kafka”), online auction, stock brokerage (Robinhood), post search, Tinder-style matching, online judge (LeetCode), and an LLM chat/inference platform.</li>
+<li><span class="new">New</span> From your own question bank: feature-flag system, CI/CD pipeline for .NET microservices on AKS, zero-downtime on-prem SQL Server → Azure SQL migration, HL7 ingestion (with HIPAA), Solr/large-scale search platform, multi-tenant SaaS auth, multi-region DR replication, recommendation engine.</li>
+<li>Adjust emphasis by company type: fintech (correctness, auditability), streaming (availability, regional failover), social (fan-out, feeds), healthcare (compliance, PHI).</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Behavioral → <em>System Design</em> (18 prompts with answer outlines: notification system, payment, multi-region replication, feature flags, collaborative editing, API gateway, HL7, Solr, CI/CD, logging/monitoring, DB migration, recommendations). QuestionBased → <em>Algorithms in system designs</em> (tries, token/leaky bucket, quadtrees).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>For each design: requirements, APIs, data model, estimates, architecture, bottlenecks, failure modes, security, and cost.</p></div>
+</article>
+
+<article class="week" id="m21"><h3><span class="wk">M21</span>Advanced architecture and cloud operations<label class="done"><input type="checkbox" data-k="m21">Done</label></h3>
+<ul>
+<li>Design active-active and active-passive multi-region architectures.</li>
+<li>Study disaster recovery, RTO/RPO, backup/restore, failover, replication lag, and conflict resolution.</li>
+<li>Design multi-tenant systems with tenant isolation, quotas, data partitioning, and security boundaries. For database-per-tenant fleets, see the 10k-database schema rollout in M19.</li>
+<li>Study Kubernetes deployment, autoscaling (HPA vs. VPA vs. cluster autoscaler), health probes, graceful shutdown, resource limits, <span class="new">New</span> StatefulSets vs. Deployments, Services (ClusterIP/NodePort/LoadBalancer), ingress, ConfigMaps/Secrets with Key Vault, network policies, and Helm charts.</li>
+<li><span class="new">New</span> Containers: multi-stage Dockerfiles, .NET 8+ defaults (port 8080, non-root user), no secrets in images, image tagging by commit SHA, ACR pull via managed identity.</li>
+<li><span class="new">New</span> Azure compute choices: App Service (plans, slots, Always On) vs. Container Apps (KEDA scaling, Dapr; TrueSpend runs here) vs. AKS vs. Azure Functions. Functions: the <strong>in-process model reached end of support on Nov 10, 2026</strong>, so learn the isolated worker model, Durable Functions, hosting plans and cold starts.</li>
+<li>Practice blue-green/canary deployments, schema migrations, backward compatibility, and rollback.</li>
+<li>Evaluate cost, observability, compliance, and operational complexity.</li>
+<li>Map Azure services to AWS equivalents: Service Bus → SQS/SNS/EventBridge, Event Hubs → Kinesis/MSK, Cosmos DB → DynamoDB, Azure SQL → Aurora/RDS, AKS → EKS/ECS, Functions → Lambda, Blob Storage/Front Door → S3/CloudFront.</li>
+<li>Write Terraform modules with remote state, per-environment configuration, and plan/apply in CI; deploy one capstone service to AWS and one to Azure.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Azure Functions</em>, <em>Azure Functions 2</em>, <em>App Service</em>, <em>Azure Storage</em>, <em>Azure Devops</em>, <em>Deploying Web Api to AKS</em>. AKS_Docker → <em>.Net with Kubernetes</em>, <em>AKS</em>, <em>Docker/Containerization</em>. Behavioral → <em>Azure &amp; DevOps</em>, <em>Architecture</em> (AKS section). <span class="fix">Fixes:</span> Always On on Consumption, Front Door vs. App Gateway, Container Apps limits, Helm, “Cosmos is usually serverless”, .NET 6 Dockerfile with SA_PASSWORD. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Design a multi-region SaaS platform with tenant isolation, regional data strategy, disaster recovery, and deployment plan.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck3"><span class="label">Checkpoint 3: HLD<label class="done" style="float:right"><input type="checkbox" data-k="ck3">Done</label></span><p>A 45-minute HLD mock on an unseen prompt from M19/M20 (e.g., Dropbox or the notification system), run end to end with your framework, followed by 10 minutes of “how would this survive a region outage?”.</p></div>
+
+<div class="phase">Phase 4: AI Engineering</div>
+
+<article class="week" id="m22"><h3><span class="wk">M22</span>LLM application fundamentals and RAG<label class="done"><input type="checkbox" data-k="m22">Done</label></h3>
+<ul>
+<li>Study tokens, context windows, sampling (temperature, top-p), model selection, and pricing.</li>
+<li>Implement structured output with JSON schemas and tool/function calling; handle malformed output, refusals, and partial responses.</li>
+<li>Implement timeouts, bounded retries, streaming responses, provider rate limits, and fallback models.</li>
+<li>Version prompts, models, and output schemas together.</li>
+<li>Build a RAG pipeline: chunking strategies, embedding models, a vector index (pgvector or Azure AI Search), and metadata filtering.</li>
+<li><span class="new">New</span> Vector index internals: exact KNN vs. ANN, HNSW, IVF, product quantization, filtered ANN, and the recall vs. latency vs. memory trade-off.</li>
+<li>Implement hybrid retrieval (BM25 + vectors), <span class="new">New</span> Reciprocal Rank Fusion (on your resume), reranking, context assembly, and citations.</li>
+<li>Debug RAG stage by stage (indexing, filtering, ranking, context assembly, generation) when the correct document exists but the answer is wrong.</li>
+<li>Handle freshness, re-indexing, deletions, and embedding-model upgrades.</li>
+<li><span class="new">New</span> Use Semantic Kernel 1.x / Microsoft.Extensions.AI (not the pre-1.0 <code>IKernel</code> API in your notes).</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Azure AI Search/ Azure Open AI/LLM Integration</em>, <em>Azure Search vs Azure AI Search</em>, <em>Semantic Kernel</em>. Behavioral → <em>Azure &amp; DevOps</em> (AI section). <span class="fix">Fixes:</span> retired models (<code>text-davinci-003</code>, <code>ada-002</code>), outdated SK API, “nearest neighbor” as the algorithm. See section 10.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A tenant-scoped RAG service over the capstone's orders and policies, with citations and a written stage-by-stage debugging guide.</p></div>
+</article>
+
+<article class="week" id="m23"><h3><span class="wk">M23</span><span class="new">New</span> LLM internals, inference, and adaptation<label class="done"><input type="checkbox" data-k="m23">Done</label></h3>
+<ul>
+<li>Transformer basics: tokenization, embeddings, attention, decoder-only generation, why longer context costs more.</li>
+<li>Inference: prefill vs. decode, KV cache, continuous batching, PagedAttention/vLLM, quantization (INT8/INT4), speculative decoding, TTFT and TPOT, prefill-decode disaggregation.</li>
+<li>Self-hosting vs. API: GPU memory math, throughput and cost per million tokens, ONNX Runtime for CPU embeddings (Byte AI), Ollama or vLLM for local serving.</li>
+<li>The adaptation ladder: prompting → RAG → fine-tuning. SFT, LoRA/QLoRA, DPO at a conceptual level, distillation, fine-tuning embedding models and rerankers, preparing data and evals for a fine-tune.</li>
+<li>Recommendation and ranking: two-tower retrieval, candidate generation → ranking → re-ranking, cold start, feedback loops. Map this to Byte AI's “For You” feed.</li>
+<li>LLM moderation and classification pipelines: thresholds, precision/recall trade-offs, human review queues. Map this to your Gemini moderation pipeline.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Serve a small model with vLLM or Ollama and measure TTFT and throughput; write a GPU capacity estimate for a 1k RPS chat feature and a one-page “fine-tune vs. RAG vs. prompting” decision memo.</p></div>
+</article>
+
+<article class="week" id="m24"><h3><span class="wk">M24</span>Agents and evals<label class="done"><input type="checkbox" data-k="m24">Done</label></h3>
+<ul>
+<li>Decide when an agent is justified versus a deterministic workflow.</li>
+<li>Design tool schemas with least-privilege access, stop conditions, step and cost budgets, and human-approval checkpoints.</li>
+<li>Debug agent loops and wrong tool calls by inspecting traces.</li>
+<li>Learn Model Context Protocol (MCP) basics: exposing tools and resources to agents.</li>
+<li><span class="new">New</span> Multi-agent patterns (orchestrator-worker, evaluator-optimizer), agent memory, and context engineering.</li>
+<li>Build eval sets from production failures and edge cases; separate offline and online evals.</li>
+<li>Implement graders: exact and state-based checks, rubric-based LLM-as-judge, and human review.</li>
+<li>Calibrate LLM-as-judge against human labels; check for position, verbosity, and self-preference bias.</li>
+<li>Run repeated trials to handle non-determinism and add eval regression gates to CI.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Semantic Kernel</em> (plugins, memory, planners → modern equivalents are function calling and agent frameworks).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A support agent whose tools call into the capstone Saga, plus an eval suite that blocks regressions in CI.</p></div>
+</article>
+
+<article class="week" id="m25"><h3><span class="wk">M25</span>Production AI, LLM security, and AI system design<label class="done"><input type="checkbox" data-k="m25">Done</label></h3>
+<ul>
+<li>Analyze quality, latency, and cost trade-offs; measure cost per resolved task and tail latency.</li>
+<li>Implement prompt and semantic caching, context trimming, and routing to smaller models.</li>
+<li><span class="new">New</span> LLM gateway design: provider routing, quotas per tenant, key management, fallbacks, and usage metering. Add guardrails (input/output validation, PII, moderation).</li>
+<li>Add LLM observability: per-call traces, token usage, cost, latency, and quality metrics.</li>
+<li>Run an incident drill: a model or prompt change regresses quality → roll back, reproduce, add a regression eval, and canary the fix.</li>
+<li>Defend against direct and indirect prompt injection, cross-tenant retrieval leaks, data exfiltration through tools, and tool misuse.</li>
+<li><span class="new">New</span> LLM-generated queries and filters (your NL → Azure AI Search filter design): validate against a schema/allowlist, never trust generated filters for authorization, enforce security trimming server-side. Define what “low confidence” means, measured with grounding checks or eval scores.</li>
+<li>Enforce authorization at retrieval time and at action time; handle PII redaction and data retention (PHI if healthcare).</li>
+<li>Design AI systems: enterprise document Q&amp;A, customer-support agent, code-review assistant, semantic search platform, and multi-tenant RAG SaaS.</li>
+<li><span class="new">New</span> <strong>AI chat over company/customer data</strong> (builds on the shared foundation and non-AI version in M19):
+  <ul>
+  <li>Unstructured data (documents, policies): RAG with an ingestion pipeline (connectors, CDC, chunking, embeddings), access-control metadata stored per chunk, per-user filtering at retrieval, freshness and deletions.</li>
+  <li>Structured data (orders, accounts): prefer tool/function calling to typed, read-only APIs over open-ended text-to-SQL. If you use text-to-SQL: a read-only login with row-level security, a semantic layer or allowlisted views, query validation, and cost/row limits.</li>
+  <li>Answers with citations, “I don't know” when retrieval finds nothing relevant, and escalation to a human.</li>
+  <li>Security: injection hidden in documents, cross-tenant leaks, PII redaction; a model-generated query never decides what the user is authorized to see.</li>
+  <li>Evals: golden Q&amp;A set, execution accuracy for generated SQL, cost and latency per answer.</li>
+  <li><strong>The comparison to be ready for:</strong> deterministic bots are cheap, predictable and auditable; AI handles open-ended questions. The usual production answer is a hybrid: deterministic flows for transactional intents (refunds, address changes), AI for open questions, a human for everything else.</li>
+  </ul></li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Azure AI Search/ Azure Open AI/LLM Integration</em> (the diabetes-patients NL-filter example). Behavioral → <em>System Design</em> (document search, internal-docs chatbot), <em>Azure &amp; DevOps</em> (hallucination fallback, securing AI workloads).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>For each AI design: requirements, architecture, retrieval strategy, eval plan, cost model, failure modes, and security controls.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck4"><span class="label">Checkpoint 4: AI system design<label class="done" style="float:right"><input type="checkbox" data-k="ck4">Done</label></span><p>A 45-minute AI design mock (e.g., multi-tenant document Q&amp;A or a support agent). The interviewer must push on evals, cost per request, prompt injection, and “the right document exists but the answer is wrong”.</p></div>
+
+<div class="phase">Phase 5: AI Coding + Capstone</div>
+
+<article class="week" id="m26"><h3><span class="wk">M26</span>AI-assisted coding, code review, and code comprehension<label class="done"><input type="checkbox" data-k="m26">Done</label></h3>
+<ul>
+<li>Explore an unfamiliar .NET repository before editing: architecture, entry points, dependencies, tests, and conventions.</li>
+<li>Use AI to locate code paths and explain behavior, then verify findings yourself.</li>
+<li>Implement a feature across API, domain, persistence, and tests.</li>
+<li>Debug an existing production-style defect and write a regression test.</li>
+<li>Refactor safely, inspect diffs, run tests, and challenge AI-generated assumptions.</li>
+<li>Use Copilot, Claude Code, Codex, or IDE agents as available.</li>
+<li><span class="new">New</span> <strong>Code-review round:</strong> review a PR with planted defects (race condition, SQL/command injection, N+1, missing authorization, missing tests) in 30 minutes; rank findings by severity and explain each fix.</li>
+<li><span class="new">New</span> <strong>Code-comprehension round:</strong> read unfamiliar code cold and explain data flow, invariants, and how it fails.</li>
+<li><span class="new">New</span> <strong>AI-assisted coding round:</strong> practice in a CoderPad-style editor with an assistant; narrate how you verify each generated piece, and when you refuse a suggestion.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Complete a repository task while retaining control of design, correctness, security, and test quality, plus three timed code-review drills.</p></div>
+</article>
+
+<article class="week" id="m27"><h3><span class="wk">M27</span>Agentic tickets and live production debugging<label class="done"><input type="checkbox" data-k="m27">Done</label></h3>
+<ul>
+<li>Practice multi-file feature work with an explicit plan and incremental implementation.</li>
+<li>Add tenant-level distributed rate limiting to an existing application.</li>
+<li>Diagnose duplicate order notifications and fix the underlying delivery/idempotency issue.</li>
+<li>Replace in-memory caching with Redis without changing public API contracts.</li>
+<li>Add Docker Compose for API, SQL Server, Redis, and RabbitMQ.</li>
+<li>Implement retry/DLQ handling and validate failure behavior.</li>
+<li>Review generated changes for security, race conditions, missing tests, and unintended scope.</li>
+<li><span class="new">New</span> <strong>Live production-debugging round:</strong> a simulated incident where clues (logs, metrics, traces) arrive gradually; state hypotheses out loud, rank them, and pick the cheapest discriminating check each time.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Complete realistic engineering tickets and explain how AI was used, what was verified, and what was rejected; run two live-debugging drills.</p></div>
+</article>
+
+<article class="week" id="m28"><h3><span class="wk">M28</span>Capstone integration<label class="done"><input type="checkbox" data-k="m28">Done</label></h3>
+<ul>
+<li>Complete a distributed order platform using .NET, SQL Server, Redis, RabbitMQ (raw and via NServiceBus/MassTransit), outbox/inbox, Saga, and idempotent consumers.</li>
+<li>Add OpenTelemetry, Prometheus/Grafana, Docker Compose, and automated tests.</li>
+<li>Run the failure-simulation suite and document recovery behavior.</li>
+<li>Review gaps and prepare concise explanations of architecture decisions and trade-offs.</li>
+<li>Integrate the AI support assistant: tenant-scoped RAG, tool calls into the Saga with human approval, and the eval suite.</li>
+<li>Add OAuth2/OIDC between services and keep secrets in a vault.</li>
+<li><span class="new">New</span> Add a SignalR channel that pushes order-status updates to the UI.</li>
+<li><span class="new">New</span> Publish it as a portfolio repo: README, architecture diagram, ADRs, failure-test results, and a short demo recording. M31 uses this.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A demonstrable, public, production-style capstone covering distributed reliability, security, real-time updates, and AI components.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck5"><span class="label">Checkpoint 5: AI coding<label class="done" style="float:right"><input type="checkbox" data-k="ck5">Done</label></span><p>A 60-minute AI-assisted coding mock in an unfamiliar repo, plus a 20-minute code-review drill on a PR you have not seen.</p></div>
+
+<div class="phase">Phase 6: Behavioral &amp; Leadership</div>
+
+<article class="week" id="m29"><h3><span class="wk">M29</span>Story bank and full question bank<label class="done"><input type="checkbox" data-k="m29">Done</label></h3>
+<h4>Framework</h4>
+<ul>
+<li>Write 10–14 STAR stories. Tag each one with Meta's signal areas (scope, ownership, ambiguity, perseverance, conflict resolution, growth, communication, leadership), Amazon's 16 Leadership Principles, and Google's Googleyness &amp; Leadership traits (humility, comfort with ambiguity, collaboration). Fill any gaps with extra stories.</li>
+<li>Every story needs numbers (scope, team size, metrics, business impact), <em>your</em> specific role (“I”, not “we”), and a “what I'd do differently”.</li>
+<li>Rehearse each in under 3 minutes, with follow-ups for “what was your specific role?” and “what would you do differently?”.</li>
+<li>Rewrite the generic “how I generally do X” answers in your notes as specific STAR stories. Replace the cliché weaknesses (“I take on too much”, “I'm a perfectionist”) with a real, current weakness and what you are doing about it.</li>
+</ul>
+<h4>Stories to build</h4>
+<div class="tablewrap"><table>
+<thead><tr><th>#</th><th>Story</th><th>Source</th><th>Best for</th></tr></thead><tbody>
+<tr><td>1</td><td>On-prem search → Azure AI Search migration (&gt;98% latency cut; multi-table event ordering; vector/NLP re-index)</td><td>Resume + notes</td><td>Technical depth, hardest project, tech decision</td></tr>
+<tr><td>2</td><td>Solr vs. Azure AI Search decision</td><td>Notes</td><td>Choosing between technologies</td></tr>
+<tr><td>3</td><td>Patient/member Saga sync (~20 min → under a minute, millions of entries)</td><td>Notes (not on resume)</td><td>Customer impact, ownership</td></tr>
+<tr><td>4</td><td>Weekend search-latency incident (0-character searches)</td><td>Notes</td><td>Production incident, debugging, customer empathy</td></tr>
+<tr><td>5</td><td>Consumer vs. API deadlock, diagnosed from deadlock reports</td><td>Notes</td><td>Hard bug, collaboration with DBAs</td></tr>
+<tr><td>6</td><td>MSMQ silently dropping messages → RabbitMQ + monitoring</td><td>Notes</td><td>Ownership, Dive Deep</td></tr>
+<tr><td>7</td><td>Four security vulnerabilities fixed ahead of SLA during FedRAMP High</td><td>Resume</td><td>Delivering under pressure, prioritization</td></tr>
+<tr><td>8</td><td>Image-cleanup automation ($34K/yr) and VM → K8s migration ($20K/yr)</td><td>Resume</td><td>Frugality, Invent &amp; Simplify, de-risking</td></tr>
+<tr><td>9</td><td>Azure OpenAI vulnerability-triage tool (weekly manual → daily automated)</td><td>Resume</td><td>AI usage, verification, adoption</td></tr>
+<tr><td>10</td><td>Lead developer of a 12-person team: standards, code review, mentoring, PI planning</td><td>Resume + notes</td><td>Leadership, raising the bar, mentoring</td></tr>
+<tr><td>11</td><td>WCF → Web API modernization / refactoring a tightly coupled MVC app</td><td>Notes</td><td>Tech debt, legacy migration</td></tr>
+<tr><td>12</td><td>Building Byte AI solo end to end</td><td>Resume</td><td>Bias for action, ambiguity, product sense</td></tr>
+<tr><td>13</td><td>A disagreement with your TrueSpend co-founder</td><td>Resume</td><td>Conflict, disagree and commit</td></tr>
+<tr><td>14</td><td>A real failure you owned, and a real conflict with a peer or manager</td><td><em>Still to find</em></td><td>Failure, conflict (most people lack these, so find them first)</td></tr>
+</tbody></table></div>
+
+<h4>A. Openers and motivation</h4>
+<ul>
+<li>Tell me about yourself (90-second and 2-minute versions); walk me through your resume. Your current note's version is one sentence about “Microsoft stack” web apps. Rewrite it around Citrix, UPMC and AI.</li>
+<li>Why this company? Why this role? Why now?</li>
+<li>What are you looking for next? Where do you see yourself in 3–5 years? (Your notes say staff engineer/architect; make it concrete.)</li>
+<li>Proudest project? Most technically complex project?</li>
+<li>What would your manager or peers say about you? Strengths and weaknesses?</li>
+</ul>
+<h4>B. Ownership, impact, delivering results</h4>
+<ul>
+<li>The project with the largest scope you drove end to end.</li>
+<li>A time you went beyond your role.</li>
+<li>A missed deadline, or delivering under a tight one.</li>
+<li>A decision with incomplete data (Bias for Action); a calculated risk.</li>
+<li>Something you did without your manager's approval.</li>
+<li>A process you simplified or automated (Invent and Simplify).</li>
+<li>A feature that measurably improved users' lives.</li>
+</ul>
+<h4>C. Ambiguity</h4>
+<ul>
+<li>Unclear or late-changing requirements.</li>
+<li>A project with no clear owner or direction.</li>
+<li>Conflicting business priorities: what did you drop, and why?</li>
+</ul>
+<h4>D. Conflict and collaboration</h4>
+<ul>
+<li>Disagreeing with a peer, a manager, or a senior/staff engineer.</li>
+<li>Two teams that couldn't agree on a path.</li>
+<li>Disagree and commit.</li>
+<li>A difficult or non-technical stakeholder.</li>
+<li>Receiving critical feedback; giving negative feedback to a developer.</li>
+</ul>
+<h4>E. Influence and leadership</h4>
+<ul>
+<li>Influencing without authority; getting a team to adopt a technology.</li>
+<li>Setting technical direction or leading a design review.</li>
+<li>Pushing back on scope, deadlines or product.</li>
+<li>Raising the bar for others; how you ensure code quality on a team.</li>
+<li>Keeping a team motivated; handling a struggling team member.</li>
+</ul>
+<h4>F. Growth, mistakes, learning</h4>
+<ul>
+<li>Your biggest mistake or failure, and what changed afterwards.</li>
+<li>A time you were wrong and changed your mind.</li>
+<li>Learning a new technology fast; how you stay current.</li>
+<li>Mentoring someone; a junior engineer stuck on a bug for hours.</li>
+<li>What separates a senior engineer from a junior, and from a staff engineer?</li>
+</ul>
+<h4>G. Execution and quality</h4>
+<ul>
+<li>Tech debt vs. features; a time you cut corners.</li>
+<li>The hardest bug you have debugged.</li>
+<li>A production incident you owned, and a blameless postmortem that led to a systemic change.</li>
+<li>Speed vs. quality trade-offs; handling pressure and urgent deadlines.</li>
+</ul>
+<h4>H. Customer focus</h4>
+<ul>
+<li>Going out of your way for a user; using data or feedback to change direction.</li>
+</ul>
+<h4>I. AI questions (now standard)</h4>
+<ul>
+<li>How do you use AI tools day to day? Give a specific example of efficiency gained.</li>
+<li>How do you verify AI output? A time AI was wrong and how you caught it.</li>
+<li>What would you <em>never</em> let an AI assistant do in a production codebase?</li>
+<li>How would you handle a teammate over-relying on AI-generated code?</li>
+<li>When would you hand a task to an autonomous agent?</li>
+<li>Have you driven AI adoption across a team?</li>
+</ul>
+<h4>J. Questions specific to your resume</h4>
+<p><strong>Citrix</strong></p>
+<ul>
+<li><strong>Why are you leaving after about a year?</strong> Expect this. Prepare a forward-looking answer that doesn't blame anyone.</li>
+<li>FedRAMP High: what was your part vs. the team's? Which control was hardest to meet?</li>
+<li>The four vulnerabilities: how did you prioritize under SLA pressure? Explain root cause and fix generically, with no confidential detail.</li>
+<li>Cost-cleanup jobs: how did you find the waste, make deletion safe, and get buy-in?</li>
+<li>VM → Kubernetes migration: how did you reduce risk? What was the rollback plan? What went wrong?</li>
+<li>Vulnerability-triage tool: how did you validate classifications? What happened when it was wrong? Did teams trust auto-created tickets?</li>
+<li>Mentoring and leading reviews after less than a year: how did you earn credibility quickly in a new org?</li>
+<li>RegScale POC: how did you evaluate the vendor? Build vs. buy?</li>
+<li>Policy-as-code automation (60 → 10 minutes): did anyone resist? How did you get adoption?</li>
+</ul>
+<p><strong>UPMC</strong></p>
+<ul>
+<li>About 8 years at one employer: how did your role grow? Why stay, and why leave?</li>
+<li>Owning 10 services, 25 workers and 8 databases: how did you prioritize? What was on-call like? What broke worst?</li>
+<li>Azure AI Search migration: how did you make the case? How did you validate with load tests? Any surprises?</li>
+<li>Coding standards: who pushed back, and how did you handle it?</li>
+<li>Azure OpenAI at a health plan: how did you handle compliance/PHI concerns and governance pushback?</li>
+</ul>
+<p><strong>Career arc</strong></p>
+<ul>
+<li>Why move from electrical engineering to software?</li>
+<li>Why only one year at Accenture?</li>
+<li>Why the shift from application developer to cloud engineer, and which direction next? Have a coherent story.</li>
+</ul>
+<p><strong>Side projects</strong></p>
+<ul>
+<li>Byte AI: why build it? How did you prioritize solo? Hardest call? What would you redo? About 50 DAU: how do you think about growth, or a product not taking off?</li>
+<li>TrueSpend co-founder: “Are you planning to go full-time on it?” “How do you split your time?” Check IP and moonlighting policies first; have an honest, settled answer.</li>
+<li>How do you balance a full-time job with three side products? (A burnout and focus question.)</li>
+</ul>
+<h4>K. <span class="new">New</span> How your team works (process questions)</h4>
+<ul>
+<li>Walk me through your release process (change requests, RC tags, load testing, feature flags, release-night monitoring).</li>
+<li>How does code move from dev to production (CI → Lab → QA → prod)?</li>
+<li>How does your team plan work (SAFe PI planning, grooming, capacity, dependencies)?</li>
+<li>Describe your team structure and your role in it.</li>
+<li>How do you work with UX, QA and product owners on a work item?</li>
+<li>Branching strategy; how do you get one commit into a release branch?</li>
+<li>Code-review rules, testing expectations, on-call rotation, incident process.</li>
+</ul>
+<h4>L. Questions to ask your interviewers</h4>
+<ul>
+<li>Team structure and how cross-team collaboration happens; methodology; deployment strategy; on-call.</li>
+<li>The team's biggest current challenge; openness to new technology; what success looks like in 6 and 12 months.</li>
+<li><span class="new">New</span> How the team uses AI tools; how technical decisions get made (RFCs/ADRs); what separates senior from staff here; the last incident and what changed after it.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>BehavioralInterviewQuestions → <em>Personal and Personality</em> (raw answers for most of sections A–H, K and L), <em>Methodologies</em> (SAFe, Agile, SaaS). All other behavioral-folder notes are technical Q&amp;A and map to their modules above.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Every question above has a matching story or answer, rehearsed aloud in under 3 minutes, with follow-ups ready.</p></div>
+</article>
+
+<article class="week" id="m30"><h3><span class="wk">M30</span>Project deep dives, motivation, and leveling<label class="done"><input type="checkbox" data-k="m30">Done</label></h3>
+<ul>
+<li>Prepare <strong>two</strong> 20-minute deep dives:
+  <ol>
+  <li><strong>Backend:</strong> the on-prem search → Azure AI Search migration. Cover the problem, baseline, why not Azure Data Factory, the custom sync tool, keeping a 10-table document consistent under concurrent events, the vector/NLP re-index, load-test results, what broke, and what you would redo. (Alternative: FedRAMP High work.)</li>
+  <li><strong>AI:</strong> Byte AI hybrid search and feed. Cover ONNX embeddings, pgvector, full-text search, RRF, the cosine-similarity feed, the Gemini moderation pipeline, cost, and scale.</li>
+  </ol></li>
+<li>Prepare for follow-ups: why not X, how it scales 10×, cost, monitoring, and security.</li>
+<li>Prepare answers for why this company, why this role, and why you are leaving.</li>
+<li>Understand leveling: what separates senior from mid-level and staff in scope, autonomy, and influence.</li>
+<li><span class="new">New</span> Technical-leadership signals: writing design docs, driving tech-debt prioritization, build vs. buy, project estimation, raising failure modes unprompted.</li>
+<li>Learn compensation negotiation basics: levels, base/bonus/equity, competing offers, and timing.</li>
+</ul>
+<div class="callout notes"><span class="label">From your notes</span><p>Behavioral → <em>Personal and Personality</em> (“challenging project you led in .NET”, “pick between two technologies”). Azure → <em>Azure AI Search/ Azure Open AI/LLM Integration</em> (technical detail for deep dive #1).</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Two rehearsed deep dives that survive five levels of “why”, plus clear motivation answers.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck6"><span class="label">Checkpoint 6: Behavioral<label class="done" style="float:right"><input type="checkbox" data-k="ck6">Done</label></span><p>A 45-minute behavioral mock with aggressive follow-up probing (“what exactly did <em>you</em> do?”), then a 20-minute deep-dive mock on one of your two projects.</p></div>
+
+<div class="phase">Phase 7: Resume &amp; Positioning</div>
+
+<article class="week" id="m31"><h3><span class="wk">M31</span><span class="new">New</span> Resume and positioning<label class="done"><input type="checkbox" data-k="m31">Done</label></h3>
+<h4>Positioning</h4>
+<ul>
+<li>Pick 2–3 target lanes (e.g., Senior Backend/.NET, AI Engineer, optionally Cloud/Platform). Write one resume variant per lane, each with its own headline, summary and bullet order. Your current headline mixes four identities.</li>
+<li>Fix inconsistent titles: header “Senior Cloud Engineer”, summary “Senior Software Engineer”, Citrix “Senior Cloud Development Engineer”. Pick one per variant.</li>
+</ul>
+<h4>Content</h4>
+<ul>
+<li>Add what your notes show but the resume omits: <strong>lead developer of a 12-person team</strong>, and the <strong>patient/member Saga sync bullet</strong> (~20 min → under a minute, millions of entries).</li>
+<li>Lead with outcomes; for example, drop “Windows Task Scheduler” and lead with what the automation fed (FedRAMP inventory, ~14K resources).</li>
+<li>Add numbers to UPMC bullets that have none (front-end, Azure OpenAI, mentoring): requests/day, members served, team size.</li>
+<li>Shrink Accenture to 1–2 bullets. Fix “two production applications — including…”.</li>
+<li>Byte AI “~50 DAU”: frame it honestly with context (solo build, live on the App Store). Never inflate it.</li>
+<li>Trim skills to each lane; match keywords to each job description.</li>
+<li>Add the capstone repo under Projects.</li>
+<li>Reconcile your notes with the resume. For each claim in <a href="#s-fixes">section 10 → “Claims to verify”</a>, either add it to the resume (if true and defensible) or drop it from your answers.</li>
+</ul>
+<h4>Verification</h4>
+<ul>
+<li>ATS check: single column, standard headings, PDF text extracts cleanly.</li>
+<li>Defend every line: a 60-second explanation plus answers to “how exactly?” and “what went wrong?” for each bullet. Cut anything you can't defend.</li>
+<li>Get 2–3 people to review it, ideally engineers at target companies.</li>
+<li>Make public profiles match: LinkedIn, GitHub pinned repos (capstone first), personal site.</li>
+</ul>
+<h4>Search logistics</h4>
+<ul>
+<li>A tiered target-company list, referral outreach messages, and an application tracker.</li>
+<li>A recruiter-screen pitch, salary-expectation answer, and timeline answer. Ask each recruiter which round types the loop has (AI-assisted coding? code review? product architecture?).</li>
+<li>Applications take 2–6 weeks to reach an onsite, so send warm-up applications when you finish this module and run M32 in parallel.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>2–3 reviewed resume variants, aligned profiles, a target list with referrals requested, and the first applications sent.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck7"><span class="label">Checkpoint 7: Recruiter screen<label class="done" style="float:right"><input type="checkbox" data-k="ck7">Done</label></span><p>A 20-minute recruiter-screen mock: tell me about yourself, why leaving, salary expectations, timeline. Then have someone pick any three resume bullets and drill into each for five minutes.</p></div>
+
+<div class="phase">Phase 8: Final Mock Interviews</div>
+
+<article class="week" id="m32"><h3><span class="wk">M32</span>Final mock interviews<label class="done"><input type="checkbox" data-k="m32">Done</label></h3>
+<ul>
+<li>Complete 60-minute LLD and machine-coding mocks.</li>
+<li>Complete 60-minute HLD mocks, including at least one classic case, one AI system design, and <span class="new">New</span> one product-architecture round.</li>
+<li>Complete a 60–90-minute AI-assisted coding exercise in an unfamiliar repository.</li>
+<li><span class="new">New</span> Complete a code-review mock, a code-comprehension mock, and a live production-debugging mock.</li>
+<li>Complete behavioral and project deep-dive mocks with follow-up probing.</li>
+<li>Use peers or platforms such as Hello Interview, Exponent, or interviewing.io; record sessions and score them against a rubric: problem solving, communication, technical depth, verification/testing, trade-offs, and seniority signals.</li>
+<li>Review gaps after each mock and repeat weak areas until performance is consistent.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A repeatable interview performance baseline across every round type.</p></div>
+</article>
+</section>
+
+<section id="s-failure"><h2>4. Failure-engineering checklist</h2>
+<p>Do not mark a topic complete after a happy-path demo. For each relevant component, deliberately inject failures, observe the result, and document the recovery behavior.</p>
+<h3>Message broker and queue</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c1"> <span>Broker unavailable during publishing.</span></label></li>
+<li><label><input type="checkbox" data-k="c2"> <span>Publisher confirmation is lost after the broker accepted the message.</span></label></li>
+<li><label><input type="checkbox" data-k="c3"> <span>Consumer crashes before ACK; broker redelivers.</span></label></li>
+<li><label><input type="checkbox" data-k="c4"> <span>Consumer commits its database transaction and crashes before ACK.</span></label></li>
+<li><label><input type="checkbox" data-k="c5"> <span>Duplicate message is delivered or processed concurrently.</span></label></li>
+<li><label><input type="checkbox" data-k="c6"> <span>Messages for one aggregate arrive out of order.</span></label></li>
+<li><label><input type="checkbox" data-k="c7"> <span>Queue backlog grows faster than consumer throughput.</span></label></li>
+<li><label><input type="checkbox" data-k="c8"> <span>Poison message repeatedly fails; DLQ replay is attempted.</span></label></li>
+<li><label><input type="checkbox" data-k="c9"> <span>Broker restarts and durability assumptions are tested.</span></label></li>
+<li><label><input type="checkbox" data-k="c10"> <span>Kafka consumer group rebalances mid-processing and partitions move to another consumer.</span></label></li>
+<li><label><input type="checkbox" data-k="c11"> <span>Offset is committed before processing completes, and the consumer crashes.</span></label></li>
+<li><label><input type="checkbox" data-k="c49"> <span><span class="new">New</span> Payload exceeds the broker's message-size limit (claim-check needed).</span></label></li>
+<li><label><input type="checkbox" data-k="c50"> <span><span class="new">New</span> Federation/shovel link to the DR cluster goes down; messages stop replicating.</span></label></li>
+<li><label><input type="checkbox" data-k="c59"> <span><span class="new">New</span> Queue hits its length limit and messages are dropped or dead-lettered silently.</span></label></li>
+</ul>
+<h3>Database and transactions</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c12"> <span>Transaction rolls back after several writes.</span></label></li>
+<li><label><input type="checkbox" data-k="c13"> <span>Database A commits while Database B fails.</span></label></li>
+<li><label><input type="checkbox" data-k="c14"> <span>Connection drops during commit and outcome is uncertain.</span></label></li>
+<li><label><input type="checkbox" data-k="c15"> <span>Concurrent updates produce a lost update or invariant violation.</span></label></li>
+<li><label><input type="checkbox" data-k="c16"> <span>Deadlock victim is selected; application retries the correct unit of work.</span></label></li>
+<li><label><input type="checkbox" data-k="c17"> <span>Long transaction causes blocking or transaction-log growth.</span></label></li>
+<li><label><input type="checkbox" data-k="c18"> <span>Connection pool is exhausted.</span></label></li>
+<li><label><input type="checkbox" data-k="c19"> <span>Outbox record is saved but relay is unavailable.</span></label></li>
+<li><label><input type="checkbox" data-k="c20"> <span>Two relay workers compete for the same event.</span></label></li>
+<li><label><input type="checkbox" data-k="c58"> <span><span class="new">New</span> A message consumer and an API request deadlock on the same rows.</span></label></li>
+</ul>
+<h3>Saga and consistency</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c21"> <span>Payment succeeds but the caller times out.</span></label></li>
+<li><label><input type="checkbox" data-k="c22"> <span>Inventory reservation succeeds but order update fails.</span></label></li>
+<li><label><input type="checkbox" data-k="c23"> <span>Saga coordinator crashes mid-workflow and restarts.</span></label></li>
+<li><label><input type="checkbox" data-k="c24"> <span>Compensation itself fails or times out.</span></label></li>
+<li><label><input type="checkbox" data-k="c25"> <span>Duplicate compensation is received.</span></label></li>
+<li><label><input type="checkbox" data-k="c26"> <span>Old event arrives after newer business state.</span></label></li>
+<li><label><input type="checkbox" data-k="c27"> <span>Two Sagas attempt to modify the same order concurrently.</span></label></li>
+</ul>
+<h3>Resilience and operations</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c28"> <span>Dependency is slow rather than fully unavailable.</span></label></li>
+<li><label><input type="checkbox" data-k="c29"> <span>Retries amplify downstream traffic into a retry storm.</span></label></li>
+<li><label><input type="checkbox" data-k="c30"> <span>Circuit breaker opens, half-opens, and recovers.</span></label></li>
+<li><label><input type="checkbox" data-k="c31"> <span>Redis becomes unavailable or returns stale data.</span></label></li>
+<li><label><input type="checkbox" data-k="c32"> <span>Distributed lock expires while the original owner is still working.</span></label></li>
+<li><label><input type="checkbox" data-k="c33"> <span>Service restarts with in-flight requests.</span></label></li>
+<li><label><input type="checkbox" data-k="c34"> <span>Queue age increases while basic health checks remain green.</span></label></li>
+<li><label><input type="checkbox" data-k="c35"> <span>Recovery creates a sudden traffic spike.</span></label></li>
+</ul>
+<h3><span class="new">New</span> Real-time delivery</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c51"> <span>A SignalR/WebSocket node dies and every client reconnects at once (reconnect storm).</span></label></li>
+<li><label><input type="checkbox" data-k="c52"> <span>The SignalR Redis backplane becomes unavailable.</span></label></li>
+<li><label><input type="checkbox" data-k="c53"> <span>A client misses messages while disconnected and must resync state.</span></label></li>
+<li><label><input type="checkbox" data-k="c54"> <span>Push notification tokens are stale or revoked.</span></label></li>
+</ul>
+<h3><span class="new">New</span> Bulk operations and fleet changes</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c60"> <span>Microsoft Graph returns 429s halfway through a 100k-user job; the job resumes from its checkpoint without redoing finished chunks.</span></label></li>
+<li><label><input type="checkbox" data-k="c61"> <span>A worker crashes mid-chunk; rerunning the chunk causes no double effects.</span></label></li>
+<li><label><input type="checkbox" data-k="c62"> <span>A schema migration fails on 3% of tenant databases; they are quarantined and the app keeps working with mixed schema versions.</span></label></li>
+</ul>
+<h3>Security and APIs</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c63"> <span><span class="new">New</span> A customer double-clicks “Pay” and two requests with the same idempotency key arrive at the same moment.</span></label></li>
+<li><label><input type="checkbox" data-k="c64"> <span><span class="new">New</span> A reservation hold expires at the same moment its payment succeeds.</span></label></li>
+<li><label><input type="checkbox" data-k="c36"> <span>Expired or revoked token is still accepted by a downstream service.</span></label></li>
+<li><label><input type="checkbox" data-k="c37"> <span>A user reaches another tenant's resource by changing an ID (broken object-level authorization).</span></label></li>
+<li><label><input type="checkbox" data-k="c38"> <span>Client retries a POST with the same idempotency key while the first request is still in flight.</span></label></li>
+<li><label><input type="checkbox" data-k="c39"> <span>Webhook is delivered twice, out of order, or replayed by an attacker.</span></label></li>
+<li><label><input type="checkbox" data-k="c40"> <span>Signing key or secret is rotated while services are running.</span></label></li>
+</ul>
+<h3>AI / LLM components</h3>
+<ul class="checks">
+<li><label><input type="checkbox" data-k="c41"> <span>LLM provider times out, rate-limits (429), or is unavailable.</span></label></li>
+<li><label><input type="checkbox" data-k="c42"> <span>Model returns malformed JSON or ignores the output schema.</span></label></li>
+<li><label><input type="checkbox" data-k="c43"> <span>Retrieved document contains a prompt-injection instruction.</span></label></li>
+<li><label><input type="checkbox" data-k="c44"> <span>Retrieval returns another tenant's document.</span></label></li>
+<li><label><input type="checkbox" data-k="c45"> <span>Agent loops or exceeds its step/cost budget.</span></label></li>
+<li><label><input type="checkbox" data-k="c46"> <span>Model or prompt version change regresses eval scores.</span></label></li>
+<li><label><input type="checkbox" data-k="c47"> <span>Embedding model changes and the index becomes inconsistent.</span></label></li>
+<li><label><input type="checkbox" data-k="c48"> <span>Index is stale after source data is updated or deleted.</span></label></li>
+<li><label><input type="checkbox" data-k="c55"> <span><span class="new">New</span> Self-hosted inference or embedding service saturates; search falls back to lexical only.</span></label></li>
+<li><label><input type="checkbox" data-k="c56"> <span><span class="new">New</span> An LLM-generated search filter tries to widen scope beyond the user's tenant or permissions.</span></label></li>
+<li><label><input type="checkbox" data-k="c57"> <span><span class="new">New</span> Moderation/classification false positives spike after a model change.</span></label></li>
+<li><label><input type="checkbox" data-k="c65"> <span><span class="new">New</span> A chat's generated SQL tries to write data or read another tenant's rows.</span></label></li>
+</ul>
+</section>
+
+<section id="s-deep"><h2>5. Deep-dive implementation requirements</h2>
+<h3>5.1 Queue delivery guarantees</h3>
+<ul>
+<li>Distinguish publisher confirms from consumer acknowledgements; they protect different stages.</li>
+<li>Understand at-most-once, at-least-once, and effectively-once business processing.</li>
+<li>Treat duplicate delivery as normal; use durable idempotency at the business boundary.</li>
+<li>Understand routing failures, durability, prefetch, redelivery, ordering, competing consumers, and backpressure.</li>
+<li>Compare RabbitMQ acknowledgement/queue behavior, Kafka partition/offset behavior, and Azure Service Bus locks/settlement.</li>
+</ul>
+<h3>5.2 Retry architecture</h3>
+<ul>
+<li>Classify transient and permanent failures before retrying.</li>
+<li>Use exponential backoff with jitter, maximum attempts, retry budgets, and an overall deadline.</li>
+<li>Avoid nested retry amplification across HTTP, database, and consumer layers.</li>
+<li>Recognize uncertain outcomes: timeout does not prove an operation failed.</li>
+<li>Use delayed retries and DLQ for exhausted/poison messages; design replay as a controlled operational workflow.</li>
+</ul>
+<h3>5.3 Transactional outbox and inbox</h3>
+<ul>
+<li>Commit business state and outbox record in the same local database transaction.</li>
+<li>Assume relay publication can be duplicated if it crashes after publish but before recording success.</li>
+<li>Use safe concurrent claiming/leases; recover abandoned claims and preserve per-aggregate ordering where required.</li>
+<li>Commit inbox deduplication record and consumer business changes in the same local transaction.</li>
+<li>Plan schema evolution, retention, cleanup, CDC versus polling, backlog monitoring, and replay.</li>
+</ul>
+<h3>5.4 Multiple databases and distributed transactions</h3>
+<ul>
+<li>Understand that two independent local commits do not automatically form one atomic transaction.</li>
+<li>Reproduce partial commit and uncertain commit outcomes.</li>
+<li>Study 2PC and its coordinator, prepare/commit, blocking, timeout, and operational constraints.</li>
+<li>Use Saga for long-running business workflows where local transactions and compensation are appropriate.</li>
+<li>Persist Saga state; make steps and compensations idempotent; recover after process restart.</li>
+<li>Treat compensation as a new business operation that can fail, not as a magical rollback.</li>
+</ul>
+<h3>5.5 SQL concurrency and locking</h3>
+<ul>
+<li>Reproduce dirty reads, non-repeatable reads, phantom reads, lost updates, write skew, and deadlocks.</li>
+<li>Use rowversion/optimistic concurrency and understand when pessimistic locks are justified.</li>
+<li>Handle SQL Server deadlock error 1205 by retrying the correct transaction boundary with bounded randomized delay.</li>
+<li>Understand lock escalation, long transactions, blocking, snapshot isolation, and connection-pool pressure.</li>
+<li>Measure throughput and tail latency under concurrent load.</li>
+</ul>
+<h3>5.6 Distributed locks</h3>
+<ul>
+<li>Understand lock acquisition, lease expiry, renewal, ownership, and safe release.</li>
+<li>Simulate pauses that outlive the lease and demonstrate stale lock holders.</li>
+<li>Use fencing tokens when stale owners must be prevented from writing.</li>
+<li>Compare database coordination with Redis-based coordination and identify when a distributed lock is unnecessary.</li>
+</ul>
+<h3>5.7 .NET async and runtime</h3>
+<ul>
+<li>Understand how async/await compiles to a state machine and resumes on the ThreadPool or a captured context.</li>
+<li>Avoid sync-over-async; diagnose ThreadPool starvation with dotnet-counters and dotnet-trace.</li>
+<li>Propagate CancellationToken through HTTP, database, and messaging calls; honor overall deadlines.</li>
+<li>Use Channels for bounded producer/consumer pipelines with backpressure.</li>
+<li>Understand GC generations, the LOH, and allocation pressure; use Span&lt;T&gt;, Memory&lt;T&gt;, and ArrayPool where they matter.</li>
+</ul>
+<h3>5.8 <span class="new">New</span> ASP.NET Core and EF Core</h3>
+<ul>
+<li>Know the DI lifetime rules and how a captive dependency happens; create scopes explicitly in background work.</li>
+<li>Use IHttpClientFactory or typed clients with resilience handlers; never create HttpClient per call.</li>
+<li>Read-only queries use AsNoTracking and projections; never rely on lazy loading for performance.</li>
+<li>DbContext is not thread-safe: scoped per request, IDbContextFactory elsewhere, never singleton.</li>
+<li>Migrations ship as reviewed, idempotent scripts using expand/contract for zero-downtime deploys.</li>
+</ul>
+<h3>5.9 <span class="new">New</span> Messaging frameworks (NServiceBus / MassTransit)</h3>
+<ul>
+<li>Know exactly what the framework's outbox guarantees and where its deduplication state lives.</li>
+<li>Configure immediate and delayed retries deliberately; know where exhausted messages go and how they are replayed.</li>
+<li>Sagas: correlation properties, persistence, concurrency control, timeouts, and completion.</li>
+<li>Version message contracts additively; run old and new contracts side by side during migrations.</li>
+</ul>
+<h3>5.10 Streaming and event sourcing</h3>
+<ul>
+<li>Choose partition keys for ordering and even distribution; understand the impact of rebalancing.</li>
+<li>Commit offsets only after durable processing, and combine this with idempotent consumers.</li>
+<li>Know what Kafka exactly-once covers (read-process-write within Kafka) and what it does not (external side effects).</li>
+<li>Evolve event schemas compatibly; plan projection rebuilds and snapshotting.</li>
+</ul>
+<h3>5.11 API design and security</h3>
+<ul>
+<li>Make unsafe operations idempotent with client-supplied keys and stored responses.</li>
+<li>Use cursor pagination for large or changing datasets; version APIs without breaking clients.</li>
+<li>Validate tokens fully (issuer, audience, signature, expiry); enforce object-level and tenant-level authorization on every request.</li>
+<li>Use authorization code + PKCE for user sign-in; keep tokens out of JavaScript-readable storage where possible (BFF).</li>
+<li>Sign webhooks, include timestamps to prevent replay, and make receivers idempotent.</li>
+</ul>
+<h3>5.12 <span class="new">New</span> Real-time delivery</h3>
+<ul>
+<li>Pick polling, SSE, or WebSockets based on direction, frequency, and infrastructure constraints.</li>
+<li>Scale out with a backplane or managed service; know what happens to in-flight messages when a node dies.</li>
+<li>Design reconnect with jittered backoff and a resync step (last-seen sequence number) so clients never silently miss state.</li>
+<li>Treat push notifications as best-effort; the source of truth is always fetchable.</li>
+</ul>
+<h3>5.13 <span class="new">New</span> Architecture and migrations</h3>
+<ul>
+<li>Draw service boundaries around bounded contexts and data ownership, not around tables or teams' convenience.</li>
+<li>Prefer a modular monolith until independent scaling, deployment, or ownership demands a split.</li>
+<li>Migrate incrementally (strangler fig, parallel run, CDC sync) with a rollback path at every step.</li>
+<li>Record significant decisions as ADRs with the alternatives you rejected.</li>
+</ul>
+<h3>5.13a <span class="new">New</span> Long-running bulk operations</h3>
+<ul>
+<li>First ask whether the change can live at a higher level (group, policy, tenant default) or be applied lazily, so no fan-out is needed.</li>
+<li>When fan-out is needed: job ID + progress, chunking with checkpoints, idempotent per-item operations, per-item status, throttling that respects downstream limits, waves with automatic halt, and verification after completion.</li>
+<li>For fleets of databases: expand/contract so the app tolerates mixed versions, a catalog tracking each DB's version, bounded concurrency per pool, and quarantine for failures.</li>
+</ul>
+<h3>5.13b <span class="new">New</span> Payment exactly-once</h3>
+<ul>
+<li>One idempotency key per checkout attempt, created before the first try and reused on retries; enforced by a unique constraint server-side and passed through to the payment provider.</li>
+<li>Only one successful payment per order, enforced by the database, not by the UI.</li>
+<li>A timeout is an unknown outcome: query or retry with the same key, never a new one; reconcile against provider reports.</li>
+</ul>
+<h3>5.14 RAG and retrieval</h3>
+<ul>
+<li>Treat retrieval quality as measurable: recall@k, precision, and answer faithfulness.</li>
+<li>Combine lexical and vector retrieval (e.g., RRF); rerank before context assembly.</li>
+<li>Apply tenant and permission filters inside the retrieval query, never only in the prompt, and never trust LLM-generated filters for authorization.</li>
+<li>Plan re-indexing for content changes, deletions, and embedding-model upgrades.</li>
+</ul>
+<h3>5.15 <span class="new">New</span> LLM inference and adaptation</h3>
+<ul>
+<li>Estimate GPU memory as weights + KV cache, and know which knob (quantization, batching, context limit) moves which number.</li>
+<li>Track TTFT, TPOT, throughput, and cost per request; know why prefill and decode scale differently.</li>
+<li>Exhaust prompting and retrieval before fine-tuning; fine-tune only with an eval set that proves the gain.</li>
+</ul>
+<h3>5.16 Agents, evals, and LLM security</h3>
+<ul>
+<li>Give agents the minimum tools and permissions needed; require approval for irreversible actions.</li>
+<li>Bound every agent run with step, time, and cost budgets and explicit stop conditions.</li>
+<li>Treat all retrieved and tool-returned content as untrusted input.</li>
+<li>Gate releases on eval results; never ship a prompt or model change without a regression run.</li>
+</ul>
+</section>
+
+<section id="s-capstone"><h2>6. Capstone: reliable distributed order platform</h2>
+<p>Build one evolving system that connects the concepts rather than creating disconnected demos. Start it in M6 and extend it in every module after that: each new concept (caching, messaging, outbox, Saga, security, real-time, AI) is added to the same platform, and M28 integrates, hardens, and publishes it.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Component</th><th>Responsibility / technology</th></tr></thead><tbody>
+<tr><td>Order Service</td><td>.NET API; order lifecycle; local SQL transaction; outbox</td></tr>
+<tr><td>Inventory Service</td><td>Stock reservation/release; inbox; concurrency control</td></tr>
+<tr><td>Payment Service</td><td>Authorize/capture/refund; idempotency; external-call uncertainty</td></tr>
+<tr><td>Notification Service</td><td>Asynchronous notifications; duplicate-safe processing</td></tr>
+<tr><td>SQL Server</td><td>Service-owned data; transactions; rowversion; indexes</td></tr>
+<tr><td>Redis</td><td>Caching, rate limiting, SignalR backplane, coordination experiments</td></tr>
+<tr><td>RabbitMQ</td><td>Events, confirms, acknowledgements, retries, DLQ</td></tr>
+<tr><td><span class="new">New</span> NServiceBus or MassTransit</td><td>Framework-based outbox, recoverability, and saga alongside the hand-built versions</td></tr>
+<tr><td>Saga Coordinator</td><td>Persistent workflow state, retry, compensation, recovery</td></tr>
+<tr><td><span class="new">New</span> SignalR Hub</td><td>Real-time order-status updates to the UI</td></tr>
+<tr><td>OpenTelemetry</td><td>Trace propagation across HTTP and messages</td></tr>
+<tr><td>Prometheus / Grafana</td><td>Metrics, dashboards, alerting</td></tr>
+<tr><td>Docker Compose</td><td>Repeatable local environment</td></tr>
+<tr><td>Identity Provider</td><td>OAuth2/OIDC tokens for users and services; Key Vault for secrets</td></tr>
+<tr><td>Support Assistant (AI)</td><td>Tenant-scoped RAG over orders and policies; tool calls into the Saga with human approval</td></tr>
+<tr><td>Vector Index</td><td>pgvector or Azure AI Search; hybrid retrieval, RRF and reranking</td></tr>
+<tr><td>Eval Harness</td><td>Eval suite with regression gates in CI; LLM cost, latency, and quality metrics</td></tr>
+<tr><td>Kafka (optional)</td><td>Order-event stream, event-sourced aggregate, and rebuildable read models</td></tr>
+<tr><td>Terraform</td><td>Infrastructure as code for Azure and AWS deployments</td></tr>
+</tbody></table></div>
+<h3>Core order workflow</h3>
+<ol>
+<li>Create order and outbox event in one Order DB transaction.</li>
+<li>Outbox relay publishes OrderCreated; publisher confirmation is handled.</li>
+<li>Inventory and Payment consumers process events with inbox/idempotency protection.</li>
+<li>Saga records progress and decides whether to continue, retry, or compensate.</li>
+<li>On failure, release inventory and/or refund payment through idempotent compensation.</li>
+<li>Publish completion/failure events, send notifications, and push status to connected clients over SignalR.</li>
+<li>Trace the complete workflow and monitor queue, outbox, Saga, database, and dependency health.</li>
+<li>Support assistant answers order questions through tenant-scoped RAG and calls tools (look up order, request refund through the Saga) with human approval.</li>
+<li>Evals run in CI; token usage, cost, latency, and quality are tracked in Grafana.</li>
+</ol>
+<div class="callout"><span class="label">Capstone Exit Criterion</span><p>Demonstrate the system recovering correctly from duplicate delivery, broker outage, partial commit, consumer crash, timeout with uncertain payment outcome, Saga restart, failed compensation, backlog recovery, and a real-time node failure. The AI assistant must pass its eval gate and resist prompt-injection and cross-tenant retrieval tests. The repo must be public and documented.</p></div>
+</section>
+
+<section id="s-stack"><h2>7. Technology stack</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Area</th><th>Recommended tools</th></tr></thead><tbody>
+<tr><td>Language / framework</td><td>C#, .NET 8 or newer, ASP.NET Core</td></tr>
+<tr><td>Database / data access</td><td>SQL Server, EF Core, Dapper</td></tr>
+<tr><td>Cache</td><td>Redis</td></tr>
+<tr><td>Messaging</td><td>RabbitMQ first; NServiceBus and/or MassTransit; Kafka and Azure Service Bus comparisons</td></tr>
+<tr><td>Real-time</td><td>ASP.NET Core SignalR (Redis backplane or Azure SignalR Service)</td></tr>
+<tr><td>Testing</td><td>xUnit, NSubstitute or Moq, Testcontainers, Pact (contract tests), FsCheck (property-based tests)</td></tr>
+<tr><td>Containers</td><td>Docker, Docker Compose, Helm</td></tr>
+<tr><td>Tracing / metrics</td><td>OpenTelemetry, Jaeger, Prometheus, Grafana (map from AppDynamics / Application Insights)</td></tr>
+<tr><td>Resilience</td><td>Polly v8 and Microsoft.Extensions.Resilience handlers</td></tr>
+<tr><td>Load / performance</td><td>NBomber, BenchmarkDotNet, dotnet-counters, dotnet-trace</td></tr>
+<tr><td>Infrastructure</td><td>Terraform (Azure and AWS); Kubernetes for deployment exercises</td></tr>
+<tr><td>Streaming</td><td>Apache Kafka with the Confluent .NET client; schema registry</td></tr>
+<tr><td>NoSQL / search</td><td>Cosmos DB or DynamoDB; Elasticsearch (compare with Solr and Azure AI Search)</td></tr>
+<tr><td>Identity / security</td><td>OAuth2/OIDC (Entra ID or Keycloak), ASP.NET Core authorization policies, Key Vault, managed identity</td></tr>
+<tr><td>AI / LLM</td><td>Azure OpenAI, OpenAI, or Anthropic APIs; Microsoft.Extensions.AI or Semantic Kernel 1.x</td></tr>
+<tr><td>Model serving</td><td>vLLM or Ollama for local LLMs; ONNX Runtime for embeddings</td></tr>
+<tr><td>Vector / retrieval</td><td>pgvector or Azure AI Search; reranking model</td></tr>
+<tr><td>Evals / LLM observability</td><td>Custom xUnit eval harness, OpenTelemetry GenAI conventions, Langfuse or similar</td></tr>
+</tbody></table></div>
+<p>Build locally first. Deploy selected exercises to Azure only after the local behavior and failure modes are understood. Avoid spending time on cloud setup when the learning objective is a distributed-systems invariant.</p>
+</section>
+
+<section id="s-criteria"><h2>8. Completion criteria</h2>
+<ul>
+<li>LLD: design a moderately complex system in 45–60 minutes, with clear objects, boundaries, tests, and trade-offs.</li>
+<li>Concurrent LLD: build a thread-safe LRU cache, rate limiter, or blocking queue as runnable code in 60–90 minutes.</li>
+<li>.NET platform: explain async/await execution, ThreadPool starvation, GC behavior, DI lifetimes, and EF Core tracking, and diagnose them with tooling.</li>
+<li>HLD: design a scalable system in 45–60 minutes, including estimates, data model, bottlenecks, failure modes, and cost.</li>
+<li>Architecture: decompose a domain into bounded contexts and plan an incremental migration with ADRs.</li>
+<li>HLD patterns: name the pattern behind a prompt; design a 100k-user change and a 10k-database schema rollout; explain how a payment is never charged twice and how a reservation never double-books.</li>
+<li>Database: implement and explain indexing, transactions, isolation, replication, partitioning, sharding, and rebalancing.</li>
+<li>Messaging: explain delivery guarantees, publisher confirms, acknowledgements, duplicate delivery, ordering, retries, and DLQ replay, both raw and through NServiceBus/MassTransit.</li>
+<li>Consistency: implement outbox/inbox, idempotency, Saga, compensation, and partial-failure recovery.</li>
+<li>Concurrency: diagnose race conditions, deadlocks, lock contention, stale locks, and transaction retry boundaries.</li>
+<li>Streaming: explain Kafka partitions, consumer groups, offset commits, and exactly-once limits; implement event sourcing and CQRS.</li>
+<li>Real-time: scale SignalR/WebSockets and explain reconnect, resync, and backplane failure.</li>
+<li>Security and APIs: design an authenticated, versioned, idempotent API with secure webhooks and tenant-level authorization.</li>
+<li>Operations: use traces, logs, and metrics to diagnose a cross-service incident.</li>
+<li>Distributed theory: explain Raft, quorums, consistent hashing, vector clocks, and consistency models from memory.</li>
+<li>AI engineering: design a RAG or agent system with evals, cost model, and security controls in 45–60 minutes; debug a failing RAG pipeline stage by stage; explain KV cache, batching, and when to fine-tune.</li>
+<li>AI coding: complete unfamiliar repository tasks while reviewing and validating every generated change; pass timed code-review and live-debugging drills.</li>
+<li>Communication: explain why a design works, what it does not guarantee, and what alternatives exist.</li>
+<li>Behavioral: tell every story in under 3 minutes with clear ownership and impact; both project deep dives survive five levels of “why”.</li>
+<li>Resume: every bullet is defensible, every claim in your answers is on the resume or dropped, and profiles match.</li>
+<li>Checkpoints: all seven phase checkpoints completed and their gaps closed.</li>
+<li>Mock interviews: perform consistently across LLD, HLD, product architecture, AI system design, AI coding, code review, debugging, and behavioral rounds.</li>
+</ul>
+</section>
+
+<section id="s-journal"><h2>9. Engineering journal template</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Prompt</th><th>Notes to capture</th></tr></thead><tbody>
+<tr><td>Problem</td><td>What real engineering problem does this concept solve?</td></tr>
+<tr><td>Internals</td><td>How does it work? What guarantees does it provide?</td></tr>
+<tr><td>Implementation</td><td>What did I build? Include code paths, schema, configuration, and tests.</td></tr>
+<tr><td>Failure</td><td>What did I deliberately break? What happened?</td></tr>
+<tr><td>Recovery</td><td>How does the system detect, recover, or reconcile the failure?</td></tr>
+<tr><td>Trade-offs</td><td>What alternatives exist? Why choose this design?</td></tr>
+<tr><td>Production</td><td>What should be monitored? What are the operational risks?</td></tr>
+<tr><td>Interview</td><td>What follow-up questions could an interviewer ask?</td></tr>
+<tr><td>My notes</td><td>Which Apple Notes did this update or correct?</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s-fixes"><h2>10. Corrections to your notes</h2>
+<p>These statements in your Apple Notes are wrong, outdated, or would draw a follow-up you can't win. Fix each note when you reach its module.</p>
+<h3>C# and .NET</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Note</th><th>Says</th><th>Correct version</th></tr></thead><tbody>
+<tr><td>C#/C#.Net8</td><td class="bad">“String is immutable, while StringBuilder is.”</td><td>StringBuilder is <em>mutable</em>.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Equality checks references; <code>==</code> compares values.</td><td>For reference types, <code>==</code> compares references unless overloaded (string overloads it). <code>Equals</code> is virtual and often overridden for value equality; records and structs get value equality.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Value types live on the stack; reference types on the heap.</td><td>Value-type fields of a class live on the heap with the object; locals may live in registers. Lifetime, not type, decides location.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Partial class: multiple classes with the same name (one logs to DB, one to file).</td><td>One class split across several files, compiled into a single type.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Namespace members: methods, constructors, properties.</td><td>Namespaces contain types (classes, structs, interfaces, enums, delegates, records) and nested namespaces.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Interfaces can only hold method definitions.</td><td>Since C# 8, interfaces can have default implementations and static members.</td></tr>
+<tr><td>C#/C#.Net8</td><td class="bad">Async methods return Task, Task&lt;T&gt; or void; always use ConfigureAwait(false).</td><td><code>async void</code> only for event handlers; ValueTask and IAsyncEnumerable are also valid. ConfigureAwait(false) matters in library code; ASP.NET Core has no SynchronizationContext.</td></tr>
+<tr><td>MultiThreading</td><td class="bad">Mutex lets threads share a resource “without creating a lock”.</td><td>Mutex <em>is</em> a lock: a kernel object usable across processes. In-process, use <code>lock</code> or SemaphoreSlim (async).</td></tr>
+<tr><td>Rest/SOAP, TCP vs HTTP</td><td class="bad"><code>using var client = new HttpClient()</code> per call.</td><td>Causes socket exhaustion under load. Use IHttpClientFactory or typed clients.</td></tr>
+<tr><td>EntityFramework</td><td class="bad">Lazy loading can be enabled “by using AsNoTracking()”.</td><td>Unrelated. Lazy loading needs proxies or ILazyLoader; AsNoTracking disables change tracking.</td></tr>
+<tr><td>Behavioral → .NET</td><td class="bad">“Use lazy loading” listed as an EF performance practice.</td><td>Lazy loading <em>causes</em> N+1 queries. Use projections, explicit Include, split queries.</td></tr>
+<tr><td>Behavioral → .NET</td><td class="bad">DbContext transient for SaaS; singleton is ideal for a fixed connection.</td><td>DbContext is not thread-safe: never singleton. Use scoped plus a per-request tenant connection resolver, or IDbContextFactory for background work.</td></tr>
+<tr><td>Microservices</td><td class="bad">“Service discovery: using API gateway.”</td><td>Separate concerns. Discovery = registry or Kubernetes DNS; a gateway handles edge routing, auth and rate limits.</td></tr>
+<tr><td>Microservices</td><td class="bad">Circuit breaker: “when a node is down it doesn't send requests to it.”</td><td>A circuit breaker fails fast after an error threshold (closed → open → half-open), protecting the caller and the dependency. Health-based routing is the load balancer's job.</td></tr>
+<tr><td>Web API</td><td class="bad">CORS exists “to avoid injection attacks”.</td><td>CORS lets a server <em>relax</em> the browser's same-origin policy. It is not a server-side security control.</td></tr>
+</tbody></table></div>
+<h3>SQL and data</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Note</th><th>Says</th><th>Correct version</th></tr></thead><tbody>
+<tr><td>SQLServer</td><td class="bad">Stored procs are precompiled and faster than raw SQL.</td><td>Parameterized ad-hoc queries also get cached plans. Procs help with security, round trips and encapsulation.</td></tr>
+<tr><td>SQLServer</td><td class="bad">CROSS JOIN returns the same number of rows; can't use WHERE.</td><td>CROSS JOIN returns the Cartesian product (rows × rows) and can be filtered.</td></tr>
+<tr><td>SQLServer</td><td class="bad">DISTINCT can't be used with GROUP BY.</td><td>It can (though it is usually redundant).</td></tr>
+<tr><td>SQLServer</td><td class="bad">UNION “based on condition”; UNION ALL “no need of conditions”.</td><td>UNION removes duplicates; UNION ALL keeps them (and is cheaper).</td></tr>
+<tr><td>SQLServer</td><td class="bad">Only Read Uncommitted and Read Committed listed.</td><td>Also RCSI, Repeatable Read, Snapshot, Serializable, and which anomalies each prevents.</td></tr>
+<tr><td>Behavioral → Data</td><td class="bad">Deadlock fixed by adding exclusive locks.</td><td>Prefer consistent lock ordering, shorter transactions, RCSI and a bounded 1205 retry. More locking can make it worse.</td></tr>
+<tr><td>Behavioral → Azure &amp; DevOps</td><td class="bad">Cosmos partition key “using guid”.</td><td>Choose from query patterns. A random GUID forces cross-partition queries for anything but point reads.</td></tr>
+<tr><td>Behavioral → Azure &amp; DevOps</td><td class="bad">“Strong consistency levels.”</td><td>Know all five levels; strong isn't available with multi-region writes.</td></tr>
+<tr><td>Database Types</td><td class="bad">Document DBs don't have ACID.</td><td>Cosmos DB and MongoDB support transactions (Cosmos within a logical partition).</td></tr>
+<tr><td>Database Types</td><td class="bad">Column DBs “don't support huge number of reads”.</td><td>Wide-column stores are write-optimized; reads are fast when tables are designed per query.</td></tr>
+</tbody></table></div>
+<h3>Messaging</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Note</th><th>Says</th><th>Correct version</th></tr></thead><tbody>
+<tr><td>Behavioral → Messaging</td><td class="bad">Outbox: after delivery completes, write a record into the outbox, then push to RabbitMQ; undo the SQL transaction on failure.</td><td>Business change + outbox row commit in <em>one</em> local transaction. A relay publishes later and may publish twice, so consumers must be idempotent. The NServiceBus outbox also deduplicates incoming messages.</td></tr>
+<tr><td>Behavioral → Messaging</td><td class="bad">Ordering: “rely on timestamps”.</td><td>Clock skew breaks this. Use per-aggregate version/sequence numbers and reject stale versions.</td></tr>
+<tr><td>Behavioral → Messaging</td><td class="bad">Dedup with message IDs in a Redis cache.</td><td>Not atomic with the business write. Store processed IDs in the same DB transaction (inbox).</td></tr>
+<tr><td>Message Queues</td><td class="bad">“Data is never lost”; “priority queue pattern to achieve ordering”.</td><td>Durability depends on persistence, confirms and replication. Priority queues reorder; they don't preserve order.</td></tr>
+<tr><td>RabbitMQ/MSMQ</td><td class="bad">Round robin to competing consumers “avoids duplication”.</td><td>Each delivery goes to one consumer, but redelivery still produces duplicates. Idempotency is still required.</td></tr>
+</tbody></table></div>
+<h3>Security and identity</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Note</th><th>Says</th><th>Correct version</th></tr></thead><tbody>
+<tr><td>OID/OAuth</td><td class="bad">“We used implicit grant from UI.”</td><td>The implicit grant is deprecated. SPAs use authorization code + PKCE. If it is past usage, say so and say what you'd do now.</td></tr>
+<tr><td>OID/OAuth</td><td class="bad">Client credentials: user authenticates, code is exchanged.</td><td>Client credentials has no user and no code: the service authenticates as itself.</td></tr>
+<tr><td>Implementation workflow and Code</td><td class="bad">Set an HttpOnly cookie from Angular via <code>document.cookie</code>.</td><td>JavaScript can't set HttpOnly cookies. The server sets them (BFF pattern).</td></tr>
+<tr><td>Implementation workflow and Code</td><td class="bad">SPA token exchange sends <code>client_secret</code>; MSAL uses localStorage after advising against it.</td><td>SPAs are public clients and must not hold secrets. Choose a cache location deliberately and explain the XSS trade-off.</td></tr>
+<tr><td>Azure Security</td><td class="bad">Grant the “Key Vault Reader” role to read secrets; use AzureServiceTokenProvider.</td><td>Reader is control-plane only; use <strong>Key Vault Secrets User</strong>. AzureServiceTokenProvider is deprecated; use DefaultAzureCredential/ManagedIdentityCredential.</td></tr>
+<tr><td>.Net with Kubernetes</td><td class="bad">“Managed identity is managed by Azure, so we always use service principal.”</td><td>A managed identity <em>is</em> a service principal whose credentials Azure manages. Prefer it over secrets wherever it is available.</td></tr>
+<tr><td>Behavioral → Authentication</td><td class="bad">Silent refresh “like a polling service”.</td><td>Refresh shortly before expiry, using refresh-token rotation; MSAL handles this.</td></tr>
+<tr><td>Behavioral → Front-End</td><td class="bad">JSONP as a CORS fallback.</td><td>JSONP is unsafe and obsolete; use CORS.</td></tr>
+</tbody></table></div>
+<h3>System design and cloud</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Note</th><th>Says</th><th>Correct version</th></tr></thead><tbody>
+<tr><td>Caching</td><td class="bad">A high eviction rate means the cache is performing well.</td><td>Backwards. High eviction usually means it is undersized; hit ratio is the key metric.</td></tr>
+<tr><td>Consistent hashing</td><td class="bad">Virtual nodes “find data faster”.</td><td>Virtual nodes spread load evenly and limit reshuffling.</td></tr>
+<tr><td>Client Server Architecture</td><td class="bad">“Thin: Windows apps, majority processing on client.”</td><td>That describes a <em>thick</em> client.</td></tr>
+<tr><td>Performance metrics</td><td class="bad">“API response time should be less than 2 sec.”</td><td>Talk in p95/p99 latency against an SLO.</td></tr>
+<tr><td>REST API</td><td class="bad">Next page: limit=20 &amp; offset=21.</td><td>Offset 20, and prefer cursor pagination for large or changing data.</td></tr>
+<tr><td>Azure Functions</td><td class="bad">Fix cold starts by enabling Always On for Consumption plans; DI via Startup.</td><td>Always On isn't available on Consumption; use the Premium plan (pre-warmed) or Flex Consumption. The in-process model ended support on Nov 10, 2026; the isolated worker uses Program.cs.</td></tr>
+<tr><td>Azure cosmos db</td><td class="bad">“Cosmos is usually serverless”; “Front Door is the application gateway service”.</td><td>Serverless is one capacity mode. Front Door is a global edge/CDN service; Application Gateway is a regional L7 load balancer.</td></tr>
+<tr><td>.Net with Kubernetes</td><td class="bad">Container Apps not suited to microservices, no large images.</td><td>Container Apps (built on Kubernetes + KEDA + Dapr) runs microservices well; TrueSpend uses it. Know its real limits instead.</td></tr>
+<tr><td>Behavioral → Azure &amp; DevOps</td><td class="bad">“Helm chart is a single file.”</td><td>A chart is a package of templates plus values.yaml, versioned and released as a unit.</td></tr>
+<tr><td>AzureAppInsights</td><td class="bad">Instrumentation keys; same key for distributed tracing.</td><td>Use connection strings. Tracing correlates via W3C trace context (OpenTelemetry).</td></tr>
+<tr><td>Docker/Containerization</td><td class="bad">.NET 6 images, <code>EXPOSE 80</code>, SA_PASSWORD in the Dockerfile.</td><td>.NET 6 is out of support; .NET 8+ images listen on 8080 and run non-root. Never bake secrets into images.</td></tr>
+<tr><td>Semantic Kernel</td><td class="bad"><code>IKernel</code>, <code>Kernel.Builder</code>, <code>ContextVariables</code>; user input concatenated into the prompt.</td><td>Pre-1.0 API; use SK 1.x or Microsoft.Extensions.AI. Treat user input as untrusted (prompt injection).</td></tr>
+<tr><td>Azure AI Search/OpenAI</td><td class="bad"><code>text-davinci-003</code>, <code>text-embedding-ada-002</code>; “we used nearest neighbor”.</td><td>Those models are retired or superseded. Name the algorithm: HNSW (approximate) vs. exhaustive KNN. LLM-generated filters must be validated (M25).</td></tr>
+</tbody></table></div>
+<h3>Claims to verify before an interview</h3>
+<p>Several answers in the behavioral folder (the “A:” lines) look generated and claim experience that your own answers underneath do not support. Keep only what you actually did and can explain in depth; reconcile with the resume in M31.</p>
+<ul>
+<li>Micro-frontends with module federation</li>
+<li>LaunchDarkly feature flags</li>
+<li>ARM/Bicep infrastructure as code</li>
+<li>Prometheus, Grafana and ELK in production</li>
+<li>ZooKeeper for service discovery</li>
+<li>Building an OAuth 2.0 authorization server; social logins via B2C</li>
+<li>MSMQ → Azure Service Bus migration with mirroring and A/B testing</li>
+<li>A destructive EF migration in production restored from backup</li>
+<li>“3× throughput” from tenant-partitioned consumers</li>
+<li>SSIS/SSRS/ADF projects, including “hours to minutes” incremental loads</li>
+</ul>
+</section>
+
+<section id="s-appendix"><h2>11. Appendix: review-only notes</h2>
+<p>These notes are outside the plan's scope (no frontend or data-engineering modules). Your resume still lists Angular, so skim them before any interview where it comes up.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Area</th><th>Notes</th><th>Corrections</th></tr></thead><tbody>
+<tr><td>Angular</td><td>UI → Angular (21 notes): components, templates, modules vs. standalone, routing, forms, directives, pipes, RxJS, signals, NgRx, performance, debugging, scenario-based questions</td><td class="bad">NgRx keeps the store in memory, not in session/local storage.</td></tr>
+<tr><td>TypeScript</td><td>UI → TypeScript (7 notes): basics, types, compiler, modules, decorators, modern JS</td><td class="bad"><code>var</code> is function-scoped and hoisted; <code>let</code>/<code>const</code> are block-scoped with a temporal dead zone. They are not “pretty much the same”.</td></tr>
+<tr><td>Front-end Q&amp;A</td><td>Behavioral → Front-End (Angular, React, Redux, AJAX)</td><td>React and Next.js are on the resume but not in your notes; refresh them if a role needs them.</td></tr>
+<tr><td>Desktop / legacy</td><td>C#.Net/SQL → WPF; Behavioral → .NET (WPF/MVVM, WCF)</td><td>Use WCF mainly as the modernization story in M18.</td></tr>
+<tr><td>Data / reporting</td><td>C#.Net/SQL → SSIS, SSRS; Behavioral → Data (ADF)</td><td>Not on the resume. See “Claims to verify”.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s-refs"><h2>12. References</h2>
+<ul>
+<li><strong>Designing Data-Intensive Applications — Martin Kleppmann — </strong>Distributed data systems, replication, partitioning, transactions, consistency, and stream processing.</li>
+<li><strong>Learning Domain-Driven Design — Vlad Khononov — </strong>Bounded contexts, context maps, and aggregates (M18).</li>
+<li><strong>Building Microservices, 2nd ed. — Sam Newman — </strong>Decomposition, communication, and migration patterns (M18).</li>
+<li><strong>Microservices.io — Transactional Outbox — </strong><a href="https://microservices.io/patterns/data/transactional-outbox.html" target="_blank" rel="noopener">https://microservices.io/patterns/data/transactional-outbox.html</a></li>
+<li><strong>Microservices.io — Idempotent Consumer — </strong><a href="https://microservices.io/patterns/communication-style/idempotent-consumer.html" target="_blank" rel="noopener">https://microservices.io/patterns/communication-style/idempotent-consumer.html</a></li>
+<li><strong>RabbitMQ — Publisher Confirms — </strong><a href="https://www.rabbitmq.com/docs/confirms" target="_blank" rel="noopener">https://www.rabbitmq.com/docs/confirms</a></li>
+<li><strong>RabbitMQ — Quorum Queues — </strong><a href="https://www.rabbitmq.com/docs/quorum-queues" target="_blank" rel="noopener">https://www.rabbitmq.com/docs/quorum-queues</a></li>
+<li><strong>Particular — NServiceBus documentation — </strong><a href="https://docs.particular.net/nservicebus/" target="_blank" rel="noopener">https://docs.particular.net/nservicebus/</a></li>
+<li><strong>MassTransit documentation — </strong><a href="https://masstransit.io/documentation/concepts" target="_blank" rel="noopener">https://masstransit.io/documentation/concepts</a></li>
+<li><strong>Microsoft — Azure Service Bus overview — </strong><a href="https://learn.microsoft.com/azure/service-bus-messaging/service-bus-messaging-overview" target="_blank" rel="noopener">https://learn.microsoft.com/azure/service-bus-messaging/service-bus-messaging-overview</a></li>
+<li><strong>Microsoft — ASP.NET Core fundamentals — </strong><a href="https://learn.microsoft.com/aspnet/core/fundamentals/" target="_blank" rel="noopener">https://learn.microsoft.com/aspnet/core/fundamentals/</a></li>
+<li><strong>Microsoft — EF Core performance — </strong><a href="https://learn.microsoft.com/ef/core/performance/" target="_blank" rel="noopener">https://learn.microsoft.com/ef/core/performance/</a></li>
+<li><strong>Microsoft — Migrate Azure Functions to the isolated worker model — </strong><a href="https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model" target="_blank" rel="noopener">https://learn.microsoft.com/azure/azure-functions/migrate-dotnet-to-isolated-model</a></li>
+<li><strong>Microsoft — SQL Server deadlocks — </strong><a href="https://learn.microsoft.com/sql/relational-databases/sql-server-deadlocks-guide" target="_blank" rel="noopener">https://learn.microsoft.com/sql/relational-databases/sql-server-deadlocks-guide</a></li>
+<li><strong>Microsoft — Transaction isolation levels — </strong><a href="https://learn.microsoft.com/sql/t-sql/statements/set-transaction-isolation-level-transact-sql" target="_blank" rel="noopener">https://learn.microsoft.com/sql/t-sql/statements/set-transaction-isolation-level-transact-sql</a></li>
+<li><strong>Microsoft — Semantic Kernel overview — </strong><a href="https://learn.microsoft.com/semantic-kernel/overview/" target="_blank" rel="noopener">https://learn.microsoft.com/semantic-kernel/overview/</a></li>
+<li><strong>AWS — Saga pattern — </strong><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga.html" target="_blank" rel="noopener">https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga.html</a></li>
+<li><strong>OpenTelemetry documentation — </strong><a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">https://opentelemetry.io/docs/</a></li>
+<li><strong>Raft consensus algorithm — </strong><a href="https://raft.github.io/" target="_blank" rel="noopener">https://raft.github.io/</a></li>
+<li><strong>Apache Kafka documentation — </strong><a href="https://kafka.apache.org/documentation/" target="_blank" rel="noopener">https://kafka.apache.org/documentation/</a></li>
+<li><strong>OWASP API Security Top 10 — </strong><a href="https://owasp.org/API-Security/" target="_blank" rel="noopener">https://owasp.org/API-Security/</a></li>
+<li><strong>AI Engineering — Chip Huyen — </strong>Building applications on foundation models: evaluation, RAG, agents, and inference optimization.</li>
+<li><strong>Efficient Memory Management for LLM Serving with PagedAttention (vLLM) — </strong><a href="https://arxiv.org/abs/2309.06180" target="_blank" rel="noopener">https://arxiv.org/abs/2309.06180</a></li>
+<li><strong>Anthropic — Building effective agents — </strong><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/building-effective-agents</a></li>
+<li><strong>System Design Interview, Volumes 1–2 — Alex Xu — </strong>Classic HLD case studies and estimation.</li>
+<li><strong>Concurrency in C# Cookbook — Stephen Cleary — </strong>async/await, Channels, cancellation, and parallelism in .NET.</li>
+<li><strong>Hello Interview — </strong><a href="https://www.hellointerview.com/" target="_blank" rel="noopener">https://www.hellointerview.com/</a> — HLD delivery framework, case studies, and AI-assisted coding preparation.</li>
+<li><strong>Sudo Code — system design playlist (from your notes) — </strong><a href="https://www.youtube.com/playlist?list=PLTCrU9sGyburBw9wNOHebv9SjlE4Elv5a" target="_blank" rel="noopener">YouTube playlist</a></li>
+<li><strong>Gaurav Sen — system design playlist (from your notes) — </strong><a href="https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX" target="_blank" rel="noopener">YouTube playlist</a></li>
+<li><strong>Tech Interview Handbook — behavioral questions — </strong><a href="https://www.techinterviewhandbook.org/behavioral-interview-questions/" target="_blank" rel="noopener">https://www.techinterviewhandbook.org/behavioral-interview-questions/</a></li>
+<li><strong>Amazon Leadership Principles — </strong><a href="https://www.amazon.jobs/content/en/our-workplace/leadership-principles" target="_blank" rel="noopener">https://www.amazon.jobs/content/en/our-workplace/leadership-principles</a></li>
+</ul>
+</section>
+
+<section id="s-final"><h2>Final guiding principle</h2>
+<div class="callout"><span class="label">Do Not Stop At The Happy Path</span><p>A topic is complete only when you can implement it, test it, explain its guarantees and limitations, inject realistic failures, recover safely, measure behavior, and defend the trade-offs in an interview, and when your own notes on it are correct.</p></div>
+</section>
+</main>
+</div>
+<button class="themebtn" id="theme">Toggle theme</button>
+<script>
+(function(){
+  var KEY='sre-plan-checks';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  var state=load();
+  document.querySelectorAll('input[data-k]').forEach(function(cb){
+    cb.checked=!!state[cb.dataset.k];
+    cb.addEventListener('change',function(){state[cb.dataset.k]=cb.checked;save(state)});
+  });
+  var toc=document.getElementById('toc');
+  document.getElementById('menu').onclick=function(){toc.classList.toggle('open')};
+  toc.addEventListener('click',function(e){if(e.target.closest('a'))toc.classList.remove('open')});
+  document.getElementById('theme').onclick=function(){
+    var r=document.documentElement, cur=r.getAttribute('data-theme');
+    var dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    r.setAttribute('data-theme',dark?'light':'dark');
+  };
+  var links={};toc.querySelectorAll('a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting&&links[e.target.id]){toc.querySelectorAll('a.active').forEach(function(x){x.classList.remove('active')});links[e.target.id].classList.add('active')}
+    })},{rootMargin:'0px 0px -75% 0px'});
+    Object.keys(links).forEach(function(id){var el=document.getElementById(id);if(el)io.observe(el)});
+  }
+})();
+</script>
+</body>
+</html>
