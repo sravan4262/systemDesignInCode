@@ -1,0 +1,31 @@
+<Solution>
+  <Folder Name="/M01/">
+    <Project Path="modules/phase-1-lld-dotnet/m01-oop-solid/src/M01.Payments/M01.Payments.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m01-oop-solid/tests/M01.Payments.Tests/M01.Payments.Tests.csproj" />
+  </Folder>
+  <Folder Name="/M02/">
+    <Project Path="modules/phase-1-lld-dotnet/m02-design-patterns/src/M02.Checkout/M02.Checkout.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m02-design-patterns/tests/M02.Checkout.Tests/M02.Checkout.Tests.csproj" />
+  </Folder>
+  <Folder Name="/M03/">
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/src/M03.Atm/M03.Atm.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/src/M03.Elevator/M03.Elevator.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/src/M03.ExpenseSharing/M03.ExpenseSharing.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/src/M03.MovieBooking/M03.MovieBooking.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/src/M03.ParkingLot/M03.ParkingLot.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/tests/M03.Atm.Tests/M03.Atm.Tests.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/tests/M03.Elevator.Tests/M03.Elevator.Tests.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/tests/M03.ExpenseSharing.Tests/M03.ExpenseSharing.Tests.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/tests/M03.MovieBooking.Tests/M03.MovieBooking.Tests.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m03-lld-problems/tests/M03.ParkingLot.Tests/M03.ParkingLot.Tests.csproj" />
+  </Folder>
+  <Folder Name="/M04/">
+    <Project Path="modules/phase-1-lld-dotnet/m04-concurrent-lld/src/M04.Concurrency/M04.Concurrency.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m04-concurrent-lld/tests/M04.Concurrency.Tests/M04.Concurrency.Tests.csproj" />
+  </Folder>
+  <Folder Name="/M05/">
+    <Project Path="modules/phase-1-lld-dotnet/m05-dotnet-internals/src/M05.Api/M05.Api.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m05-dotnet-internals/src/M05.Runtime/M05.Runtime.csproj" />
+    <Project Path="modules/phase-1-lld-dotnet/m05-dotnet-internals/tests/M05.Tests/M05.Tests.csproj" />
+  </Folder>
+</Solution>
