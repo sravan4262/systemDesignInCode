@@ -49,6 +49,12 @@ After step 7, have the learner write a short entry in the module README's **Conc
 - `checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores.
 - `notes/` holds corrected versions of the learner's Apple Notes, as Markdown.
 
+## Concept code (patterns, principles, LLD snippets)
+- Keep examples minimal: each class shows only **2–3 properties or methods**, just enough to show the problem and how the fix solves it. No extra fields for realism.
+- One file per concept with a `// ❌ BEFORE` section and a `// ✅ AFTER` section. Every class has a short comment on top: the problem (Before) or how this solves it (After).
+- When wiring matters, add a nested `Program` class showing what goes in a real ASP.NET Core `Program.cs` (registrations + one endpoint).
+- Quick-check questions for M2 patterns are parked in the module README's "End-of-M2 review questions" list and answered at the end of the module.
+
 ## Code conventions
 - .NET 10 SDK is installed; target `net10.0` unless a library requires otherwise. C#, ASP.NET Core, xUnit, Testcontainers.
 - One root solution (`SystemDesignInCode.slnx`). Add each module's projects to it under a solution folder named after the module.

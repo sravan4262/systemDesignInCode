@@ -1,3 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Gives access to real ASP.NET Core types (WebApplication, DI, Minimal APIs)
+       so pattern files can show their Program.cs wiring. Ships with the SDK, no NuGet package. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>
