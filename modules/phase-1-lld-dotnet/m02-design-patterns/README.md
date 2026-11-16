@@ -141,6 +141,12 @@ _What should be monitored? What are the operational risks?_
 ### Interview
 _Follow-up questions an interviewer could ask, with my short answers._
 
+#### Mock round 2 (2026-11-16): ~4.6 / 10 (harder questions)
+- Strong: Q4 Builder (cross-field rule in `Build()`), Q9 Factory vs. plain DI.
+- Revisit: **Q3** reject a generic `IRepository<T>` over EF; approve only a specific repository with named queries. **Q5** "must never be skipped" → event (pub/sub) + Outbox + broker + idempotent handlers; a command has ONE owner, many reactions = event. **Q10** `SaveChanges` is one DB transaction but does NOT cover a RabbitMQ publish (two systems, no shared transaction) → Outbox.
+- Lessons: constraint words ARE the question; be skeptical of extra layers (name what they add); DB write + message publish together → say "Outbox".
+- Also: Q6 captive dependency (singleton holding scoped `DbContext`); Q8 collect-all validation still rejects, it just reports every error.
+
 #### Mock round 1 (2026-11-16): ~6.6 / 10
 - Strong: pattern recognition; Q6 (CoR middleware), Q8 (Strategy + Factory), Q10 (event vs. command).
 - Missed: Q5 compliance audit of admin actions → **Command** (audit in the dispatcher, before the handler, records failures too), not Observer.
@@ -205,6 +211,13 @@ _Parked here while going through the patterns, answered together at the end of t
 3. A form must show ALL validation errors at once. Is CoR still the right fit? What would you use?
 4. How is ASP.NET Core middleware an example of this pattern?
 5. What actually enforces `[Authorize]`, and why is that Chain of Responsibility?
+
+**Repository / Unit of Work on EF Core**
+1. "Would you put a repository on top of EF Core?" Give the senior answer (not "always", not "never").
+2. Which EF Core types already implement Repository and Unit of Work, and how?
+3. What's wrong with a generic `IRepository<T>` that returns `IQueryable<T>`?
+4. "We need repositories so we can mock the database in tests." How do you respond?
+5. Why must `DbContext` (the unit of work) be scoped per request?
 
 
 ### My notes

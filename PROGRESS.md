@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M2 — Design patterns
-- **Next step:** All M2 patterns covered (State and Decorator dropped by choice): Strategy, Factory, Builder, Singleton, Adapter (+Facade), Observer, Command, Chain of Responsibility. Next: a second Q&A round (focus on the 3 habits in the README's "Mock round 1"), then the M2 wrap-up tasks (combine patterns in a small checkout engine, compare with simpler alternatives, Repository/UoW over EF Core critique) and the end-of-M2 review questions in the module README.
+- **Current module:** M3 — LLD interview problems
+- **Next step:** M3 Parking Lot is designed and coded (`ParkingLotDesign.cs`); remaining: break it (concurrent last-slot entry, payment failure, rounding; create a test project only if asked) and a verbal walkthrough. Then Movie Ticket Booking. Format: Claude gives ONLY the problem statement (interviewer-style), then back-and-forth (clarifying questions → requirements → entities → class diagram → API → code → tests). Order: Parking Lot, Movie Ticket Booking, Expense Sharing, ATM, Elevator, then extra classics.
 - **Machine last used:** Windows
 
 ## Status
@@ -14,8 +14,8 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | Phase | Item | Title | Status |
 |---|---|---|---|
 | 1 | M1 | OOP, SOLID, clean design | ✅ |
-| 1 | M2 | Design patterns | 🟨 |
-| 1 | M3 | LLD interview problems | ⬜ |
+| 1 | M2 | Design patterns | ✅ (moved on; see open questions) |
+| 1 | M3 | LLD interview problems | 🟨 |
 | 1 | M4 | Concurrent LLD & machine coding | ⬜ |
 | 1 | M5 | .NET platform internals | ⬜ |
 | 1 | CP1 | Checkpoint: LLD & .NET | ⬜ |
@@ -58,10 +58,12 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-16 · Windows · M3 · Parking Lot interview-style: clarifying questions → requirements → entities → service signatures → Enter/Exit flows → concurrency (lock vs. atomic UPDATE) → data structures (min-heap per slot size, ConcurrentDictionary for tickets) → simple in-memory code. Key gap: method signatures (inputs = what the caller knows). Next: break it + verbal walkthrough, then Movie Ticket Booking.
+- 2026-11-16 · Windows · M2 → M3 · Added Repository/Unit of Work critique (`RepositoryUnitOfWork.cs`; EF Core InMemory via central package versions). Mock round 2: ~4.6/10 (harder questions; see README). Closed M2 by choice and moved to M3. Recorded the LLD format preference in CLAUDE.md (problem statement first, then back-and-forth). Next: M3 Parking Lot.
 - 2026-11-16 · Windows · M2 · Restarted M2 and covered 8 patterns (7-step each): Strategy, Factory, Builder, Singleton, Adapter (+Facade), Observer, Command, Chain of Responsibility. Dropped State and Decorator from the plan by choice. Before/After files with a nested `Program` (ASP.NET Core wiring) in `M02.Checkout/DesignPatterns/`; project now references `Microsoft.AspNetCore.App`. Concepts entries written; ~45 review questions parked in the README. Mock round 1: ~6.6/10 (see README). Added a "Concept code" convention to CLAUDE.md (2–3 members per class). Next: Q&A round 2, then M2 wrap-up tasks.
 - 2026-11-16 · Mac · M2 · First pass at Strategy and Factory (`Strategy.cs`, `Factory.cs`); Factory quick check not answered. Next: restart design patterns from the beginning.
 - 2026-11-15 · Mac · M1 · Covered encapsulation, abstraction/polymorphism, and SOLID (7-step each); violation-vs-fix code in `M01.Payments/SolidPrinciples/`; Concepts entries written. Payment-engine build skipped by choice; test projects removed (create on request). Next: M2.
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions
-- —
+- M2 revisit (mock round 2): Q3 generic repository verdict, Q5 "must never be skipped" → event + Outbox, Q10 DB transaction vs. broker publish. Retry before CP1.

@@ -6,4 +6,9 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <!-- EF Core (in-memory provider pulls in EF Core itself) for the Repository / Unit of Work critique. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+  </ItemGroup>
+
 </Project>

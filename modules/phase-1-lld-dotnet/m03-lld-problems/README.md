@@ -21,6 +21,15 @@
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### Parking Lot (design done; tests + verbal walkthrough pending)
+- **Requirements:** public lot, configurable floors/slots; vehicle types Motorcycle/Car/Truck, slot sizes Small/Medium/Large, a vehicle fits its size or bigger; system assigns the nearest slot (lowest floor, then lowest number); hourly fee rounded up, rate by vehicle type; pay cash/card at exit; lost ticket = flat daily max; lot full → refuse entry. Non-functional: no double assignment across concurrent gates; extensible pricing/allocation. Out of scope: reservations, passes, EV/handicapped, payment internals.
+- **Entities:** ParkingLot, Floor, Slot (source of truth for "is it free"), Ticket (SlotId, plate, vehicle type, EntryTime, ExitTime, Status Active→Paid→Exited, Payments list), Payment (attempts: Failed/Succeeded), Gate.
+- **Services:** `ISlotAllocator` (Strategy; nearest-first with one min-heap per SlotType + lock), `IPricingStrategy` (Strategy; rates are data), `ITicketService` (ConcurrentDictionary by ticket ID), `IPaymentProcessor` + factory (cash/card), `ParkingService` coordinator (`Enter`, `Exit`); gates only call the coordinator.
+- **Flows:** Enter = Allocate (null → full) → GenerateTicket (throws → Release, compensation). Exit = Find → CalculateFee → Pay (failed → stop, slot stays taken) → Release → Exited.
+- **Concurrency:** check-then-act race; `lock` around allocation only (small critical section); across servers → atomic `UPDATE ... WHERE IsEmpty = 1`, check rows affected.
+- **Lessons:** signatures = inputs the caller knows, outputs the service decides (never pass `isEmpty`, `status`, new ids). In LLD rounds use in-memory structures behind an interface; mention the DB, don't build it. Discussion rounds: code only the core 30–50 lines.
+- **Code:** `src/M03.ParkingLot/ParkingLotDesign.cs`
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**

@@ -28,6 +28,7 @@ Applies to everything: each OOP principle, each design pattern, each LLD problem
 
 How the steps adapt:
 - **LLD problem** (e.g., Parking Lot): steps 1–2 = what the system must do and the hard part (concurrency, extensibility); step 4 = class diagram; step 5 = alternative designs.
+  - **Format (learner's preference):** start by giving ONLY the problem statement, the way an interviewer would (short, slightly ambiguous, no hints or solution). Then discuss back and forth: let the learner ask clarifying questions, propose requirements, entities, and design; answer as the interviewer, push back, and guide. Don't dump a full design up front.
 - **HLD case** (e.g., design Uber): steps 1–2 = the product and its core scaling/consistency problem; step 4 = high-level architecture; step 5 = alternative architectures; step 6 = over-engineered choices to avoid.
 - **Behavioral topic:** steps 1–2 = what the question is really testing (the signal); step 3 = an example of a strong vs. a weak answer.
 
