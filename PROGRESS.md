@@ -4,17 +4,17 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M1 — OOP, SOLID, and clean design
-- **Next step:** Read the M1 notes (SOLID Principles, C#/C#.Net8), then start the payment processing engine.
-- **Machine last used:** —
+- **Current module:** M2 — Design patterns
+- **Next step:** Restart M2 from the beginning (Strategy, then Factory), then Builder, Adapter, Decorator, Observer, Command, Chain of Responsibility, State. Code goes in `M02.Checkout/DesignPatterns/` (one short file per pattern: violation + fix).
+- **Machine last used:** Mac
 
 ## Status
 Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 
 | Phase | Item | Title | Status |
 |---|---|---|---|
-| 1 | M1 | OOP, SOLID, clean design | ⬜ |
-| 1 | M2 | Design patterns | ⬜ |
+| 1 | M1 | OOP, SOLID, clean design | ✅ |
+| 1 | M2 | Design patterns | 🟨 |
 | 1 | M3 | LLD interview problems | ⬜ |
 | 1 | M4 | Concurrent LLD & machine coding | ⬜ |
 | 1 | M5 | .NET platform internals | ⬜ |
@@ -58,6 +58,8 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-16 · Mac · M2 · First pass at Strategy and Factory (`Strategy.cs`, `Factory.cs`); Factory quick check not answered. Next: restart design patterns from the beginning.
+- 2026-11-15 · Mac · M1 · Covered encapsulation, abstraction/polymorphism, and SOLID (7-step each); violation-vs-fix code in `M01.Payments/SolidPrinciples/`; Concepts entries written. Payment-engine build skipped by choice; test projects removed (create on request). Next: M2.
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions

@@ -6,7 +6,6 @@ See the plan's section 6 for components, the core order workflow, and the exit c
 
 ## Layout
 - `src/`: services (`Capstone.OrderService`, `Capstone.InventoryService`, `Capstone.PaymentService`, `Capstone.NotificationService`, `Capstone.SagaCoordinator`, …)
-- `tests/`: unit, integration (Testcontainers), contract, and failure/chaos tests
 - `docs/adr/`: Architecture Decision Records (`0001-use-outbox-for-order-events.md`, …)
 - `docker-compose.yml`: local environment (added in M6)
 

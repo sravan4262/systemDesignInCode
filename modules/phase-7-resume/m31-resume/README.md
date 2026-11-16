@@ -13,7 +13,7 @@
 - [ ] Applied any corrections from plan section 10 to those notes
 
 ## Layout
-- `src/` and `tests/`: code for this module (create projects when you start; add them to the root solution)
+- `src/`: code for this module (add projects to the root solution; tests only when asked)
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
