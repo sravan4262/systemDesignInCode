@@ -2,6 +2,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="System.IO.Hashing" />
+  </ItemGroup>
+
+  <!-- Real ASP.NET Core types for the API-level wiring sample (ShardedApi.cs). Ships with the SDK. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

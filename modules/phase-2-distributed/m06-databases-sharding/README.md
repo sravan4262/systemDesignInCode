@@ -93,6 +93,24 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - Strong: Q1 replication vs. sharding, Q2 sync vs. async mechanism, Q8 "not sharding for a read-heavy DB".
 - Revisit: Q4/Q5 "make it sync" ≠ fix for stale reads (use read-your-writes routing / return data from the write); Q6 one primary + sync replica in another zone + async replica in another region, region failover loses seconds; Q7 listener re-pointing, writes fail briefly → retry + idempotency.
 
+#### Sharding strategies (Session 8)
+- **In plain words:** split one big DB into shards; a shard key + strategy decides which shard holds each row. Replication = copies (reads, failover); sharding = split (writes, size). Big systems do both: replicas per shard.
+- **Shard key:** in almost every query (else scatter-gather: correct but slow, fails if any shard is down), spreads data AND load evenly, never changes. SaaS → `TenantId`; messaging → `ChatId`; a second common key → a secondary index/copy sharded by that key (async, targeted fan-out or denormalized).
+- **Directory** (`ShardRouting.cs`): `tenant → shard` table in a replicated catalog DB, cached with a TTL; onboarding = place by load (status Provisioning → Active); adding a shard moves no one; per-tenant control (big tenant → dedicated shard). Shard list in config/Key Vault (managed identity), tenant map in a table.
+- **Range:** simple, range scans; growing keys → all new rows on the last shard (hot).
+- **Hash** (`HashShardRouting.cs`): stable hash (`XxHash32`, never `GetHashCode()`), even spread, no lookup. `hash % N` moved 79.8% of keys going 4 → 5 shards; **fixed buckets** (1,024, never changes, ≫ shard count) + small bucket → shard map moved 19.8%. Hybrid: hash's even spread + directory's control.
+- **Hot keys:** sharding can't split one key. Reads → cache/CDN, replicas, fan-out on write. Writes → batch/aggregate (Redis INCR), split the key (salting).
+- **API flow** (`ShardedApi.cs`, `designs/sharding-request-flow.md`): tenant from token → shard (cached directory) → primary/replica → pooled connection; multi-region adds home region first (global directory, token claim, forward/redirect).
+
+#### Living with shards (Session 9)
+- **Global IDs:** per-shard `IDENTITY` collides. Options: random GUID (index fragmentation), v7 GUID, Snowflake = time + node id (unique per generator) + counter (unique within the ms); never embed a physical shard (use bucket/tenant). Risks: duplicate node ids, clock going backwards.
+- **Pagination:** `OFFSET` cost grows with page × shards; keyset/cursor `(CreatedAt, Id)` with per-shard TOP N + merge; Id = tiebreaker. Prefer single-shard (per tenant); cross-shard lists → search index with `search_after` (eventually consistent); analytics → warehouse.
+- **Rebalancing** (`TenantMove.cs`): copy → catch up → freeze (status Moving via version CAS + **fence** the old shard) → final catch-up + verify → switch directory → clean up later. Stale caches: the fenced old shard rejects writes → `ShardAwareWriter` invalidates + re-resolves → new shard (during freeze → 503 Retry-After). Caveat: fence vs. in-flight writes needs a lock on the fence row.
+
+#### Sharding & replication Q&A (2026-11-17): ~7.3 / 17 over three rounds
+- Strong: before-sharding answer (don't shard at 40% CPU), bucket reasoning (round 2), rebalancing phases.
+- Revisit (recurring): (1) replicas never take writes; (2) timeout = unknown outcome → idempotency key + unique constraint ("effectively once", not exactly once); (3) different replica lag → monotonic reads → sticky replica per session, not a cache; (4) cross-database transfer → Saga (not a "transaction in app code" = 2PC); (5) hot key isn't a sharding problem; (6) the old shard rejects (fence), it doesn't forward; (7) shard key not in the query = slow fan-out, not wrong data; (8) fixed buckets avoid rehashing (plain `% N` doesn't).
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
