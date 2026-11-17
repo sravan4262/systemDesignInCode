@@ -14,6 +14,28 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+This module has two halves.
+- **Contention at database and multi-server scale** (deadlocks, blocking, distributed locks): your M4 locks, grown up.
+- **Resilience:** dependencies get slow or fail, and your service must **degrade gracefully** instead of passing the failure on.
+
+### Sessions (in order)
+1. **Contention at scale:** a booking system under thousands of users; optimistic vs. pessimistic in practice. 🧪 Load-test the seat claim.
+2. **SQL deadlocks:** why they happen, error 1205, lock ordering, short transactions, RCSI, retrying. 🧪 Reproduce a consumer-vs-API deadlock.
+3. **Blocking, lock escalation, connection-pool exhaustion.**
+4. **Distributed locks (Redis):** leases, owner identity, renewal, safe release, fencing tokens; when not to use a lock.
+5. **Timeouts and retries:** backoff with jitter, retry amplification, deadlines and budgets.
+6. **Circuit breaker, bulkhead, fallback.** 🧪 Polly v8 / Microsoft.Extensions.Resilience against a flaky dependency.
+7. **Load shedding, graceful degradation, backpressure.**
+
+### Done when you can answer
+- How do you fix a deadlock without adding more locks?
+- Why is a Redis lock alone unsafe, and what do fencing tokens fix?
+- Three layers each retry 3 times. What happens to the bottom service?
+- What are the circuit breaker's states, and when does it trip and recover?
+
 ---
 
 ## Journal

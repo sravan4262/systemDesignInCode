@@ -14,6 +14,27 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+SQL isn't the only shape a database can take. Learn how databases store data on disk (B-tree vs. LSM-tree), how NoSQL makes you design **around your queries and a partition key**, and how search engines answer "find documents containing these words". The goal is to pick the right store for a job **and defend the choice**.
+
+### Sessions (in order)
+1. **Storage engines:** B-tree vs. LSM-tree (memtable, SSTables, compaction, Bloom filters); read, write and space amplification.
+2. **Document and key-value modelling:** model around access patterns, denormalise, single-table design.
+3. **Cosmos DB in depth:** partition-key choice, hot partitions, RU cost, the 5 consistency levels, indexing policy, change feed, transactional batch. 🧪 Cosmos emulator: a good vs. a bad partition key.
+4. **Wide-column (Cassandra):** query-first tables, tunable consistency.
+5. **Same query, two stores:** order history in SQL vs. NoSQL. 🧪 Compare latency, cost and consistency.
+6. **Search engines:** inverted index, analysers, BM25 scoring, near-real-time refresh, shards and replicas. 🧪 An Elasticsearch container.
+7. **Keeping search in sync:** events or change feed → indexer; Solr and Azure AI Search compared.
+8. **Choosing a store:** relational vs. document vs. wide-column vs. key-value vs. search, as a decision checklist.
+
+### Done when you can answer
+- Why do LSM-trees write faster than B-trees, and what do they give up for it?
+- How do you choose a Cosmos DB partition key, and why is a random GUID usually wrong?
+- Why not just use `LIKE '%term%'` instead of a search engine?
+- Order history, chat messages, product catalogue: which store for each, and why?
+
 ---
 
 ## Journal

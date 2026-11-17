@@ -14,6 +14,27 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+One business action, such as placing an order, touches **several services, each with its own database**. There's no single transaction across them. You either **coordinate one commit** (2PC) or **chain local transactions with undo steps** (Saga). This module covers both, and why Saga wins in microservices.
+
+### Sessions (in order)
+1. **Local vs. distributed transactions:** a partial-commit demo. 🧪 DB A commits, DB B fails.
+2. **2PC:** prepare and commit, the coordinator, in-doubt outcomes, blocking; the limits of `TransactionScope`.
+3. **The Saga idea:** local transactions plus compensations; semantic undo (refund, not delete).
+4. **Orchestration:** a coordinator with persisted state. 🧪 Build the order saga (reserve → pay → confirm).
+5. **Choreography:** services reacting to each other's events; coupling and visibility trade-offs.
+6. **Designing compensations:** idempotent, retryable, ordered; things you can't undo (a sent email).
+7. **Failure and recovery:** the orchestrator crashes mid-flow, timeouts, stuck sagas. 🧪
+8. **NServiceBus sagas and MassTransit state machines:** correlation, timeouts, concurrency on saga state.
+
+### Done when you can answer
+- Why not use 2PC across microservices?
+- Orchestration vs. choreography: when do you use each?
+- The payment succeeded but the inventory reservation failed. Walk through the saga.
+- What makes a compensation safe to retry?
+
 ---
 
 ## Journal

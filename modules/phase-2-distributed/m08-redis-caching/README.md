@@ -14,6 +14,27 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Your M4 LRU cache, moved **out of the process** so every server shares it. A cache makes reads fast and cheap, but every cache is a **second copy of the data**. The hard parts are keeping that copy correct (invalidation) and surviving when the cache fails or empties all at once.
+
+### Sessions (in order)
+1. **Why a distributed cache:** in-process vs. Redis, latency numbers, hit ratio as the key health metric.
+2. **Caching patterns:** cache-aside, read-through, write-through, write-around, write-behind. 🧪 Cache-aside in ASP.NET Core with Redis.
+3. **Expiry and eviction:** TTL, Redis's approximate LRU/LFU, memory limits.
+4. **Redis data structures and atomic operations:** strings, hashes, sets, sorted sets (leaderboards), `INCR`, Lua scripts.
+5. **Invalidation and consistency:** update the DB then delete the cache entry; the races that remain; stale reads.
+6. **Failure modes:** stampede (dogpile), penetration, avalanche (mass expiry), hot keys. 🧪 Cause a stampede, then fix it (single-flight lock, jittered TTL).
+7. **Distributed rate limiting:** your token bucket as a Redis Lua script. 🧪
+8. **When Redis is down:** fallback, timeouts, circuit breaker, restart and failover. 🧪 Measure DB-only vs. cached throughput.
+
+### Done when you can answer
+- Cache-aside vs. write-through: what are the trade-offs?
+- A hot key expires and the database falls over. What happened, and how do you prevent it?
+- Why delete the cache entry after a write instead of updating it? What race is still left?
+- What happens to your app when Redis goes down?
+
 ---
 
 ## Journal

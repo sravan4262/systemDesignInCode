@@ -103,7 +103,6 @@ public static class ParkingLotDesign
                 if (slot.IsEmpty) _free[slot.Type].Enqueue(slot, (slot.FloorNumber, slot.Number));
             }
         }
-
         public Slot? Allocate(VehicleType vehicle)
         {
             lock (_lock)   // check + take = one step, so two gates can't get the same slot

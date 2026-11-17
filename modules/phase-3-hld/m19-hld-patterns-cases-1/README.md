@@ -14,6 +14,29 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Most HLD questions are **combinations of 7 recurring patterns**. Learn each pattern on its own, then practise spotting and combining them in timed case studies: a 45-minute attempt, then a 45-minute review against a reference design.
+
+### Sessions (in order)
+1. **Pattern: real-time updates.** Polling, SSE, WebSockets, pub/sub fan-out, connection gateways.
+2. **Pattern: contention.** Atomic conditional updates, optimistic and pessimistic locking, holds with TTL, queues.
+3. **Pattern: multi-step processes.** Saga, workflow engines (Durable Functions, Temporal), state machines.
+4. **Pattern: scaling reads.** Cache, read replicas, CDN, denormalised read models.
+5. **Pattern: scaling writes.** Sharding, batching, sharded counters, queues to absorb bursts.
+6. **Pattern: large blobs.** Presigned URLs, chunked and resumable uploads, claim-check.
+7. **Pattern: long-running tasks.** 202 with a job ID, job and chunk tables, worker pools, checkpoints, progress, DLQ.
+8. **Worked example:** one change applied to 100k users (Azure).
+9. **Worked example:** one schema change across 10k tenant databases.
+10. **Cases, one per session:** URL shortener, WhatsApp, Netflix/YouTube, live streaming, Uber, Yelp, Twitter, Dropbox, live comments, non-AI chat over company data. 🧪 Each one: a timed attempt with an Excalidraw diagram saved in `designs/`, then a review.
+
+### Done when you can answer
+- Given a new prompt, can you name the patterns it needs within the first 5 minutes?
+- Contention: holding a seat vs. claiming a count across dates. Which update for each?
+- When do you return 202 with a job ID instead of doing the work in the request?
+- How do you upload a 5 GB file without sending it through your API servers?
+
 ---
 
 ## Journal

@@ -14,6 +14,27 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Services talk by leaving **messages in a broker** instead of calling each other directly. That decouples them and absorbs traffic spikes, but brings new failures: messages that are **lost, duplicated, reordered or stuck**. This module covers what RabbitMQ guarantees, and exactly where each guarantee ends.
+
+### Sessions (in order)
+1. **Why messaging:** sync vs. async, decoupling, load levelling; queues vs. pub/sub.
+2. **The RabbitMQ model:** exchanges (direct, topic, fanout), bindings, routing keys, queues. 🧪 RabbitMQ in Docker with a .NET producer and consumer.
+3. **Competing consumers and prefetch:** scaling workers, fair dispatch.
+4. **Acknowledgements:** publisher confirms vs. consumer acks; durable queues and persistent messages. 🧪 Crash a consumer before and after its ack.
+5. **Failure catalogue:** broker outage, lost confirm, a crash after the DB commit but before the ack → duplicates → idempotency.
+6. **Ordering and poison messages:** per-aggregate ordering, head-of-line blocking, requeue loops, dead-letter exchanges.
+7. **NServiceBus and MassTransit:** what the frameworks add (recoverability, error queue, monitoring).
+8. **Beyond RabbitMQ:** Service Bus (locks, sessions, DLQ), a first look at Kafka, claim-check, quorum queues.
+
+### Done when you can answer
+- Publisher confirm vs. consumer ack: what does each one guarantee?
+- A consumer commits to the database, then crashes before acking. What happens, and how do you make it safe?
+- How do you keep one order's messages in order while still scaling consumers?
+- What is a poison message, and how do you stop it blocking the queue?
+
 ---
 
 ## Journal

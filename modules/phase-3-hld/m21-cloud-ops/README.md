@@ -14,6 +14,32 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Running your designs **in production**. This module covers:
+- surviving a region outage
+- isolating tenants
+- deploying on Kubernetes and Azure compute
+- shipping changes safely
+- mapping all of it to AWS
+
+### Sessions (in order)
+1. **Multi-region:** active-active vs. active-passive, RTO and RPO, failover, replication lag, conflict resolution.
+2. **Multi-tenancy:** isolation models (shared, schema per tenant, DB per tenant), quotas, noisy neighbours.
+3. **Containers:** multi-stage Dockerfiles, non-root, port 8080, image tags by commit SHA.
+4. **Kubernetes:** Deployments vs. StatefulSets, Services, ingress, probes, HPA/VPA/cluster autoscaler, ConfigMaps and Secrets, Helm.
+5. **Azure compute:** App Service vs. Container Apps vs. AKS vs. Functions (isolated worker model, Durable Functions).
+6. **Safe delivery:** blue-green, canary, rollback, backward-compatible schemas.
+7. **Azure ↔ AWS mapping;** Terraform with remote state. 🧪 Deploy one capstone service.
+8. **Trade-offs:** cost, compliance, operational complexity.
+
+### Done when you can answer
+- RTO vs. RPO: what are they, and what drives each one?
+- Active-active: how do you handle write conflicts?
+- When do you choose Container Apps vs. AKS vs. Functions?
+- How do you roll out a breaking schema change with zero downtime?
+
 ---
 
 ## Journal

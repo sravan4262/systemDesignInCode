@@ -14,6 +14,28 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Kafka isn't a queue. It's a **durable, ordered log** that many consumers read at their own pace and can **replay**. Two ideas are built on top of it: **event sourcing** (store every change, not just the current state) and **CQRS** (separate models for writes and reads).
+
+### Sessions (in order)
+1. **Log vs. queue:** why Kafka keeps messages; topics, partitions, offsets, retention.
+2. **Partitioning and ordering:** the partition key gives per-key order; hot partitions. 🧪 Kafka in Docker with the Confluent .NET client.
+3. **Consumer groups and rebalancing:** scaling, partition assignment, pauses.
+4. **Delivery semantics:** committing before vs. after processing gives at-most-once vs. at-least-once; idempotent producer; transactions and what "exactly-once" really covers. 🧪 Crash before and after the commit.
+5. **Schemas and versioning:** schema registry, backward and forward compatibility, v1 and v2 side by side.
+6. **Stream-processing concepts:** windows, late events, watermarks.
+7. **Event sourcing:** event store, rebuilding state, snapshots, projections. 🧪 An event-sourced Order aggregate.
+8. **CQRS:** separate read models, eventual consistency, when it's overkill.
+9. **RabbitMQ vs. Kafka vs. Service Bus:** a decision table.
+
+### Done when you can answer
+- How does Kafka keep events in order, and what breaks that order?
+- Committing the offset before vs. after processing: which guarantee does each give?
+- What does Kafka's exactly-once cover, and what doesn't it cover?
+- When is event sourcing worth it, and when is it a trap?
+
 ---
 
 ## Journal

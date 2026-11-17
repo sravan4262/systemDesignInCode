@@ -34,6 +34,11 @@ How the steps adapt:
 
 After step 7, have the learner write a short entry in the module README's **Concepts** section in their own words, then proceed.
 
+### Module flow (M6 onward)
+- Each module README (M6–M21) has a **Learning plan**: big picture → numbered sessions (🧪 = lab) → "done when you can answer".
+- Open every module with its **big picture** (what it is, why it matters, how the sessions build), then teach the sessions in order, one sub-topic at a time, using the 7 steps.
+- Phases 2–3 are the learner's priority: get at least one quick-check answer in their own words per topic, for 🧪 labs show short code samples (SQL/C#) with the expected output instead of running Docker (learner's choice), and finish each module with the "done when" questions, graded.
+
 ### After the concept
 - Let the learner write the code. Give hints before full solutions unless asked for the answer.
 - Review the learner's code like a senior reviewer: correctness, concurrency, failure handling, tests.

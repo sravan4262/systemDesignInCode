@@ -14,6 +14,26 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+Once a system is distributed, you can't debug it by reading one log file. **Observability** (traces, logs, metrics) lets you follow one request across services and spot trouble **before users do**. A **testing strategy** and **SLOs** stop it from getting worse over time.
+
+### Sessions (in order)
+1. **The three pillars:** logs, metrics and traces, and what each one answers.
+2. **OpenTelemetry in ASP.NET Core:** traces and context propagation over HTTP and messaging. 🧪 A Jaeger trace across 2 services and a queue.
+3. **Structured logs and correlation IDs;** mapping App Insights and AppDynamics concepts onto OpenTelemetry.
+4. **Metrics for this phase:** queue depth, oldest message age, consumer lag, DLQ size, outbox backlog, deadlocks, pool usage. 🧪 A Prometheus and Grafana dashboard.
+5. **SLIs, SLOs and alerting:** p95 and p99, error budgets, alert fatigue, runbooks.
+6. **Incident drill:** a broker outage, a growing backlog, a slow DB, cascading latency.
+7. **Testing strategy:** unit, integration (Testcontainers), contract (Pact), end-to-end, property-based, chaos.
+
+### Done when you can answer
+- Why alert on p99 latency and not on the average?
+- How does a trace follow a request through a message queue?
+- Which metric tells you a consumer is falling behind?
+- Which tests would you put in CI for an outbox?
+
 ---
 
 ## Journal

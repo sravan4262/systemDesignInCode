@@ -14,6 +14,31 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+The theory underneath the databases and coordination services you use. It covers:
+- how nodes **agree** (consensus)
+- how copies stay **consistent enough** (quorums)
+- how keys **spread** across nodes (consistent hashing)
+- how to **order events without trusting clocks**
+- small, approximate data structures that save a lot of space
+
+### Sessions (in order)
+1. **Consistency models, precisely:** linearizable, serializable, causal, read-your-writes, eventual.
+2. **Replication and quorums:** R + W > N, sloppy quorums, hinted handoff, read repair, Merkle trees.
+3. **Consistent hashing with virtual nodes.** 🧪 Build it in C#, then measure how many keys move when a node joins or leaves.
+4. **Time and ordering:** clock skew, Lamport clocks, vector clocks, hybrid logical clocks; why timestamps can't order events.
+5. **Consensus with Raft:** leader election, log replication, terms, commit index; preventing split-brain.
+6. **Gossip, failure detectors, CRDTs.**
+7. **Probabilistic structures:** Bloom filter, HyperLogLog, Count-Min Sketch.
+
+### Done when you can answer
+- Why does R + W > N guarantee you read the latest write?
+- Explain Raft leader election in 1 minute.
+- Why does consistent hashing use virtual nodes?
+- Why can't you order events across servers by timestamp?
+
 ---
 
 ## Journal

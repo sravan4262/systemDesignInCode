@@ -14,6 +14,29 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+One database done right, then split when one isn't enough. First learn how SQL Server finds rows fast (indexes) and keeps concurrent transactions from corrupting each other (isolation levels, locks). Then **copy** the database (replication) for read scale and availability, and **split** it (sharding) for write scale and size. Sharding is the last resort, and knowing what to try first is a senior signal.
+
+### Sessions (in order)
+1. **Indexes:** B-tree, clustered vs. non-clustered, seek vs. scan, composite-index column order, covering indexes (`INCLUDE`). 🧪 Compare execution plans before and after adding an index.
+2. **Query tuning and connection pooling:** reading plans, key lookups, parameter sniffing, pool exhaustion.
+3. **Transactions and anomalies:** dirty read, non-repeatable read, phantom, lost update, write skew. 🧪 Two SQL sessions side by side, reproducing each one.
+4. **Isolation levels:** Read Uncommitted, Read Committed, RCSI, Repeatable Read, Snapshot, Serializable. Which anomaly each one prevents, and what it costs.
+5. **Optimistic vs. pessimistic concurrency:** `rowversion` with an EF Core concurrency token; `UPDLOCK`, `HOLDLOCK` and `READPAST`. 🧪 Fix a lost update both ways.
+6. **Replication:** primary-replica (master-slave) with a read/write split; single-primary vs. multi-primary vs. leaderless (overview, with depth in M17/M21); sync, async and semi-sync; replica lag; read-your-writes; failover and promotion; replica vs. backup vs. snapshot. Replication = copies of all the data; sharding = splitting the data. They're often combined.
+7. **Before sharding:** scale up, read replicas, caching, archiving, partitioning. When sharding is premature.
+8. **Sharding strategies:** range, hash and directory; choosing the shard key; hot partitions. 🧪 3 SQL containers and a C# shard resolver.
+9. **Living with shards:** cross-shard queries, pagination, global IDs, rebalancing and migration. 🧪 Move a tenant from one shard to another.
+
+### Done when you can answer
+- Why does an index on `(CustomerId, Date)` help `WHERE CustomerId = …` but not `WHERE Date = …`?
+- Which isolation level prevents lost updates in SQL Server, and what does RCSI change?
+- Optimistic vs. pessimistic concurrency: when do you use each?
+- How do you pick a shard key for a multi-tenant SaaS, and what is a hot partition?
+- What do you try before sharding?
+
 ---
 
 ## Journal

@@ -14,6 +14,32 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+The vocabulary and method for system design interviews. This module covers:
+- the standard building blocks (DNS, load balancers, gateways, CDN)
+- how to **size** a system with back-of-envelope maths
+- the CAP trade-off
+- a **delivery framework** to use every time
+- how servers **push** data to clients in real time
+
+### Sessions (in order)
+1. **The delivery framework:** requirements → entities → API → high-level design → deep dives → scale → wrap-up; leading the conversation.
+2. **The request path:** what happens when you type a URL (DNS, TCP, TLS, HTTP/1.1, 2 and 3).
+3. **Building blocks:** L4 and L7 load balancers, reverse proxy, API gateway, CDN, object storage, stateless scaling.
+4. **Back-of-envelope maths:** latency numbers, QPS, storage, bandwidth, server count. 🧪 Build a cheat sheet, then size 3 systems.
+5. **Data choices as HLD decisions:** SQL vs. NoSQL, replication, partitioning, caching (a recap of Phase 2).
+6. **CAP and PACELC,** consistency models in practice, failure domains.
+7. **Real-time delivery:** polling, long polling, SSE and WebSockets, and when each fits.
+8. **SignalR at scale:** backplane vs. Azure SignalR Service, reconnect storms, presence, resyncing missed messages; mobile push.
+
+### Done when you can answer
+- Estimate QPS and storage for a given product in 2 minutes.
+- SSE vs. WebSockets: when do you use each?
+- What does CAP actually force you to choose, and when?
+- How do you scale WebSocket connections across many servers?
+
 ---
 
 ## Journal

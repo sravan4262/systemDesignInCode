@@ -14,6 +14,31 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+This module covers three questions:
+- **Who** is calling? That's authentication.
+- **What** are they allowed to do? That's authorization.
+- **How are your APIs shaped** so clients can use them safely as they change? That's contracts, pagination, versioning and idempotency.
+
+### Sessions (in order)
+1. **OAuth2 and OIDC basics:** tokens and flows; authorization code with PKCE; client credentials.
+2. **JWT validation and pitfalls:** signature, algorithm confusion, expiry, revocation, refresh-token rotation, key rotation.
+3. **Browser apps:** the BFF pattern; `HttpOnly`/`Secure`/`SameSite` cookies; SPAs as public clients.
+4. **Entra ID in practice:** app registrations, scopes, managed identity, `DefaultAzureCredential`, Key Vault.
+5. **Authorization:** RBAC and ABAC, policy-based authorization in ASP.NET Core, tenant-aware checks; BOLA. 🧪 Find and fix a BOLA bug.
+6. **Service-to-service:** mTLS and secrets management; SAML vs. OIDC (overview).
+7. **Threat modelling:** OWASP API Top 10, STRIDE.
+8. **API design:** REST vs. gRPC vs. GraphQL, resource models, ProblemDetails, contract-first OpenAPI.
+9. **API mechanics:** cursor pagination, versioning, Stripe-style idempotency keys. 🧪 Idempotency middleware with stored responses.
+
+### Done when you can answer
+- Why PKCE, and why is the implicit flow dead?
+- How do you revoke a JWT before it expires?
+- What is BOLA, and how do you prevent it systematically?
+- Cursor vs. offset pagination: what's the difference, and when do you use each?
+
 ---
 
 ## Journal

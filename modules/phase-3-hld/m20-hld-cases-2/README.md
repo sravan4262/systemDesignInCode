@@ -14,6 +14,29 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+More cases. Some you've already designed at LLD level (rate limiter, notification service, hotel), now at **system scale**. The others are correctness-heavy designs such as **payments**. You'll also practise tuning an answer to the company type: fintech, healthcare, social or streaming.
+
+### Sessions (in order)
+1. **Rate limiter:** distributed counters, multi-region, fail-open vs. fail-closed.
+2. **Distributed key-value store and distributed cache.**
+3. **Notification system:** channels, templates, preferences, retries, dedup, priority.
+4. **Typeahead and web crawler.**
+5. **Ticketmaster:** flash-sale contention, virtual waiting room, fairness.
+6. **Payment system:** double-entry ledger, reconciliation; the deep dive on making sure a payment never happens twice.
+7. **Hotel and meeting-room reservation** at system scale.
+8. **Job scheduler, top-K / ad-click aggregation, leaderboard, metrics and logging platform.**
+9. **Google Docs, "design Kafka", auction, stock brokerage.**
+10. **Your own question bank:** feature flags, CI/CD on AKS, zero-downtime SQL migration, HL7 ingestion, multi-tenant auth, multi-region DR. Pick about 10–12 by priority. 🧪 Each one timed, with a diagram in `designs/`, then reviewed.
+
+### Done when you can answer
+- Does every design cover requirements, API, data model, estimates, architecture, bottlenecks, failure modes, security and cost?
+- How do you guarantee a payment is never charged twice, end to end?
+- Should a rate limiter fail open or fail closed when Redis is down? Why?
+- How does your answer change for a fintech vs. a social media company?
+
 ---
 
 ## Journal

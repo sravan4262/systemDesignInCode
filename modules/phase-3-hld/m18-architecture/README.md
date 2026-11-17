@@ -14,6 +14,29 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+How to carve a system into the **right pieces**, and how to change it safely over time.
+- **DDD** gives you the boundaries: bounded contexts and aggregates.
+- **Architecture styles** give each service its internal structure.
+- **Migration patterns** let you change a live system without a big-bang rewrite.
+
+### Sessions (in order)
+1. **Strategic DDD:** ubiquitous language, bounded contexts, context maps, anti-corruption layer.
+2. **Aggregates:** consistency boundaries, one aggregate per transaction, referencing other aggregates by ID.
+3. **Inside a service:** layered vs. clean/hexagonal vs. vertical slice, in .NET.
+4. **Monolith vs. modular monolith vs. microservices;** the smells of a distributed monolith.
+5. **Communication:** sync vs. async, API gateway (APIM), BFF, service discovery, service mesh, retrying in only one place.
+6. **Migrations:** strangler fig, branch by abstraction, parallel run, dual writes with backfill, CDC, expand/contract. Practise retelling your own migrations in this vocabulary.
+7. **Design docs:** RFCs and ADRs. 🧪 Write an RFC and 2 ADRs that split the capstone into services.
+
+### Done when you can answer
+- How do you find service boundaries?
+- What is a distributed monolith, and how do you spot one?
+- How do you migrate a monolith without a big-bang rewrite?
+- Service discovery vs. API gateway: what's the difference?
+
 ---
 
 ## Journal

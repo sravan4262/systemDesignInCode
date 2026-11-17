@@ -21,6 +21,15 @@
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### M4 summary (concepts + code)
+- **LRU cache** (`LruCache.cs`): Dictionary (find O(1)) + LinkedList (order, move/remove O(1)); Get also moves to front, so one exclusive `lock` (RW lock gains nothing). Without the lock: capacity check races, map and list drift apart or corrupt. Scale-out: striped shards (LRU per shard).
+- **Eviction policies:** LRU (recency), LFU (frequency; O(1) with freq → list + minFreq), FIFO (insertion order), TTL (store ExpiresAt, lazy check + sweep, no timer per key).
+- **Rate limiters** (`IRateLimiter`, Strategy): token bucket (bursts, lazy refill, `TokenBucketRateLimiter.cs`), sliding window counter (2 counters, no boundary burst, `SlidingWindowRateLimiter.cs`), fixed window (boundary burst), leaky bucket (queue drained at fixed rate, for protecting a downstream). `KeyedRateLimiter` = one limiter per client; GetOrAdd factory may run twice (harmless here). Per process only; across servers use Redis.
+- **Bounded queue / Channels (concept only):** in-process hand-off with backpressure (Wait / Drop modes); one channel per subscriber for fan-out; not durable → RabbitMQ for business messages, Channels inside a process (telemetry, batching, fan-out to workers).
+- **KV store with transactions** (`KeyValueStore.cs`): committed dict + stack of draft dicts; Get walks top → committed; tombstone for delete; Rollback pops; Commit merges all bottom → top.
+- **Primitives** (`Primitives/`): `lock` = threads in one process; named `Mutex` = processes on one machine sharing a resource (OS object, by name, voluntary, read-change-write all inside); `ReaderWriterLockSlim` = shared read / exclusive write (like SQL S/X/U), writer priority prevents starvation; only for read-heavy truly read-only data. Across servers: SQL/Redis locks.
+- **Thread-safe logger (concept only):** callers enqueue to a bounded Channel, ONE background writer writes in batches (no file lock needed); drop when full; drain on shutdown; audit logs must be durable instead.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**

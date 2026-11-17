@@ -14,6 +14,32 @@
 - `designs/`: diagrams and write-ups (HLD modules)
 - This README: the journal
 
+## Learning plan
+
+### Big picture (read first)
+The toolkit for "**never lose a message, never apply it twice**".
+- The **outbox** fixes the producer side: a DB commit and a broker publish can't be one transaction.
+- The **inbox** fixes the consumer side: duplicates.
+- **Retries and the DLQ** handle failures without losing messages or looping forever.
+
+This module answers your M2 open question (DB transaction vs. broker publish).
+
+### Sessions (in order)
+1. **The dual-write problem:** a DB commit plus a broker publish is two systems with no shared transaction; the four crash points.
+2. **Transactional outbox:** the business row and the outbox row in one transaction. 🧪 Build it with EF Core.
+3. **The relay:** polling publisher, leases and claims, concurrent relays (`UPDLOCK`/`READPAST` again), status and retries. 🧪 Two relays, with a crash at each step.
+4. **Inbox / idempotent consumer:** a processed-message table in the same transaction as the business change. 🧪 Deliver a duplicate.
+5. **Retries:** transient vs. permanent errors, exponential backoff with jitter, retry budgets, delayed retries.
+6. **DLQ operations:** failure metadata, inspection, selective replay, throttling, quarantine.
+7. **CDC vs. polling,** ordering, outbox cleanup.
+8. **Framework outboxes:** NServiceBus and MassTransit, and what each one guarantees.
+
+### Done when you can answer
+- Why can't you just publish after `SaveChanges`? Walk through the failure.
+- The outbox gives at-least-once publishing. What makes the whole flow effectively-once?
+- Why must the inbox record be in the same DB transaction, and not in Redis?
+- How do you replay 10,000 DLQ messages safely?
+
 ---
 
 ## Journal
