@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** Phase 1 done except M5 (skipped for now). Choose: CP1 or Phase 2 (M6).
-- **Next step:** Decide between CP1 (Phase 1 checkpoint mock, LLD + concurrency) and starting M6 (database internals & sharding). M5: 6 hot topics done; GC, Span, Options, EF concurrency tokens etc. deferred.
+- **Current module:** M6 — Database internals, transactions & sharding (Phase 2 started)
+- **Next step:** Restart M6 Session 1 (Indexes) from the beginning, in small pieces with a short check after each: (1) what an index is + seek vs. scan, (2) clustered vs. non-clustered, (3) key lookups + covering indexes, (4) composite indexes + column order, (5) when indexes hurt / how seeks get lost. Then Session 2. Code samples instead of Docker. CP1 deferred.
 - **Machine last used:** Mac
 
 ## Status
@@ -18,8 +18,8 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 1 | M3 | LLD interview problems | ✅ (moved on; design-only, no tests/walkthroughs) |
 | 1 | M4 | Concurrent LLD & machine coding | ✅ (concepts + core code; no tests by choice) |
 | 1 | M5 | .NET platform internals | 🟨 (6 hot topics covered; rest deferred) |
-| 1 | CP1 | Checkpoint: LLD & .NET | ⬜ |
-| 2 | M6 | Database internals & sharding | ⬜ |
+| 1 | CP1 | Checkpoint: LLD & .NET | ⬜ (deferred) |
+| 2 | M6 | Database internals & sharding | 🟨 |
 | 2 | M7 | NoSQL, storage engines, search | ⬜ |
 | 2 | M8 | Redis & distributed caching | ⬜ |
 | 2 | M9 | Messaging & queue reliability | ⬜ |
@@ -58,6 +58,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-16 · Mac · Phase 2/3 setup + M6 · Wrote Learning plans (big picture → sessions → done-when) for M6–M21; learner prioritizes Phases 2–3; code samples instead of Docker labs. Replication vs. sharding clarified. M6 Session 1 (indexes) taught, quick check pending. Next: answer it, then Session 2.
 - 2026-11-16 · Mac · M4 · LRU cache, eviction policies, token bucket + sliding window limiters (IRateLimiter), Channels/backpressure (concept), KV store with nested transactions, lock / Mutex / ReaderWriterLockSlim examples, thread-safe logger (concept). M5 hot topics (concept only): async/await + sync-over-async, DI lifetimes + captive dependency, middleware order, IHttpClientFactory, N+1, DbContext lifetime. Next: CP1 or M6.
 - 2026-11-16 · Mac · M3 · Parking Lot break-it (partial): last-slot race (lock → conditional UPDATE / UPDLOCK+READPAST + unique index), double exit (atomic status claim, idempotency key, ownership-aware release), gateway timeout = unknown outcome (PaymentPending + reconciliation). Learner chose to skip remaining drills and focus on LLD design. Movie Ticket Booking designed (requirements → entities with ShowSeat → services), no code by choice. Expense Sharing designed (Splits list, split Strategy, pair balances, settlements). ATM: clarifications + entities + state machine; services skipped. Hotel Booking designed (RoomInventory per night, all-nights atomic claim). Notification Service clarifications (commands vs events, priorities, preferences at send time, idempotency key). Closed M3 by choice. Next: M4.
 - 2026-11-16 · Windows · M3 · Parking Lot interview-style: clarifying questions → requirements → entities → service signatures → Enter/Exit flows → concurrency (lock vs. atomic UPDATE) → data structures (min-heap per slot size, ConcurrentDictionary for tickets) → simple in-memory code. Key gap: method signatures (inputs = what the caller knows). Next: break it + verbal walkthrough, then Movie Ticket Booking.
