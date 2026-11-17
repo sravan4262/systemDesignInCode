@@ -42,6 +42,20 @@ Your M4 LRU cache, moved **out of the process** so every server shares it. A cac
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### M8 overview (2026-11-17, all 8 sessions at overview level by choice; no labs)
+- **Why distributed:** in-process (~100 ns, per server, inconsistent after updates, cold after deploy) vs. Redis (~1 ms, one shared copy). Two-level / `HybridCache` for the hottest keys. Hit ratio is the health metric (95% → 1 in 20 reads hits the DB; a drop multiplies DB load).
+- **Patterns:** cache-aside (default; DB = source of truth, survives Redis down), read-through (`HybridCache.GetOrCreateAsync`), write-through (always warm, slower writes, caches unread data), write-around, write-behind (counters/bursts; loses unflushed writes; never money).
+- **Expiry/eviction:** always a TTL, with jitter; TTL = staleness cap, invalidation does the real work. `allkeys-lru` for a pure cache; Redis LRU is approximate (sampling); `noeviction`/separate instance when Redis holds data you can't lose (rate limits, locks).
+- **Data structures:** commands are atomic (single thread): `INCR` counters, sorted sets for leaderboards/top-N (`ZINCRBY`, `ZREVRANGE`), `SET NX EX` locks, Lua for multi-step atomic logic.
+- **Invalidation:** update DB first, then DELETE the key (updating races: last writer may write the older value). Remaining race: slow reader re-populates the old value after the delete → TTL caps it, delayed double delete, versioning. Reliable invalidation via outbox/CDC; pub/sub to clear local caches. Caches are eventually consistent: balances/stock-at-checkout read from the DB.
+- **Failure modes:** stampede (hot key expires → single-flight lock, early refresh, serve stale), avalanche (mass expiry/cold restart → jitter, warm-up, protect DB), penetration (missing ids → cache "not found", Bloom filter), hot key (one node → local cache in front, key copies, split counters).
+- **Rate limiting:** in-process limiters multiply by server count; shared token bucket per client in Redis as a Lua script (atomic refill + take); one bucket per rule, check-all-then-take-all in one script, hash tags in Cluster. Gateway (APIM policies: per IP, subscription, JWT claim, quotas) for request-level limits; app + Redis for limits needing business data. 429 + Retry-After; fail open with a local fallback.
+- **Redis down:** short timeouts (ms, not the 5 s default), one shared `ConnectionMultiplexer`, catch and fall back to the DB, circuit breaker (M13), protect the DB (local cache, single-flight, bulkhead), per-use decisions (cache → DB, rate limit → fail open, locks → fail closed). Replica + auto-failover (async: may lose last writes), Cluster (16,384 slots), plan for a cold cache.
+
+#### M8 Q&A (2026-11-17): ~2.9 / 6
+- Strong: rate limits across servers (shared state in Redis), product descriptions/countries caching.
+- Revisit: name the failure (stampede; fix = single-flight + early refresh, not "re-cache"); the remaining delete race (slow reader) + TTL cap; Redis down must also protect the DB (local cache, single-flight, bulkhead) and the "stop calling, test periodically" is a circuit breaker; don't cache balances because they must be current (not because of traffic); arbitrary search queries → low hit ratio, don't cache. Skipped: cache-aside vs. write-through.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
