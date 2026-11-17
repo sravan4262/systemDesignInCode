@@ -19,4 +19,7 @@
     <Project Path="modules/phase-1-lld-dotnet/m05-dotnet-internals/src/M05.Api/M05.Api.csproj" />
     <Project Path="modules/phase-1-lld-dotnet/m05-dotnet-internals/src/M05.Runtime/M05.Runtime.csproj" />
   </Folder>
+  <Folder Name="/M06/">
+    <Project Path="modules/phase-2-distributed/m06-databases-sharding/src/M06.Databases/M06.Databases.csproj" />
+  </Folder>
 </Solution>

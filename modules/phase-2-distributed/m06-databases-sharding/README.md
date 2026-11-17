@@ -44,6 +44,55 @@ One database done right, then split when one isn't enough. First learn how SQL S
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### Indexes (Session 1)
+- **In plain words:** A sorted copy of column values plus a pointer to the row, stored as a B-tree. Because it's sorted, SQL walks down the levels to the matching values (seek, ~3–4 page reads) instead of reading every row (scan).
+- **Seek vs. scan:** seek cost grows with the number of matches; scan cost grows with table size. A scan is right when the query needs most rows (e.g. `SUM` over the table, a status that 80% of rows have).
+- **Clustered vs. non-clustered:** clustered = the table itself stored in key order, so only one. Non-clustered = a separate copy of the key columns + the clustered key as pointer; the other columns are not stored.
+- **Key lookup / covering:** columns not in the index → a trip back to the table per row (key lookup); too many matches → SQL scans instead. `INCLUDE` columns are carried at the leaf so the trip disappears. Key = what you filter on (sorted); INCLUDE = what you select (just present).
+- **Composite order:** sorted by the first column, then the next within it. Seeks only if the query uses the leading column (`CustomerId`, or `CustomerId` + `OrderDate`); `OrderDate` alone scans. Filter order in `WHERE` never matters; equality columns first, then one range/sort column.
+- **When indexes hurt:** every index is updated on every write → few indexes on write-heavy tables (outbox: one small filtered index for the relay). Non-SARGable filters lose the seek: function or maths on the column (`YEAR(OrderDate)` → use a range), implicit conversion, leading `%`, OR across columns. Low-selectivity column → filtered index.
+- **Analogy:** the index at the back of a book; a phone book sorted by (surname, first name).
+
+#### Query tuning & connection pooling (Session 2)
+- **Execution plans:** SQL's recipe for a query. Look for: scans on big tables for few rows, costly Key Lookups (fix: `INCLUDE` the columns or select fewer), estimated ≠ actual rows (stale statistics / sniffing), sort or hash spills. Use the ACTUAL plan, `SET STATISTICS IO ON` (logical reads), Query Store (top queries by total time, plan changes).
+- **Parameter sniffing:** the plan is built from the first parameter value and reused for every call; results stay correct, but a skewed value gets the wrong strategy (e.g. seek + 1M key lookups ≈ 3M random page reads vs. a 62,500-page sequential scan). Matters most with a non-covering index (two possible plans). Fixes: covering index first; `OPTION (RECOMPILE)` for heavy, infrequent queries (compile CPU every call); `OPTIMIZE FOR`; Query Store plan forcing; PSP in SQL 2022.
+- **Connection pooling:** Open borrows, Dispose returns (default max 100 per connection string). Exhaustion = connections held too long. Low DB CPU + exhaustion → held while idle/blocked (leak, held across HTTP calls, lock blocking, sync-over-async) → check session DMVs. Raising Max Pool Size only delays it and pushes load onto SQL.
+- **Connections in use = requests/sec × seconds held** (Little's Law). Before sharding: tune queries → fewer calls (cache, batch, fix N+1) → throttle → scale up → read replicas → queues/CQRS → split by service → shard (last, when one primary's writes/size are exceeded).
+
+#### Transactions & anomalies (Session 3)
+- **Transaction / ACID:** a group of changes that succeed or fail together. Atomicity (all or nothing), Consistency (constraints hold), Isolation (others don't see half-done work; the adjustable one), Durability (written to the transaction log before COMMIT returns; replayed after a crash). Every SQL statement is its own transaction; several statements are atomic only inside one explicit transaction (EF: one `SaveChanges`). Never covers a second DB or a broker publish.
+- **Inside a transaction nothing is committed until COMMIT:** at Read Committed others wait (locking) or see the previous committed version (RCSI), so a rollback leaves nothing behind. The DB doesn't replay failed transactions; the app retries (so transactions must be safe to retry). WAL replay after a crash only restores committed work.
+- **Dirty read:** reading uncommitted data that may roll back (Read Uncommitted / `NOLOCK`). Example: NOLOCK fulfilment job ships an order whose checkout rolled back. NOLOCK can also double-count/skip rows. Fix blocking with RCSI, not NOLOCK.
+- **Non-repeatable read:** same row, same transaction, different value (allowed at Read Committed, the default).
+- **Phantom:** same query returns new/missing rows (count/limit checks → overbooking).
+- **Lost update:** read → compute in app → write back; one write overwrites the other (stock 10 → two sales → 9). Default EF pattern. Fixes: atomic `SET Stock = Stock - 1 WHERE Stock >= 1`, `UPDLOCK`, `rowversion`.
+- **Write skew:** each checks a rule, each updates a DIFFERENT row, together they break it (on-call doctors, overlapping bookings). Even Snapshot allows it; rowversion on your own row can't see it. Fixes: Serializable / `UPDLOCK, HOLDLOCK` on the rows the rule reads, a constraint/unique index, or materialise the conflict into one shared row (like Hotel `RoomInventory`).
+- **Default:** Read Committed (Azure SQL: with RCSI). Keep it, and protect check-then-act operations specifically.
+
+#### Isolation levels (Session 4)
+- **Mechanism (locking levels):** writers always take X locks held to COMMIT; levels differ in readers' S locks. Read Uncommitted: none (dirty reads). Read Committed: S lock released after each row (non-repeatable reads, phantoms, lost updates allowed). Repeatable Read: S locks held to COMMIT (stops non-repeatable reads; lost update becomes a deadlock; phantoms still get in because new rows weren't locked). Serializable: + key-range locks (stops phantoms and write skew; most blocking and deadlocks; needs an index or it locks far more).
+- **Hints:** `NOLOCK` = Read Uncommitted, `HOLDLOCK` = Serializable for one table, `UPDLOCK` = read with intent to write.
+- **Versioning:** old committed row versions kept in tempdb; readers don't block writers and vice versa. RCSI = snapshot per statement (DB-wide replacement for Read Committed; default on Azure SQL); the safe alternative to NOLOCK. Does NOT prevent lost updates. Snapshot = snapshot per transaction (repeatable reads, no phantoms; same-row write conflict → error 3960, retry). Neither prevents write skew. Cost: tempdb growth, 14 bytes/row, slightly stale reads.
+- **Choosing:** RC + RCSI as default; Snapshot for consistent multi-query reports; atomic update / UPDLOCK / rowversion for read-then-update; Serializable/HOLDLOCK or a constraint or a shared counter row for check-range-then-insert and write skew; never NOLOCK.
+
+#### Optimistic vs. pessimistic concurrency (Session 5)
+- **Optimistic:** no lock on read; remember the version; `UPDATE ... WHERE RowVersion = @read` → 0 rows = conflict (EF: `[Timestamp]` → `DbUpdateConcurrencyException`). Then reload and retry (mechanical change, capped ~3) or return 409/412 to the user (a human decision). Never ignore it. `rowversion` = SQL Server's automatic DB-wide change counter (not a time, not a GUID; you never set it). Over HTTP: ETag + If-Match → 412. Bad under high contention: most attempts conflict and retry (wasted work), not because of locks.
+- **Pessimistic:** `SELECT ... WITH (UPDLOCK, ROWLOCK)` inside a transaction; other would-be writers wait at the read; plain readers aren't blocked. U lock conflicts with U, so no S→X upgrade deadlock (unlike Repeatable Read). Keep the work short; lock in a consistent order. `UPDLOCK + READPAST` = claim the next free item (job queues, outbox relay, nearest slot). Works across app servers because the lock lives in the DB.
+- **Choose:** one SQL statement → atomic conditional UPDATE; complex logic + rare conflicts / across HTTP → optimistic; complex logic + frequent conflicts → pessimistic; many workers taking items → UPDLOCK + READPAST.
+
+#### Replication (Session 6, part 1)
+- **Primary-replica:** one primary takes all writes and streams its transaction log to replicas, which replay it (SQL Server Always On AG / Azure SQL). Built into the engine (not app code, not jobs; log shipping is the old job-based exception). Helps reads + availability, never writes.
+- **Sync vs. async = data loss on failover:** sync → commit waits for the replica to harden the log (few ms if nearby, no data loss); async → commit returns immediately (fast, can lose the last seconds). Sync close (other zones), async far (other regions). Sync replica unreachable → after ~10 s the primary continues without it (effectively async; failover would lose data; log grows until it catches up).
+- **Stale reads are a routing problem, not a sync problem:** even a sync replica redoes slightly later. Read-your-writes fixes: after a write, route that user's reads to the primary for a few seconds (`ReadWriteRouting.cs`), return data in the write response, route must-be-fresh reads to the primary. Different replica lag → monotonic-read violations → sticky replica per session.
+- **Routing in code:** the caller states intent (Write/Read); writes → primary listener; reads → replica (round-robin) unless the user just wrote. Commonly: one listener + `ApplicationIntent=ReadOnly` and let read-only routing pick.
+- **Failover:** the cluster detects failure and promotes a sync replica; the listener / failover-group endpoint is re-pointed; writes fail for 10–30 s → app retries (`EnableRetryOnFailure`) and writes must be idempotent. RPO = data you can lose; RTO = time down.
+- **Multi-primary:** Cosmos DB, Cassandra, some MySQL/Postgres setups (not SQL Server AGs); write conflicts (last-writer-wins, merge, CRDTs) → use one primary unless low-latency writes worldwide are needed.
+- **Code:** `src/M06.Databases/ReadWriteRouting.cs`
+
+#### Replication mock (2026-11-17): ~5 / 10
+- Strong: Q1 replication vs. sharding, Q2 sync vs. async mechanism, Q8 "not sharding for a read-heavy DB".
+- Revisit: Q4/Q5 "make it sync" ≠ fix for stale reads (use read-your-writes routing / return data from the write); Q6 one primary + sync replica in another zone + async replica in another region, region failover loses seconds; Q7 listener re-pointing, writes fail briefly → retry + idempotency.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**

@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M6 — Database internals, transactions & sharding (Phase 2 started)
-- **Next step:** Restart M6 Session 1 (Indexes) from the beginning, in small pieces with a short check after each: (1) what an index is + seek vs. scan, (2) clustered vs. non-clustered, (3) key lookups + covering indexes, (4) composite indexes + column order, (5) when indexes hurt / how seeks get lost. Then Session 2. Code samples instead of Docker. CP1 deferred.
+- **Next step:** Continue M6 at Session 8: sharding — what it is, shard key, range/hash/directory strategies, hot partitions, C# shard resolver (code sample). Then Session 9: cross-shard queries, pagination, global IDs, rebalancing. Sessions 1–7 done (Session 7 = the 'before sharding' ladder). Code samples instead of Docker. CP1 deferred.
 - **Machine last used:** Mac
 
 ## Status
@@ -58,6 +58,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-17 · Mac · M6 · Session 1 indexes (seek/scan, clustered vs. non-clustered, key lookup + INCLUDE, composite order, SARGable) and Session 2 (execution plans, parameter sniffing + RECOMPILE trade-off, connection pooling/exhaustion, Little's Law, ladder before sharding). Gaps: filter order vs. index column order (corrected), low CPU + pool exhaustion = idle/blocked holders. Session 3: ACID, read anomalies, lost update, write skew (corrected: lost update ends at 9 not -1; name is 'lost update'). Session 4: lock-based levels (S/X lock duration, range locks) and RCSI vs. Snapshot (RCSI doesn't stop lost updates; neither stops write skew). Session 5: optimistic (rowversion, retry vs. 409, bad under contention = wasted retries) and pessimistic (UPDLOCK, READPAST). Session 6: replication (primary-replica, sync/async, read-your-writes, listener failover, multi-primary, read replica routing) + `ReadWriteRouting.cs`; mock ~5/10. Next: Session 7–8.
 - 2026-11-16 · Mac · Phase 2/3 setup + M6 · Wrote Learning plans (big picture → sessions → done-when) for M6–M21; learner prioritizes Phases 2–3; code samples instead of Docker labs. Replication vs. sharding clarified. M6 Session 1 (indexes) taught, quick check pending. Next: answer it, then Session 2.
 - 2026-11-16 · Mac · M4 · LRU cache, eviction policies, token bucket + sliding window limiters (IRateLimiter), Channels/backpressure (concept), KV store with nested transactions, lock / Mutex / ReaderWriterLockSlim examples, thread-safe logger (concept). M5 hot topics (concept only): async/await + sync-over-async, DI lifetimes + captive dependency, middleware order, IHttpClientFactory, N+1, DbContext lifetime. Next: CP1 or M6.
 - 2026-11-16 · Mac · M3 · Parking Lot break-it (partial): last-slot race (lock → conditional UPDATE / UPDLOCK+READPAST + unique index), double exit (atomic status claim, idempotency key, ownership-aware release), gateway timeout = unknown outcome (PaymentPending + reconciliation). Learner chose to skip remaining drills and focus on LLD design. Movie Ticket Booking designed (requirements → entities with ShowSeat → services), no code by choice. Expense Sharing designed (Splits list, split Strategy, pair balances, settlements). ATM: clarifications + entities + state machine; services skipped. Hotel Booking designed (RoomInventory per night, all-nights atomic claim). Notification Service clarifications (commands vs events, priorities, preferences at send time, idempotency key). Closed M3 by choice. Next: M4.
@@ -69,5 +70,6 @@ Ticked items (by ID, e.g., c1, c13): —
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions
+- M6 replication (mock ~5/10): stale reads are fixed by routing (read-your-writes), not by making replicas sync; one primary + sync replica in another zone + async replica in another region; during failover writes fail briefly → retry + idempotent writes. Retry before CP2.
 - Priority: Phase 2 (M6–M15) and Phase 3 (M16–M21) need deep understanding: run the labs, answer at least one quick check per topic, end each module with interview follow-ups.
 - M2 revisit (mock round 2): Q3 generic repository verdict, Q5 "must never be skipped" → event + Outbox, Q10 DB transaction vs. broker publish. Retry before CP1.
