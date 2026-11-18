@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M14 Security & API design
-- **Next step:** M14 Session 1 (OAuth2 + OIDC + PKCE). Agreed cut (2026-11-17):
+- **Current module:** M15 Observability & testing
+- **Next step:** M15 Session 1 (three pillars). Agreed cut (2026-11-17):
   - **M14 (7):** 1 OAuth2/OIDC/PKCE + client credentials · 2 JWT validation + revocation · 3 BFF + cookies · 4 Azure identity + secrets (Entra, managed identity, DefaultAzureCredential, Key Vault; mTLS one-liner) · 5 Authorization + BOLA (code) · 6 API design (REST/gRPC/GraphQL, ProblemDetails) · 7 API mechanics (cursor pagination, versioning, idempotency middleware). One-liners: SAML, OWASP API Top 10 list.
   - **M15 (6):** 1 three pillars · 2 OpenTelemetry tracing across services + queue · 3 structured logs + correlation IDs · 4 key metrics (lag, oldest age, DLQ, outbox backlog, pool, deadlocks) · 5 SLIs/SLOs/alerting · 6 testing strategy. Incident drill → CP2 mock.
   - M13 done-when: Q1 (deadlock fix) and Q2 (Redis lock + fencing) open for CP2.
@@ -31,7 +31,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 2 | M11 | Outbox, inbox, retries, DLQ | ✅ (outbox + inbox code, failure catalog) |
 | 2 | M12 | Multiple DBs, 2PC, Saga | ✅ (Saga concepts; see open questions) |
 | 2 | M13 | Concurrency & resilience | ✅ (Sessions 1–6; load shedding skipped; see open questions) |
-| 2 | M14 | Security & API design | ⬜ |
+| 2 | M14 | Security & API design | ✅ (7-session cut; see open questions) |
 | 2 | M15 | Observability, testing, ops | ⬜ |
 | 2 | CP2 | Checkpoint: distributed systems | ⬜ |
 | 3 | M16 | HLD fundamentals & real-time | ⬜ |
@@ -62,6 +62,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-17 · Mac · M14 · S1 OAuth2/OIDC/PKCE (Entra workflow, per-call PKCE, B2B/B2C, social login; PKCE explanation ~9/10), S2 JWT validation + revocation (signature, scp vs. roles; quick check ~3.5/10), S3 BFF + HttpOnly cookies (~9.5/10 explanation), S4 managed identity (Key Vault skipped), S5 BOLA (`Bola.cs`, ~5/10), S6 API design high level (~6.5/10), S7 pagination/versioning/idempotency keys (`IdempotencyMiddleware.cs`, Stripe keys). Next: M15.
 - 2026-11-17 · Mac · M13 · S1 contention at scale (pessimistic vs. atomic conditional UPDATE vs. optimistic; buckets `BucketedInventory.cs`), S2 deadlocks (blocking vs. cycle, lock order, retry 1205), S3 blocking + lock escalation + pool exhaustion (batching), S4 distributed locks (Redis NX/PX/token release, fencing, sp_getapplock, claim batches for big jobs), S5 timeouts + retries (amplification 64, deadlines, CancellationToken), S6 circuit breaker MVP + bulkhead + fallback (`Resilience.cs`, Polly v8); learner's breaker explanation ~8.5/10. S7 load shedding skipped. Next: M14.
 - 2026-11-17 · Mac · M9–M12 (messaging track) · S1 refresher (queue vs. pub/sub, fanout/topic/direct exchanges, shared queue for competing consumers, acks, guarantees, ordering, DLQ, idempotency). S2 Kafka (partitions, offsets per group per partition, consumer groups, parallelism cap, acks/ISR, commits, lag, exactly-once scope). S3 RabbitMQ vs. Kafka (queue vs. log, use-case table). S4 outbox (`M11.Messaging/Outbox.cs`, relay with UPDLOCK+READPAST). S5 inbox (`Inbox.cs`, PK as referee, Stripe idempotency key); outbox/inbox Q&A ~6.5/10. S6 failure catalog. S7 Saga (choreography vs. orchestration, Saga vs. 2PC, compensation, pivot). Track closed. Next: M13.
 - 2026-11-17 · Windows · M7 + M8 · M7 all 8 sessions at overview level (storage engines, document modelling, Cosmos DB, Cassandra, SQL vs. NoSQL order history, search engines, search sync, choosing a store). M8 all 8 sessions at overview level (why distributed, caching patterns, TTL/eviction, data structures, invalidation, stampede/avalanche/penetration/hot keys, Redis rate limiting incl. gateway vs. app, Redis down). M8 Q&A ~2.9/6. Planned a condensed messaging track for M9–M12 (see Now). Next: messaging track Session 1.
@@ -78,6 +79,9 @@ Ticked items (by ID, e.g., c1, c13): —
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions
+- M14 done-when: cursor vs. offset pagination unanswered; idempotency in-progress = 409 + replay (not wait/ignore). Retry before CP2.
+- M14 BOLA: identity only from the signed token (token can't be manipulated; query string can); 404 over 403 because 403 confirms existence (enumeration).
+- M14 JWT: tampered payload → SIGNATURE fails (not scp); audience = token meant for THIS API (blocks valid tokens for other APIs), not 'malformed'; revocation window = current token valid until exp, refresh revoked, denylist for zero window. Retry before CP2.
 - M13 done-when: breaker goes max failures → OPEN (not half-open), then half-open = one trial call. Q1 deadlock-without-more-locks and Q2 Redis lock + fencing unanswered. Retry before CP2.
 - M13 distributed locks quick check unanswered: why expiry + the slow-holder problem it creates; token-checked release; fencing token checked by the RESOURCE (DB), not the lock service.
 - M13 deadlocks: Q2 fix = consistent lock order (both touch Orders → Inventory); Q3 = retry the WHOLE tx, safe only if no external side effects inside it. Blocking vs. deadlock (line vs. cycle) and optimistic (no locks) vs. pessimistic (lock at read until commit) were mixed up; retry before CP2.

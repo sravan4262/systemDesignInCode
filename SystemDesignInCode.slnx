@@ -28,4 +28,7 @@
   <Folder Name="/M13/">
     <Project Path="modules/phase-2-distributed/m13-concurrency-resilience/src/M13.Concurrency/M13.Concurrency.csproj" />
   </Folder>
+  <Folder Name="/M14/">
+    <Project Path="modules/phase-2-distributed/m14-security-api/src/M14.Security/M14.Security.csproj" />
+  </Folder>
 </Solution>
