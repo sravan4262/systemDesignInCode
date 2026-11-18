@@ -31,4 +31,7 @@
   <Folder Name="/M14/">
     <Project Path="modules/phase-2-distributed/m14-security-api/src/M14.Security/M14.Security.csproj" />
   </Folder>
+  <Folder Name="/M15/">
+    <Project Path="modules/phase-2-distributed/m15-observability-testing/src/M15.Observability/M15.Observability.csproj" />
+  </Folder>
 </Solution>

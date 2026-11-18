@@ -50,6 +50,44 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+#### Three pillars (Session 1, 2026-11-17)
+- **Metrics** = that something is wrong (cheap counters, alerts, trends); **traces** = where (one request across services, spans with timings); **logs** = why (event detail). Trace ID links traces and logs; metrics link by time window or exemplars.
+- **Incident flow:** p99 alert → slow trace shows Payments → Stripe 3 s → logs for that trace id show timeout + retry → fix timeout (p99 + margin).
+- **Sampling:** keep only a fraction of traces to control cost (spans for every request are expensive); metrics count everything. Head-based (decide at start, whole chain kept/dropped, may drop the failing one) vs. tail-based (decide at end, keep all errors/slow + a % of normal; needs a buffering collector).
+- **Quick-check answers:** Q1 ✅ metrics tell that, logs explain why. Q2 ✅ trace id (refined: metrics are aggregates → exemplars/time window). Q3 asked "what does sampled mean?" → explained above.
+
+
+#### OpenTelemetry tracing (Session 2, 2026-11-17)
+- **Propagation (in-band):** only W3C `traceparent` = trace id + CURRENT span id (+ sampled flag) travels; span data never goes in headers. Each service creates its own spans pointing at the parent; nobody updates another service's span. In .NET a span = `Activity`; `Activity.Current` supplies the parent id.
+- **HTTP hops automatic** (ASP.NET Core + HttpClient instrumentation read/write traceparent). **Queue hops:** producer INJECTS traceparent into message headers, consumer EXTRACTS it and starts a Consumer span with that parent (MassTransit / broker instrumentation do it for you). Store traceparent in the outbox row too. `ParentBasedSampler` keeps a trace all-or-nothing.
+- **Export (out-of-band):** each service batches its finished spans and sends them (OTLP, background) to one central collector/backend; no "end of trace" moment; backend assembles by trace id + parent ids at read time. Clock skew across servers; tail sampling needs all spans of a trace at one collector.
+- **App Insights:** separate rows in `requests` (server/consumer spans), `dependencies` (client/SQL/publish), `traces` (= LOGS), `exceptions`; `operation_Id` = trace id, `operation_ParentId` = parent span, `cloud_RoleName` = service. End-to-end view / KQL groups by operation_Id at query time; storage stays individual. All services must send to the same resource/workspace.
+- **Code:** `src/M15.Observability/Tracing.cs`.
+- **Quick-check answers:** Q1 ✅ orders copies the trace id into the message header, consumer reads it and starts a span (refine: whole traceparent incl. publish span id as parent). Q2 ⚠️ checkout trace stops at publish ✅; Billing's work becomes a SEPARATE unlinked trace (not missing).
+
+
+#### Structured logs + correlation IDs (Session 3, 2026-11-17, concise)
+- Message templates (`"Order {OrderId} placed", id`) store named FIELDS → query/aggregate by field; `$"…"` interpolation = opaque text (and builds the string even when the level is off).
+- OTel/App Insights logging stamps every `ILogger` line inside a span with TraceId/SpanId (`operation_Id`); `BeginScope` adds business fields (OrderId) to many lines.
+- Rules: meaningful levels; never log secrets/PII; log an exception once where it's handled.
+- Quick check skipped.
+
+
+#### Key metrics (Session 4, 2026-11-17, concise)
+- RED for APIs (rate, errors, duration p95/p99), USE for resources (utilization, saturation, errors).
+- Phase 2 metrics: consumer lag / queue depth (growing), OLDEST MESSAGE AGE (staleness; better than depth), DLQ size (any increase), outbox backlog + oldest unsent age, pool in-use/wait, deadlocks/s, breaker state, p99 per dependency.
+- OTel `Meter` counters/gauges; keep tags LOW-cardinality (no OrderId/UserId: each value = a new time series → those go in logs/traces).
+- Quick check skipped.
+
+#### SLOs (Session 5): skipped by choice
+- One line kept: alert on p99, not the average, because averages hide the slow tail (1% of users at 5 s vanishes in a 200 ms average).
+
+#### Testing strategy (Session 6, 2026-11-17)
+- Pyramid: many unit (pure logic, no I/O, TimeProvider), many integration (real SQL/Redis/RabbitMQ via Testcontainers, WebApplicationFactory), some contract (Pact / schema checks: producer and consumer agree on API/message shape), few E2E (critical journeys only).
+- Outbox CI: commit-together + rollback-neither (real SQL), relay publishes + marks SentAt, kill relay between publish and SentAt → republished, two relays → each row once, inbox dedups same MessageId, contract test on OrderPlaced shape.
+- **Quick-check answers:** Q1 ⚠️ real DB ✅ but reason off: a mock can't reproduce transaction atomicity/rollback/locking, which IS the outbox guarantee. Q2 ✅ contract tests (self-corrected from E2E): fail in the producer's CI before deploy.
+
+
 ### Problem
 _What real engineering problem does this concept solve?_
 
