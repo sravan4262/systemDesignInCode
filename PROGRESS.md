@@ -4,8 +4,14 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** CP2 (Phase 2 checkpoint mock, M6–M15)
-- **Next step:** CP2 retry round on the weak list in `checkpoints/CP2-mock.md` (Kafka partitions vs. instances, breaker order, deadlock lock order, Kafka poison message, cursor vs. offset, inbox unique constraint, 2PC, Redis fencing, lag/oldest age). Then Phase 3 (M16).
+- **Current module:** M17 Distributed systems theory (CP2 retry round still pending)
+- **Next step:** M17 big picture, then Session 1 (consistency models, precisely).
+- **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
+  1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
+  2. **Cloud ops:** M21 (all 8).
+  3. **HLD patterns:** M19 sessions 1–9 (7 patterns + 2 worked examples).
+  4. **HLD cases:** M19 session 10 cases → M20 cases (all). Interview format: prompt only, learner drives.
+  - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Mac
 
@@ -31,7 +37,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 2 | M14 | Security & API design | ✅ (7-session cut; see open questions) |
 | 2 | M15 | Observability, testing, ops | ✅ (sessions 1–4 + 6; SLOs skipped) |
 | 2 | CP2 | Checkpoint: distributed systems | 🟨 (mock 4.7/10; retry weak list) |
-| 3 | M16 | HLD fundamentals & real-time | ⬜ |
+| 3 | M16 | HLD fundamentals & real-time | ✅ (all 8 + deep dives; designs in designs/) |
 | 3 | M17 | Distributed systems theory | ⬜ |
 | 3 | M18 | Architecture & domain design | ⬜ |
 | 3 | M19 | HLD patterns & case studies I | ⬜ |
@@ -59,6 +65,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-18 · Mac · M16 · All 8 sessions: framework, request path, building blocks + deep dives (edge/CDN/Front Door, DNS + GoDaddy, load balancer, API gateway vs. BFF, Blob + SAS), back-of-envelope (SnapShare worksheet; capacity per layer; vertical vs. horizontal), data choices (Cosmos partition key), CAP/PACELC, real-time (SSE vs. WebSockets), SignalR at scale. Designs: amazon-request-flow, request-path-azure, capacity-per-layer-azure, snapshare-sizing. Phase 3 order changed: concepts (M16–M18) → M21 → M19 patterns → cases. Next: M17.
 - 2026-11-18 · Mac · CP2 · 30-question shuffled mock across M6–M15: 136/290 ≈ 4.7/10 (log: `checkpoints/CP2-mock.md`). Strong: idempotent retries, outbox, PKCE, tracing, flash sale. Weak: Kafka partition assignment, breaker order, deadlock lock order, poison message, cursor pagination, inbox constraint, 2PC, fencing. Next: retry weak list, then M16.
 - 2026-11-17 · Mac · M15 · S1 three pillars + sampling, S2 OpenTelemetry tracing (traceparent, queue inject/extract, export to collector, App Insights tables/operation_Id; `Tracing.cs`), S3 structured logs (concise), S4 key metrics (concise), S5 SLOs skipped, S6 testing strategy + outbox CI tests. Phase 2 done. Next: CP2.
 - 2026-11-17 · Mac · M14 · S1 OAuth2/OIDC/PKCE (Entra workflow, per-call PKCE, B2B/B2C, social login; PKCE explanation ~9/10), S2 JWT validation + revocation (signature, scp vs. roles; quick check ~3.5/10), S3 BFF + HttpOnly cookies (~9.5/10 explanation), S4 managed identity (Key Vault skipped), S5 BOLA (`Bola.cs`, ~5/10), S6 API design high level (~6.5/10), S7 pagination/versioning/idempotency keys (`IdempotencyMiddleware.cs`, Stripe keys). Next: M15.
