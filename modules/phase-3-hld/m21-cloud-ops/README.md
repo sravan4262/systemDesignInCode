@@ -82,3 +82,15 @@ _Follow-up questions an interviewer could ask, with my short answers._
 
 ### My notes
 _Which Apple Notes did this update or correct?_
+
+#### Multi-region, multi-tenancy, containers, Kubernetes (S1–S4)
+- **Multi-region:** zones for a datacenter failure, regions for a region outage; active-passive (SQL failover group, RPO seconds, RTO minutes) by default; active-active (Cosmos multi-region writes) for global low latency, home region per user to avoid conflicts.
+- **Multi-tenancy:** shared tables + query filter + RLS for small tenants, DB per tenant (Elastic Pool) for big/regulated, tenant catalog to route; tenant ID from the JWT; noisy neighbours → per-tenant rate limits, own DB, reports on a read replica.
+- **Read-heavy ladder:** CDN → Redis → read replica (watch replication lag, read-your-writes on primary) → analytics store.
+- **Containers:** image = bundle, container = running instance; multi-stage, non-root, port 8080, SHA tags (traceability + exact rollback).
+- **Kubernetes:** orchestrator. Container (app) in a pod (wrapper, IP) on a node (VM); Deployment keeps N pods + rolling updates; Service = stable name + internal LB; Ingress = external L7 entry. Liveness → restart (app only); readiness → out of rotation (deps). HPA pods, cluster autoscaler nodes, KEDA on queue length.
+- **Drill:** 114/180; gaps logged in PROGRESS.
+- **Azure compute:** Functions (event glue, pay per run; Durable = workflows), App Service (simplest web hosting on managed VMs), Container Apps (microservices, KEDA, scale to zero), AKS (full control, most ops).
+- **Safe delivery:** rolling / blue-green (full copy, switch) / canary (small v2, weights at the routing layer moved in stages, instant rollback); expand/contract because v1 and v2 share the DB; feature flags separate deploy from release.
+- **Helm:** templated Kubernetes YAML + values per environment, installed as one versioned release (upgrade/rollback); the pipeline calls Helm, Kubernetes orchestrates.
+- **Trade-offs:** cost, compliance (residency, PII), ops; end designs with triggers for when to change. S7 (AWS mapping, Terraform) skipped.

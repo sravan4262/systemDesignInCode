@@ -79,3 +79,13 @@ _Follow-up questions an interviewer could ask, with my short answers._
 
 ### My notes
 _Which Apple Notes did this update or correct?_
+
+#### Bounded contexts, aggregates, service structure, monolith vs. microservices (S1–S4)
+- **Bounded context:** an area where each word has one meaning; owns its data; talks by IDs and events; anti-corruption layer in front of external models (Stripe).
+- **Aggregate:** a root plus its parts, saved in one transaction; rules enforced in the root; other aggregates referenced by ID; across aggregates → events.
+- **Inside a service:** layered vs. clean/hexagonal (dependencies point inward) vs. vertical slice (folder per use case); common mix = slices + shared domain.
+- **Deployment shape:** start as a modular monolith (module per context, schema per module), extract a service for different scaling, release cadence or team ownership. Repo layout (mono vs. poly) is separate from architecture.
+- **Q&A (S4, 30/50):** "Services released together + shared tables" = distributed monolith → own data + backward-compatible contracts. Share only versioned contracts, never domain models.
+- **S5 communication:** sync only on the user's critical path; async via outbox + Service Bus; retry in one layer per hop (Polly for internal calls); APIM → LB → instances.
+- **S6 migrations:** strangler fig behind APIM; CDC; parallel run; expand → dual-write → backfill in batches → switch reads → stop old writes → contract (8/10).
+- **S7 RFC/ADR:** RFC proposes and gets reviewed; ADR records one decision + consequences, never edited (superseded). Lab deferred.

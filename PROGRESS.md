@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M17 Distributed systems theory (CP2 retry round still pending)
-- **Next step:** M17 Session 4 (time and ordering: clock skew, Lamport, vector clocks, HLC). Sessions 1–3 done.
+- **Current module:** M21 Cloud ops (CP2 retry round still pending)
+- **Next step:** M19 HLD patterns, Session 1 (M21 done; S7 Terraform/AWS mapping skipped by choice).
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
@@ -38,11 +38,11 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 2 | M15 | Observability, testing, ops | ✅ (sessions 1–4 + 6; SLOs skipped) |
 | 2 | CP2 | Checkpoint: distributed systems | 🟨 (mock 4.7/10; retry weak list) |
 | 3 | M16 | HLD fundamentals & real-time | ✅ (all 8 + deep dives; designs in designs/) |
-| 3 | M17 | Distributed systems theory | 🟨 |
-| 3 | M18 | Architecture & domain design | ⬜ |
+| 3 | M17 | Distributed systems theory | ✅ |
+| 3 | M18 | Architecture & domain design | ✅ (lab → later) |
 | 3 | M19 | HLD patterns & case studies I | ⬜ |
 | 3 | M20 | HLD case studies II | ⬜ |
-| 3 | M21 | Advanced architecture & cloud ops | ⬜ |
+| 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
 | 3 | CP3 | Checkpoint: HLD | ⬜ |
 | 4 | M22 | LLM apps & RAG | ⬜ |
 | 4 | M23 | LLM internals, inference, adaptation | ⬜ |
@@ -65,6 +65,10 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-18 · Mac · M21 · S5 Azure compute (Functions/App Service/Container Apps/AKS; App Service plan = managed VMs; isolated worker, Durable), S6 safe delivery (rolling/blue-green/canary on new instances; weights at the routing layer shifted in pipeline stages; feature flags; Helm = templated YAML + env values, Kubernetes orchestrates), S7 skipped, S8 trade-offs (cost/compliance/ops + triggers). Next: M19 patterns.
+- 2026-11-18 · Mac · M21 · S1 multi-region (active-passive vs. active-active, RPO/RTO, conflicts: LWW vs. merge vs. home region), S2 multi-tenancy (shared/schema/DB per tenant, hybrid + catalog, query filter + RLS, noisy neighbours; read replicas + replication lag), S3 containers (multi-stage, non-root, 8080, SHA tags), S4 Kubernetes (image → container → pod → node → Deployment → Service → Ingress; liveness vs. readiness; HPA/VPA/cluster autoscaler/KEDA). 20-question K8s drill 114/180 ≈ 6.3/10. Next: M21 S5.
+- 2026-11-18 · Mac · M18 · S1–S7: bounded contexts + ACL, aggregates, layered vs. clean vs. vertical slice (folder trees), monolith vs. modular monolith vs. microservices (+ mono/polyrepo), communication (sync vs. async, retry in one place, APIM → LB), migrations (strangler fig, CDC, parallel run, expand/contract), RFC/ADR. Q&A 30/50; expand/contract 8/10. Lab + done-when → CP3.
+- 2026-11-18 · Mac · M17 · S4–S7 condensed into one interview-level session (learner's choice): clock skew + last-write-wins → version numbers; Raft in depth (election with random timeouts + terms, majority commit, no split-brain because majorities overlap, 3/5 nodes); gossip, failure detectors, CRDTs one line each; Bloom filter in depth (bits + k hashes, no false negatives, ~10 bits/item ≈ 1%, crawler/LSM use); HyperLogLog, Count-Min Sketch one line each. Quick checks and done-when questions skipped → CP3. Next: M18.
 - 2026-11-18 · Mac · M17 · S1 consistency models (linearizable vs. serializable, causal, session, eventual; Cosmos mapping), S2 quorums (R + W > N, read repair, hinted handoff, Merkle trees), S3 consistent hashing (lab in `src/M17.Theory`: modulo 79.9% vs. ring 19.8% keys moved; virtual nodes; sorted list + binary search; range/hash/directory compared). Learner explained the ring correctly. Next: M17 Session 4 (time and ordering).
 - 2026-11-18 · Mac · M16 · All 8 sessions: framework, request path, building blocks + deep dives (edge/CDN/Front Door, DNS + GoDaddy, load balancer, API gateway vs. BFF, Blob + SAS), back-of-envelope (SnapShare worksheet; capacity per layer; vertical vs. horizontal), data choices (Cosmos partition key), CAP/PACELC, real-time (SSE vs. WebSockets), SignalR at scale. Designs: amazon-request-flow, request-path-azure, capacity-per-layer-azure, snapshare-sizing. Phase 3 order changed: concepts (M16–M18) → M21 → M19 patterns → cases. Next: M17.
 - 2026-11-18 · Mac · CP2 · 30-question shuffled mock across M6–M15: 136/290 ≈ 4.7/10 (log: `checkpoints/CP2-mock.md`). Strong: idempotent retries, outbox, PKCE, tracing, flash sale. Weak: Kafka partition assignment, breaker order, deadlock lock order, poison message, cursor pagination, inbox constraint, 2PC, fencing. Next: retry weak list, then M16.
@@ -86,6 +90,16 @@ Ticked items (by ID, e.g., c1, c13): —
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions
+- M21 S8: startup pushback 6/10 → say modular monolith, Container Apps, one EU region + zones, reasons on 3 axes, triggers. S6 rename: breaks during the release (v1 still live), not just on rollback.
+- M21 K8s drill gaps: Service (internal) vs. Ingress (external L7) vs. LoadBalancer Service (L4); KEDA for queue scaling; OOMKilled → raise limit/fix leak, not autoscale; `kubectl rollout undo`; sidecar = 2nd container in same pod; topologySpreadConstraints; never secrets in ConfigMap (Secrets only base64); Pending → cluster autoscaler/quota; HPA/VPA/Helm skipped. Multi-tenancy: separate table ≠ isolation (own DB); reports → read replica not search index. M21 S1 RPO/RTO definitions.
+- M18 → CP3: lab (RFC + 2 ADRs + strangler plan) deferred; done-when unanswered; S1–S3 checks skipped; S5 sync/async split; S4 Q&A: name 'distributed monolith', backward-compatible contracts, module boundary via public interface/events; S6 dual-write before backfill.
+- M18 S6 expand/contract 8/10: batches good; missed dual-write BEFORE backfill, switch-reads step, contract in later release.
+- M18 S5: retry in one place answered (code level/Polly for internal; amplification); sync vs. async split for order steps unanswered (stock sync; charge/email/analytics async).
+- M18 S4 Q&A 30/50: missed term 'distributed monolith' + backward-compatible contracts fix; Q3 (module talks to another via public interface / in-process event, never its tables) unanswered; shared = versioned contracts only.
+- M18 → CP3: S3 quick check skipped (PlaceOrder via aggregate vs. GetOrderHistory direct query).
+- M18 → CP3: S2 quick check skipped (Order + StockItem in one transaction? CustomerId vs. Customer object).
+- M18 → CP3: S1 quick check skipped (shared Addresses table vs. own copy per context; ACL placement; sign of a wrong split).
+- M17 → CP3: S4–7 quick checks (timestamp LWW risk; Raft 2|3 partition; Bloom false positive / no false negative) and all 4 done-when questions (R + W > N, Raft election in 1 min, virtual nodes, why not timestamps) unanswered.
 - M17: S1 Q1 minimal model for 'reply before post' = CAUSAL (said strong); S2 quorum quick check unanswered (W=1/R=1 stale; N=5 → W=R=3).
 - M15: real DB for outbox tests because mocks can't reproduce atomicity/locking (not 'broker unreliable'); oldest message age vs. depth; no high-cardinality metric tags. Session 3/4 quick checks unanswered.
 - M14 done-when: cursor vs. offset pagination unanswered; idempotency in-progress = 409 + replay (not wait/ignore). Retry before CP2.

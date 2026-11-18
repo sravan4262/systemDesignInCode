@@ -103,3 +103,11 @@ _Follow-up questions an interviewer could ask, with my short answers._
 
 ### My notes
 _Which Apple Notes did this update or correct?_
+
+#### Time, Raft, gossip/CRDTs, probabilistic structures (S4–S7, condensed)
+- **Time:** clocks drift → last-write-wins can drop the newer write; use a version/sequence number (vector clocks to detect concurrent writes).
+- **Raft:** one leader; random election timeouts; higher term wins; write commits on a majority; two majorities overlap → no split-brain; 3 nodes tolerate 1 failure, 5 tolerate 2. Used via etcd/ZooKeeper/Consul, not built.
+- **Gossip / CRDTs:** spread membership by telling random peers; CRDTs merge copies without conflicts (collaborative editing, offline sync).
+- **Bloom filter:** bit array + k hashes; "definitely not" or "probably yes"; ~10 bits/item ≈ 1% false positives; no delete; crawler seen-URLs, LSM-tree disk-read skip.
+- **HyperLogLog:** unique counts in ~12 KB (Redis PFADD/PFCOUNT). **Count-Min Sketch:** frequency estimates for top-K / trending.
+- **Quick-check answers:** skipped → CP3.
