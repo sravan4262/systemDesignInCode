@@ -55,6 +55,28 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+#### Consistency models (Session 1, 2026-11-18)
+- Strongest → weakest: linearizable (one-copy illusion, latest write everywhere) → sequential (same order for all) → causal (dependent writes in order: no reply before the post) → read-your-writes / monotonic reads (session guarantees) → eventual (agree someday, any order).
+- Linearizable (one item across replicas) ≠ serializable (transactions as if one at a time, M6); strict serializable = both.
+- Mapping: SQL primary = linearizable; async replica / Redis = eventual; ReadWriteRouting.cs = read-your-writes; Cosmos Strong / Session (default: RYW + monotonic per session) / Consistent prefix / Eventual.
+- Choose the WEAKEST model that fixes the problem: money/stock/unique names → linearizable; comments/chat → causal; own edits → session; counts/feeds → eventual.
+- **Quick-check answers:** Q1 ⚠️ 5/10 said strong; minimal = CAUSAL. Q2 ✅ 8/10 session (read-your-writes; M6 = route that user's reads to the primary after a write). Q3 skipped.
+
+
+#### Replication and quorums (Session 2, 2026-11-18)
+- N copies, write done after W confirmations, read asks R; R + W > N → read overlaps the latest write (pick newest version). N=3: W=2/R=2 quorum tolerates 1 down; W=1/R=1 fast but stale (eventual). Cassandra ONE/QUORUM/ALL per query.
+- Catch-up: read repair, hinted handoff, sloppy quorum, anti-entropy with Merkle trees. Leader-based (one writer, failover pause, no conflicts) vs. leaderless (any W nodes, stays up, concurrent-write conflicts). Cosmos: quorum inside a region; consistency level across regions.
+- Quick check skipped (open: W=1/R=1 stale? yes, may hit a node without the write; N=5 → W=R=3).
+
+
+#### Consistent hashing (Session 3, 2026-11-18)
+- Lab (`src/M17.Theory`, 100,000 keys, 4 → 5 nodes): modulo moved 79.9%, hash ring moved 19.8% (ideal 20%); 100 virtual nodes each → 18–22% per node.
+- Ring = servers and keys hashed onto one circle; key → first server clockwise; adding a server moves only its slice (~1/N). Virtual nodes = many points per server → even spread, a leaving server's keys spread across all.
+- Data structure: sorted (position → server) list + binary search for the first position ≥ hash (O(log n)), wrap around; small, in memory, copy-on-write on changes. Fixed slots (Redis 16,384, M6 buckets) = array lookup O(1).
+- Strategies: range (range queries, hot last range) · hash modulo (even, ~80% move on resize) · consistent hashing (even, ~1/N move) · directory (full control, lookup + critical table; best for thousands of tenants; hash → buckets → directory of buckets for billions of keys). Tenant-based = choice of KEY, placed by hash or directory. Hashing is also used for dictionaries, integrity (JWT, ETags), security (PKCE, passwords), dedup, Bloom filters.
+- **My explanation (~7.5/10):** range, lookup, hash, consistent explained in order. Fixes: collisions are NOT the hash problem (keys sharing a shard is the point); the problem is resizing (~80% move). Servers are HASHED onto the circle (not sharded); key goes to the FIRST server clockwise; add the why (~1/N moves, virtual nodes).
+
+
 ### Problem
 _What real engineering problem does this concept solve?_
 
