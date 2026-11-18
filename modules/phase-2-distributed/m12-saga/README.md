@@ -51,6 +51,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+#### Saga (condensed track, Session 7, 2026-11-17)
+- **In plain words:** a business transaction across services = a chain of local transactions; on failure, earlier steps are undone by compensating actions (refund, cancel), not a rollback.
+- **Choreography vs. orchestration:** events and reactions (loose, hard to see the whole flow; good for 2–3 steps) vs. a central orchestrator with stored saga state sending commands (visible, handles branching/timeouts; risk of a god service).
+- **My words (orchestration):** the orchestrator maintains state shared across commands and knows whether each command succeeded or failed. Missing: WHEN to pick it (4+ steps, branching, timeouts, complex compensation, "where is order 42?").
+- **Saga vs. 2PC:** 2PC holds locks across participants and blocks if the coordinator dies; most brokers/cloud DBs don't support it. Saga = eventual consistency, no isolation (use semantic locks like `Pending`).
+- **Depth:** compensation ≠ rollback (emails can't be unsent → irreversible steps last); pivot step → after it, retry forward; compensations idempotent (inbox + idempotency key); timeouts = unknown outcome.
+- **Transport:** broker-agnostic (RabbitMQ, Kafka keyed by SagaId, Service Bus, or HTTP via Temporal/Durable Functions).
+- **Quick check:** Q1 (why not 2PC) and Q3 (double refund) skipped: see open questions.
+
 ### Problem
 _What real engineering problem does this concept solve?_
 

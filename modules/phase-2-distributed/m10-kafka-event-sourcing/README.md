@@ -52,6 +52,16 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+#### Kafka core (condensed track, Session 2, 2026-11-17)
+- **Model:** topic → partitions (append-only logs); offset = position in a partition; key → `hash(key) % N` → partition.
+- **Consumer groups:** each group gets all messages (pub/sub); inside a group each partition is owned by ONE instance (competing consumers). Offsets are committed per GROUP per PARTITION (stored in `__consumer_offsets`), not per instance; on rebalance the new owner resumes from the last committed offset.
+- **Parallelism cap:** instances beyond the partition count sit idle. Adding partitions later reshuffles keys (same issue as hash-mod-N sharding in M6).
+- **Durability:** replication factor 3, `acks=all`, `min.insync.replicas=2`, idempotent producer. `acks=1` can lose an acked message if the leader dies before followers copy it.
+- **Commits:** auto-commit can commit before processing → silent loss; commit manually after processing = at least once. Kafka transactions give exactly-once only for Kafka → Kafka; DB/side effects still need idempotency.
+- **Health:** consumer lag = latest offset − committed offset.
+- **Quick-check answers (part 1):** Q1 ❌ said round-robin; correct: partitions are assigned to instances, 4 partitions + 6 instances → 2 idle. Q2 ✅ key = OrderId (same key → same partition → one owner → in order). Q3 ✅ resumes from committed offset 10 → reprocesses 10–14 → needs idempotency.
+- **Part 2 quick check (acks / auto-commit / lag) skipped:** see open questions.
+
 ### Problem
 _What real engineering problem does this concept solve?_
 

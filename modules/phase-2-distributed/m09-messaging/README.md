@@ -51,6 +51,21 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+#### Messaging refresher (condensed track, Session 1, 2026-11-17)
+- **Queue vs. pub/sub:** queue = one consumer per message; pub/sub = every subscriber group gets a copy. Real systems use both: one queue per service (pub/sub across services), many instances on that queue (competing consumers). Commands → point-to-point; events → pub/sub.
+- **Exchanges:** fanout = every bound queue gets a copy; topic = only queues with a matching binding pattern (`*` one word, `#` zero or more); direct = exact key. Unmatched messages are dropped silently (use `mandatory` or an alternate exchange).
+- **Competing consumers:** instances of one service must share the SAME queue name; an auto-named queue per instance turns it into pub/sub (every instance processes every message). The queue gives each message to one consumer at a time, not "once ever": crash before ack → redelivered to another instance.
+- **Acks and guarantees:** ack after processing = at least once (duplicates); ack before = at most once (loss). "Exactly once" = at least once + idempotent consumer. Producer side: publisher confirms + durable/quorum queues.
+- **Ordering:** broken by competing consumers and requeue; use per-key ordering or versioned, order-tolerant handlers.
+- **DLQ:** permanent errors (bad payload) → DLQ immediately; transient → retry with backoff, then DLQ. `requeue: true` on a poison message = hot loop.
+- **Quick-check answers:** Q1 ✅ two queues on a fanout exchange (one per service; instances share it). Q3 ✅ malformed → DLQ. Q2 (crash after commit before ack) skipped: answer = redelivered, prevented by inbox + payment idempotency key.
+
+#### RabbitMQ vs. Kafka (condensed track, Session 3)
+- **My words:** Kafka keeps the history (it doesn't delete on consume), so we can replay; it's faster because the broker doesn't track an ack per message.
+- **Correction:** say "log", not "queue". Speed comes from sequential appends, batching, partitions, zero-copy, and one offset per partition instead of per-message state. Also: Kafka keeps ORDER per key while scaling.
+- **One line:** RabbitMQ is a queue (deliver and forget, rich routing, per-message retry/DLQ/delay); Kafka is a partitioned log (retain, replay, per-key order, huge throughput; a poison message blocks its partition).
+- **When:** tasks/commands (SendEmail, GenerateInvoicePdf, delayed retries) → RabbitMQ. Events many services read now and later, replay, CDC, audit/clickstream → Kafka. Common hybrid: events on Kafka, task queues on RabbitMQ.
+
 ### Problem
 _What real engineering problem does this concept solve?_
 

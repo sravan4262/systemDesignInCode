@@ -22,4 +22,10 @@
   <Folder Name="/M06/">
     <Project Path="modules/phase-2-distributed/m06-databases-sharding/src/M06.Databases/M06.Databases.csproj" />
   </Folder>
+  <Folder Name="/M11/">
+    <Project Path="modules/phase-2-distributed/m11-outbox-inbox/src/M11.Messaging/M11.Messaging.csproj" />
+  </Folder>
+  <Folder Name="/M13/">
+    <Project Path="modules/phase-2-distributed/m13-concurrency-resilience/src/M13.Concurrency/M13.Concurrency.csproj" />
+  </Folder>
 </Solution>
