@@ -1,6 +1,6 @@
 # Case 3: Twitter / news feed
 
-Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), four rows, each flowing left to right: (1) a regular user posts (push), (2) a follower reads, (3) a celebrity posts (no fan-out), (4) a follower reads with celebrity tweets (push + pull merged). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: **A. Regular user** and **B. Celebrity**. Each row has one left-to-right lane per requirement: post, home timeline, follow/unfollow, like/unlike, profile timeline. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Twitter. Users post short tweets, follow other users, and see a home timeline of tweets from people they follow."
@@ -10,9 +10,9 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), four rows, ea
 2. **Follow and unfollow** another user. Following is one-way, with no approval step.
 3. **Home timeline:** tweets from the people I follow, newest first, paginated 20 at a time.
 4. **User timeline:** one user's own tweets, newest first.
-5. **Like and retweet** a tweet, with counts shown on each tweet.
+5. **Like and unlike** a tweet, with a like count shown on each tweet.
 
-**Out of scope (say this out loud):** DMs, ads, trends and hashtag ranking, notifications, ranked or ML feeds (we use reverse-chronological order), and edit/delete beyond a soft delete. **Search** is a stretch goal: there is a hook in the diagram, but no deep dive.
+**Out of scope (say this out loud):** retweets and quote tweets, DMs, ads, trends and hashtag ranking, notifications, ranked or ML feeds (we use reverse-chronological order), and edit/delete beyond a soft delete. **Search** is a stretch goal, with no deep dive.
 
 ## Non-functional requirements
 | Requirement | Target | Why it matters here |
@@ -45,7 +45,7 @@ One instance handles **~2,000 req/s** at 70% CPU. Keep at least 3 instances (one
 |---|---|---|---|---|
 | Timeline reads (`GET /timeline`) | 200M × 10 = 2B | 20k/s | **60k/s** | 60k ÷ 2k = **30** (min 10) |
 | Post tweet (`POST /tweets`) | 100M | 1k/s | 3k/s | 2 → **3** (availability) |
-| Like / retweet | 200M × 5 = 1B | 10k/s | 30k/s | **15** |
+| Like / unlike | 200M × 5 = 1B | 10k/s | 30k/s | **15** |
 | Follow / unfollow | 100M | 1k/s | 3k/s | 2 → **3** |
 | Fan-out workers (Kafka consumers) | 20B Redis writes | 200k/s | **600k/s** | ~20k pipelined writes/s each → **30 workers** |
 | **Total** | | | | **~80 instances at peak** |
