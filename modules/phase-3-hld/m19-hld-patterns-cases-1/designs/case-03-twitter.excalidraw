@@ -1,0 +1,2966 @@
+{
+    "type":  "excalidraw",
+    "version":  2,
+    "source":  "https://excalidraw.com",
+    "elements":  [
+                     {
+                         "id":  "title",
+                         "type":  "text",
+                         "x":  40,
+                         "y":  -60,
+                         "width":  693,
+                         "height":  35,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1007,
+                         "version":  1,
+                         "versionNonce":  1014,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Case 3: Twitter / news feed  (hybrid fan-out)",
+                         "fontSize":  28,
+                         "fontFamily":  1,
+                         "textAlign":  "left",
+                         "verticalAlign":  "top",
+                         "containerId":  null,
+                         "originalText":  "Case 3: Twitter / news feed  (hybrid fan-out)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "legend",
+                         "type":  "text",
+                         "x":  40,
+                         "y":  -15,
+                         "width":  616,
+                         "height":  20,
+                         "angle":  0,
+                         "strokeColor":  "#495057",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1021,
+                         "version":  1,
+                         "versionNonce":  1028,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Blue arrows = write path    Green arrows = read path    Dashed = async",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "left",
+                         "verticalAlign":  "top",
+                         "containerId":  null,
+                         "originalText":  "Blue arrows = write path    Green arrows = read path    Dashed = async",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "client",
+                         "type":  "rectangle",
+                         "x":  40,
+                         "y":  320,
+                         "width":  160,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffc9c9",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1035,
+                         "version":  1,
+                         "versionNonce":  1042,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "client-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "a1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "a2",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "a4",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "client-t",
+                         "type":  "text",
+                         "x":  45,
+                         "y":  335,
+                         "width":  150,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1049,
+                         "version":  1,
+                         "versionNonce":  1056,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Clients\n(web / mobile)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "client",
+                         "originalText":  "Clients\n(web / mobile)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "cdn",
+                         "type":  "rectangle",
+                         "x":  40,
+                         "y":  120,
+                         "width":  160,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffc9c9",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1063,
+                         "version":  1,
+                         "versionNonce":  1070,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "cdn-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "a2",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "a3",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "cdn-t",
+                         "type":  "text",
+                         "x":  45,
+                         "y":  135,
+                         "width":  150,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1077,
+                         "version":  1,
+                         "versionNonce":  1084,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "CDN\n(images, video)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "cdn",
+                         "originalText":  "CDN\n(images, video)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "blob",
+                         "type":  "rectangle",
+                         "x":  300,
+                         "y":  120,
+                         "width":  190,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#b2f2bb",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1091,
+                         "version":  1,
+                         "versionNonce":  1098,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "blob-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "a3",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "a4",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "blob-t",
+                         "type":  "text",
+                         "x":  305,
+                         "y":  135,
+                         "width":  180,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1105,
+                         "version":  1,
+                         "versionNonce":  1112,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Blob storage\n(media)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "blob",
+                         "originalText":  "Blob storage\n(media)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "gw",
+                         "type":  "rectangle",
+                         "x":  300,
+                         "y":  320,
+                         "width":  190,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffc9c9",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1119,
+                         "version":  1,
+                         "versionNonce":  1126,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "gw-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "a1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "g1",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "gw-t",
+                         "type":  "text",
+                         "x":  305,
+                         "y":  335,
+                         "width":  180,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1133,
+                         "version":  1,
+                         "versionNonce":  1140,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "API Gateway / LB\n(auth, rate limit)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "gw",
+                         "originalText":  "API Gateway / LB\n(auth, rate limit)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "tweetSvc",
+                         "type":  "rectangle",
+                         "x":  600,
+                         "y":  190,
+                         "width":  200,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#a5d8ff",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1147,
+                         "version":  1,
+                         "versionNonce":  1154,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "tweetSvc-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w2",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "tweetSvc-t",
+                         "type":  "text",
+                         "x":  605,
+                         "y":  205,
+                         "width":  190,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1161,
+                         "version":  1,
+                         "versionNonce":  1168,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Tweet Service\n(post, Snowflake id)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "tweetSvc",
+                         "originalText":  "Tweet Service\n(post, Snowflake id)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "timelineSvc",
+                         "type":  "rectangle",
+                         "x":  600,
+                         "y":  340,
+                         "width":  200,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#a5d8ff",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1175,
+                         "version":  1,
+                         "versionNonce":  1182,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "timelineSvc-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "r1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r2",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r3",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "timelineSvc-t",
+                         "type":  "text",
+                         "x":  605,
+                         "y":  355,
+                         "width":  190,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1189,
+                         "version":  1,
+                         "versionNonce":  1196,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Timeline Service\n(home + user timeline)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "timelineSvc",
+                         "originalText":  "Timeline Service\n(home + user timeline)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "graphSvc",
+                         "type":  "rectangle",
+                         "x":  600,
+                         "y":  500,
+                         "width":  200,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#a5d8ff",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1203,
+                         "version":  1,
+                         "versionNonce":  1210,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "graphSvc-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "g1",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "g2",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "graphSvc-t",
+                         "type":  "text",
+                         "x":  605,
+                         "y":  515,
+                         "width":  190,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1217,
+                         "version":  1,
+                         "versionNonce":  1224,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Social Graph Service\n(follow / unfollow)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "graphSvc",
+                         "originalText":  "Social Graph Service\n(follow / unfollow)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "tweetsDb",
+                         "type":  "rectangle",
+                         "x":  920,
+                         "y":  80,
+                         "width":  230,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#b2f2bb",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1231,
+                         "version":  1,
+                         "versionNonce":  1238,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "tweetsDb-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w2",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w3",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r4",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "tweetsDb-t",
+                         "type":  "text",
+                         "x":  925,
+                         "y":  95,
+                         "width":  220,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1245,
+                         "version":  1,
+                         "versionNonce":  1252,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Tweets store + outbox\n(Cassandra, key tweet_id)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "tweetsDb",
+                         "originalText":  "Tweets store + outbox\n(Cassandra, key tweet_id)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "tweetCache",
+                         "type":  "rectangle",
+                         "x":  920,
+                         "y":  250,
+                         "width":  230,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#b2f2bb",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1259,
+                         "version":  1,
+                         "versionNonce":  1266,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "tweetCache-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "r3",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r4",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "tweetCache-t",
+                         "type":  "text",
+                         "x":  925,
+                         "y":  265,
+                         "width":  220,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1273,
+                         "version":  1,
+                         "versionNonce":  1280,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Tweet cache\n(Redis, hot tweets)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "tweetCache",
+                         "originalText":  "Tweet cache\n(Redis, hot tweets)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "timelineCache",
+                         "type":  "rectangle",
+                         "x":  920,
+                         "y":  380,
+                         "width":  230,
+                         "height":  80,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#b2f2bb",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1287,
+                         "version":  1,
+                         "versionNonce":  1294,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "timelineCache-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w6",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "r2",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "timelineCache-t",
+                         "type":  "text",
+                         "x":  925,
+                         "y":  390,
+                         "width":  220,
+                         "height":  60,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1301,
+                         "version":  1,
+                         "versionNonce":  1308,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Timeline cache\n(Redis list per user,\n\u003c= 800 tweet ids)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "timelineCache",
+                         "originalText":  "Timeline cache\n(Redis list per user,\n\u003c= 800 tweet ids)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "graphDb",
+                         "type":  "rectangle",
+                         "x":  920,
+                         "y":  520,
+                         "width":  230,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#b2f2bb",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1315,
+                         "version":  1,
+                         "versionNonce":  1322,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "graphDb-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w5",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "g2",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "graphDb-t",
+                         "type":  "text",
+                         "x":  925,
+                         "y":  535,
+                         "width":  220,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1329,
+                         "version":  1,
+                         "versionNonce":  1336,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Graph store\n(followers / following)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "graphDb",
+                         "originalText":  "Graph store\n(followers / following)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "kafka",
+                         "type":  "rectangle",
+                         "x":  1290,
+                         "y":  80,
+                         "width":  200,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffec99",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1343,
+                         "version":  1,
+                         "versionNonce":  1350,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "kafka-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w3",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w4",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w7",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "kafka-t",
+                         "type":  "text",
+                         "x":  1295,
+                         "y":  95,
+                         "width":  190,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1357,
+                         "version":  1,
+                         "versionNonce":  1364,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Kafka\ntopic: tweet-created",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "kafka",
+                         "originalText":  "Kafka\ntopic: tweet-created",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "fanout",
+                         "type":  "rectangle",
+                         "x":  1290,
+                         "y":  380,
+                         "width":  200,
+                         "height":  80,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffec99",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1371,
+                         "version":  1,
+                         "versionNonce":  1378,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "fanout-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w4",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w5",
+                                                   "type":  "arrow"
+                                               },
+                                               {
+                                                   "id":  "w6",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "fanout-t",
+                         "type":  "text",
+                         "x":  1295,
+                         "y":  390,
+                         "width":  190,
+                         "height":  60,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1385,
+                         "version":  1,
+                         "versionNonce":  1392,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Fan-out workers\n(push to followers,\nskip celebrities)",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "fanout",
+                         "originalText":  "Fan-out workers\n(push to followers,\nskip celebrities)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "search",
+                         "type":  "rectangle",
+                         "x":  1580,
+                         "y":  80,
+                         "width":  200,
+                         "height":  70,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "#ffec99",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  3
+                                       },
+                         "seed":  1399,
+                         "version":  1,
+                         "versionNonce":  1406,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "search-t",
+                                                   "type":  "text"
+                                               },
+                                               {
+                                                   "id":  "w7",
+                                                   "type":  "arrow"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false
+                     },
+                     {
+                         "id":  "search-t",
+                         "type":  "text",
+                         "x":  1585,
+                         "y":  95,
+                         "width":  190,
+                         "height":  40,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1413,
+                         "version":  1,
+                         "versionNonce":  1420,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Search indexer\n-\u003e Elasticsearch",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "search",
+                         "originalText":  "Search indexer\n-\u003e Elasticsearch",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "a1",
+                         "type":  "arrow",
+                         "x":  200,
+                         "y":  355,
+                         "width":  100,
+                         "height":  0,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1427,
+                         "version":  1,
+                         "versionNonce":  1434,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "a1-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            100,
+                                            0
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "client"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "gw"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "a1-t",
+                         "type":  "text",
+                         "x":  230,
+                         "y":  346.5,
+                         "width":  40,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1441,
+                         "version":  1,
+                         "versionNonce":  1448,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "HTTPS",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "a1",
+                         "originalText":  "HTTPS",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "a2",
+                         "type":  "arrow",
+                         "x":  120,
+                         "y":  320,
+                         "width":  0,
+                         "height":  130,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1455,
+                         "version":  1,
+                         "versionNonce":  1462,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "a2-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            -130
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "client"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "cdn"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "a2-t",
+                         "type":  "text",
+                         "x":  80,
+                         "y":  246.5,
+                         "width":  80,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1469,
+                         "version":  1,
+                         "versionNonce":  1476,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "load media",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "a2",
+                         "originalText":  "load media",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "a3",
+                         "type":  "arrow",
+                         "x":  200,
+                         "y":  155,
+                         "width":  100,
+                         "height":  0,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1483,
+                         "version":  1,
+                         "versionNonce":  1490,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "a3-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            100,
+                                            0
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "cdn"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "blob"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "a3-t",
+                         "type":  "text",
+                         "x":  226,
+                         "y":  146.5,
+                         "width":  48,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1497,
+                         "version":  1,
+                         "versionNonce":  1504,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "origin",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "a3",
+                         "originalText":  "origin",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "a4",
+                         "type":  "arrow",
+                         "x":  168.125,
+                         "y":  320,
+                         "width":  178.75,
+                         "height":  130,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1511,
+                         "version":  1,
+                         "versionNonce":  1518,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "a4-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            178.75,
+                                            -130
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "client"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "blob"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "a4-t",
+                         "type":  "text",
+                         "x":  221.5,
+                         "y":  238,
+                         "width":  72,
+                         "height":  34,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1525,
+                         "version":  1,
+                         "versionNonce":  1532,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "upload\n(SAS URL)",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "a4",
+                         "originalText":  "upload\n(SAS URL)",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w1",
+                         "type":  "arrow",
+                         "x":  477.11538461538464,
+                         "y":  320,
+                         "width":  140.76923076923072,
+                         "height":  60,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1539,
+                         "version":  1,
+                         "versionNonce":  1546,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w1-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            140.76923076923072,
+                                            -60
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "gw"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "tweetSvc"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w1-t",
+                         "type":  "text",
+                         "x":  491.5,
+                         "y":  281.5,
+                         "width":  112,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1553,
+                         "version":  1,
+                         "versionNonce":  1560,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "1 POST /tweets",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w1",
+                         "originalText":  "1 POST /tweets",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w2",
+                         "type":  "arrow",
+                         "x":  800,
+                         "y":  192.16417910447763,
+                         "width":  128.40909090909088,
+                         "height":  42.164179104477626,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1567,
+                         "version":  1,
+                         "versionNonce":  1574,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w2-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            128.40909090909088,
+                                            -42.164179104477626
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "tweetSvc"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "tweetsDb"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w2-t",
+                         "type":  "text",
+                         "x":  812.2045454545455,
+                         "y":  154.08208955223881,
+                         "width":  104,
+                         "height":  34,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1581,
+                         "version":  1,
+                         "versionNonce":  1588,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "2 write tweet\n+ outbox row",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w2",
+                         "originalText":  "2 write tweet\n+ outbox row",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w3",
+                         "type":  "arrow",
+                         "x":  1150,
+                         "y":  115,
+                         "width":  140,
+                         "height":  0,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "dashed",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1595,
+                         "version":  1,
+                         "versionNonce":  1602,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w3-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            140,
+                                            0
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "tweetsDb"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "kafka"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w3-t",
+                         "type":  "text",
+                         "x":  1164,
+                         "y":  106.5,
+                         "width":  112,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1609,
+                         "version":  1,
+                         "versionNonce":  1616,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "3 outbox relay",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w3",
+                         "originalText":  "3 outbox relay",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w4",
+                         "type":  "arrow",
+                         "x":  1390,
+                         "y":  150,
+                         "width":  0,
+                         "height":  230,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "dashed",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1623,
+                         "version":  1,
+                         "versionNonce":  1630,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w4-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            230
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "kafka"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "fanout"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w4-t",
+                         "type":  "text",
+                         "x":  1354,
+                         "y":  256.5,
+                         "width":  72,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1637,
+                         "version":  1,
+                         "versionNonce":  1644,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "4 consume",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w4",
+                         "originalText":  "4 consume",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w5",
+                         "type":  "arrow",
+                         "x":  1290,
+                         "y":  458.02816901408448,
+                         "width":  162.96296296296305,
+                         "height":  61.971830985915517,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "dashed",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1651,
+                         "version":  1,
+                         "versionNonce":  1658,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w5-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            -162.96296296296305,
+                                            61.971830985915517
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "fanout"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "graphDb"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w5-t",
+                         "type":  "text",
+                         "x":  1148.5185185185185,
+                         "y":  480.51408450704224,
+                         "width":  120,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1665,
+                         "version":  1,
+                         "versionNonce":  1672,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "5 get followers",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w5",
+                         "originalText":  "5 get followers",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w6",
+                         "type":  "arrow",
+                         "x":  1290,
+                         "y":  420,
+                         "width":  140,
+                         "height":  0,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "dashed",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1679,
+                         "version":  1,
+                         "versionNonce":  1686,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w6-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            -140,
+                                            0
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "fanout"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "timelineCache"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w6-t",
+                         "type":  "text",
+                         "x":  1160,
+                         "y":  411.5,
+                         "width":  120,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1693,
+                         "version":  1,
+                         "versionNonce":  1700,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "6 LPUSH + LTRIM",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w6",
+                         "originalText":  "6 LPUSH + LTRIM",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "w7",
+                         "type":  "arrow",
+                         "x":  1490,
+                         "y":  115,
+                         "width":  90,
+                         "height":  0,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "dashed",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1707,
+                         "version":  1,
+                         "versionNonce":  1714,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "w7-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            90,
+                                            0
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "kafka"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "search"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "w7-t",
+                         "type":  "text",
+                         "x":  1515,
+                         "y":  106.5,
+                         "width":  40,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1971c2",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1721,
+                         "version":  1,
+                         "versionNonce":  1728,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "index",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "w7",
+                         "originalText":  "index",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "r1",
+                         "type":  "arrow",
+                         "x":  490,
+                         "y":  361.22950819672133,
+                         "width":  110,
+                         "height":  7.213114754098342,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1735,
+                         "version":  1,
+                         "versionNonce":  1742,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "r1-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            110,
+                                            7.213114754098342
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "gw"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "timelineSvc"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "r1-t",
+                         "type":  "text",
+                         "x":  485,
+                         "y":  356.3360655737705,
+                         "width":  120,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1749,
+                         "version":  1,
+                         "versionNonce":  1756,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "1 GET /timeline",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "r1",
+                         "originalText":  "1 GET /timeline",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "r2",
+                         "type":  "arrow",
+                         "x":  800,
+                         "y":  388.43283582089555,
+                         "width":  120,
+                         "height":  16.1194029850746,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1763,
+                         "version":  1,
+                         "versionNonce":  1770,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "r2-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            120,
+                                            16.1194029850746
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "timelineSvc"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "timelineCache"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "r2-t",
+                         "type":  "text",
+                         "x":  820,
+                         "y":  387.99253731343288,
+                         "width":  80,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1777,
+                         "version":  1,
+                         "versionNonce":  1784,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "2 read ids",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "r2",
+                         "originalText":  "2 read ids",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "r3",
+                         "type":  "arrow",
+                         "x":  800,
+                         "y":  348.13432835820896,
+                         "width":  120,
+                         "height":  32.238805970149258,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1791,
+                         "version":  1,
+                         "versionNonce":  1798,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "r3-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            120,
+                                            -32.238805970149258
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "timelineSvc"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "tweetCache"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "r3-t",
+                         "type":  "text",
+                         "x":  804,
+                         "y":  315.01492537313436,
+                         "width":  112,
+                         "height":  34,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1805,
+                         "version":  1,
+                         "versionNonce":  1812,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "3 hydrate +\ncelebrity pull",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "r3",
+                         "originalText":  "3 hydrate +\ncelebrity pull",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "r4",
+                         "type":  "arrow",
+                         "x":  1035,
+                         "y":  250,
+                         "width":  0,
+                         "height":  100,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1819,
+                         "version":  1,
+                         "versionNonce":  1826,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "r4-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            0,
+                                            -100
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "tweetCache"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "tweetsDb"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "r4-t",
+                         "type":  "text",
+                         "x":  1019,
+                         "y":  191.5,
+                         "width":  32,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#2f9e44",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1833,
+                         "version":  1,
+                         "versionNonce":  1840,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "miss",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "r4",
+                         "originalText":  "miss",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "g1",
+                         "type":  "arrow",
+                         "x":  454.30555555555554,
+                         "y":  390,
+                         "width":  186.38888888888891,
+                         "height":  110,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1847,
+                         "version":  1,
+                         "versionNonce":  1854,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "g1-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            186.38888888888891,
+                                            110
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "gw"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "graphSvc"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "g1-t",
+                         "type":  "text",
+                         "x":  499.5,
+                         "y":  436.5,
+                         "width":  96,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1861,
+                         "version":  1,
+                         "versionNonce":  1868,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "POST /follow",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "g1",
+                         "originalText":  "POST /follow",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "g2",
+                         "type":  "arrow",
+                         "x":  800,
+                         "y":  540.97014925373139,
+                         "width":  120,
+                         "height":  7.1641791044775118,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  {
+                                           "type":  2
+                                       },
+                         "seed":  1875,
+                         "version":  1,
+                         "versionNonce":  1882,
+                         "isDeleted":  false,
+                         "boundElements":  [
+                                               {
+                                                   "id":  "g2-t",
+                                                   "type":  "text"
+                                               }
+                                           ],
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "points":  [
+                                        [
+                                            0,
+                                            0
+                                        ],
+                                        [
+                                            120,
+                                            7.1641791044775118
+                                        ]
+                                    ],
+                         "lastCommittedPoint":  null,
+                         "startBinding":  {
+                                              "gap":  4,
+                                              "focus":  0,
+                                              "elementId":  "graphSvc"
+                                          },
+                         "endBinding":  {
+                                            "gap":  4,
+                                            "focus":  0,
+                                            "elementId":  "graphDb"
+                                        },
+                         "startArrowhead":  null,
+                         "endArrowhead":  "arrow",
+                         "elbowed":  false
+                     },
+                     {
+                         "id":  "g2-t",
+                         "type":  "text",
+                         "x":  820,
+                         "y":  536.05223880597009,
+                         "width":  80,
+                         "height":  17,
+                         "angle":  0,
+                         "strokeColor":  "#1e1e1e",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1889,
+                         "version":  1,
+                         "versionNonce":  1896,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "write edge",
+                         "fontSize":  14,
+                         "fontFamily":  1,
+                         "textAlign":  "center",
+                         "verticalAlign":  "middle",
+                         "containerId":  "g2",
+                         "originalText":  "write edge",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     },
+                     {
+                         "id":  "notes",
+                         "type":  "text",
+                         "x":  40,
+                         "y":  640,
+                         "width":  1056,
+                         "height":  80,
+                         "angle":  0,
+                         "strokeColor":  "#495057",
+                         "backgroundColor":  "transparent",
+                         "fillStyle":  "solid",
+                         "strokeWidth":  2,
+                         "strokeStyle":  "solid",
+                         "roughness":  1,
+                         "opacity":  100,
+                         "groupIds":  [
+
+                                      ],
+                         "frameId":  null,
+                         "roundness":  null,
+                         "seed":  1903,
+                         "version":  1,
+                         "versionNonce":  1910,
+                         "isDeleted":  false,
+                         "boundElements":  null,
+                         "updated":  1700000000000,
+                         "link":  null,
+                         "locked":  false,
+                         "text":  "Celebrity rule: authors with \u003e ~1M followers are NOT fanned out; their recent tweets are pulled and merged at read time.\nRead-your-writes: the Timeline Service also merges my own latest tweets.\nInactive users (30+ days) are skipped in fan-out; their timeline is rebuilt on login.\nNumbers: 60k timeline reads/s peak, 3k tweets/s peak, ~600k fan-out writes/s peak, timeline cache ~3 TB.",
+                         "fontSize":  16,
+                         "fontFamily":  1,
+                         "textAlign":  "left",
+                         "verticalAlign":  "top",
+                         "containerId":  null,
+                         "originalText":  "Celebrity rule: authors with \u003e ~1M followers are NOT fanned out; their recent tweets are pulled and merged at read time.\nRead-your-writes: the Timeline Service also merges my own latest tweets.\nInactive users (30+ days) are skipped in fan-out; their timeline is rebuilt on login.\nNumbers: 60k timeline reads/s peak, 3k tweets/s peak, ~600k fan-out writes/s peak, timeline cache ~3 TB.",
+                         "lineHeight":  1.25,
+                         "autoResize":  true
+                     }
+                 ],
+    "appState":  {
+                     "gridSize":  20,
+                     "viewBackgroundColor":  "#ffffff"
+                 },
+    "files":  {
+
+              }
+}
