@@ -1,6 +1,6 @@
 # Case 3: Twitter / news feed
 
-Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: **A. Regular user** and **B. Celebrity**. Each row has one left-to-right lane per requirement: post, home timeline, follow/unfollow, like/unlike, profile timeline. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: **A. Regular user** and **B. Celebrity**. In each row: User → API Gateway, which then splits into a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Twitter. Users post short tweets, follow other users, and see a home timeline of tweets from people they follow."
@@ -102,6 +102,18 @@ Rule of thumb: keep **~2 TB of data per node or shard** (disks of about 4 TB lea
 5. It returns 20 tweets and a cursor.
 
 **Media:** the client uploads straight to Blob storage with a presigned (SAS) URL, and the tweet stores only the media URL. Reads come from the CDN.
+
+## Which components each path touches
+| Requirement | Path | Regular user (row A) | Celebrity (row B) |
+|---|---|---|---|
+| Post a tweet | Write | Tweet Service → Tweets store + outbox → Kafka → fan-out worker → **Timeline cache of all 200 followers** | Same up to the fan-out worker, which **skips** the 50M timelines and writes only to the **celebrity recent cache** |
+| Media | Write / Read | Blob storage (upload with a SAS URL) / CDN | Same; the CDN absorbs the spike |
+| Follow / unfollow | Write | Graph Service → Graph store + outbox → Kafka → graph worker → reverse edge + **backfill** of the followed user's last 20 tweets into my timeline cache (`LREM` on unfollow) | Same up to the graph worker → **no backfill**; only `SADD`/`SREM` on my celebs set and an update of the follower count |
+| Like / unlike | Write | Like Service → Likes store (insert if the row is new) → like counter `INCR` (synchronous) | Like Service → **split counter** (1 of 16 shards) + Kafka → aggregator → Likes store in batches (async, 202) |
+| Home timeline | Read | Timeline Service → Timeline cache (20 ids) → Tweet cache + like counter → Tweets store only on a miss | Timeline Service → Timeline cache + celebs set + celebrity recent cache (in parallel) → **merge** → hydrate |
+| Profile timeline | Read | Timeline Service → `user_tweets` → Tweet cache | Timeline Service → in-process cache → celebrity recent cache → Tweet cache (never reaches Cassandra) |
+
+**What the read path never touches:** Kafka, the workers, the Graph store, or the Likes store. Reads come almost entirely from Redis. The Tweets store is hit only on a cache miss.
 
 ## Deep dives to drive (learner leads, interviewer pushes)
 1. **Fan-out on write vs. on read vs. hybrid:** what decides the celebrity threshold?
