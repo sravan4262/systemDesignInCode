@@ -14,7 +14,7 @@
      - Worked examples first (M19 S8–S9): one change applied to 100k users (Azure); one schema change across 10k tenant DBs.
      - Cases in order: (1) URL shortener ✅ (done on Mac, may be unpushed) → (2) WhatsApp → (3) Twitter / news feed → (4) YouTube / Netflix → (5) Uber → (6) Ticketmaster → (7) Payment system → (8) Notification system → (9) Top-K / ad-click aggregation → (10) Dropbox → (11) Google Docs → (12) Chat over company data (non-AI).
      - Skipped (covered by the above or earlier modules): live comments, live streaming, Yelp, rate limiter (M8), distributed KV/cache (M17 + M8), hotel/meeting rooms (Ticketmaster + M3), job scheduler/leaderboard/metrics, typeahead, web crawler, design Kafka, auction, stock brokerage, own question bank.
-     - Per-case prep (learner's request 2026-11-19): FRs + NFRs + capacity in `<module>/designs/case-NN-<name>.md` plus an Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Done: (3) Twitter. Next: the other 10 (not the URL shortener).
+     - Per-case prep (learner's request 2026-11-19): FRs + NFRs + capacity in `<module>/designs/case-NN-<name>.md` plus an Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (3) Twitter (learner reviewing, then refine). Next: the other 10 (not the URL shortener).
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Mac
