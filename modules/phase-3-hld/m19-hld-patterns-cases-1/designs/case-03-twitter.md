@@ -1,6 +1,6 @@
 # Case 3: Twitter / news feed
 
-Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), four panels left to right: (1) a regular user posts (push), (2) a follower reads, (3) a celebrity posts (no fan-out), (4) a follower reads with celebrity tweets (push + pull merged). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Twitter. Users post short tweets, follow other users, and see a home timeline of tweets from people they follow."
