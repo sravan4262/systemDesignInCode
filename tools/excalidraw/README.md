@@ -13,3 +13,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/excalidraw/excal.ps1 `
 - Each row runs left to right: User → API Gateway. After the gateway it splits into the **write path** (top, blue) and the **read path** (bottom, green). Async steps are dashed; skipped steps are red.
 - Every functional requirement appears as a service or arrow on the path it uses.
 - Each row ends with a note saying which components the write path touches and which the read path touches.
+
+**Without PowerShell (Mac/Linux):** `excal.py` is a Python port with the same helpers and output. Layouts are `.layout.py` files.
+
+```bash
+python3 tools/excalidraw/excal.py tools/excalidraw/case-02-whatsapp.layout.py \
+  modules/phase-3-hld/m19-hld-patterns-cases-1/designs/case-02-whatsapp.excalidraw
+```
