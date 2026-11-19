@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 2 WhatsApp: learner resumes at the estimates (prep doc + diagram in `designs/case-02-whatsapp.*`; skip its capacity section to do the math first). Then the 12-case list below.
+- **Next step:** Case 2 WhatsApp: learner resumes at the estimates (prep doc + diagram in `designs/case-02-whatsapp/`; skip its capacity section to do the math first). Then the 12-case list below.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
@@ -14,7 +14,7 @@
      - Worked examples first (M19 S8–S9): one change applied to 100k users (Azure); one schema change across 10k tenant DBs.
      - Cases in order: (1) URL shortener ✅ 6.5/10 (`case-01-url-shortener.*`, learner attempt in `.attempt.excalidraw`) → (2) WhatsApp → (3) Twitter / news feed → (4) YouTube / Netflix → (5) Uber → (6) Ticketmaster → (7) Payment system → (8) Notification system → (9) Top-K / ad-click aggregation → (10) Dropbox → (11) Google Docs → (12) Chat over company data (non-AI).
      - Skipped (covered by the above or earlier modules): live comments, live streaming, Yelp, rate limiter (M8), distributed KV/cache (M17 + M8), hotel/meeting rooms (Ticketmaster + M3), job scheduler/leaderboard/metrics, typeahead, web crawler, design Kafka, auction, stock brokerage, own question bank.
-     - Per-case prep (learner's request 2026-11-19): FRs + NFRs + capacity in `<module>/designs/case-NN-<name>.md` plus an Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (1) URL shortener, (2) WhatsApp (prep; learner mid-case), (3) Twitter (learner reviewing, then refine). Next: the other 9. Python generator `excal.py` for Mac.
+     - Per-case prep (learner's request 2026-11-19): one folder per case `<module>/designs/case-NN-<name>/` holding `case-NN-<name>.md` (FRs + NFRs + capacity) and the Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (1) URL shortener, (2) WhatsApp (prep; learner mid-case), (3) Twitter (learner reviewing, then refine). Next: the other 9. Python generator `excal.py` for Mac.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Mac
@@ -69,7 +69,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
-- 2026-11-18 · Mac · M19 · Case 1 URL shortener 6.5/10 (review in designs/case-01-url-shortener.md): estimates per month slip, redirect lookup missing in diagram, duplicate services; good decisions on 302 + edge TTL, random code + 409 retry, single write region. Next: Case 2 WhatsApp.
+- 2026-11-18 · Mac · M19 · Case 1 URL shortener 6.5/10 (review in designs/case-01-url-shortener/): estimates per month slip, redirect lookup missing in diagram, duplicate services; good decisions on 302 + edge TTL, random code + 409 retry, single write region. Next: Case 2 WhatsApp.
 - 2026-11-18 · Mac · M19 · Patterns 1–7: real-time (gateways + backplane, DB catch-up by seq), contention (holds with TTL, auth→capture/void), multi-step (state machine, Saga, Durable; idempotent activities), scaling reads (read models, fan-out on write vs. read for celebrities), scaling writes (queue, batch, sharded counters, shard key), large blobs (SAS, staged blocks, Range, claim-check), long-running tasks (202 + job/chunk tables, staged blocks as merge). Learner chose: cases next; S8–S9 become cases.
 - 2026-11-18 · Mac · M21 · S5 Azure compute (Functions/App Service/Container Apps/AKS; App Service plan = managed VMs; isolated worker, Durable), S6 safe delivery (rolling/blue-green/canary on new instances; weights at the routing layer shifted in pipeline stages; feature flags; Helm = templated YAML + env values, Kubernetes orchestrates), S7 skipped, S8 trade-offs (cost/compliance/ops + triggers). Next: M19 patterns.
 - 2026-11-18 · Mac · M21 · S1 multi-region (active-passive vs. active-active, RPO/RTO, conflicts: LWW vs. merge vs. home region), S2 multi-tenancy (shared/schema/DB per tenant, hybrid + catalog, query filter + RLS, noisy neighbours; read replicas + replication lag), S3 containers (multi-stage, non-root, 8080, SHA tags), S4 Kubernetes (image → container → pod → node → Deployment → Service → Ingress; liveness vs. readiness; HPA/VPA/cluster autoscaler/KEDA). 20-question K8s drill 114/180 ≈ 6.3/10. Next: M21 S5.

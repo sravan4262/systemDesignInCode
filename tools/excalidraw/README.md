@@ -5,7 +5,7 @@ This builds the `.excalidraw` files for the HLD case designs from a small PowerS
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/excalidraw/excal.ps1 `
   -Layout tools/excalidraw/case-03-twitter.layout.ps1 `
-  -Out modules/phase-3-hld/m19-hld-patterns-cases-1/designs/case-03-twitter.excalidraw
+  -Out modules/phase-3-hld/m19-hld-patterns-cases-1/designs/case-03-twitter/case-03-twitter.excalidraw
 ```
 
 **Case diagram format (agreed for Case 3, reuse for every case):**
@@ -18,5 +18,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/excalidraw/excal.ps1 `
 
 ```bash
 python3 tools/excalidraw/excal.py tools/excalidraw/case-02-whatsapp.layout.py \
-  modules/phase-3-hld/m19-hld-patterns-cases-1/designs/case-02-whatsapp.excalidraw
+  modules/phase-3-hld/m19-hld-patterns-cases-1/designs/case-02-whatsapp/case-02-whatsapp.excalidraw
 ```
