@@ -53,11 +53,22 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 - Pagination is **cursor-based** (`max_id`), not offset, so new tweets don't shift pages (M14).
 
 ## High-level design (see the diagram)
+**Services and stores:**
+| Component | What it does | Store / technology |
+|---|---|---|
+| Tweet Service | Posts a tweet: assigns a Snowflake id and writes the tweet plus an outbox row | **Tweets store: Cassandra**. Tables `tweets` (pk `tweet_id`) and `user_tweets` (pk `user_id, month`). The outbox row goes in the same logged batch |
+| **Follow Service** | Handles `POST/DELETE /follows`. It stores who follows whom (the "social graph", which is why it is often called the Graph Service) and answers "who follows Alice?" for the fan-out | **Follow store: SQL, sharded by `user_id`**. Tables `following(user_id, followee_id)` and `followers(user_id, follower_id)`, plus the follower count |
+| Like Service | Like / unlike | **Likes store: Cassandra** (pk `tweet_id`, ck `user_id`). Counts are kept in **Redis** |
+| Timeline Service | Home and profile timelines (read only) | Reads **Redis** (timeline cache, tweet cache, celebrity recent cache, celebs set) and Cassandra only on a miss |
+| Fan-out / follow / like workers | Kafka consumers that do the async work | Write to **Redis** (timelines, celebrity lists) and Cassandra (batched likes) |
+| Kafka | Event log: `tweet-created`, `follow-events`, `like-events` | Kafka (3 brokers, RF 3) |
+| Media | Images and video | **Azure Blob** + CDN |
+
 **Write path:**
 1. Client → Gateway → Tweet Service.
 2. The service gets a Snowflake ID and writes the tweet to the Tweets store. The tweet goes into the outbox in the same transaction.
 3. The outbox publishes `tweet-created` to Kafka.
-4. Fan-out workers fetch the follower list from the graph store and push the tweet id onto each follower's timeline list in Redis (`LPUSH` + `LTRIM` to 800).
+4. Fan-out workers fetch the follower list from the Follow store (SQL) and push the tweet id onto each follower's timeline list in Redis (`LPUSH` + `LTRIM` to 800).
 5. **Celebrities (over ~1M followers) are skipped here.**
 
 **Read path:**
@@ -74,12 +85,12 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 |---|---|---|---|
 | Post a tweet | Write | Tweet Service → Tweets store + outbox → Kafka → fan-out worker → **Timeline cache of all 200 followers** | Same up to the fan-out worker, which **skips** the 50M timelines and writes only to the **celebrity recent cache** |
 | Media | Write / Read | Blob storage (upload with a SAS URL) / CDN | Same; the CDN absorbs the spike |
-| Follow / unfollow | Write | Graph Service → Graph store + outbox → Kafka → graph worker → reverse edge + **backfill** of the followed user's last 20 tweets into my timeline cache (`LREM` on unfollow) | Same up to the graph worker → **no backfill**; only `SADD`/`SREM` on my celebs set and an update of the follower count |
+| Follow / unfollow | Write | Follow Service → Follow store (SQL) + outbox → Kafka → follow worker → `followers` edge + **backfill** of the followed user's last 20 tweets into my timeline cache (`LREM` on unfollow) | Same up to the follow worker → **no backfill**; only `SADD`/`SREM` on my celebs set and an update of the follower count |
 | Like / unlike | Write | Like Service → Likes store (insert if the row is new) → like counter `INCR` (synchronous) | Like Service → **split counter** (1 of 16 shards) + Kafka → aggregator → Likes store in batches (async, 202) |
 | Home timeline | Read | Timeline Service → Timeline cache (20 ids) → Tweet cache + like counter → Tweets store only on a miss | Timeline Service → Timeline cache + celebs set + celebrity recent cache (in parallel) → **merge** → hydrate |
 | Profile timeline | Read | Timeline Service → `user_tweets` → Tweet cache | Timeline Service → in-process cache → celebrity recent cache → Tweet cache (never reaches Cassandra) |
 
-**What the read path never touches:** Kafka, the workers, the Graph store, or the Likes store. Reads come almost entirely from Redis. The Tweets store is hit only on a cache miss.
+**What the read path never touches:** Kafka, the workers, the Follow store, or the Likes store. Reads come almost entirely from Redis. The Tweets store is hit only on a cache miss.
 
 ## Deep dives to drive (learner leads, interviewer pushes)
 1. **Fan-out on write vs. on read vs. hybrid:** what decides the celebrity threshold?
@@ -88,7 +99,7 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 4. **IDs and ordering:** Snowflake (time + node + sequence) gives sortable ids, which makes cursor pagination `max_id`-based (keyset, as in M6).
 5. **Like counts:** at 100k likes/s on a viral tweet, a single row becomes a hot key. Use sharded counters plus async aggregation; an approximate count is fine.
 6. **Failure modes:**
-   - A Redis node is lost: rebuild from the Tweets store and graph.
+   - A Redis node is lost: rebuild from the Tweets store and the Follow store.
    - Kafka lag: freshness drops, but correctness holds.
    - A duplicate event: the fan-out must be idempotent (check whether the id is already present, or accept the dup and dedupe at read).
 7. **Hot partitions:** a celebrity's tweet row is read by millions. Spread it across cache replicas and add a local in-process cache.

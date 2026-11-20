@@ -84,7 +84,7 @@
                          "type":  "rectangle",
                          "x":  0,
                          "y":  0,
-                         "width":  2560,
+                         "width":  2640,
                          "height":  820,
                          "angle":  0,
                          "strokeColor":  "#868e96",
@@ -153,7 +153,7 @@
                      {
                          "id":  "Awl",
                          "type":  "text",
-                         "x":  620,
+                         "x":  660,
                          "y":  55,
                          "width":  99,
                          "height":  22,
@@ -191,7 +191,7 @@
                      {
                          "id":  "Arl",
                          "type":  "text",
-                         "x":  620,
+                         "x":  660,
                          "y":  435,
                          "width":  89,
                          "height":  22,
@@ -231,7 +231,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  320,
-                         "width":  200,
+                         "width":  230,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -279,7 +279,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  340,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -317,7 +317,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  150,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -357,7 +357,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  165,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -380,13 +380,13 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Blob storage\n(media upload, SAS)",
+                         "text":  "Blob storage (Azure Blob)\n(media upload, SAS)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Ab",
-                         "originalText":  "Blob storage\n(media upload, SAS)",
+                         "originalText":  "Blob storage (Azure Blob)\n(media upload, SAS)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
@@ -395,7 +395,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  500,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -435,7 +435,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  515,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -471,9 +471,9 @@
                      {
                          "id":  "Ag",
                          "type":  "rectangle",
-                         "x":  330,
+                         "x":  350,
                          "y":  320,
-                         "width":  200,
+                         "width":  230,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -527,9 +527,9 @@
                      {
                          "id":  "Ag-t",
                          "type":  "text",
-                         "x":  335,
+                         "x":  355,
                          "y":  330,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -565,7 +565,7 @@
                      {
                          "id":  "Aa0",
                          "type":  "arrow",
-                         "x":  140,
+                         "x":  155,
                          "y":  320,
                          "width":  0,
                          "height":  100,
@@ -625,7 +625,7 @@
                      {
                          "id":  "Aa0-t",
                          "type":  "text",
-                         "x":  116,
+                         "x":  131,
                          "y":  261.5,
                          "width":  48,
                          "height":  17,
@@ -663,7 +663,7 @@
                      {
                          "id":  "Aa00",
                          "type":  "arrow",
-                         "x":  140,
+                         "x":  155,
                          "y":  400,
                          "width":  0,
                          "height":  100,
@@ -723,7 +723,7 @@
                      {
                          "id":  "Aa00-t",
                          "type":  "text",
-                         "x":  124,
+                         "x":  139,
                          "y":  441.5,
                          "width":  32,
                          "height":  17,
@@ -761,9 +761,9 @@
                      {
                          "id":  "Aa1",
                          "type":  "arrow",
-                         "x":  240,
+                         "x":  270,
                          "y":  360,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -799,7 +799,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -821,7 +821,7 @@
                      {
                          "id":  "Aa1-t",
                          "type":  "text",
-                         "x":  265,
+                         "x":  290,
                          "y":  351.5,
                          "width":  40,
                          "height":  17,
@@ -859,9 +859,9 @@
                      {
                          "id":  "Ats",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  90,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -903,9 +903,9 @@
                      {
                          "id":  "Ats-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  105,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -941,9 +941,9 @@
                      {
                          "id":  "Ags",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  200,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -985,9 +985,9 @@
                      {
                          "id":  "Ags-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  215,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1010,22 +1010,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph Service\nPOST|DELETE /follows",
+                         "text":  "Follow Service\nPOST|DELETE /follows",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Ags",
-                         "originalText":  "Graph Service\nPOST|DELETE /follows",
+                         "originalText":  "Follow Service\nPOST|DELETE /follows",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Als",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  310,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1067,9 +1067,9 @@
                      {
                          "id":  "Als-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  325,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1105,9 +1105,9 @@
                      {
                          "id":  "Atd",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  90,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1149,9 +1149,9 @@
                      {
                          "id":  "Atd-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  95,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1174,22 +1174,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweets store\ntweets + user_tweets\n+ outbox",
+                         "text":  "Tweets store (Cassandra)\ntweets + user_tweets\n+ outbox",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Atd",
-                         "originalText":  "Tweets store\ntweets + user_tweets\n+ outbox",
+                         "originalText":  "Tweets store (Cassandra)\ntweets + user_tweets\n+ outbox",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Agd",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  200,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1231,10 +1231,10 @@
                      {
                          "id":  "Agd-t",
                          "type":  "text",
-                         "x":  915,
-                         "y":  215,
-                         "width":  190,
-                         "height":  40,
+                         "x":  975,
+                         "y":  205,
+                         "width":  220,
+                         "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
                          "backgroundColor":  "transparent",
@@ -1256,22 +1256,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph store\nfollowing + outbox",
+                         "text":  "Follow store (SQL,\nsharded by user_id)\nfollowing + outbox",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Agd",
-                         "originalText":  "Graph store\nfollowing + outbox",
+                         "originalText":  "Follow store (SQL,\nsharded by user_id)\nfollowing + outbox",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Ald",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  310,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1313,9 +1313,9 @@
                      {
                          "id":  "Ald-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  325,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1338,22 +1338,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Likes store\ninsert-if-new row",
+                         "text":  "Likes store (Cassandra)\ninsert-if-new row",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Ald",
-                         "originalText":  "Likes store\ninsert-if-new row",
+                         "originalText":  "Likes store (Cassandra)\ninsert-if-new row",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Ak",
                          "type":  "rectangle",
-                         "x":  1200,
+                         "x":  1280,
                          "y":  90,
-                         "width":  200,
+                         "width":  230,
                          "height":  180,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1403,9 +1403,9 @@
                      {
                          "id":  "Ak-t",
                          "type":  "text",
-                         "x":  1205,
+                         "x":  1285,
                          "y":  150,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1428,22 +1428,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Kafka\ntweet-created\nfollow-events",
+                         "text":  "Kafka (event log)\ntweet-created\nfollow-events",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Ak",
-                         "originalText":  "Kafka\ntweet-created\nfollow-events",
+                         "originalText":  "Kafka (event log)\ntweet-created\nfollow-events",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Alc",
                          "type":  "rectangle",
-                         "x":  1200,
+                         "x":  1280,
                          "y":  310,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1481,9 +1481,9 @@
                      {
                          "id":  "Alc-t",
                          "type":  "text",
-                         "x":  1205,
+                         "x":  1285,
                          "y":  325,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1519,9 +1519,9 @@
                      {
                          "id":  "Afo",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  90,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1563,10 +1563,10 @@
                      {
                          "id":  "Afo-t",
                          "type":  "text",
-                         "x":  1495,
-                         "y":  105,
-                         "width":  190,
-                         "height":  40,
+                         "x":  1595,
+                         "y":  95,
+                         "width":  220,
+                         "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
                          "backgroundColor":  "transparent",
@@ -1588,22 +1588,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Fan-out worker\n\u003c 1M followers: PUSH",
+                         "text":  "Fan-out worker\nreads followers (SQL)\n\u003c 1M: PUSH",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Afo",
-                         "originalText":  "Fan-out worker\n\u003c 1M followers: PUSH",
+                         "originalText":  "Fan-out worker\nreads followers (SQL)\n\u003c 1M: PUSH",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Agw",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  200,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1645,9 +1645,9 @@
                      {
                          "id":  "Agw-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  215,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1670,22 +1670,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph worker\nreverse edge + backfill",
+                         "text":  "Follow worker\nfollowers edge + backfill",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Agw",
-                         "originalText":  "Graph worker\nreverse edge + backfill",
+                         "originalText":  "Follow worker\nfollowers edge + backfill",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Atl",
                          "type":  "rectangle",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  90,
-                         "width":  200,
+                         "width":  230,
                          "height":  180,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1727,9 +1727,9 @@
                      {
                          "id":  "Atl-t",
                          "type":  "text",
-                         "x":  1785,
+                         "x":  1905,
                          "y":  140,
-                         "width":  190,
+                         "width":  220,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -1765,9 +1765,9 @@
                      {
                          "id":  "Aw1",
                          "type":  "arrow",
-                         "x":  479.36170212765956,
+                         "x":  517.76595744680856,
                          "y":  320,
-                         "width":  197.44680851063833,
+                         "width":  211.063829787234,
                          "height":  160,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -1803,7 +1803,7 @@
                                             0
                                         ],
                                         [
-                                            197.44680851063833,
+                                            211.063829787234,
                                             -160
                                         ]
                                     ],
@@ -1825,7 +1825,7 @@
                      {
                          "id":  "Aw1-t",
                          "type":  "text",
-                         "x":  562.08510638297867,
+                         "x":  607.29787234042556,
                          "y":  231.5,
                          "width":  32,
                          "height":  17,
@@ -1863,9 +1863,9 @@
                      {
                          "id":  "Aw2",
                          "type":  "arrow",
-                         "x":  522.8,
+                         "x":  564.2,
                          "y":  320,
-                         "width":  116,
+                         "width":  124,
                          "height":  50,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -1901,7 +1901,7 @@
                                             0
                                         ],
                                         [
-                                            116,
+                                            124,
                                             -50
                                         ]
                                     ],
@@ -1923,7 +1923,7 @@
                      {
                          "id":  "Aw2-t",
                          "type":  "text",
-                         "x":  556.8,
+                         "x":  602.2,
                          "y":  286.5,
                          "width":  48,
                          "height":  17,
@@ -1961,10 +1961,10 @@
                      {
                          "id":  "Aw3",
                          "type":  "arrow",
-                         "x":  530,
-                         "y":  354.82758620689657,
-                         "width":  90,
-                         "height":  4.6551724137931387,
+                         "x":  580,
+                         "y":  354.43548387096774,
+                         "width":  80,
+                         "height":  3.8709677419354875,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -1999,8 +1999,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -4.6551724137931387
+                                            80,
+                                            -3.8709677419354875
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2021,7 +2021,7 @@
                      {
                          "id":  "Aw3-t",
                          "type":  "text",
-                         "x":  559,
+                         "x":  604,
                          "y":  344,
                          "width":  32,
                          "height":  17,
@@ -2059,9 +2059,9 @@
                      {
                          "id":  "Aw4",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  125,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -2097,7 +2097,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -2119,7 +2119,7 @@
                      {
                          "id":  "Aw4-t",
                          "type":  "text",
-                         "x":  845,
+                         "x":  910,
                          "y":  116.5,
                          "width":  40,
                          "height":  17,
@@ -2157,9 +2157,9 @@
                      {
                          "id":  "Aw5",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  235,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -2195,7 +2195,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -2217,7 +2217,7 @@
                      {
                          "id":  "Aw5-t",
                          "type":  "text",
-                         "x":  845,
+                         "x":  910,
                          "y":  226.5,
                          "width":  40,
                          "height":  17,
@@ -2255,9 +2255,9 @@
                      {
                          "id":  "Aw6",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  345,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -2293,7 +2293,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -2315,7 +2315,7 @@
                      {
                          "id":  "Aw6-t",
                          "type":  "text",
-                         "x":  841,
+                         "x":  906,
                          "y":  336.5,
                          "width":  48,
                          "height":  17,
@@ -2353,10 +2353,10 @@
                      {
                          "id":  "Aw7",
                          "type":  "arrow",
-                         "x":  1110,
-                         "y":  143.9655172413793,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1200,
+                         "y":  145.40322580645162,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2391,8 +2391,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            17.068965517241395
+                                            80,
+                                            14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2413,7 +2413,7 @@
                      {
                          "id":  "Aw7-t",
                          "type":  "text",
-                         "x":  1131,
+                         "x":  1216,
                          "y":  144,
                          "width":  48,
                          "height":  17,
@@ -2451,10 +2451,10 @@
                      {
                          "id":  "Aw8",
                          "type":  "arrow",
-                         "x":  1110,
-                         "y":  216.0344827586207,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1200,
+                         "y":  214.59677419354838,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2489,8 +2489,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -17.068965517241395
+                                            80,
+                                            -14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2511,7 +2511,7 @@
                      {
                          "id":  "Aw8-t",
                          "type":  "text",
-                         "x":  1131,
+                         "x":  1216,
                          "y":  199,
                          "width":  48,
                          "height":  17,
@@ -2549,9 +2549,9 @@
                      {
                          "id":  "Aw9",
                          "type":  "arrow",
-                         "x":  1110,
+                         "x":  1200,
                          "y":  345,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -2587,7 +2587,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -2609,7 +2609,7 @@
                      {
                          "id":  "Aw9-t",
                          "type":  "text",
-                         "x":  1147,
+                         "x":  1232,
                          "y":  336.5,
                          "width":  16,
                          "height":  17,
@@ -2647,10 +2647,10 @@
                      {
                          "id":  "Aw10",
                          "type":  "arrow",
-                         "x":  1400,
-                         "y":  161.0344827586207,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1510,
+                         "y":  159.59677419354838,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2682,8 +2682,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -17.068965517241395
+                                            80,
+                                            -14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2704,10 +2704,10 @@
                      {
                          "id":  "Aw11",
                          "type":  "arrow",
-                         "x":  1400,
-                         "y":  198.9655172413793,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1510,
+                         "y":  200.40322580645162,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2739,8 +2739,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            17.068965517241395
+                                            80,
+                                            14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2761,10 +2761,10 @@
                      {
                          "id":  "Aw12",
                          "type":  "arrow",
-                         "x":  1690,
-                         "y":  143.9655172413793,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1820,
+                         "y":  145.40322580645162,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2799,8 +2799,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            17.068965517241395
+                                            80,
+                                            14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2821,7 +2821,7 @@
                      {
                          "id":  "Aw12-t",
                          "type":  "text",
-                         "x":  1707,
+                         "x":  1832,
                          "y":  144,
                          "width":  56,
                          "height":  17,
@@ -2859,10 +2859,10 @@
                      {
                          "id":  "Aw13",
                          "type":  "arrow",
-                         "x":  1690,
-                         "y":  216.0344827586207,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  1820,
+                         "y":  214.59677419354838,
+                         "width":  80,
+                         "height":  14.193548387096769,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -2897,8 +2897,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -17.068965517241395
+                                            80,
+                                            -14.193548387096769
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -2919,7 +2919,7 @@
                      {
                          "id":  "Aw13-t",
                          "type":  "text",
-                         "x":  1703,
+                         "x":  1828,
                          "y":  199,
                          "width":  64,
                          "height":  17,
@@ -2957,9 +2957,9 @@
                      {
                          "id":  "Ats2",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  470,
-                         "width":  200,
+                         "width":  230,
                          "height":  180,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3009,9 +3009,9 @@
                      {
                          "id":  "Ats2-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  530,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3047,9 +3047,9 @@
                      {
                          "id":  "Atl2",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  470,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3087,9 +3087,9 @@
                      {
                          "id":  "Atl2-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  485,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3112,22 +3112,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Timeline cache\nhome: 20 ids",
+                         "text":  "Timeline cache (Redis)\nhome: 20 ids",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Atl2",
-                         "originalText":  "Timeline cache\nhome: 20 ids",
+                         "originalText":  "Timeline cache (Redis)\nhome: 20 ids",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Aut2",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  580,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3165,9 +3165,9 @@
                      {
                          "id":  "Aut2-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  595,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3190,22 +3190,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "user_tweets\nprofile: 20 ids",
+                         "text":  "user_tweets (Cassandra)\nprofile: 20 ids",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Aut2",
-                         "originalText":  "user_tweets\nprofile: 20 ids",
+                         "originalText":  "user_tweets (Cassandra)\nprofile: 20 ids",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Atc2",
                          "type":  "rectangle",
-                         "x":  1200,
+                         "x":  1280,
                          "y":  470,
-                         "width":  200,
+                         "width":  230,
                          "height":  180,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3247,9 +3247,9 @@
                      {
                          "id":  "Atc2-t",
                          "type":  "text",
-                         "x":  1205,
+                         "x":  1285,
                          "y":  520,
-                         "width":  190,
+                         "width":  220,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3272,22 +3272,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweet cache\n+ like counter\n(hydrate 20 tweets\n+ counts)",
+                         "text":  "Tweet cache (Redis)\n+ like counter\n(hydrate 20 tweets\n+ counts)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Atc2",
-                         "originalText":  "Tweet cache\n+ like counter\n(hydrate 20 tweets\n+ counts)",
+                         "originalText":  "Tweet cache (Redis)\n+ like counter\n(hydrate 20 tweets\n+ counts)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Atd2",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  470,
-                         "width":  200,
+                         "width":  230,
                          "height":  180,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3325,9 +3325,9 @@
                      {
                          "id":  "Atd2-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  540,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -3350,23 +3350,23 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweets store\n(only on miss)",
+                         "text":  "Tweets store (Cassandra)\n(only on miss)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Atd2",
-                         "originalText":  "Tweets store\n(only on miss)",
+                         "originalText":  "Tweets store (Cassandra)\n(only on miss)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Ar1",
                          "type":  "arrow",
-                         "x":  488,
+                         "x":  527,
                          "y":  400,
-                         "width":  132,
-                         "height":  91.0344827586207,
+                         "width":  133,
+                         "height":  85.806451612903231,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -3401,8 +3401,8 @@
                                             0
                                         ],
                                         [
-                                            132,
-                                            91.0344827586207
+                                            133,
+                                            85.806451612903231
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -3423,8 +3423,8 @@
                      {
                          "id":  "Ar1-t",
                          "type":  "text",
-                         "x":  538,
-                         "y":  437.01724137931035,
+                         "x":  577.5,
+                         "y":  434.40322580645159,
                          "width":  32,
                          "height":  17,
                          "angle":  0,
@@ -3461,10 +3461,10 @@
                      {
                          "id":  "Ar2",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  541.0344827586207,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  890,
+                         "y":  539.59677419354841,
+                         "width":  80,
+                         "height":  14.193548387096826,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -3499,8 +3499,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -17.068965517241395
+                                            80,
+                                            -14.193548387096826
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -3521,7 +3521,7 @@
                      {
                          "id":  "Ar2-t",
                          "type":  "text",
-                         "x":  849,
+                         "x":  914,
                          "y":  524,
                          "width":  32,
                          "height":  17,
@@ -3559,10 +3559,10 @@
                      {
                          "id":  "Ar3",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  578.9655172413793,
-                         "width":  90,
-                         "height":  17.068965517241395,
+                         "x":  890,
+                         "y":  580.40322580645159,
+                         "width":  80,
+                         "height":  14.193548387096826,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -3597,8 +3597,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            17.068965517241395
+                                            80,
+                                            14.193548387096826
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -3619,7 +3619,7 @@
                      {
                          "id":  "Ar3-t",
                          "type":  "text",
-                         "x":  837,
+                         "x":  902,
                          "y":  579,
                          "width":  56,
                          "height":  17,
@@ -3657,9 +3657,9 @@
                      {
                          "id":  "Ar4",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  560,
-                         "width":  380,
+                         "width":  390,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
@@ -3695,7 +3695,7 @@
                                             0
                                         ],
                                         [
-                                            380,
+                                            390,
                                             0
                                         ]
                                     ],
@@ -3717,7 +3717,7 @@
                      {
                          "id":  "Ar4-t",
                          "type":  "text",
-                         "x":  982,
+                         "x":  1057,
                          "y":  551.5,
                          "width":  56,
                          "height":  17,
@@ -3755,9 +3755,9 @@
                      {
                          "id":  "Ar5",
                          "type":  "arrow",
-                         "x":  1400,
+                         "x":  1510,
                          "y":  560,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
@@ -3793,7 +3793,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -3815,7 +3815,7 @@
                      {
                          "id":  "Ar5-t",
                          "type":  "text",
-                         "x":  1429,
+                         "x":  1534,
                          "y":  551.5,
                          "width":  32,
                          "height":  17,
@@ -3853,9 +3853,9 @@
                      {
                          "id":  "Asum",
                          "type":  "text",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  470,
-                         "width":  475,
+                         "width":  484,
                          "height":  140,
                          "angle":  0,
                          "strokeColor":  "#495057",
@@ -3878,13 +3878,13 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "WRITE touches: Tweet / Graph / Like Service,\nTweets / Graph / Likes store, Kafka,\nfan-out + graph workers, Timeline cache, like counter.\n\nREAD touches: Timeline Service, Timeline cache,\nuser_tweets, Tweet cache, like counter;\nTweets store only on a cache miss.",
+                         "text":  "WRITE touches: Tweet / Follow / Like Service,\nTweets / Follow / Likes store, Kafka,\nfan-out + follow workers, Timeline cache, like counter.\n\nREAD touches: Timeline Service, Timeline cache,\nuser_tweets, Tweet cache, like counter;\nTweets store only on a cache miss.",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "left",
                          "verticalAlign":  "top",
                          "containerId":  null,
-                         "originalText":  "WRITE touches: Tweet / Graph / Like Service,\nTweets / Graph / Likes store, Kafka,\nfan-out + graph workers, Timeline cache, like counter.\n\nREAD touches: Timeline Service, Timeline cache,\nuser_tweets, Tweet cache, like counter;\nTweets store only on a cache miss.",
+                         "originalText":  "WRITE touches: Tweet / Follow / Like Service,\nTweets / Follow / Likes store, Kafka,\nfan-out + follow workers, Timeline cache, like counter.\n\nREAD touches: Timeline Service, Timeline cache,\nuser_tweets, Tweet cache, like counter;\nTweets store only on a cache miss.",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
@@ -3893,7 +3893,7 @@
                          "type":  "rectangle",
                          "x":  0,
                          "y":  900,
-                         "width":  2560,
+                         "width":  2640,
                          "height":  960,
                          "angle":  0,
                          "strokeColor":  "#868e96",
@@ -3962,7 +3962,7 @@
                      {
                          "id":  "Bwl",
                          "type":  "text",
-                         "x":  620,
+                         "x":  660,
                          "y":  955,
                          "width":  99,
                          "height":  22,
@@ -4000,7 +4000,7 @@
                      {
                          "id":  "Brl",
                          "type":  "text",
-                         "x":  620,
+                         "x":  660,
                          "y":  1445,
                          "width":  89,
                          "height":  22,
@@ -4040,7 +4040,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  1300,
-                         "width":  200,
+                         "width":  230,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4088,7 +4088,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  1320,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4126,7 +4126,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  1130,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4166,7 +4166,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  1145,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4189,13 +4189,13 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Blob storage\n(media upload, SAS)",
+                         "text":  "Blob storage (Azure Blob)\n(media upload, SAS)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bb",
-                         "originalText":  "Blob storage\n(media upload, SAS)",
+                         "originalText":  "Blob storage (Azure Blob)\n(media upload, SAS)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
@@ -4204,7 +4204,7 @@
                          "type":  "rectangle",
                          "x":  40,
                          "y":  1480,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4244,7 +4244,7 @@
                          "type":  "text",
                          "x":  45,
                          "y":  1495,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4280,9 +4280,9 @@
                      {
                          "id":  "Bg",
                          "type":  "rectangle",
-                         "x":  330,
+                         "x":  350,
                          "y":  1300,
-                         "width":  200,
+                         "width":  230,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4336,9 +4336,9 @@
                      {
                          "id":  "Bg-t",
                          "type":  "text",
-                         "x":  335,
+                         "x":  355,
                          "y":  1310,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4374,7 +4374,7 @@
                      {
                          "id":  "Ba0",
                          "type":  "arrow",
-                         "x":  140,
+                         "x":  155,
                          "y":  1300,
                          "width":  0,
                          "height":  100,
@@ -4434,7 +4434,7 @@
                      {
                          "id":  "Ba0-t",
                          "type":  "text",
-                         "x":  116,
+                         "x":  131,
                          "y":  1241.5,
                          "width":  48,
                          "height":  17,
@@ -4472,7 +4472,7 @@
                      {
                          "id":  "Ba00",
                          "type":  "arrow",
-                         "x":  140,
+                         "x":  155,
                          "y":  1380,
                          "width":  0,
                          "height":  100,
@@ -4532,7 +4532,7 @@
                      {
                          "id":  "Ba00-t",
                          "type":  "text",
-                         "x":  124,
+                         "x":  139,
                          "y":  1421.5,
                          "width":  32,
                          "height":  17,
@@ -4570,9 +4570,9 @@
                      {
                          "id":  "Ba1",
                          "type":  "arrow",
-                         "x":  240,
+                         "x":  270,
                          "y":  1340,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4608,7 +4608,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -4630,7 +4630,7 @@
                      {
                          "id":  "Ba1-t",
                          "type":  "text",
-                         "x":  265,
+                         "x":  290,
                          "y":  1331.5,
                          "width":  40,
                          "height":  17,
@@ -4668,9 +4668,9 @@
                      {
                          "id":  "Bts",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  990,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4712,9 +4712,9 @@
                      {
                          "id":  "Bts-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  1005,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4750,9 +4750,9 @@
                      {
                          "id":  "Bgs",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  1100,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4794,9 +4794,9 @@
                      {
                          "id":  "Bgs-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  1115,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4819,22 +4819,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph Service\nPOST|DELETE /follows",
+                         "text":  "Follow Service\nPOST|DELETE /follows",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bgs",
-                         "originalText":  "Graph Service\nPOST|DELETE /follows",
+                         "originalText":  "Follow Service\nPOST|DELETE /follows",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bls",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  1210,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4880,9 +4880,9 @@
                      {
                          "id":  "Bls-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  1225,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4918,9 +4918,9 @@
                      {
                          "id":  "Bsc",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  1320,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4958,9 +4958,9 @@
                      {
                          "id":  "Bsc-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  1335,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -4996,9 +4996,9 @@
                      {
                          "id":  "Btd",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  990,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5040,9 +5040,9 @@
                      {
                          "id":  "Btd-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  995,
-                         "width":  190,
+                         "width":  220,
                          "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5065,22 +5065,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweets store\ntweets + user_tweets\n+ outbox",
+                         "text":  "Tweets store (Cassandra)\ntweets + user_tweets\n+ outbox",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Btd",
-                         "originalText":  "Tweets store\ntweets + user_tweets\n+ outbox",
+                         "originalText":  "Tweets store (Cassandra)\ntweets + user_tweets\n+ outbox",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bgd",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  1100,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5122,10 +5122,10 @@
                      {
                          "id":  "Bgd-t",
                          "type":  "text",
-                         "x":  915,
-                         "y":  1115,
-                         "width":  190,
-                         "height":  40,
+                         "x":  975,
+                         "y":  1105,
+                         "width":  220,
+                         "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
                          "backgroundColor":  "transparent",
@@ -5147,22 +5147,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph store\nfollowing + outbox",
+                         "text":  "Follow store (SQL,\nsharded by user_id)\nfollowing + outbox",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bgd",
-                         "originalText":  "Graph store\nfollowing + outbox",
+                         "originalText":  "Follow store (SQL,\nsharded by user_id)\nfollowing + outbox",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bk",
                          "type":  "rectangle",
-                         "x":  1200,
+                         "x":  1280,
                          "y":  990,
-                         "width":  200,
+                         "width":  230,
                          "height":  290,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5220,9 +5220,9 @@
                      {
                          "id":  "Bk-t",
                          "type":  "text",
-                         "x":  1205,
+                         "x":  1285,
                          "y":  1095,
-                         "width":  190,
+                         "width":  220,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5245,22 +5245,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Kafka\ntweet-created\nfollow-events\nlike-events",
+                         "text":  "Kafka (event log)\ntweet-created\nfollow-events\nlike-events",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bk",
-                         "originalText":  "Kafka\ntweet-created\nfollow-events\nlike-events",
+                         "originalText":  "Kafka (event log)\ntweet-created\nfollow-events\nlike-events",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bfo",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  990,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5306,9 +5306,9 @@
                      {
                          "id":  "Bfo-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  1005,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5344,9 +5344,9 @@
                      {
                          "id":  "Bgw",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  1100,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5388,9 +5388,9 @@
                      {
                          "id":  "Bgw-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  1115,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5413,22 +5413,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Graph worker\nNO backfill",
+                         "text":  "Follow worker\nNO backfill",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bgw",
-                         "originalText":  "Graph worker\nNO backfill",
+                         "originalText":  "Follow worker\nNO backfill",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bag",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  1210,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5470,9 +5470,9 @@
                      {
                          "id":  "Bag-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  1225,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5508,9 +5508,9 @@
                      {
                          "id":  "Brc",
                          "type":  "rectangle",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  990,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5548,10 +5548,10 @@
                      {
                          "id":  "Brc-t",
                          "type":  "text",
-                         "x":  1785,
-                         "y":  1005,
-                         "width":  190,
-                         "height":  40,
+                         "x":  1905,
+                         "y":  995,
+                         "width":  220,
+                         "height":  60,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
                          "backgroundColor":  "transparent",
@@ -5573,22 +5573,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Celebrity recent cache\nZADD (last 100 ids)",
+                         "text":  "Celebrity recent cache\n(Redis sorted set)\nZADD last 100 ids",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Brc",
-                         "originalText":  "Celebrity recent cache\nZADD (last 100 ids)",
+                         "originalText":  "Celebrity recent cache\n(Redis sorted set)\nZADD last 100 ids",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bx",
                          "type":  "rectangle",
-                         "x":  2070,
+                         "x":  2210,
                          "y":  1100,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#e03131",
@@ -5626,9 +5626,9 @@
                      {
                          "id":  "Bx-t",
                          "type":  "text",
-                         "x":  2075,
+                         "x":  2215,
                          "y":  1115,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5664,9 +5664,9 @@
                      {
                          "id":  "Bcs",
                          "type":  "rectangle",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  1100,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5704,9 +5704,9 @@
                      {
                          "id":  "Bcs-t",
                          "type":  "text",
-                         "x":  1785,
+                         "x":  1905,
                          "y":  1115,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5729,22 +5729,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "celebs:bob set (SADD)\n+ follower count",
+                         "text":  "celebs:bob (Redis set)\n+ follower count (SQL)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bcs",
-                         "originalText":  "celebs:bob set (SADD)\n+ follower count",
+                         "originalText":  "celebs:bob (Redis set)\n+ follower count (SQL)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bld",
                          "type":  "rectangle",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  1210,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5782,9 +5782,9 @@
                      {
                          "id":  "Bld-t",
                          "type":  "text",
-                         "x":  1785,
+                         "x":  1905,
                          "y":  1225,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -5807,22 +5807,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Likes store\nbatch insert-if-new",
+                         "text":  "Likes store (Cassandra)\nbatch insert-if-new",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bld",
-                         "originalText":  "Likes store\nbatch insert-if-new",
+                         "originalText":  "Likes store (Cassandra)\nbatch insert-if-new",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bw1",
                          "type":  "arrow",
-                         "x":  466.82539682539681,
+                         "x":  504.36507936507934,
                          "y":  1300,
-                         "width":  220.95238095238102,
+                         "width":  236.1904761904762,
                          "height":  240,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -5858,7 +5858,7 @@
                                             0
                                         ],
                                         [
-                                            220.95238095238102,
+                                            236.1904761904762,
                                             -240
                                         ]
                                     ],
@@ -5880,7 +5880,7 @@
                      {
                          "id":  "Bw1-t",
                          "type":  "text",
-                         "x":  561.30158730158735,
+                         "x":  606.46031746031747,
                          "y":  1171.5,
                          "width":  32,
                          "height":  17,
@@ -5918,9 +5918,9 @@
                      {
                          "id":  "Bw2",
                          "type":  "arrow",
-                         "x":  486.58536585365852,
+                         "x":  525.48780487804879,
                          "y":  1300,
-                         "width":  183.90243902439028,
+                         "width":  196.58536585365857,
                          "height":  130,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -5956,7 +5956,7 @@
                                             0
                                         ],
                                         [
-                                            183.90243902439028,
+                                            196.58536585365857,
                                             -130
                                         ]
                                     ],
@@ -5978,7 +5978,7 @@
                      {
                          "id":  "Bw2-t",
                          "type":  "text",
-                         "x":  554.53658536585363,
+                         "x":  599.780487804878,
                          "y":  1226.5,
                          "width":  48,
                          "height":  17,
@@ -6016,10 +6016,10 @@
                      {
                          "id":  "Bw3",
                          "type":  "arrow",
-                         "x":  530,
-                         "y":  1307.2413793103449,
-                         "width":  90,
-                         "height":  29.482758620689765,
+                         "x":  580,
+                         "y":  1304.758064516129,
+                         "width":  80.78947368421052,
+                         "height":  24.758064516129025,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -6054,8 +6054,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -29.482758620689765
+                                            80.78947368421052,
+                                            -24.758064516129025
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -6076,8 +6076,8 @@
                      {
                          "id":  "Bw3-t",
                          "type":  "text",
-                         "x":  559,
-                         "y":  1284,
+                         "x":  604.3947368421052,
+                         "y":  1283.8790322580644,
                          "width":  32,
                          "height":  17,
                          "angle":  0,
@@ -6114,9 +6114,9 @@
                      {
                          "id":  "Bw4",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  1025,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -6152,7 +6152,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -6174,7 +6174,7 @@
                      {
                          "id":  "Bw4-t",
                          "type":  "text",
-                         "x":  845,
+                         "x":  910,
                          "y":  1016.5,
                          "width":  40,
                          "height":  17,
@@ -6212,9 +6212,9 @@
                      {
                          "id":  "Bw5",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  1135,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -6250,7 +6250,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -6272,7 +6272,7 @@
                      {
                          "id":  "Bw5-t",
                          "type":  "text",
-                         "x":  845,
+                         "x":  910,
                          "y":  1126.5,
                          "width":  40,
                          "height":  17,
@@ -6310,7 +6310,7 @@
                      {
                          "id":  "Bw6",
                          "type":  "arrow",
-                         "x":  720,
+                         "x":  775,
                          "y":  1280,
                          "width":  0,
                          "height":  40,
@@ -6370,7 +6370,7 @@
                      {
                          "id":  "Bw6-t",
                          "type":  "text",
-                         "x":  660,
+                         "x":  715,
                          "y":  1291.5,
                          "width":  120,
                          "height":  17,
@@ -6408,10 +6408,10 @@
                      {
                          "id":  "Bw7",
                          "type":  "arrow",
-                         "x":  1102.2727272727273,
+                         "x":  1183.6363636363637,
                          "y":  1060,
-                         "width":  97.727272727272748,
-                         "height":  37.068965517241395,
+                         "width":  96.36363636363626,
+                         "height":  34.193548387096826,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -6446,8 +6446,8 @@
                                             0
                                         ],
                                         [
-                                            97.727272727272748,
-                                            37.068965517241395
+                                            96.36363636363626,
+                                            34.193548387096826
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -6468,8 +6468,8 @@
                      {
                          "id":  "Bw7-t",
                          "type":  "text",
-                         "x":  1127.1363636363635,
-                         "y":  1070.0344827586207,
+                         "x":  1207.818181818182,
+                         "y":  1068.5967741935483,
                          "width":  48,
                          "height":  17,
                          "angle":  0,
@@ -6506,9 +6506,9 @@
                      {
                          "id":  "Bw8",
                          "type":  "arrow",
-                         "x":  1110,
+                         "x":  1200,
                          "y":  1135,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -6544,7 +6544,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -6566,7 +6566,7 @@
                      {
                          "id":  "Bw8-t",
                          "type":  "text",
-                         "x":  1131,
+                         "x":  1216,
                          "y":  1126.5,
                          "width":  48,
                          "height":  17,
@@ -6604,10 +6604,10 @@
                      {
                          "id":  "Bw9",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  1226.0344827586207,
-                         "width":  380,
-                         "height":  72.0689655172414,
+                         "x":  890,
+                         "y":  1224.5967741935483,
+                         "width":  390,
+                         "height":  69.1935483870966,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -6642,8 +6642,8 @@
                                             0
                                         ],
                                         [
-                                            380,
-                                            -72.0689655172414
+                                            390,
+                                            -69.1935483870966
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -6664,7 +6664,7 @@
                      {
                          "id":  "Bw9-t",
                          "type":  "text",
-                         "x":  962,
+                         "x":  1037,
                          "y":  1181.5,
                          "width":  96,
                          "height":  17,
@@ -6702,10 +6702,10 @@
                      {
                          "id":  "Bw10",
                          "type":  "arrow",
-                         "x":  1400,
-                         "y":  1097.0689655172414,
-                         "width":  97.727272727272748,
-                         "height":  37.068965517241395,
+                         "x":  1510,
+                         "y":  1094.1935483870968,
+                         "width":  96.36363636363626,
+                         "height":  34.193548387096826,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -6737,8 +6737,8 @@
                                             0
                                         ],
                                         [
-                                            97.727272727272748,
-                                            -37.068965517241395
+                                            96.36363636363626,
+                                            -34.193548387096826
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -6759,9 +6759,9 @@
                      {
                          "id":  "Bw11",
                          "type":  "arrow",
-                         "x":  1400,
+                         "x":  1510,
                          "y":  1135,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -6794,7 +6794,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -6816,10 +6816,10 @@
                      {
                          "id":  "Bw12",
                          "type":  "arrow",
-                         "x":  1400,
-                         "y":  1172.9310344827586,
-                         "width":  97.727272727272748,
-                         "height":  37.068965517241395,
+                         "x":  1510,
+                         "y":  1175.8064516129032,
+                         "width":  96.36363636363626,
+                         "height":  34.193548387096826,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
                          "backgroundColor":  "transparent",
@@ -6851,8 +6851,8 @@
                                             0
                                         ],
                                         [
-                                            97.727272727272748,
-                                            37.068965517241395
+                                            96.36363636363626,
+                                            34.193548387096826
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -6873,9 +6873,9 @@
                      {
                          "id":  "Bw13",
                          "type":  "arrow",
-                         "x":  1690,
+                         "x":  1820,
                          "y":  1025,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -6911,7 +6911,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -6933,7 +6933,7 @@
                      {
                          "id":  "Bw13-t",
                          "type":  "text",
-                         "x":  1711,
+                         "x":  1836,
                          "y":  1016.5,
                          "width":  48,
                          "height":  17,
@@ -6971,10 +6971,10 @@
                      {
                          "id":  "Bw14",
                          "type":  "arrow",
-                         "x":  1690,
-                         "y":  1043.9655172413793,
-                         "width":  380,
-                         "height":  72.0689655172414,
+                         "x":  1820,
+                         "y":  1045.4032258064517,
+                         "width":  390,
+                         "height":  69.1935483870966,
                          "angle":  0,
                          "strokeColor":  "#e03131",
                          "backgroundColor":  "transparent",
@@ -7006,8 +7006,8 @@
                                             0
                                         ],
                                         [
-                                            380,
-                                            72.0689655172414
+                                            390,
+                                            69.1935483870966
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -7028,9 +7028,9 @@
                      {
                          "id":  "Bw15",
                          "type":  "arrow",
-                         "x":  1690,
+                         "x":  1820,
                          "y":  1135,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -7066,7 +7066,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -7088,7 +7088,7 @@
                      {
                          "id":  "Bw15-t",
                          "type":  "text",
-                         "x":  1719,
+                         "x":  1844,
                          "y":  1126.5,
                          "width":  32,
                          "height":  17,
@@ -7126,9 +7126,9 @@
                      {
                          "id":  "Bw16",
                          "type":  "arrow",
-                         "x":  1690,
+                         "x":  1820,
                          "y":  1245,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#1971c2",
@@ -7164,7 +7164,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -7186,7 +7186,7 @@
                      {
                          "id":  "Bw16-t",
                          "type":  "text",
-                         "x":  1715,
+                         "x":  1840,
                          "y":  1236.5,
                          "width":  40,
                          "height":  17,
@@ -7224,9 +7224,9 @@
                      {
                          "id":  "Bts2",
                          "type":  "rectangle",
-                         "x":  620,
+                         "x":  660,
                          "y":  1480,
-                         "width":  200,
+                         "width":  230,
                          "height":  290,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7280,9 +7280,9 @@
                      {
                          "id":  "Bts2-t",
                          "type":  "text",
-                         "x":  625,
+                         "x":  665,
                          "y":  1575,
-                         "width":  190,
+                         "width":  220,
                          "height":  100,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7318,9 +7318,9 @@
                      {
                          "id":  "Btl2",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  1470,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7358,9 +7358,9 @@
                      {
                          "id":  "Btl2-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  1485,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7383,22 +7383,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Timeline cache\npushed ids",
+                         "text":  "Timeline cache (Redis)\npushed ids",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Btl2",
-                         "originalText":  "Timeline cache\npushed ids",
+                         "originalText":  "Timeline cache (Redis)\npushed ids",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Bcs2",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  1545,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7436,9 +7436,9 @@
                      {
                          "id":  "Bcs2-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  1560,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7461,22 +7461,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "celebs:bob set\n-\u003e 5 celebs",
+                         "text":  "celebs:bob (Redis set)\n-\u003e 5 celebs",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Bcs2",
-                         "originalText":  "celebs:bob set\n-\u003e 5 celebs",
+                         "originalText":  "celebs:bob (Redis set)\n-\u003e 5 celebs",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Brc2",
                          "type":  "rectangle",
-                         "x":  910,
+                         "x":  970,
                          "y":  1640,
-                         "width":  200,
+                         "width":  230,
                          "height":  70,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7514,9 +7514,9 @@
                      {
                          "id":  "Brc2-t",
                          "type":  "text",
-                         "x":  915,
+                         "x":  975,
                          "y":  1655,
-                         "width":  190,
+                         "width":  220,
                          "height":  40,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7539,22 +7539,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Celebrity recent cache\nhome merge + profile",
+                         "text":  "Celebrity recent (Redis)\nhome merge + profile",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Brc2",
-                         "originalText":  "Celebrity recent cache\nhome merge + profile",
+                         "originalText":  "Celebrity recent (Redis)\nhome merge + profile",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Btc2",
                          "type":  "rectangle",
-                         "x":  1200,
+                         "x":  1280,
                          "y":  1480,
-                         "width":  200,
+                         "width":  230,
                          "height":  290,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7596,9 +7596,9 @@
                      {
                          "id":  "Btc2-t",
                          "type":  "text",
-                         "x":  1205,
+                         "x":  1285,
                          "y":  1585,
-                         "width":  190,
+                         "width":  220,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7621,22 +7621,22 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweet cache\n+ sum of 16\ncounter shards\n(hydrate top 20)",
+                         "text":  "Tweet cache (Redis)\n+ sum of 16\ncounter shards\n(hydrate top 20)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Btc2",
-                         "originalText":  "Tweet cache\n+ sum of 16\ncounter shards\n(hydrate top 20)",
+                         "originalText":  "Tweet cache (Redis)\n+ sum of 16\ncounter shards\n(hydrate top 20)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Btd2",
                          "type":  "rectangle",
-                         "x":  1490,
+                         "x":  1590,
                          "y":  1480,
-                         "width":  200,
+                         "width":  230,
                          "height":  290,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7674,9 +7674,9 @@
                      {
                          "id":  "Btd2-t",
                          "type":  "text",
-                         "x":  1495,
+                         "x":  1595,
                          "y":  1585,
-                         "width":  190,
+                         "width":  220,
                          "height":  80,
                          "angle":  0,
                          "strokeColor":  "#1e1e1e",
@@ -7699,23 +7699,23 @@
                          "updated":  1700000000000,
                          "link":  null,
                          "locked":  false,
-                         "text":  "Tweets store\n(only on miss;\ncelebrity reads\nnever get here)",
+                         "text":  "Tweets store (Cassandra)\n(only on miss;\ncelebrity reads\nnever get here)",
                          "fontSize":  16,
                          "fontFamily":  1,
                          "textAlign":  "center",
                          "verticalAlign":  "middle",
                          "containerId":  "Btd2",
-                         "originalText":  "Tweets store\n(only on miss;\ncelebrity reads\nnever get here)",
+                         "originalText":  "Tweets store (Cassandra)\n(only on miss;\ncelebrity reads\nnever get here)",
                          "lineHeight":  1.25,
                          "autoResize":  true
                      },
                      {
                          "id":  "Br1",
                          "type":  "arrow",
-                         "x":  470.70175438596493,
+                         "x":  508.50877192982455,
                          "y":  1380,
-                         "width":  149.29824561403507,
-                         "height":  146.72413793103442,
+                         "width":  151.49122807017545,
+                         "height":  139.27419354838707,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -7750,8 +7750,8 @@
                                             0
                                         ],
                                         [
-                                            149.29824561403507,
-                                            146.72413793103442
+                                            151.49122807017545,
+                                            139.27419354838707
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -7772,8 +7772,8 @@
                      {
                          "id":  "Br1-t",
                          "type":  "text",
-                         "x":  529.35087719298247,
-                         "y":  1444.8620689655172,
+                         "x":  568.25438596491222,
+                         "y":  1441.1370967741937,
                          "width":  32,
                          "height":  17,
                          "angle":  0,
@@ -7810,10 +7810,10 @@
                      {
                          "id":  "Br2",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  1583.6206896551723,
-                         "width":  105.41666666666663,
-                         "height":  43.620689655172328,
+                         "x":  890,
+                         "y":  1580.483870967742,
+                         "width":  104.58333333333337,
+                         "height":  40.48387096774195,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -7848,8 +7848,8 @@
                                             0
                                         ],
                                         [
-                                            105.41666666666663,
-                                            -43.620689655172328
+                                            104.58333333333337,
+                                            -40.48387096774195
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -7870,8 +7870,8 @@
                      {
                          "id":  "Br2-t",
                          "type":  "text",
-                         "x":  868.70833333333326,
-                         "y":  1553.3103448275861,
+                         "x":  938.29166666666674,
+                         "y":  1551.741935483871,
                          "width":  8,
                          "height":  17,
                          "angle":  0,
@@ -7908,10 +7908,10 @@
                      {
                          "id":  "Br3",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  1609.4827586206898,
-                         "width":  90,
-                         "height":  13.96551724137953,
+                         "x":  890,
+                         "y":  1608.3064516129032,
+                         "width":  80,
+                         "height":  11.612903225806349,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -7946,8 +7946,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            -13.96551724137953
+                                            80,
+                                            -11.612903225806349
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -7968,7 +7968,7 @@
                      {
                          "id":  "Br3-t",
                          "type":  "text",
-                         "x":  861,
+                         "x":  926,
                          "y":  1594,
                          "width":  8,
                          "height":  17,
@@ -8006,10 +8006,10 @@
                      {
                          "id":  "Br4",
                          "type":  "arrow",
-                         "x":  820,
-                         "y":  1642.2413793103449,
-                         "width":  90,
-                         "height":  15.517241379310235,
+                         "x":  890,
+                         "y":  1643.5483870967741,
+                         "width":  80,
+                         "height":  12.903225806451701,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
                          "backgroundColor":  "transparent",
@@ -8044,8 +8044,8 @@
                                             0
                                         ],
                                         [
-                                            90,
-                                            15.517241379310235
+                                            80,
+                                            12.903225806451701
                                         ]
                                     ],
                          "lastCommittedPoint":  null,
@@ -8066,7 +8066,7 @@
                      {
                          "id":  "Br4-t",
                          "type":  "text",
-                         "x":  861,
+                         "x":  926,
                          "y":  1641.5,
                          "width":  8,
                          "height":  17,
@@ -8104,9 +8104,9 @@
                      {
                          "id":  "Br5",
                          "type":  "arrow",
-                         "x":  820,
+                         "x":  890,
                          "y":  1625,
-                         "width":  380,
+                         "width":  390,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
@@ -8142,7 +8142,7 @@
                                             0
                                         ],
                                         [
-                                            380,
+                                            390,
                                             0
                                         ]
                                     ],
@@ -8164,7 +8164,7 @@
                      {
                          "id":  "Br5-t",
                          "type":  "text",
-                         "x":  982,
+                         "x":  1057,
                          "y":  1616.5,
                          "width":  56,
                          "height":  17,
@@ -8202,9 +8202,9 @@
                      {
                          "id":  "Br6",
                          "type":  "arrow",
-                         "x":  1400,
+                         "x":  1510,
                          "y":  1625,
-                         "width":  90,
+                         "width":  80,
                          "height":  0,
                          "angle":  0,
                          "strokeColor":  "#2f9e44",
@@ -8240,7 +8240,7 @@
                                             0
                                         ],
                                         [
-                                            90,
+                                            80,
                                             0
                                         ]
                                     ],
@@ -8262,7 +8262,7 @@
                      {
                          "id":  "Br6-t",
                          "type":  "text",
-                         "x":  1429,
+                         "x":  1534,
                          "y":  1616.5,
                          "width":  32,
                          "height":  17,
@@ -8300,7 +8300,7 @@
                      {
                          "id":  "Bsum",
                          "type":  "text",
-                         "x":  1780,
+                         "x":  1900,
                          "y":  1480,
                          "width":  537,
                          "height":  160,
