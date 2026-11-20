@@ -39,7 +39,8 @@ Box 'Ak'  (Col 4) $w1 $BW 180 "Kafka (event log)`ntweet-created`nfollow-events" 
 Box 'Alc' (Col 4) $w3 $BW $H "Like counter (Redis)`nINCR if new row" $data
 Box 'Afo' (Col 5) $w1 $BW $H "Fan-out worker`nreads followers (SQL)`n< 1M: PUSH" $async
 Box 'Agw' (Col 5) $w2 $BW $H "Follow worker`nfollowers edge + backfill" $async
-Box 'Atl' (Col 6) $w1 $BW 180 "Timeline cache (Redis)`nLPUSH to 200 followers`n+ backfill / LREM`non follow / unfollow" $data
+Box 'Atc' (Col 6) $w1 $BW $H "Tweet cache (Redis)`n1 SET tweet:{id}`nTTL 2 days" $data
+Box 'Atl' (Col 6) $w2 $BW 80 "Timeline cache (Redis)`n2 LPUSH id to 200 followers`nbackfill / LREM on follow" $data
 Arrow 'Aw1' 'Ag' 'Ats' "post" $w $false
 Arrow 'Aw2' 'Ag' 'Ags' "follow" $w $false
 Arrow 'Aw3' 'Ag' 'Als' "like" $w $false
@@ -51,7 +52,8 @@ Arrow 'Aw8' 'Agd' 'Ak' "outbox" $w $true
 Arrow 'Aw9' 'Ald' 'Alc' "+1" $w $false
 Arrow 'Aw10' 'Ak' 'Afo' "" $w $true
 Arrow 'Aw11' 'Ak' 'Agw' "" $w $true
-Arrow 'Aw12' 'Afo' 'Atl' "push id" $w $true
+Arrow 'Aw12a' 'Afo' 'Atc' "1 cache tweet" $w $true
+Arrow 'Aw12' 'Afo' 'Atl' "2 push id" $w $true
 Arrow 'Aw13' 'Agw' 'Atl' "backfill" $w $true
 
 # read services
@@ -66,7 +68,7 @@ Arrow 'Ar3' 'Ats2' 'Aut2' "profile" $r $false
 Arrow 'Ar4' 'Ats2' 'Atc2' "hydrate" $r $false
 Arrow 'Ar5' 'Atc2' 'Atd2' "miss" $r $false
 
-Note 'Asum' (Col 6) ($T + 470) ("WRITE touches: Tweet / Follow / Like Service,`nTweets / Follow / Likes store, Kafka,`nfan-out + follow workers, Timeline cache, like counter.`n`nREAD touches: Timeline Service, Timeline cache,`nuser_tweets, Tweet cache, like counter;`nTweets store only on a cache miss.") 16 $note
+Note 'Asum' (Col 6) ($T + 470) ("WRITE touches: Tweet / Follow / Like Service,`nTweets / Follow / Likes store, Kafka,`nfan-out + follow workers, Tweet cache, Timeline cache, like counter.`n`nREAD touches: Timeline Service, Timeline cache,`nuser_tweets, Tweet cache, like counter;`nTweets store only on a cache miss.") 16 $note
 
 # =================== ROW B: CELEBRITY ===================
 $T = 900
@@ -96,7 +98,7 @@ Box 'Bk'  (Col 4) $w1 $BW 290 "Kafka (event log)`ntweet-created`nfollow-events`n
 Box 'Bfo' (Col 5) $w1 $BW $H "Fan-out worker`n>= 1M followers: SKIP" $async
 Box 'Bgw' (Col 5) $w2 $BW $H "Follow worker`nNO backfill" $async
 Box 'Bag' (Col 5) $w3 $BW $H "Like aggregator`nbatch every 1 s" $async
-Box 'Brc' (Col 6) $w1 $BW $H "Celebrity recent cache`n(Redis sorted set)`nZADD last 100 ids" $data
+Box 'Brc' (Col 6) $w1 $BW $H "Tweet cache + celeb recent`n(Redis) 1 SET tweet:{id}`n2 ZADD celeb:{id} last 100" $data
 Box 'Bx'  (Col 7) $w2 $BW $H "50M follower timelines`nNOT written" $grey
 Box 'Bcs' (Col 6) $w2 $BW $H "celebs:bob (Redis set)`n+ follower count (SQL)" $data
 Box 'Bld' (Col 6) $w3 $BW $H "Likes store (Cassandra)`nbatch insert-if-new" $data
@@ -112,7 +114,7 @@ Arrow 'Bw9' 'Bls' 'Bk' "event -> 202" $w $true
 Arrow 'Bw10' 'Bk' 'Bfo' "" $w $true
 Arrow 'Bw11' 'Bk' 'Bgw' "" $w $true
 Arrow 'Bw12' 'Bk' 'Bag' "" $w $true
-Arrow 'Bw13' 'Bfo' 'Brc' "add id" $w $true
+Arrow 'Bw13' 'Bfo' 'Brc' "1 cache tweet`n2 add id" $w $true
 Arrow 'Bw14' 'Bfo' 'Bx' "" $red $true
 Arrow 'Bw15' 'Bgw' 'Bcs' "SADD" $w $true
 Arrow 'Bw16' 'Bag' 'Bld' "batch" $w $true
@@ -132,4 +134,4 @@ Arrow 'Br4' 'Bts2' 'Brc2' "c" $r $false
 Arrow 'Br5' 'Bts2' 'Btc2' "hydrate" $r $false
 Arrow 'Br6' 'Btc2' 'Btd2' "miss" $r $false
 
-Note 'Bsum' (Col 6) ($T + 580) ("WRITE touches: same services as A, but the fan-out writes ONE`ncelebrity list (not 50M timelines), follow does no backfill,`nand likes go split counter + Kafka + batch aggregator.`n`nREAD touches: Timeline Service (merges a + c in parallel),`nTimeline cache, celebs set, celebrity recent cache,`nin-process cache + Tweet cache, counter shards.`nTweets store only on a miss.") 16 $note
+Note 'Bsum' (Col 6) ($T + 580) ("WRITE touches: same services as A, but the fan-out caches the tweet + writes ONE`ncelebrity list (not 50M timelines), follow does no backfill,`nand likes go split counter + Kafka + batch aggregator.`n`nREAD touches: Timeline Service (merges a + c in parallel),`nTimeline cache, celebs set, celebrity recent cache,`nin-process cache + Tweet cache, counter shards.`nTweets store only on a miss.") 16 $note

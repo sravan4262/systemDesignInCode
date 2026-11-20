@@ -68,14 +68,14 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 1. Client → Gateway → Tweet Service.
 2. The service gets a Snowflake ID and writes the tweet to the Tweets store. The tweet goes into the outbox in the same transaction.
 3. The outbox publishes `tweet-created` to Kafka.
-4. Fan-out workers fetch the follower list from the Follow store (SQL) and push the tweet id onto each follower's timeline list in Redis (`LPUSH` + `LTRIM` to 800).
+4. The fan-out worker first caches the tweet (`SET tweet:{id}`, TTL 2 days) so no follower ever gets an id whose tweet is not cached. It then fetches the follower list from the Follow store (SQL) and pushes the tweet id onto each follower's timeline list in Redis (`LPUSH` + `LTRIM` to 800).
 5. **Celebrities (over ~1M followers) are skipped here.**
 
 **Read path:**
 1. Client → Gateway → Timeline Service.
 2. The service reads the tweet ids from my Redis timeline list.
 3. It merges in recent tweets from the celebrities I follow (a pull at read time) and my own latest tweets (read-your-writes).
-4. It hydrates the ids from the tweet cache, falling back to the Tweets store on a miss.
+4. It hydrates the ids from the tweet cache. On a miss (an expired or older tweet), it reads the Tweets store and writes the tweet back to the cache (cache-aside).
 5. It returns 20 tweets and a cursor.
 
 **Media:** the client uploads straight to Blob storage with a presigned (SAS) URL, and the tweet stores only the media URL. Reads come from the CDN.
@@ -83,7 +83,7 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 ## Which components each path touches
 | Requirement | Path | Regular user (row A) | Celebrity (row B) |
 |---|---|---|---|
-| Post a tweet | Write | Tweet Service → Tweets store + outbox → Kafka → fan-out worker → **Timeline cache of all 200 followers** | Same up to the fan-out worker, which **skips** the 50M timelines and writes only to the **celebrity recent cache** |
+| Post a tweet | Write | Tweet Service → Tweets store + outbox → Kafka → fan-out worker → **Tweet cache** (`SET tweet:{id}`) → **Timeline cache of all 200 followers** | Same up to the fan-out worker, which caches the tweet, **skips** the 50M timelines, and writes only to the **celebrity recent cache** |
 | Media | Write / Read | Blob storage (upload with a SAS URL) / CDN | Same; the CDN absorbs the spike |
 | Follow / unfollow | Write | Follow Service → Follow store (SQL) + outbox → Kafka → follow worker → `followers` edge + **backfill** of the followed user's last 20 tweets into my timeline cache (`LREM` on unfollow) | Same up to the follow worker → **no backfill**; only `SADD`/`SREM` on my celebs set and an update of the follower count |
 | Like / unlike | Write | Like Service → Likes store (insert if the row is new) → like counter `INCR` (synchronous) | Like Service → **split counter** (1 of 16 shards) + Kafka → aggregator → Likes store in batches (async, 202) |
