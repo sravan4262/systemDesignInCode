@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 4 YouTube: doc + diagram ready in `designs/case-04-youtube/` (learner reviews / drives deep dives). Cases 2 WhatsApp and 3 Twitter prepped. Then the 12-case list below.
+- **Next step:** Case 5 Uber: doc + diagram ready in `designs/case-05-uber/` (learner reviews / adjusts requirements). Case 4 YouTube done (learner's requirements: upload, search, subscribe, watch, like, comment). Then the 12-case list below.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
