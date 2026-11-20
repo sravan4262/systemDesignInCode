@@ -65,12 +65,17 @@ def _edge(b, tx, ty):
     return cx + dx * s, cy + dy * s
 
 
-def Arrow(id, frm, to, label='', color=None, dashed=False):
+def Arrow(id, frm, to, label='', color=None, dashed=False, flat=False):
+    """flat=True: a horizontal arrow at the target's centre height (for a tall box like a gateway)."""
     a, b = boxes[frm], boxes[to]
     acx, acy = a['x'] + a['width'] / 2, a['y'] + a['height'] / 2
     bcx, bcy = b['x'] + b['width'] / 2, b['y'] + b['height'] / 2
-    x1, y1 = _edge(a, bcx, bcy)
-    x2, y2 = _edge(b, acx, acy)
+    if flat:
+        y1 = y2 = bcy
+        x1, x2 = (a['x'] + a['width'], b['x']) if bcx > acx else (a['x'], b['x'] + b['width'])
+    else:
+        x1, y1 = _edge(a, bcx, bcy)
+        x2, y2 = _edge(b, acx, acy)
     ar = _base(id, 'arrow', x1, y1, abs(x2 - x1), abs(y2 - y1))
     ar['roundness'] = {'type': 2}
     if color:

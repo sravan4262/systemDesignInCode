@@ -1,109 +1,117 @@
-# Case 4: YouTube (video upload + streaming)
+# Case 4: YouTube (upload, search, subscribe, watch, like, comment)
 
-Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: **A. Regular video** and **B. Viral video**. In each row: User → API Gateway, which then splits into a **write path** (top) and a **read path** (bottom). The video bytes never go through the gateway: uploads go straight to Blob storage, and playback streams from the CDN. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: **A. Regular creator** and **B. Hot creator** (100M subscribers; millions of views, likes and comments right after an upload). In each row: User → API Gateway (drawn as one tall box; every service hangs off it), which then splits into a **write path** (top) and a **read path** (bottom). The video bytes never go through the gateway: uploads go straight to Blob storage, and playback streams from the CDN. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design YouTube. Users can upload videos and other users can watch them."
 
 ## Functional requirements (in scope)
-1. **Upload a video** (up to ~10 GB) with a title and description. Uploads are resumable.
-2. **Process it** into several qualities (240p → 1080p) plus a thumbnail. The video becomes watchable when processing finishes.
-3. **Watch a video** with **adaptive quality**: the player switches resolution as the network changes.
-4. **View count** shown on each video.
-5. **Channel page:** a creator's videos, newest first.
+1. **Upload a video** (up to ~10 GB) with a title, description and tags. Uploads are resumable; the video is processed into several qualities before it can be watched.
+2. **Search** videos by title, description and tags.
+3. **Subscribe / unsubscribe** to a channel, and see a **subscriptions feed** (latest videos from my channels, newest first).
+4. **Watch a video** with adaptive quality (the player switches resolution as the network changes).
+5. **Like / unlike** a video and **comment** on it; like, comment and subscriber counts are shown.
 
-**Out of scope (say this out loud):** recommendations and the home feed, search (a stretch goal), comments and likes, live streaming, subscriptions and notifications, ads and monetization, DRM, and copyright matching.
+**Must handle both:** a regular creator (a few thousand views, likes trickle in) and a **hot creator** (100M subscribers; 10M views, 1M likes and 100k comments in the first hour after an upload).
+
+**Out of scope (say this out loud):** recommendations and the home feed, notifications ("new video from…"), comment replies and comment likes, live streaming, ads, DRM, copyright matching, view-count accuracy (shown as approximate).
 
 ## Non-functional requirements
 | Requirement | Target | Why it matters here |
 |---|---|---|
 | Playback start | < 2 s to first frame; no buffering | Viewers leave after a few seconds of waiting |
-| Availability | Watching always works (AP) | A stale view count is fine; a video that won't play is not |
-| Upload durability | An uploaded video is never lost | The raw file is kept until processing succeeds (and longer, in cold storage) |
-| Processing time | Minutes, not seconds | The creator sees "processing"; that's acceptable |
-| View count | Eventual, approximate (~1 min lag) | Nobody needs an exact count in real time |
-| Geography | Global viewers | Segments are served from CDN POPs near the viewer |
-| Read:write ratio | ~2,500 views per upload | The design is read-optimised, and egress is the main cost |
+| Availability | Watch, search, like and comment always work (AP) | A stale count is fine; a video that won't play is not |
+| Upload durability | An uploaded video is never lost | The raw file is kept until processing succeeds |
+| Processing time | Minutes | The creator sees "processing" |
+| Freshness | New video in search and subscriber feeds within ~1 min; counts lag ≤ a few s | Eventual consistency is fine |
+| Read-your-writes | My own like / comment shows immediately | Otherwise users think it failed |
+| Correctness | One like per user per video | Insert-if-new on `(userId, videoId)` |
+| Geography | Global | CDN POPs + Cosmos read copies near viewers |
 
 ## Capacity estimate (high level)
-**Facts:** 500M DAU × 5 videos watched/day; 1M uploads/day, 10 min each, ~500 MB raw; average watch 5 min at ~2.5 Mbps (720p); peak = 3× average; 1 day ≈ 10⁵ s.
+**Facts:** 500M DAU; 5 watches, 2 searches, 1 like/day each; 1 comment per 10 users/day; 1M uploads/day (10 min, ~500 MB raw); avg watch 5 min at ~2.5 Mbps; hot creator: 10M views / 1M likes / 100k comments in the first hour; peak = 3× average; 1 day ≈ 10⁵ s.
 
 | What | Math | Result | So… |
 |---|---|---|---|
-| Uploads/s | 1M ÷ 10⁵ | **~10/s avg, 30/s peak** | Writes are light; the work is in processing |
-| Watch-page reads/s | 2.5B ÷ 10⁵ | **25k/s avg, 75k/s peak** | Metadata from Redis; ~40 Video Service instances |
-| Raw storage | 1M × 500 MB | **~500 TB/day** | Move raw files to cold/archive tier after processing |
-| Processed storage | ~1.5× raw (5 renditions) | **~750 TB/day** | Blob storage; this sets the storage bill |
-| Transcode compute | 10M video-min × 5 renditions | **~35k cores busy** | Split into 4-s chunks, run in parallel; autoscale on queue lag; spot VMs |
-| Concurrent viewers | 2.5B × 5 min ÷ 1,440 min | **~9M avg, ~25M peak** | — |
-| Egress | 25M × 2.5 Mbps | **~60 Tbps peak** | Only a CDN can serve this; our services never touch the bytes |
+| Watch-page reads/s | 2.5B ÷ 10⁵ | **25k/s avg, 75k/s peak** | Redis in front of Cosmos |
+| Searches/s | 1B ÷ 10⁵ | **10k/s avg, 30k/s peak** | AI Search with replicas; cache popular queries |
+| Likes + comments/s | (500M + 50M) ÷ 10⁵ | **~5.5k/s avg, ~17k/s peak** | Cheap overall; the problem is **one hot video** |
+| Hot video, first hour | 1M likes, 100k comments ÷ 3,600 s | **~300 likes/s (bursts 2–3k/s), ~30 comments/s; 3k watch-page reads/s** | One count row and one comments partition get hammered → aggregate counts, bucket comments, cache page 1 |
+| Uploads + storage | 1M × 500 MB raw + ~1.5× processed | **~10 uploads/s; ~1.2 PB/day** | Direct-to-Blob upload; raw to cold tier after processing |
+| Transcode compute | 10M video-min × 5 renditions | **~35k cores busy** | 4-s chunks in parallel; autoscale on queue lag; spot VMs |
+| Egress | ~25M concurrent viewers × 2.5 Mbps | **~60 Tbps peak** | CDN only; our services never touch the bytes |
 
-**What the numbers tell you:** this is a **bandwidth and storage** problem, not a request-rate problem. 75k metadata reads/s is ordinary; 60 Tbps of video is not, so every byte must come from the CDN. Storage grows by ~1 PB/day, which is why raw files go to cheap tiers. Transcoding is heavy but async, so it scales with parallel workers, not faster machines.
+**What the numbers tell you:** video is a **bandwidth and storage** problem (CDN, Blob tiers). The request rates are ordinary *on average*; what breaks is **concentration**: one hot video turns into one hot count row, one hot comments partition and one hot metadata key. And a hot creator's upload must **not** fan out to 100M subscriber feeds, so the subscriptions feed is a **pull**.
 
 ## API
 | Endpoint | Request | Response | Notes |
 |---|---|---|---|
-| `POST /videos` | `{ title, description, sizeBytes, contentType }` | `201 { videoId, uploadUrl (SAS), expiresAt }` | Creates the metadata row (`status = uploading`) |
+| `POST /videos` | `{ title, description, tags[], sizeBytes, contentType }` | `201 { videoId, uploadUrl (SAS), expiresAt }` | Creates the metadata row (`status = uploading`) |
 | *(direct to Blob)* `PUT {uploadUrl}&comp=block&blockid=…` | 4–100 MB block | `201` | Resumable: re-send only missing blocks |
-| `POST /videos/{id}/complete` | `{ blockIds[] }` | `202 { status: processing }` | Commits the blocks; outbox → `video-uploaded` |
-| `GET /videos/{id}` | — | `200 { videoId, title, status, manifestUrl, thumbnailUrl, viewCount, durationSec }` | `404` if missing; `status = processing` until ready |
-| *(CDN)* `GET {manifestUrl}` → `GET …/720p/seg_0042.ts` | — | HLS manifest, then 4-s segments | The player picks the quality (ABR) |
-| `POST /videos/{id}/views` | `{ watchedSec }` | `202` | Beacon; counted once the viewer passes ~30 s |
-| `GET /channels/{id}/videos?cursor=&limit=20` | — | `200 { videos[], nextCursor }` | Cursor = last `createdAt + videoId` |
+| `POST /videos/{id}/complete` | `{ blockIds[] }` | `202 { status: processing }` | Idempotent; outbox → `video-uploaded` |
+| `GET /videos/{id}` | — | `200 { videoId, title, channel, status, manifestUrl, thumbnailUrl, likeCount, commentCount, likedByMe, subscribedToChannel }` | The player then reads the manifest + segments from the **CDN** |
+| `GET /search?q=&cursor=` | — | `200 { videos[], nextCursor }` | Ranked by text relevance + popularity |
+| `POST /subscriptions` · `DELETE /subscriptions/{channelId}` | `{ channelId }` | `204` | Insert-if-new, so a double subscribe counts once |
+| `GET /feed/subscriptions?cursor=` | — | `200 { videos[], nextCursor }` | Pull: merge my channels' latest lists |
+| `POST /videos/{id}/likes` · `DELETE /videos/{id}/likes` | — | `204` (`202` on hot videos, counted async) | Insert-if-new on `(userId, videoId)` |
+| `POST /videos/{id}/comments` | `{ text (≤ 10k) }` | `201 { commentId, createdAt }` (`202` on hot videos) | Idempotency key header |
+| `GET /videos/{id}/comments?cursor=&limit=20` | — | `200 { comments[], nextCursor }` | Page 1 from cache; cursor = commentId (time-sortable) |
 
-- `POST /complete` is **idempotent**: calling it twice for the same `videoId` starts processing only once (the status moves `uploading → processing` with an optimistic-concurrency check).
-- The SAS URL is write-only, for this one blob, and expires in a few hours. The client can ask for a new one to resume.
+- Pagination is **cursor-based** everywhere (time-sortable ids), never offset.
+- The client shows my own like or comment immediately (optimistic UI), and the API returns it; the public count catches up a few seconds later.
 
 ## High-level design (see the diagram)
 **Services and stores:**
 | Component | What it does | Store / technology |
 |---|---|---|
-| Upload Service | Creates the video row and the SAS URL; on `/complete`, commits the block list and writes an outbox row | **Video metadata: Cosmos DB** (pk `videoId`; a second container `channel_videos` with pk `channelId` for the channel page) |
-| Blob: raw | Holds the uploaded original | **Azure Blob**, staged blocks; moved to cold/archive after processing |
-| Transcode orchestrator | Splits the video into 4-s chunks, fans out one job per chunk × rendition, waits for all, then finalizes | **Durable Functions** (fan-out / fan-in), triggered from Kafka `video-uploaded` |
-| Transcode workers | Read one raw chunk, encode it to one rendition, write the segment | Containers on AKS / Container Apps, scaled by **KEDA** on queue lag, spot VMs |
-| Blob: processed | HLS segments per rendition + manifests + thumbnails | **Azure Blob**, the **CDN origin** |
-| Video Service | Watch-page metadata and the channel page (read only) | **Redis** (`video:{id}`), Cosmos read copy on a miss |
-| View Service + views consumer | Takes view beacons; counts per video per minute | Kafka topic `views` → consumer group → **view counts (Cosmos)** |
-| CDN | Serves manifests and segments to viewers | **Azure Front Door** (edge POPs + origin shield) |
+| Upload Service | Video row + SAS URL; on `/complete`, commits the blocks and writes an outbox row | **Video metadata: Cosmos DB** (pk `videoId`) |
+| Transcode orchestrator + workers | Split into 4-s chunks; one job per chunk × rendition; then manifest + `status = ready` | **Durable Functions** + containers scaled by **KEDA**; output to **Blob: processed** (the CDN origin) |
+| Search indexer → Search Service | On `video-ready`, upsert the video into the index; counts refreshed every few minutes for ranking | **Azure AI Search** (replicas for read throughput) |
+| Subscribe Service | Subscribe / unsubscribe | **Subscriptions: Cosmos**, pk `userId` (my channels); subscriber count in the Counts store |
+| Channel feed updater → Feed Service | On `video-ready`, `LPUSH` the id onto that channel's list; the feed merges my channels' lists at read time | **Redis** `channel:{id}` (last 20 ids) |
+| Like Service | Like / unlike | **Likes: Cosmos**, pk `userId`, id `videoId` (insert if new) |
+| Comment Service | Write and page comments | **Comments: Cosmos**, pk `videoId` (hot videos: `(videoId, hour)`); page-1 cache in **Redis** |
+| Counts | Like / comment / subscriber counts | **Cosmos** (durable) + **Redis** (what the watch page reads) |
+| Video Service | Watch page: metadata, counts, my like / subscribe state | **Redis** → Cosmos read copy on a miss |
+| Kafka | `video-uploaded`, `video-ready`, `count-events` | Azure Event Hubs (Kafka API) |
+| CDN | Manifests + segments | **Azure Front Door** (edge POPs + origin shield) |
 
-**Write path (upload → watchable):**
-1. Client → Gateway → Upload Service `POST /videos`: it writes the metadata row (`uploading`) and returns a SAS URL.
-2. The client uploads the file **straight to Blob** in blocks (staged blocks; resumable). Our services never carry the bytes.
-3. The client calls `/complete`. The Upload Service commits the block list, sets `processing`, and writes the outbox row in the same write → Kafka `video-uploaded`.
-4. The orchestrator splits the video into 4-s chunks and fans out **chunk × rendition** jobs (e.g. 150 chunks × 5 = 750 jobs). Workers run them in parallel and write HLS segments to processed Blob.
-5. When every job is done, the finalize step writes the manifests (`master.m3u8` → one per quality) and the thumbnail, then sets `status = ready`.
-6. Each job is **idempotent**: its output path is `{videoId}/{rendition}/seg_{n}.ts`, so a retried job overwrites the same file.
+**Write path:**
+1. **Upload:** Upload Service → metadata (`uploading`) → SAS URL → client uploads blocks straight to Blob → `/complete` → `processing` + outbox → Kafka `video-uploaded` → orchestrator → workers write HLS segments → manifest, `status = ready` → outbox → Kafka `video-ready`.
+2. **`video-ready` has two consumers:** the search indexer (upsert into AI Search) and the channel feed updater (`LPUSH channel:{id}`, `LTRIM` 20). **Nothing is written per subscriber.**
+3. **Subscribe / like / comment (regular video):** write one row, then `+1` on the count (Cosmos patch + Redis `INCR`). A few per second on one video is nothing.
+4. **Hot video:** the row writes stay the same (likes and subscriptions are keyed by `userId`, so 1M likes spread over all partitions). Only the **count** is hot, so the service emits a `count-event` instead and returns `202`; the count aggregator sums per video per second and writes **one** update per second.
 
-**Read path (watch):**
-1. Client → Gateway → Video Service `GET /videos/{id}` → Redis → Cosmos read copy on a miss. It returns the title, view count and **manifest URL**.
-2. The player fetches the manifest from the CDN, then segments one by one. It measures its download speed and switches quality between segments (**adaptive bitrate**).
-3. CDN miss → origin shield → processed Blob. Popular segments stay at the edge; long-tail videos come from the origin.
-
-**View counts:** the player sends a beacon after ~30 s of watching → View Service → Kafka `views` → views consumer sums per video per minute → one write per video per minute to the view counts table. The watch page shows the cached, approximate count.
+**Read path:**
+1. **Watch:** Video Service → Redis (`video:{id}` + counts) → Cosmos read copy on a miss → returns the manifest URL. The player streams segments from the CDN (edge → origin shield → Blob).
+2. **Search:** Search Service → AI Search (hot: popular-query cache in Redis, TTL 30 s).
+3. **Comments:** page 1 from the Redis cache, older pages from Cosmos by cursor.
+4. **Subscriptions feed (pull):** my ~50 channels from Subscriptions → `MGET` 50 channel lists from Redis → merge by time → hydrate from the metadata cache.
 
 ## Which components each path touches
-| Requirement | Path | Regular video (row A) | Viral video (row B) |
+| Requirement | Path | Regular creator (row A) | Hot creator (row B) |
 |---|---|---|---|
-| Upload | Write | Upload Service → metadata (Cosmos) → raw Blob (direct, SAS) → `/complete` → outbox → Kafka | Same |
-| Processing | Write | Orchestrator → transcode workers (chunk × rendition) → processed Blob → finalize (manifest, `ready`) | Same |
-| View count | Write | View Service → Kafka `views` → consumer → view counts (1 write / min) | View Service **sums in memory and sends every 5 s**, so one hot video isn't 3k messages/s; the consumer flags trending videos and **pre-warms CDN POPs** |
-| Watch page | Read | Video Service → Redis → Cosmos read copy on a miss | Video Service **in-process cache (5 s)** → Redis (replicas) → Cosmos almost never |
-| Playback | Read | CDN → origin (processed Blob) on a miss | CDN edge (~99% hits) → **origin shield** collapses misses → Blob rarely hit |
-| Channel page | Read | Video Service → `channel_videos` (pk `channelId`) | Same |
+| Upload | Write | Upload Service → metadata → raw Blob (SAS) → Kafka → orchestrator → workers → processed Blob → `video-ready` → search indexer + channel feed updater | Same, plus a **priority lane** in the transcode queue and a **pre-warm job** that pushes the first segments to CDN POPs; **no fan-out** to 100M subscribers |
+| Subscribe | Write | Subscribe Service → Subscriptions (pk `userId`) → count +1 | Same row write; the count goes **Kafka → aggregator → 1 write/s** |
+| Like | Write | Like Service → Likes (insert if new) → count +1 (sync) | Same row write (spread by `userId`); count async via aggregator, `202` |
+| Comment | Write | Comment Service → Comments (pk `videoId`) → count +1 | Comments pk `(videoId, hour)` so one partition doesn't take every write; count via aggregator, `202` |
+| Watch | Read | Video Service → Redis → Cosmos on a miss; segments CDN → Blob | **In-process cache (5 s)** → Redis replicas; segments CDN edge (~99%) → **origin shield** → Blob |
+| Search | Read | Search Service → AI Search | **Popular-query cache** → AI Search replicas |
+| Comments | Read | Page-1 cache → Cosmos | **Top-comments cache rebuilt every 5 s** (not on every write) → Cosmos for older pages |
+| Subscriptions feed | Read | Feed Service → my channels → channel lists (Redis) | Same; the hot channel's list is read by millions → Redis replicas + in-process cache |
 
-**What the read path never touches:** the Upload Service, Kafka, the orchestrator or the workers. **What our services never touch:** the video bytes (Blob and the CDN carry them).
+**What the read path never touches:** Kafka, the orchestrator, workers, indexer or aggregator. **What our services never touch:** the video bytes.
 
 ## Deep dives to drive (learner leads, interviewer pushes)
-1. **Why chunk the transcode?** One 2-hour video on one machine takes hours; 1,800 chunks on 1,800 workers take minutes. A failed chunk is retried alone. The cost: chunk boundaries must fall on keyframes.
-2. **Adaptive bitrate (HLS / DASH):** why short segments (2–6 s)? The trade-off: shorter = faster quality switches and faster start, but more requests and worse compression.
-3. **CDN cost and the long tail:** most views go to a few videos (edge hits); most videos get almost no views (served from origin). Do you pre-encode every video in 4K? No: encode the top renditions only when a video gets popular.
-4. **Resumable upload:** staged blocks + commit list (M19 pattern 6). What happens if the client disappears mid-upload? Uncommitted blocks expire after 7 days; a cleanup job marks the row `abandoned`.
-5. **Processing failures:** a worker crashes mid-chunk. The orchestrator retries that job only; the output path makes it idempotent. After N failures the video goes to `failed` and the creator is told.
-6. **View counting at scale:** pre-aggregate at the service, then per minute in the consumer. Dedupe the same viewer replaying (a short-lived `(videoId, viewerId)` set in Redis). Fraud filtering is a separate async job.
-7. **Storage tiers:** raw → cool after processing → archive after 30 days. Old, unwatched renditions can move to cool too, at the cost of a slower first segment.
+1. **Subscriptions feed: push vs. pull.** Push (Twitter's fan-out on write) would mean 100M writes per upload for a hot creator. Pull works here because a user follows ~50 channels and channels upload rarely, so the read is 50 small Redis lists. Compare with Case 3, where the hybrid was needed.
+2. **Hot counts.** Why key likes by `userId` instead of `videoId`? (The "who liked" rows spread out; "did I like it?" is a point read.) Then only the count is hot: aggregate it (Kafka → 1 write/s) or use split counters. An approximate count is fine.
+3. **Hot comments.** 30–3k writes/s and millions of page-1 reads on one video. Bucket the partition key by hour; rebuild the top-comments cache every few seconds instead of invalidating on every write; spam/moderation runs async.
+4. **Search freshness vs. cost.** Index on `video-ready` (seconds), but refresh like/view counts for ranking in batches every few minutes; per-like index updates would melt the index.
+5. **Chunked transcoding.** Minutes instead of hours; retry one chunk; idempotent output paths `{videoId}/{rendition}/seg_{n}.ts`. Why chunk boundaries must be keyframes.
+6. **CDN for a hot upload.** 10M viewers in an hour hit the same first segments. Pre-warm + origin shield so the first wave of misses doesn't stampede Blob.
+7. **Unsubscribe / unlike races.** A double click sends like then unlike out of order. Use a per-row version (last action wins by client timestamp + server seq), and the count derives from the row state change, not from the request count.
 
 ## Interview follow-ups (answer these after the design)
-- Walk through what happens between the creator pressing "Upload" and the first viewer pressing "Play". Which steps are synchronous?
-- A video goes viral 10 minutes after upload. Which component hurts first, and what protects it?
-- Why not stream the video through the Video Service so you can check permissions on every request? (Hint: signed CDN URLs / tokens.)
+- A creator with 100M subscribers uploads. Walk through what happens before the first subscriber sees it in their feed, and why nothing is written per subscriber.
+- 2k likes/s hit one video. Which component would melt first in the regular design, and what changes?
+- A user likes a video and refreshes: the count hasn't moved. Is that a bug? How do you make it look right to them?
