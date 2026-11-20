@@ -102,7 +102,7 @@ def Arrow(id, frm, to, label='', color=None, dashed=False, flat=False):
 
 def Note(id, x, y, text, size, color=None):
     lines = text.split('\n')
-    w = round(size * 0.55 * max(len(l) for l in lines))
+    w = round(size * 0.62 * max(len(l) for l in lines))
     t = _text(id, x, y, w, round(size * 1.25 * len(lines)), text, None, size)
     if color:
         t['strokeColor'] = color
