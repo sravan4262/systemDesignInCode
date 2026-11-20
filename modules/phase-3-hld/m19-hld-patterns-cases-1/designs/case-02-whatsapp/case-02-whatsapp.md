@@ -31,7 +31,7 @@ Diagram: [case-02-whatsapp.excalidraw](case-02-whatsapp.excalidraw), in two rows
 
 | What | Math | Result | So… |
 |---|---|---|---|
-| Messages/s | 20B ÷ 10⁵ | **200k/s avg, 600k/s peak** | ~120 Chat Service instances; Kafka partitioned by chat |
+| Messages/s | 20B ÷ 10⁵ | **200k/s avg, 600k/s peak** | ~120 Chat Service instances (store + presence + push in one service) |
 | Deliveries/s | groups fan out ~6× | **~4M pushes/s peak** | Store each message once; push, don't write per recipient |
 | Open connections | 20% × 500M | **100M WebSockets** | Dedicated gateway layer, ~500 nodes at ~200k each |
 | Text storage | 18B × ~150 B | **~3 TB/day** | 30 days on the server ≈ 90 TB (~135 Cassandra nodes); history lives on the device |
@@ -66,14 +66,17 @@ Live messaging runs over **one WebSocket per device**; everything else is plain 
 ## High-level design (see the diagram)
 **Send (write path):**
 1. The app keeps one WebSocket to a Connection Gateway, which registers `user → gateway node` in Presence.
-2. Gateway → Chat Service: `seq = INCR chat:{id}`, write `(chat_id, seq, sender, body or media ref)` to the Messages store, then ack ✓ to the sender.
-3. Publish `message-sent` to Kafka, partitioned by chat_id, so each chat's order is kept.
-4. The Delivery worker looks up each recipient in Presence:
-   - **online:** push through their gateway node;
-   - **offline:** do nothing. The message is already stored, and Bob's app pulls it through sync when it connects.
-   - **Groups:** read the members set, one Presence MGET for all members, one push per gateway node; offline members are skipped and sync later.
+2. Gateway → **Chat Service**, which does every step itself:
+   1. `seq = INCR chat:{id}`;
+   2. **always** write `(chat_id, seq, sender, body or media ref)` to the Messages store;
+   3. ack ✓ to the sender (the message is now safe);
+   4. look up the recipient in Presence;
+   5. **online:** push straight to their gateway node; **offline:** skip. The message is already stored, and the app pulls it through sync when it connects.
+   - **Groups:** read the members set, one Presence MGET for all members, one push per gateway node; offline members are skipped.
+3. **Why store even when Bob is online:** ✓ promises the message is saved; a push can fail (Bob's socket drops, presence is a few seconds stale); and history, receipts and sync all need the stored `(chatId, seq)`. The push is the fast path; the store plus sync is the guarantee.
+4. **No queue in the send path:** pushing directly from the Chat Service is one hop fewer. If a push fails, nothing retries it; sync catches it up. Pushes for one chat can arrive slightly out of order across Chat Service instances, so the app orders by seq and fetches any gap.
 
-**Receipts:** the device acks "delivered up to seq N" or "read up to seq N" for the chat. The Receipt Service upserts that into the Receipts store and publishes an event, which is pushed to the sender's gateway to update the ticks. In a group, blue ticks appear when **every member's read_seq ≥ N**.
+**Receipts:** the device acks "delivered up to seq N" or "read up to seq N" for the chat. The Receipt Service upserts that into the Receipts store, then pushes it to the sender's gateway if they're online (otherwise the sender sees the ticks after their next sync). In a group, blue ticks appear when **every member's read_seq ≥ N**.
 
 **Reconnect and history (read path):**
 1. The app opens the WebSocket **first** (presence registered, live pushes start), **then** calls sync with its last seq per chat. A message may arrive both ways; the app dedupes by `(chatId, seq)`.
@@ -86,13 +89,13 @@ Live messaging runs over **one WebSocket per device**; everything else is plain 
 ## Which components each path touches
 | Requirement | Path | 1:1 chat (row A) | Group chat (row B) |
 |---|---|---|---|
-| Send | Write | Gateway → Chat Service → seq INCR → Messages store → ✓ → Kafka → Delivery worker → Presence → recipient's gateway (skipped if offline) | Same, but stored once; the worker reads the members set, does one Presence MGET for 255 users, one push per gateway node; offline members skipped |
-| Receipts | Write | Gateway → Receipt Service → Receipts store → Kafka → sender's gateway | Same per member; blue when min(read_seq) ≥ N |
+| Send | Write | Gateway → Chat Service → seq INCR → Messages store → ✓ → Presence → recipient's gateway (skipped if offline) | Same, but stored once; the Chat Service reads the members set, does one Presence MGET for 255 users, one push per gateway node; offline members skipped |
+| Receipts | Write | Gateway → Receipt Service → Receipts store → sender's gateway (if online) | Same per member; blue when min(read_seq) ≥ N |
 | Offline / reconnect | Read | Sync Service → user_chats → seq counters (MGET) → recent cache → Messages store on a miss | Same; the group's recent cache is shared by all members (hot) |
 | History | Read | Sync Service → Messages store by `(chat_id, month)`, seq range | Same |
 | Media | Write / Read | Blob (SAS upload) / CDN | Same; one blob, many downloads |
 
-**What the live send path never touches:** the Sync Service, `user_chats`, or the Receipts store. Online delivery is a push.
+**What the live send path never touches:** the Sync Service or `user_chats`. Online delivery is a direct push from the Chat Service.
 
 ## Deep dives to drive (learner leads, interviewer pushes)
 1. **Retention:** keep everything on the server (search, multi-device, ~10× storage) vs. store-and-forward with a short server retention (what WhatsApp does). What breaks if a user loses their phone?
@@ -100,9 +103,10 @@ Live messaging runs over **one WebSocket per device**; everything else is plain 
 3. **At-least-once:** the gateway can push a message twice (a retry after a lost ack). The device dedupes by (chat, seq); acks are cumulative ("up to N").
 4. **Gateway failure:** 200k users drop at once. Clients reconnect with jitter to another node, re-register Presence, and sync by seq. Nothing is lost because the store is the source of truth.
 5. **Big groups:** at 256 members fan-out is cheap. What changes at 100k members (a channel)? Readers pull, like Twitter's celebrity case.
-6. **Hot chat:** one very busy group puts everything on one Kafka partition and one counter. It's fine at a few hundred messages/s; beyond that, split the chat into partitioned sub-streams.
+6. **Hot chat:** one very busy group puts everything on one seq counter. It's fine at a few hundred messages/s; beyond that, split the chat into partitioned sub-streams.
+7. **When would you add a queue (Kafka) back?** If other systems need every message (search indexing, spam scanning, analytics), or for very large groups where the fan-out should run in the background instead of inside the send request.
 
 ## Interview follow-ups (answer these after the design)
 - Bob was offline for 3 days in 40 chats. Walk through exactly what happens when he opens the app.
 - How does Alice's phone know to show blue ticks in a group of 100?
-- Why not let the Chat Service push straight to the recipient instead of going through Kafka?
+- The push to Bob fails right after the message is stored. What does Bob see, and when?
