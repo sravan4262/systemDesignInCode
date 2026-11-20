@@ -26,55 +26,18 @@ Diagram: [case-02-whatsapp.excalidraw](case-02-whatsapp.excalidraw), in two rows
 | Delivery semantics | At least once + dedupe by (chat, seq) on the device | Exactly-once is not possible over a network |
 | Geography | Global (India, Brazil, Europe, US) | Gateways in many regions |
 
-## Capacity estimate
-### 0. Facts (agree these with the interviewer first)
-| Fact | Value |
-|---|---|
-| Users | 2B registered, **500M DAU** |
-| Messages | 40 per user per day → **20B/day** |
-| Mix | 90% text (~100 B), 10% media (~200 KB) |
-| Groups | Assume 30% of messages are in groups, average group size 20 |
-| Online at peak | 20% of DAU → **100M concurrent connections** |
-| Peak / retention | Peak = 3× average. The server keeps messages **30 days**; history lives on the device (see deep dive 1) |
+## Capacity estimate (high level)
+**Facts:** 500M DAU × 40 messages/day = **20B messages/day**; 90% text (~100 B), 10% media (~200 KB); 20% of DAU online at peak; peak = 3× average; 1 day ≈ 10⁵ s.
 
-Conversion: 1 day ≈ 10⁵ s, so 20B/day ≈ 200k/s.
+| What | Math | Result | So… |
+|---|---|---|---|
+| Messages/s | 20B ÷ 10⁵ | **200k/s avg, 600k/s peak** | ~120 Chat Service instances; Kafka partitioned by chat |
+| Deliveries/s | groups fan out ~6× | **~4M pushes/s peak** | Store each message once; push, don't write per recipient |
+| Open connections | 20% × 500M | **100M WebSockets** | Dedicated gateway layer, ~500 nodes at ~200k each |
+| Text storage | 18B × ~150 B | **~3 TB/day** | 30 days on the server ≈ 90 TB (~135 Cassandra nodes); history lives on the device |
+| Media storage | 2B × 200 KB | **~400 TB/day** | Blob + CDN with SAS upload; never through the chat path |
 
-### 1. API estimate → number of servers
-| Service | Per day | Average | Peak | Instances at peak |
-|---|---|---|---|---|
-| Connection gateways | 100M open WebSockets | — | 100M | ÷ ~200k per node = 500 → **~600** (headroom), across regions |
-| Chat Service (send) | 20B | 200k/s | **600k/s** | ÷ ~5k/s each (INCR + write + publish) = **120** |
-| Delivery workers | 20B × (0.7 × 1 + 0.3 × 19) ≈ 128B deliveries | 1.3M/s | **~3.8M/s** | ÷ ~50k/s each (batched MGET + pushes) = **~80** |
-| Receipt Service | batched "up to seq" per chat | ~170k/s | ~500k/s | ÷ ~10k/s each = **50** |
-| Sync Service (reconnect + history) | 500M × ~10 reconnects = 5B | 50k/s | 150k/s | ÷ ~2k/s each = **75** |
-| **Total** | | | | **~925 instances** (gateways dominate) |
-
-### 2. Redis estimate → number of nodes
-| Cluster | What it holds | Memory | Ops at peak | Primaries | Nodes with replicas |
-|---|---|---|---|---|---|
-| Presence | user → gateway node (TTL, refreshed every ~60 s) | 100M × 100 B × 2 = **20 GB** | Lookups ~1M/s (MGET batches) + refreshes ~1.7M/s | Ops decide: ~3M ÷ 100k = **30** | **60** |
-| Seq counters | `chat:{id}` → last seq | Chats active in 30 days ~10B × 60 B × 1.5 = **900 GB** | 600k INCR/s + reconnect MGETs | Memory decides: 900 ÷ 50 = **18** | **36** (AOF on: a seq must never go backwards) |
-| Recent messages | Last 20 messages for chats active in the last hour (~200M chats) | 200M × 20 × 150 B × 1.5 ≈ **900 GB** | Sync reads ~150k/s | Memory decides: **18** | **36** |
-| Group members | `group:{id}:members` (≤ 256 ids) | ~500M groups × 20 × 8 B × 2 ≈ **160 GB** | Delivery ~180k/s | **4** | **8** |
-| **Total** | | | | | **~140 nodes** |
-
-### 3. Database estimate → number of nodes
-Rule of thumb: ~2 TB of data per node, **replication factor 3** across 3 availability zones.
-
-| Store | Key | Data | × RF 3 | Load at peak | Servers |
-|---|---|---|---|---|---|
-| Messages (Cassandra, or Cosmos) | pk `(chat_id, month)`, ck `seq` | 20B × ~150 B (text + metadata) = 3 TB/day → 30 days = **90 TB** | 270 TB | 600k writes/s | 270 ÷ 2 TB = **135 nodes** (storage decides; at 1-year retention it would be ~1,650) |
-| user_chats (membership) | pk `user_id` → chat ids | 2B × 50 chats × 40 B = **4 TB** | 12 TB | Changes only on join/leave | **6** |
-| Receipts | pk `(chat_id)`, ck `user_id` → delivered_seq, read_seq | **~4 TB** | 12 TB | ~500k upserts/s | Writes decide: **~60** |
-| Kafka | `message-sent`, `receipt-events`, 256 partitions by chat_id | ~230 MB/s, 3-day retention ≈ 60 TB | 180 TB | — | **~20 brokers** |
-| Media (Blob + CDN) | `media/{chat}/{id}` | 2B × 200 KB = **400 TB/day** → 30 days ≈ 12 PB | Managed | Served by the CDN | Managed |
-| **Total (excluding managed)** | | | | | **~220 servers** |
-
-### What the numbers tell you
-- **100M open connections** is the defining number. You need a dedicated gateway layer that holds sockets and does nothing else. (Azure SignalR Service tops out far below this, so these are self-run gateways.)
-- 3.8M deliveries/s means you **don't write anything per recipient**. Store each message once, keep one seq counter per chat, and push.
-- Message storage is sized by **retention**: 30 days on the server is ~135 nodes; a year of history would be ~10×. That's why history lives on the device.
-- Media volume (400 TB/day) is 100× the text, so it must never touch the chat path: SAS upload plus the CDN (claim-check).
+**What the numbers tell you:** 100M open connections and ~4M pushes/s shape the design (gateway layer, push model, one stored copy per message). Media volume is 100× the text, so it goes straight to Blob storage. Server storage is set by **retention**, which is why messages are kept only 30 days on the server.
 
 ## High-level design (see the diagram)
 **Send (write path):**
