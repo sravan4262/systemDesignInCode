@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 2 WhatsApp: learner resumes at the estimates (prep doc + diagram in `designs/case-02-whatsapp/`; skip its capacity section to do the math first). Then the 12-case list below.
+- **Next step:** Case 4 YouTube: doc + diagram ready in `designs/case-04-youtube/` (learner reviews / drives deep dives). Cases 2 WhatsApp and 3 Twitter prepped. Then the 12-case list below.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
