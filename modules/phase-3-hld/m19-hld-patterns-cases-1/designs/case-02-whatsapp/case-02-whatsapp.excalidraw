@@ -1215,8 +1215,8 @@
     {
       "id": "Apr",
       "type": "rectangle",
-      "x": 1780.0,
-      "y": 90.0,
+      "x": 1490.0,
+      "y": 240.0,
       "width": 240.0,
       "height": 70.0,
       "angle": 0,
@@ -1253,8 +1253,8 @@
     {
       "id": "Apr-t",
       "type": "text",
-      "x": 1785.0,
-      "y": 105.0,
+      "x": 1495.0,
+      "y": 255.0,
       "width": 230.0,
       "height": 40.0,
       "angle": 0,
@@ -1369,7 +1369,7 @@
       "height": 70.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
-      "backgroundColor": "#ffc9c9",
+      "backgroundColor": "#e9ecef",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -1402,9 +1402,9 @@
       "id": "Aoff-t",
       "type": "text",
       "x": 2075.0,
-      "y": 215.0,
+      "y": 205.0,
       "width": 230.0,
-      "height": 40.0,
+      "height": 60.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -1424,13 +1424,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "OFFLINE: Notification\nHubs (APNs / FCM)",
+      "text": "OFFLINE: skip\n(stays stored; syncs\nwhen Bob connects)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Aoff",
-      "originalText": "OFFLINE: Notification\nHubs (APNs / FCM)",
+      "originalText": "OFFLINE: skip\n(stays stored; syncs\nwhen Bob connects)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -1866,10 +1866,10 @@
     {
       "id": "Aw6",
       "type": "arrow",
-      "x": 1730.0,
-      "y": 125.0,
-      "width": 50.0,
-      "height": 0.0,
+      "x": 1610.0,
+      "y": 160.0,
+      "width": 0.0,
+      "height": 80.0,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
@@ -1902,8 +1902,8 @@
           0
         ],
         [
-          50.0,
-          0.0
+          0.0,
+          80.0
         ]
       ],
       "lastCommittedPoint": null,
@@ -1924,8 +1924,8 @@
     {
       "id": "Aw6-t",
       "type": "text",
-      "x": 1703.0,
-      "y": 116.5,
+      "x": 1558.0,
+      "y": 191.5,
       "width": 104.0,
       "height": 17.0,
       "angle": 0,
@@ -2112,9 +2112,9 @@
     {
       "id": "Aw8-t",
       "type": "text",
-      "x": 1876.0,
+      "x": 1884.0,
       "y": 171.5,
-      "width": 48.0,
+      "width": 32.0,
       "height": 17.0,
       "angle": 0,
       "strokeColor": "#e03131",
@@ -2135,13 +2135,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "notify",
+      "text": "skip",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Aw8",
-      "originalText": "notify",
+      "originalText": "skip",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -2622,10 +2622,6 @@
         },
         {
           "type": "arrow",
-          "id": "Ar3"
-        },
-        {
-          "type": "arrow",
           "id": "Ar4"
         }
       ],
@@ -2701,6 +2697,10 @@
         {
           "type": "arrow",
           "id": "Ar2"
+        },
+        {
+          "type": "arrow",
+          "id": "Ar3"
         }
       ],
       "updated": 1700000000000,
@@ -3160,10 +3160,10 @@
     {
       "id": "Ar3",
       "type": "arrow",
-      "x": 860.0,
-      "y": 638.6206896551724,
-      "width": 340.0,
-      "height": 32.24137931034488,
+      "x": 1150.0,
+      "y": 595.0,
+      "width": 50.0,
+      "height": 0.0,
       "angle": 0,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
@@ -3196,13 +3196,13 @@
           0
         ],
         [
-          340.0,
-          -32.24137931034488
+          50.0,
+          0.0
         ]
       ],
       "lastCommittedPoint": null,
       "startBinding": {
-        "elementId": "Ass",
+        "elementId": "Auc2",
         "focus": 0,
         "gap": 4
       },
@@ -3218,8 +3218,8 @@
     {
       "id": "Ar3-t",
       "type": "text",
-      "x": 970.0,
-      "y": 614.0,
+      "x": 1115.0,
+      "y": 586.5,
       "width": 120.0,
       "height": 17.0,
       "angle": 0,
@@ -3465,13 +3465,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "WRITE touches: Gateway, Chat Service, Seq counter (INCR),\nMessages store, Kafka, Delivery worker, Presence,\nBob's gateway OR Notification Hubs. Receipts: Receipt\nService -> Receipts store -> Kafka -> Alice's gateway.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nrecent cache, Messages store on a miss. Live delivery is\na PUSH (write path); reads happen on reconnect / history.",
+      "text": "WRITE touches: Gateway, Chat Service, Seq counter (INCR),\nMessages store, Kafka, Delivery worker, Presence,\nBob's gateway (offline: skipped). Receipts: Receipt\nService -> Receipts store -> Kafka -> Alice's gateway.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nrecent cache, Messages store on a miss. Live delivery is\na PUSH (write path); reads happen on reconnect / history.",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "WRITE touches: Gateway, Chat Service, Seq counter (INCR),\nMessages store, Kafka, Delivery worker, Presence,\nBob's gateway OR Notification Hubs. Receipts: Receipt\nService -> Receipts store -> Kafka -> Alice's gateway.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nrecent cache, Messages store on a miss. Live delivery is\na PUSH (write path); reads happen on reconnect / history.",
+      "originalText": "WRITE touches: Gateway, Chat Service, Seq counter (INCR),\nMessages store, Kafka, Delivery worker, Presence,\nBob's gateway (offline: skipped). Receipts: Receipt\nService -> Receipts store -> Kafka -> Alice's gateway.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nrecent cache, Messages store on a miss. Live delivery is\na PUSH (write path); reads happen on reconnect / history.",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4217,10 +4217,6 @@
         },
         {
           "type": "arrow",
-          "id": "Bw7"
-        },
-        {
-          "type": "arrow",
           "id": "Bw8"
         },
         {
@@ -4271,8 +4267,8 @@
     {
       "id": "Bgm",
       "type": "rectangle",
-      "x": 1780.0,
-      "y": 1070.0,
+      "x": 1490.0,
+      "y": 1220.0,
       "width": 240.0,
       "height": 70.0,
       "angle": 0,
@@ -4300,6 +4296,10 @@
         {
           "type": "arrow",
           "id": "Bw6"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw7"
         }
       ],
       "updated": 1700000000000,
@@ -4309,8 +4309,8 @@
     {
       "id": "Bgm-t",
       "type": "text",
-      "x": 1785.0,
-      "y": 1085.0,
+      "x": 1495.0,
+      "y": 1235.0,
       "width": 230.0,
       "height": 40.0,
       "angle": 0,
@@ -4345,8 +4345,8 @@
     {
       "id": "Bpr",
       "type": "rectangle",
-      "x": 1780.0,
-      "y": 1180.0,
+      "x": 1490.0,
+      "y": 1370.0,
       "width": 240.0,
       "height": 70.0,
       "angle": 0,
@@ -4383,8 +4383,8 @@
     {
       "id": "Bpr-t",
       "type": "text",
-      "x": 1785.0,
-      "y": 1195.0,
+      "x": 1495.0,
+      "y": 1385.0,
       "width": 230.0,
       "height": 40.0,
       "angle": 0,
@@ -4499,7 +4499,7 @@
       "height": 70.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
-      "backgroundColor": "#ffc9c9",
+      "backgroundColor": "#e9ecef",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -4554,13 +4554,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "~195 offline:\ncollapsed notification",
+      "text": "~195 offline: skip\n(sync on connect)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Boff",
-      "originalText": "~195 offline:\ncollapsed notification",
+      "originalText": "~195 offline: skip\n(sync on connect)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4996,10 +4996,10 @@
     {
       "id": "Bw6",
       "type": "arrow",
-      "x": 1730.0,
-      "y": 1105.0,
-      "width": 50.0,
-      "height": 0.0,
+      "x": 1610.0,
+      "y": 1140.0,
+      "width": 0.0,
+      "height": 80.0,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
@@ -5032,8 +5032,8 @@
           0
         ],
         [
-          50.0,
-          0.0
+          0.0,
+          80.0
         ]
       ],
       "lastCommittedPoint": null,
@@ -5054,8 +5054,8 @@
     {
       "id": "Bw6-t",
       "type": "text",
-      "x": 1727.0,
-      "y": 1096.5,
+      "x": 1582.0,
+      "y": 1171.5,
       "width": 56.0,
       "height": 17.0,
       "angle": 0,
@@ -5090,10 +5090,10 @@
     {
       "id": "Bw7",
       "type": "arrow",
-      "x": 1702.2727272727273,
-      "y": 1140.0,
-      "width": 105.4545454545455,
-      "height": 40.0,
+      "x": 1610.0,
+      "y": 1290.0,
+      "width": 0.0,
+      "height": 80.0,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
@@ -5111,7 +5111,12 @@
       "version": 1,
       "versionNonce": 2708,
       "isDeleted": false,
-      "boundElements": [],
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bw7-t"
+        }
+      ],
       "updated": 1700000000000,
       "link": null,
       "locked": false,
@@ -5121,13 +5126,13 @@
           0
         ],
         [
-          105.4545454545455,
-          40.0
+          0.0,
+          80.0
         ]
       ],
       "lastCommittedPoint": null,
       "startBinding": {
-        "elementId": "Bdw",
+        "elementId": "Bgm",
         "focus": 0,
         "gap": 4
       },
@@ -5139,6 +5144,42 @@
       "startArrowhead": null,
       "endArrowhead": "arrow",
       "elbowed": false
+    },
+    {
+      "id": "Bw7-t",
+      "type": "text",
+      "x": 1578.0,
+      "y": 1321.5,
+      "width": 64.0,
+      "height": 17.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2715,
+      "version": 1,
+      "versionNonce": 2722,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "MGET 255",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bw7",
+      "originalText": "MGET 255",
+      "lineHeight": 1.25,
+      "autoResize": true
     },
     {
       "id": "Bw8",
@@ -5160,9 +5201,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2715,
+      "seed": 2729,
       "version": 1,
-      "versionNonce": 2722,
+      "versionNonce": 2736,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5216,9 +5257,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2729,
+      "seed": 2743,
       "version": 1,
-      "versionNonce": 2736,
+      "versionNonce": 2750,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5254,9 +5295,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2743,
+      "seed": 2757,
       "version": 1,
-      "versionNonce": 2750,
+      "versionNonce": 2764,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5295,9 +5336,9 @@
     {
       "id": "Bw9-t",
       "type": "text",
-      "x": 1876.0,
+      "x": 1884.0,
       "y": 1151.5,
-      "width": 48.0,
+      "width": 32.0,
       "height": 17.0,
       "angle": 0,
       "strokeColor": "#e03131",
@@ -5310,21 +5351,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2757,
+      "seed": 2771,
       "version": 1,
-      "versionNonce": 2764,
+      "versionNonce": 2778,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "notify",
+      "text": "skip",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bw9",
-      "originalText": "notify",
+      "originalText": "skip",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5348,9 +5389,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2771,
+      "seed": 2785,
       "version": 1,
-      "versionNonce": 2778,
+      "versionNonce": 2792,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5388,9 +5429,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2785,
+      "seed": 2799,
       "version": 1,
-      "versionNonce": 2792,
+      "versionNonce": 2806,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5426,9 +5467,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2799,
+      "seed": 2813,
       "version": 1,
-      "versionNonce": 2806,
+      "versionNonce": 2820,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5462,9 +5503,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2813,
+      "seed": 2827,
       "version": 1,
-      "versionNonce": 2820,
+      "versionNonce": 2834,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5500,9 +5541,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2827,
+      "seed": 2841,
       "version": 1,
-      "versionNonce": 2834,
+      "versionNonce": 2848,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5556,9 +5597,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2841,
+      "seed": 2855,
       "version": 1,
-      "versionNonce": 2848,
+      "versionNonce": 2862,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5594,9 +5635,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2855,
+      "seed": 2869,
       "version": 1,
-      "versionNonce": 2862,
+      "versionNonce": 2876,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5650,9 +5691,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2869,
+      "seed": 2883,
       "version": 1,
-      "versionNonce": 2876,
+      "versionNonce": 2890,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5688,9 +5729,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2883,
+      "seed": 2897,
       "version": 1,
-      "versionNonce": 2890,
+      "versionNonce": 2904,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5704,10 +5745,6 @@
         {
           "type": "arrow",
           "id": "Br2"
-        },
-        {
-          "type": "arrow",
-          "id": "Br3"
         },
         {
           "type": "arrow",
@@ -5736,9 +5773,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2897,
+      "seed": 2911,
       "version": 1,
-      "versionNonce": 2904,
+      "versionNonce": 2918,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5774,9 +5811,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2911,
+      "seed": 2925,
       "version": 1,
-      "versionNonce": 2918,
+      "versionNonce": 2932,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5786,6 +5823,10 @@
         {
           "type": "arrow",
           "id": "Br2"
+        },
+        {
+          "type": "arrow",
+          "id": "Br3"
         }
       ],
       "updated": 1700000000000,
@@ -5810,9 +5851,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2925,
+      "seed": 2939,
       "version": 1,
-      "versionNonce": 2932,
+      "versionNonce": 2946,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5848,9 +5889,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2939,
+      "seed": 2953,
       "version": 1,
-      "versionNonce": 2946,
+      "versionNonce": 2960,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5884,9 +5925,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2953,
+      "seed": 2967,
       "version": 1,
-      "versionNonce": 2960,
+      "versionNonce": 2974,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5922,9 +5963,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2967,
+      "seed": 2981,
       "version": 1,
-      "versionNonce": 2974,
+      "versionNonce": 2988,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5962,9 +6003,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2981,
+      "seed": 2995,
       "version": 1,
-      "versionNonce": 2988,
+      "versionNonce": 3002,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6000,9 +6041,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2995,
+      "seed": 3009,
       "version": 1,
-      "versionNonce": 3002,
+      "versionNonce": 3016,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6036,9 +6077,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3009,
+      "seed": 3023,
       "version": 1,
-      "versionNonce": 3016,
+      "versionNonce": 3030,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6074,9 +6115,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3023,
+      "seed": 3037,
       "version": 1,
-      "versionNonce": 3030,
+      "versionNonce": 3044,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6130,9 +6171,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3037,
+      "seed": 3051,
       "version": 1,
-      "versionNonce": 3044,
+      "versionNonce": 3058,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6168,9 +6209,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3051,
+      "seed": 3065,
       "version": 1,
-      "versionNonce": 3058,
+      "versionNonce": 3072,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6204,10 +6245,10 @@
     {
       "id": "Br3",
       "type": "arrow",
-      "x": 860.0,
-      "y": 1618.6206896551723,
-      "width": 340.0,
-      "height": 32.241379310344655,
+      "x": 1150.0,
+      "y": 1575.0,
+      "width": 50.0,
+      "height": 0.0,
       "angle": 0,
       "strokeColor": "#2f9e44",
       "backgroundColor": "transparent",
@@ -6221,9 +6262,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3065,
+      "seed": 3079,
       "version": 1,
-      "versionNonce": 3072,
+      "versionNonce": 3086,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6235,13 +6276,13 @@
           0
         ],
         [
-          340.0,
-          -32.241379310344655
+          50.0,
+          0.0
         ]
       ],
       "lastCommittedPoint": null,
       "startBinding": {
-        "elementId": "Bss",
+        "elementId": "Buc2",
         "focus": 0,
         "gap": 4
       },
@@ -6274,9 +6315,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3079,
+      "seed": 3093,
       "version": 1,
-      "versionNonce": 3086,
+      "versionNonce": 3100,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6327,9 +6368,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3093,
+      "seed": 3107,
       "version": 1,
-      "versionNonce": 3100,
+      "versionNonce": 3114,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6383,9 +6424,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3107,
+      "seed": 3121,
       "version": 1,
-      "versionNonce": 3114,
+      "versionNonce": 3128,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6419,21 +6460,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3121,
+      "seed": 3135,
       "version": 1,
-      "versionNonce": 3128,
+      "versionNonce": 3142,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "WRITE touches: same as A, but the message is stored ONCE;\nthe Delivery worker reads the members set, does one\nPresence MGET for 255 users, sends one push per gateway\nnode, and one collapsed notification to offline members.\nNothing is written per member. Receipts: per member read_seq.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nthe group's shared recent cache (hot), store on a miss.",
+      "text": "WRITE touches: same as A, but the message is stored ONCE;\nthe Delivery worker reads the members set, does one\nPresence MGET for 255 users, sends one push per gateway\nnode; offline members are skipped and sync later.\nNothing is written per member. Receipts: per member read_seq.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nthe group's shared recent cache (hot), store on a miss.",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "WRITE touches: same as A, but the message is stored ONCE;\nthe Delivery worker reads the members set, does one\nPresence MGET for 255 users, sends one push per gateway\nnode, and one collapsed notification to offline members.\nNothing is written per member. Receipts: per member read_seq.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nthe group's shared recent cache (hot), store on a miss.",
+      "originalText": "WRITE touches: same as A, but the message is stored ONCE;\nthe Delivery worker reads the members set, does one\nPresence MGET for 255 users, sends one push per gateway\nnode; offline members are skipped and sync later.\nNothing is written per member. Receipts: per member read_seq.\n\nREAD touches: Sync Service, user_chats, Seq counters,\nthe group's shared recent cache (hot), store on a miss.",
       "lineHeight": 1.25,
       "autoResize": true
     }

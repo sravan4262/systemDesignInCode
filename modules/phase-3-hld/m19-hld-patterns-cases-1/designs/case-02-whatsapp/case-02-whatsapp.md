@@ -11,10 +11,10 @@ Diagram: [case-02-whatsapp.excalidraw](case-02-whatsapp.excalidraw), in two rows
 1. **Send messages** in 1:1 chats and in groups of up to **256 members**.
 2. **Text and media** (images, video, audio up to 100 MB). Media goes to Blob Storage, and the message carries only a reference.
 3. **Receipts:** sent ✓ (the server has it), delivered ✓✓ (the device has it), read (blue).
-4. **Offline delivery:** messages to offline users are kept and delivered when they reconnect, with a push notification in the meantime.
+4. **Offline users:** messages stay stored, and the user gets them when the app connects again (sync). No push notifications.
 5. **History:** load older messages when scrolling up (paged).
 
-**Out of scope (say this out loud):** voice/video calls, broadcast lists, "last seen", end-to-end encryption, multiple devices per user, stories, search.
+**Out of scope (say this out loud):** push notifications (offline users catch up through sync when they open the app), voice/video calls, broadcast lists, "last seen", end-to-end encryption, multiple devices per user, stories, search.
 
 ## Non-functional requirements
 | Requirement | Target | Why it matters here |
@@ -70,13 +70,13 @@ Live messaging runs over **one WebSocket per device**; everything else is plain 
 3. Publish `message-sent` to Kafka, partitioned by chat_id, so each chat's order is kept.
 4. The Delivery worker looks up each recipient in Presence:
    - **online:** push through their gateway node;
-   - **offline:** send a push notification through Notification Hubs (APNs/FCM).
-   - **Groups:** read the members set, one Presence MGET for all members, one push per gateway node, and one collapsed notification for offline members.
+   - **offline:** do nothing. The message is already stored, and Bob's app pulls it through sync when it connects.
+   - **Groups:** read the members set, one Presence MGET for all members, one push per gateway node; offline members are skipped and sync later.
 
 **Receipts:** the device acks "delivered up to seq N" or "read up to seq N" for the chat. The Receipt Service upserts that into the Receipts store and publishes an event, which is pushed to the sender's gateway to update the ticks. In a group, blue ticks appear when **every member's read_seq ≥ N**.
 
 **Reconnect and history (read path):**
-1. The app reconnects and sends its last seq per chat.
+1. The app opens the WebSocket **first** (presence registered, live pushes start), **then** calls sync with its last seq per chat. A message may arrive both ways; the app dedupes by `(chatId, seq)`.
 2. The Sync Service reads `user_chats` (which chats I'm in), then MGETs the seq counters (which chats changed).
 3. For each changed chat it returns the messages with seq greater than the client's: from the recent-messages cache, or the Messages store on a miss.
 4. Scrolling up pages older messages by seq.
@@ -86,7 +86,7 @@ Live messaging runs over **one WebSocket per device**; everything else is plain 
 ## Which components each path touches
 | Requirement | Path | 1:1 chat (row A) | Group chat (row B) |
 |---|---|---|---|
-| Send | Write | Gateway → Chat Service → seq INCR → Messages store → ✓ → Kafka → Delivery worker → Presence → recipient's gateway **or** Notification Hubs | Same, but stored once; the worker reads the members set, does one Presence MGET for 255 users, one push per gateway node, one collapsed notification |
+| Send | Write | Gateway → Chat Service → seq INCR → Messages store → ✓ → Kafka → Delivery worker → Presence → recipient's gateway (skipped if offline) | Same, but stored once; the worker reads the members set, does one Presence MGET for 255 users, one push per gateway node; offline members skipped |
 | Receipts | Write | Gateway → Receipt Service → Receipts store → Kafka → sender's gateway | Same per member; blue when min(read_seq) ≥ N |
 | Offline / reconnect | Read | Sync Service → user_chats → seq counters (MGET) → recent cache → Messages store on a miss | Same; the group's recent cache is shared by all members (hot) |
 | History | Read | Sync Service → Messages store by `(chat_id, month)`, seq range | Same |
