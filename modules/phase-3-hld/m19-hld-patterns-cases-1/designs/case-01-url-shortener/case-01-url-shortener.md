@@ -45,7 +45,7 @@ One instance handles **~2,000 req/s** at 70% CPU. Keep at least 3 instances per 
 | Redirect (`GET /{code}`) | 10B | 4k/s | **12k/s** (worst case, edge cache cold) | 12k ÷ 2k = 6 → **12** (3 per region × 4) |
 | Create (`POST /urls`) | 100M | 40/s | 120/s | 1 → **3** (write region) |
 | Stats (`GET /urls/{code}/stats`) | small | — | — | **3** |
-| Click aggregator | 10B events | 4k/s | 12k/s | **2–3** |
+| Clicks consumer (Kafka consumer group) | 10B events | 4k/s | 12k/s | **2–3** |
 | **Total** | | | | **~20 instances** |
 
 Code space: 6B links in 5 years out of 3.5T codes ≈ 0.2% used, so a random code collides about once in 500 creates and one retry fixes it.
@@ -60,11 +60,12 @@ Rule of thumb: use ~50 GB of each 64 GB node and plan on ~100k ops/s per node; a
 Cache only successful lookups. A code never changes, so a long TTL is safe; a 404 is cached for a few seconds at most.
 
 ### 3. Database estimate (Cosmos DB)
+**Why Cosmos:** every read is a lookup by one key (the code), and Cosmos copies data to other regions for you, so each region reads locally.
 | Store | Key | Data (5 years) | Load at peak | Notes |
 |---|---|---|---|---|
 | `links` container | `id` = code, partition key `/id` | 6B × 500 B = **3 TB** (+ index ≈ 3.6 TB per region) | Reads on cache miss: ~2.4k RU/s; writes 120/s × ~10 RU ≈ 1.2k RU/s | One write region + 3 read regions. Cosmos splits it into ~72 physical partitions by itself; there's no manual sharding |
-| `stats` container | `code` + minute | ~1 row per active code per minute; roll up to hourly after 7 days | ~2k writes/s at peak | Written only by the aggregator |
-| Event Hubs | `clicks`, 32 partitions | 7-day retention | 12k events/s → **12 throughput units** (1,000 events/s each) | Absorbs click spikes |
+| Click counts table (a second Cosmos container) | `code` + minute → count | ~1 row per active code per minute; roll up to hourly after 7 days | ~2k writes/s at peak | Written only by the clicks consumer; read by the Stats Service |
+| Kafka topic `clicks` (Azure Event Hubs, Kafka-compatible) | 32 partitions | 7-day retention | 12k events/s → **12 throughput units** (1,000 events/s each) | Absorbs click spikes |
 
 ### What the numbers tell you
 - Writes are tiny (120/s), so **one write region** is plenty. That also makes code uniqueness easy.
@@ -84,18 +85,20 @@ Cache only successful lookups. A code never changes, so a long TTL is safe; a 40
 2. Otherwise → Redirect Service in the nearest region → Redis → nearest Cosmos read region on a miss.
 3. If the code isn't found there, read the **write region** once (a brand-new code may not have replicated yet) before returning 404.
 4. Expired → **410**. Otherwise → **302** with `Location: longUrl`.
-5. Record the click by adding an event to an in-memory buffer that is sent to Event Hubs in batches. The redirect doesn't wait for it.
+5. Record the click by adding an event to an in-memory buffer that the Kafka producer sends to the `clicks` topic in batches. The redirect doesn't wait for it.
 
-**Clicks:** Event Hubs → aggregator (count per code per minute) → stats container. For edge-cached clicks, count from **Front Door access logs** instead, because those clicks never reach the Redirect Service.
+**Clicks:** Kafka topic `clicks` → clicks consumer (a consumer group that counts per code per minute) → **click counts table**, a second Cosmos container with one row per code per minute (`code, minute, count`). The Stats Service reads it for the owner. For edge-cached clicks, count from **Front Door access logs** instead, because those clicks never reach the Redirect Service.
+
+**Kafka vs. Event Hubs:** Event Hubs is Azure's managed event stream and accepts the Kafka protocol, so the design uses Kafka terms: topic, partition, producer, consumer group.
 
 ## Which components each path touches
 | Requirement | Path | Regular link (row A) | Viral link (row B) |
 |---|---|---|---|
 | Create | Write | Front Door → APIM → Create Service → Cosmos write region → (async) read regions | Same |
 | Redirect | Read | Front Door → Redirect Service → Redis → Cosmos read region (miss) → write region (not found) | Front Door **edge cache** answers ~99% of clicks; the rest go to the in-process cache (5 s) → Redis (hot key with replicas) → Cosmos (almost never) |
-| Click counts | Write | Redirect Service → Event Hubs → aggregator → stats | Front Door logs → Event Hubs (partition by code) → aggregator pre-aggregates in memory → 1 write per minute |
+| Click counts | Write | Redirect Service → Kafka topic `clicks` → clicks consumer → click counts table | Front Door logs → Kafka topic (partition by code) → clicks consumer pre-aggregates in memory → 1 write per minute |
 | Delete / abuse | Write | Create Service → Cosmos (deleted → 410) | Same + **purge** the Front Door cache and `DEL` the Redis key |
-| Stats | Read | APIM → Stats Service → stats container | Same |
+| Stats | Read | APIM → Stats Service → click counts table | Same |
 
 **What the redirect path never touches:** APIM, the Create Service, or the write region (except for a code that hasn't replicated yet).
 
