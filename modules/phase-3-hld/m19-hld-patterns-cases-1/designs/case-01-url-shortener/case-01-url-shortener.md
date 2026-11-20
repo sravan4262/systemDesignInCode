@@ -24,54 +24,31 @@ Diagram: [case-01-url-shortener.excalidraw](case-01-url-shortener.excalidraw), i
 | Freshness | A new link may take ~1 s to work in other regions | Eventual consistency for reads is fine |
 | Read:write ratio | 100:1 | The design is read-optimised |
 
-## Capacity estimate
-### 0. Facts (agree these with the interviewer first)
-| Fact | Value |
-|---|---|
-| Creates | 100M per month |
-| Redirects | 10B per month (100:1) |
-| Code | 7 characters of base62 → 62⁷ ≈ 3.5 trillion codes |
-| Link row | ~500 B (code, long URL, owner, created, expiry) |
-| Peak / retention | Peak = 3× average; keep 5 years |
-| Regions | Write: East US. Read: West Europe, Central India, Japan East |
+## Capacity estimate (high level)
+**Facts:** 100M creates/month, 10B redirects/month (100:1); link row ~500 B; keep 5 years; peak = 3× average; 1 month ≈ 3 × 10⁶ s.
 
-Conversion: 1 month ≈ 30 × 10⁵ s ≈ 3 × 10⁶ s, so 100M/month ≈ 40/s.
+| What | Math | Result | So… |
+|---|---|---|---|
+| Creates/s | 100M ÷ 3 × 10⁶ | **40/s avg, 120/s peak** | Tiny: one Cosmos write region is plenty, which also makes codes unique |
+| Redirects/s | 10B ÷ 3 × 10⁶ | **4k/s avg, 12k/s peak** | Front Door cache + Redis + read copy in each region; ~3 redirect instances per region |
+| Code length | 62⁷ vs. 6B links | **3.5T codes, 0.2% used** | 7 base62 characters; a random code rarely collides, so retry on 409 |
+| Storage | 6B × 500 B | **~3 TB in 5 years** | Small: Cosmos splits it by itself, no manual sharding |
+| Click events | = redirects | **12k/s peak** | Kafka topic + a consumer that writes one row per code per minute |
 
-### 1. API estimate → number of servers
-One instance handles **~2,000 req/s** at 70% CPU. Keep at least 3 instances per region (one per availability zone).
-
-| Service | Per month | Average | Peak | Instances at peak |
-|---|---|---|---|---|
-| Redirect (`GET /{code}`) | 10B | 4k/s | **12k/s** (worst case, edge cache cold) | 12k ÷ 2k = 6 → **12** (3 per region × 4) |
-| Create (`POST /urls`) | 100M | 40/s | 120/s | 1 → **3** (write region) |
-| Stats (`GET /urls/{code}/stats`) | small | — | — | **3** |
-| Clicks consumer (Kafka consumer group) | 10B events | 4k/s | 12k/s | **2–3** |
-| **Total** | | | | **~20 instances** |
-
-Code space: 6B links in 5 years out of 3.5T codes ≈ 0.2% used, so a random code collides about once in 500 creates and one retry fixes it.
-
-### 2. Redis estimate → number of nodes
-Rule of thumb: use ~50 GB of each 64 GB node and plan on ~100k ops/s per node; add 1 replica per primary.
-
-| Cluster | What it holds | Memory | Ops at peak | Primaries | Nodes with replicas |
-|---|---|---|---|---|---|
-| Redirect cache (per region) | Hot codes → long URL (~50M links × ~200 B × 2 overhead) | **~20 GB** | ≤ 12k reads/s | **1** (neither memory nor ops is close to the limit) | **2 per region → 8** |
-
-Cache only successful lookups. A code never changes, so a long TTL is safe; a 404 is cached for a few seconds at most.
-
-### 3. Database estimate (Cosmos DB)
 **Why Cosmos:** every read is a lookup by one key (the code), and Cosmos copies data to other regions for you, so each region reads locally.
-| Store | Key | Data (5 years) | Load at peak | Notes |
-|---|---|---|---|---|
-| `links` container | `id` = code, partition key `/id` | 6B × 500 B = **3 TB** (+ index ≈ 3.6 TB per region) | Reads on cache miss: ~2.4k RU/s; writes 120/s × ~10 RU ≈ 1.2k RU/s | One write region + 3 read regions. Cosmos splits it into ~72 physical partitions by itself; there's no manual sharding |
-| Click counts table (a second Cosmos container) | `code` + minute → count | ~1 row per active code per minute; roll up to hourly after 7 days | ~2k writes/s at peak | Written only by the clicks consumer; read by the Stats Service |
-| Kafka topic `clicks` (Azure Event Hubs, Kafka-compatible) | 32 partitions | 7-day retention | 12k events/s → **12 throughput units** (1,000 events/s each) | Absorbs click spikes |
 
-### What the numbers tell you
-- Writes are tiny (120/s), so **one write region** is plenty. That also makes code uniqueness easy.
-- Reads are 100× writes and latency-critical everywhere, so use **Front Door + Redis + read regions**.
-- 3 TB is small: the store is chosen for **global reads and point lookups**, not for size.
-- The hard parts are **global latency and uniqueness**, not volume.
+**What the numbers tell you:** writes are tiny and reads are 100× more and latency-critical worldwide, so the design is all about **reading close to the user** (edge, Redis, regional read copies). Volume is not the hard part; **global latency and unique codes** are.
+
+## API
+| Endpoint | Request | Response | Errors |
+|---|---|---|---|
+| `POST /urls` (APIM, auth) | `{ longUrl, customAlias?, expiresAt? }` | `201 { code, shortUrl, expiresAt }` | `400` invalid URL · `409` alias taken |
+| `GET /{code}` (public, via Front Door) | — | `302` + `Location: <longUrl>` (no body) | `404` unknown · `410` expired or deleted |
+| `GET /urls/{code}/stats` (APIM, owner only) | — | `200 { code, clicks, clicksByDay[] }` | `403` not owner · `404` |
+| `DELETE /urls/{code}` (APIM, owner or abuse team) | — | `204` (then purge Front Door + Redis) | `403` · `404` |
+
+- The redirect is a browser request, so it returns a **302 with a Location header**, not JSON; the browser follows it by itself.
+- Clicks are recorded **inside** `GET /{code}` (an async event), so there's no separate "track click" call a client could skip or fake.
 
 ## High-level design (see the diagram)
 **Create (write path):**

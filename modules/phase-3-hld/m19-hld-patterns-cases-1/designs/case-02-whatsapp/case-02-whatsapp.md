@@ -39,6 +39,30 @@ Diagram: [case-02-whatsapp.excalidraw](case-02-whatsapp.excalidraw), in two rows
 
 **What the numbers tell you:** 100M open connections and ~4M pushes/s shape the design (gateway layer, push model, one stored copy per message). Media volume is 100× the text, so it goes straight to Blob storage. Server storage is set by **retention**, which is why messages are kept only 30 days on the server.
 
+## API
+Live messaging runs over **one WebSocket per device**; everything else is plain REST.
+
+**WebSocket** `wss://chat.example.com/ws` (JWT checked on connect)
+
+| Direction | Frame | Payload | Answer |
+|---|---|---|---|
+| Client → server | `send` | `{ clientMsgId, chatId, type: text\|media, body \| mediaRef }` | `ack { clientMsgId, seq }` → ✓ sent |
+| Server → client | `message` | `{ chatId, seq, senderId, body \| mediaRef, sentAt }` | — |
+| Client → server | `delivered` / `read` | `{ chatId, upToSeq }` (cumulative) | — |
+| Server → client | `receipt` | `{ chatId, userId, type: delivered\|read, upToSeq }` | → ✓✓ / blue |
+
+**REST**
+
+| Endpoint | Request | Response |
+|---|---|---|
+| `POST /sync` | `{ lastSeq: { chatId: seq, … } }` | `200 { chats: [{ chatId, messages[] }] }` (everything newer than my seq) |
+| `GET /chats/{chatId}/messages?beforeSeq=&limit=50` | — | `200 { messages[], nextBeforeSeq }` (history, scrolling up) |
+| `POST /media/upload-url` | `{ contentType, size }` | `200 { mediaId, sasUrl }` (upload straight to Blob) |
+| `POST /groups` · `POST /groups/{id}/members` | `{ name, memberIds[] }` · `{ userId }` | `201 { groupId }` · `204` (max 256 → `409`) |
+
+- `clientMsgId` makes **send idempotent**: if the app resends after a lost ack, the server returns the same `seq` instead of storing the message twice.
+- Acks are **cumulative** ("up to seq N"), so one frame covers many messages.
+
 ## High-level design (see the diagram)
 **Send (write path):**
 1. The app keeps one WebSocket to a Connection Gateway, which registers `user → gateway node` in Presence.

@@ -24,67 +24,33 @@ Diagram: [case-03-twitter.excalidraw](case-03-twitter.excalidraw), in two rows: 
 | Durability | A posted tweet is never lost | It is acknowledged only after the DB write |
 | Read:write ratio | ~20:1 (requests), ~400:1 (tweet rows read) | The design is read-optimised |
 
-## Capacity estimate
-### 0. Facts (agree these with the interviewer first)
-| Fact | Value |
-|---|---|
-| Users | 500M MAU, **200M DAU** |
-| Timeline loads | 10 per user per day, 20 tweets per page |
-| Tweets | 0.5 per user per day → 100M/day; 10% have media (~500 KB) |
-| Likes / follows | 5 likes and 0.5 follows per user per day |
-| Followers | 200 on average; celebrities up to 100M |
-| Sizes | Tweet row ~500 B; tweet id 8 B (Snowflake) |
-| Peak / retention | Peak = 3× average; keep 5 years |
+## Capacity estimate (high level)
+**Facts:** 200M DAU; 10 timeline loads/day (20 tweets each); 0.5 tweets/day per user (10% with ~500 KB media); 5 likes/day; 200 followers on average, celebrities up to 100M; tweet row ~500 B; peak = 3× average; 1 day ≈ 10⁵ s.
 
-Conversion: 1 day ≈ 10⁵ s, so 100M/day ≈ 1,000/s.
+| What | Math | Result | So… |
+|---|---|---|---|
+| Timeline reads/s | 200M × 10 ÷ 10⁵ | **20k/s avg, 60k/s peak** | ~30 Timeline Service instances; reads come from Redis |
+| Tweets/s | 100M ÷ 10⁵ | **1k/s avg, 3k/s peak** | Writes are light |
+| Fan-out writes/s | 100M × 200 followers | **20B/day → 600k/s peak** | Timelines live in Redis, not SQL; skip celebrities (hybrid) |
+| Likes/s | 200M × 5 ÷ 10⁵ | **10k/s avg, 30k/s peak** | Redis counters; split counters for viral tweets |
+| Timeline cache | 200M × 800 ids × 8 B × 2 | **~2.6 TB** | ~52 Redis primaries (or keep 200 ids → ~13) |
+| Tweet storage | 100M × 500 B | **50 GB/day → ~90 TB in 5 years** | Cassandra, sized by storage (~95% of reads hit the cache) |
+| Media | 10M × 500 KB | **~5 TB/day** | Blob + CDN with SAS upload |
 
-### 1. API estimate → number of servers
-One instance handles **~2,000 req/s** at 70% CPU. Keep at least 3 instances (one per availability zone) for availability, and autoscale between the minimum and the peak count.
+**What the numbers tell you:** reads dominate, so build timelines in advance (fan-out on write). A celebrity tweet would mean 50M+ inserts, so use a **hybrid**: push for normal users, pull for celebrities. Memory (2.6 TB of timelines) sets the Redis size; storage sets the Tweets store size.
 
-| Service | Per day | Average | Peak | Instances at peak |
-|---|---|---|---|---|
-| Timeline reads (`GET /timeline`) | 200M × 10 = 2B | 20k/s | **60k/s** | 60k ÷ 2k = **30** (min 10) |
-| Post tweet (`POST /tweets`) | 100M | 1k/s | 3k/s | 2 → **3** (availability) |
-| Like / unlike | 200M × 5 = 1B | 10k/s | 30k/s | **15** |
-| Follow / unfollow | 100M | 1k/s | 3k/s | 2 → **3** |
-| Fan-out workers (Kafka consumers) | 20B Redis writes | 200k/s | **600k/s** | ~20k pipelined writes/s each → **30 workers** |
-| **Total** | | | | **~80 instances at peak** |
+## API
+| Endpoint | Request | Response | Notes |
+|---|---|---|---|
+| `POST /tweets` | `{ text (≤ 280), mediaIds? }` | `201 { tweetId, createdAt }` | Idempotency key header; outbox → fan-out |
+| `POST /media/upload-url` | `{ contentType, size }` | `200 { mediaId, sasUrl }` | Upload straight to Blob |
+| `POST /follows` · `DELETE /follows/{userId}` | `{ userId }` | `204` | Follow is one-way, no approval |
+| `POST /likes` · `DELETE /likes/{tweetId}` | `{ tweetId }` | `204` (`202` for viral tweets, counted async) | Insert-if-new, so a double like counts once |
+| `GET /home?cursor=&limit=20` | — | `200 { tweets[], nextCursor }` | Push + pull merge; cursor = last tweet id (Snowflake) |
+| `GET /users/{id}/tweets?cursor=&limit=20` | — | `200 { tweets[], nextCursor }` | Profile timeline |
 
-Egress (text only): 60k/s × 20 tweets × 500 B ≈ **600 MB/s** at peak. Media is not served by the API; it goes through the CDN.
-
-### 2. Redis estimate → number of nodes
-Rule of thumb: a node has 64 GB of RAM, but **use only ~50 GB** (leave headroom for fragmentation and for snapshot forks), and handles **~100k ops/s**. Size each cluster by memory **and** by throughput, and take the larger. Add **1 replica per primary**.
-
-| Cluster | What it holds | Memory | Ops at peak | Primaries (memory / ops) | Nodes with replicas |
-|---|---|---|---|---|---|
-| Timeline cache | List of ≤800 tweet ids per active user | 200M × 800 × 8 B = 1.3 TB, ×2 overhead = **2.6 TB** | 600k writes + 60k reads/s | 2.6 TB ÷ 50 GB = **52** / 660k ÷ 100k = 7 → **52** (memory decides) | **104** |
-| Tweet cache | Hot tweets (last 2 days) + like counters | 2 × 100M × 500 B × 1.5 = **150 GB** | 60k × 20 = **1.2M reads/s** | 150 GB ÷ 50 GB = 3 / 1.2M ÷ 150k (MGET) = **8** → **8** (ops decide) | **16** |
-| **Total** | | | | | **~120 nodes** |
-
-- Trade-off: keep 200 ids per timeline instead of 800 → 13 primaries → **~42 nodes** in total. Older pages fall back to a pull from the Tweets store.
-- Celebrity tweets are hot keys, so add a short-TTL **in-process cache** on the Timeline Service in front of Redis.
-
-### 3. Database estimate → number of shards and replicas
-Rule of thumb: keep **~2 TB of data per node or shard** (disks of about 4 TB leave room for compaction and rebuilds). **Replication factor 3**, spread over 3 availability zones.
-
-| Store | Key / tables | Data (5 years) | × RF 3 | Load at peak | Shards or nodes | Servers |
-|---|---|---|---|---|---|---|
-| Tweets (Cassandra) | `tweets` (pk `tweet_id`); `user_tweets` (pk `user_id, month`, ck `tweet_id DESC`, ids only) | 100M × 500 B = 50 GB/day → 18 TB/year → **90 TB** | 270 TB | Reads: 5% miss × 1.2M = 60k/s; writes: 3k/s (light) | 270 ÷ 2 TB = **135 nodes** (year 1: **27**) | **135** (storage decides) |
-| Social graph (SQL, by `user_id`) | `followers`, `following` (each lookup on one shard) | 500M × 200 × 2 × 16 B = **3.2 TB** | 9.6 TB | Fan-out reads: 3k tweets/s; follows: 3k/s | 3.2 ÷ ~1 TB = 4 → **8 shards** (fixed buckets, M6) | 8 × 3 = **24** |
-| Likes (Cassandra) | pk `tweet_id` | 1B × 24 B = 24 GB/day → **45 TB** | 135 TB | 30k writes/s; counts come from Redis | 135 ÷ 2 TB = **~68 nodes** (or share the tweets cluster) | **~68** |
-| Kafka | topic `tweet-created`, 64 partitions | 3k/s × 1 KB = 3 MB/s, 7-day retention ≈ 2 TB | 6 TB | Tiny | Partitions ≥ 30 fan-out workers | **3 brokers** |
-| Media (Blob + CDN) | `media/{tweet_id}` | 5 TB/day → **~9 PB** | Managed | Served by the CDN | Hot → cool → archive tiers | Managed |
-| **Total (excluding managed)** | | | | | | **~230 servers** |
-
-- If tweets were in sharded SQL instead: 90 TB ÷ 2 TB = **45 shards × (1 primary + 2 replicas) = 135 servers**. The size is the same, but you run the sharding yourself (M6).
-- Moving tweets older than a year to cheaper storage cuts the tweet nodes a lot.
-- A celebrity's follower list (100M × 16 B ≈ 1.6 GB) sits on one graph shard. That's fine, because the hybrid model never fans it out.
-
-### What the numbers tell you
-- Reads dominate, so build timelines in advance (fan-out on write).
-- At 600k fan-out writes/s, timelines must live in Redis, not in SQL. The memory needed (2.6 TB) is what sets the node count.
-- A celebrity tweet means 50M inserts, so pure push breaks. Use a **hybrid**: push for normal users, pull for celebrities.
-- The Tweets store is sized by **storage**, not by load (cache hit rate around 95%).
+- Each tweet in a response carries `{ tweetId, author, text, mediaUrls, likeCount, likedByMe, createdAt }`.
+- Pagination is **cursor-based** (`max_id`), not offset, so new tweets don't shift pages (M14).
 
 ## High-level design (see the diagram)
 **Write path:**
