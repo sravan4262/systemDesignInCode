@@ -71,7 +71,8 @@ def Arrow(id, frm, to, label='', color=None, dashed=False, flat=False):
     acx, acy = a['x'] + a['width'] / 2, a['y'] + a['height'] / 2
     bcx, bcy = b['x'] + b['width'] / 2, b['y'] + b['height'] / 2
     if flat:
-        y1 = y2 = bcy
+        # the target's centre height if the source spans it, else the source's (e.g. a small box -> a tall one)
+        y1 = y2 = bcy if a['y'] <= bcy <= a['y'] + a['height'] else acy
         x1, x2 = (a['x'] + a['width'], b['x']) if bcx > acx else (a['x'], b['x'] + b['width'])
     else:
         x1, y1 = _edge(a, bcx, bcy)

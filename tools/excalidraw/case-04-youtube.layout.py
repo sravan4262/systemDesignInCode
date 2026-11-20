@@ -8,36 +8,37 @@ Note('legend', 0, -25, "Blue = write path   Green = read path   Dashed = async  
 
 # =================== ROW A: REGULAR CREATOR ===================
 T = 0
-Frame('fA', 0, T, 2560, 1200)
+Frame('fA', 0, T, 2560, 1310)
 Note('At', 20, T + 12, "A. REGULAR CREATOR (2k subscribers; a few thousand views, likes and comments trickle in)", 24, W)
-w1, w2, w3, w4, w5 = T + 90, T + 210, T + 330, T + 450, T + 570
-r1, r2, r3, r4 = T + 730, T + 860, T + 970, T + 1080
+w1, w2, w3, w4, w5 = T + 200, T + 320, T + 440, T + 560, T + 680
+r1, r2, r3, r4 = T + 840, T + 970, T + 1080, T + 1190
 Note('Awl', Col(2), T + 55, "WRITE PATH", 18, W)
-Note('Arl', Col(2), T + 695, "READ PATH", 18, R)
+Note('Arl', Col(2), T + 805, "READ PATH", 18, R)
 
-Box('Au', Col(0), T + 560, BW, 80, "User (creator / viewer)\nweb / mobile / TV", EDGE)
-Box('Araw', Col(0), T + 380, BW, H, "Blob: raw videos\n(staged blocks via SAS,\nresumable)", DATA)
-Box('Acdn', Col(0), T + 760, BW, H, "CDN (Front Door)\nmanifest + segments", EDGE)
-Box('Aorg', Col(0), T + 880, BW, H, "Blob: processed\n(CDN origin)", DATA)
+Box('Au', Col(0), w1, BW, 80, "User (creator / viewer)\nweb / mobile / TV", EDGE)
+Box('Araw', Col(1), T + 90, BW, H, "Blob: raw videos\n(staged blocks,\nresumable)", DATA)
+Box('Acdn', Col(0), T + 840, BW, H, "CDN (Front Door)\nmanifest + segments", EDGE)
+Box('Aorg', Col(0), T + 960, BW, H, "Blob: processed\n(CDN origin)", DATA)
 Box('Ag', Col(1), w1, BW, r4 + H - w1, "API Gateway (APIM)\n\nauth (JWT),\nrate limit,\nroute by path", EDGE)
-Arrow('Aa0', 'Au', 'Araw', "upload chunks", W)
+Arrow('Aa0', 'Au', 'Araw', "2 upload blocks\n(SAS URL)", W)
 Arrow('Aa00', 'Au', 'Acdn', "stream (ABR)", R)
 Arrow('Aa01', 'Acdn', 'Aorg', "miss", R)
-Arrow('Aa1', 'Au', 'Ag', "HTTPS", None, False, True)
+Arrow('Aa1', 'Au', 'Ag', "1, 3", W, False, True)
 
 # write: upload -> transcode; video-ready feeds search + channel lists
-Box('Aus', Col(2), w1, BW, H, "Upload Service\nPOST /videos -> SAS\nPOST /complete", SVC)
-Box('Amd', Col(3), w1, BW, H, "Video metadata (Cosmos)\nstatus + outbox", DATA)
+Box('Aus', Col(2), w1, BW, H, "Upload Service\n1 POST /videos -> SAS\n3 POST /complete", SVC)
+Box('Amd', Col(3), w1, BW, H, "Video metadata (Cosmos)\n1 row: uploading\n3 processing + outbox", DATA)
 Box('Ak', Col(4), w1, BW, w3 + H - w1, "Kafka topics\n\nvideo-uploaded\nvideo-ready\n\n(from the metadata\noutbox)", ASYNC)
 Box('Aor', Col(5), w1, BW, H, "Transcode orchestrator\n(Durable Functions)\nsplit into 4-s chunks", ASYNC)
-Box('Atw', Col(6), w1, BW, H, "Transcode workers\n(KEDA) chunk x 5\nrenditions", ASYNC)
+Box('Atw', Col(6), w1, BW, H, "Transcode workers\nread raw chunk ->\n5 renditions", ASYNC)
 Box('Apr', Col(7), w1, BW, H, "Blob: processed\nHLS segments +\nmanifest", DATA)
 Box('Aix', Col(5), w2, BW, H, "Search indexer\n(consumer: video-ready)", ASYNC)
 Box('Asr', Col(6), w2, BW, H, "Search index\n(Azure AI Search)\ntitle, tags, counts", DATA)
 Box('Acu', Col(5), w3, BW, H, "Channel feed updater\n(consumer: video-ready)", ASYNC)
 Box('Acl', Col(6), w3, BW, H, "Channel latest (Redis)\nchannel:{id} last 20 ids", DATA)
 Arrow('Aw1', 'Ag', 'Aus', '', W, False, True)
-Arrow('Aw2', 'Aus', 'Amd', "write", W)
+Arrow('Aw2', 'Aus', 'Amd', "1, 3", W)
+Arrow('Aw0', 'Aus', 'Araw', "3 commit\nblocks", W)
 Arrow('Aw3', 'Amd', 'Ak', "outbox", W, True)
 Arrow('Aw4', 'Ak', 'Aor', "uploaded", W, True)
 Arrow('Aw5', 'Aor', 'Atw', "jobs", W, True)
@@ -92,7 +93,7 @@ Arrow('Ar11', 'Asd2', 'Acl2', "2 latest ids", R)
 Note('Asum', Col(5) + 40, r1, "WRITE touches: Upload Service, raw Blob (direct, SAS),\nVideo metadata + outbox, Kafka, transcode orchestrator +\nworkers, processed Blob; video-ready -> search indexer +\nchannel feed updater. Subscribe / like / comment write\none row each and bump the count synchronously.\n\nREAD touches: Video Service (Redis -> Cosmos), Search\nService (AI Search), Comment Service (page-1 cache ->\nCosmos), Feed Service (pull: my channels -> channel\nlatest lists). Video bytes: CDN -> Blob origin only.", 16, NOTE)
 
 # =================== ROW B: HOT CREATOR ===================
-T = 1280
+T = 1390
 Frame('fB', 0, T, 2560, 1100)
 Note('Bt', 20, T + 12, "B. HOT CREATOR (100M subscribers; 10M views, 1M likes, 100k comments in the first hour)", 24, RED)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
