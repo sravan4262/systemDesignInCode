@@ -26,7 +26,7 @@ Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: 
 | Freshness | New video in search and subscriber feeds within ~1 min; counts lag ≤ a few s | Eventual consistency is fine |
 | Read-your-writes | My own like / comment shows immediately | Otherwise users think it failed |
 | Correctness | One like per user per video | Insert-if-new on `(userId, videoId)` |
-| Geography | Global | CDN POPs + Cosmos read copies near viewers |
+| Geography | Global; a viewer in India never crosses an ocean on the common path | CDN POPs, Cosmos read copies, **regional Blob copies** for CDN misses, Redis per region |
 
 ## Capacity estimate (high level)
 **Facts:** 500M DAU; 5 watches, 2 searches, 1 like/day each; 1 comment per 10 users/day; 1M uploads/day (10 min, ~500 MB raw); avg watch 5 min at ~2.5 Mbps; hot creator: 10M views / 1M likes / 100k comments in the first hour; peak = 3× average; 1 day ≈ 10⁵ s.
@@ -65,14 +65,14 @@ Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: 
 | Component | What it does | Store / technology |
 |---|---|---|
 | Upload Service | Video row + SAS URL; on `/complete`, commits the blocks and writes an outbox row | **Video metadata: Cosmos DB** (pk `videoId`) |
-| Transcode orchestrator + workers | Split into 4-s chunks; one job per chunk × rendition; then manifest + `status = ready` | **Durable Functions** + containers scaled by **KEDA**; output to **Blob: processed** (the CDN origin) |
+| Transcode orchestrator + workers | Split into 4-s chunks; one job per chunk × rendition; then manifest + `status = ready` | **Durable Functions** + containers scaled by **KEDA**; output to **Blob: processed** in the home region, then **async object replication** to regional copies (West Europe, Central India, Japan East); these are the CDN origins |
 | Search indexer → Search Service | On `video-ready`, upsert the video into the index; counts refreshed every few minutes for ranking | **Azure AI Search** (replicas for read throughput) |
 | Subscribe Service | Subscribe / unsubscribe | **Subscriptions: Cosmos**, pk `userId` (my channels); subscriber count in the Counts store |
 | Channel feed updater → Feed Service | On `video-ready`, `LPUSH` the id onto that channel's list; the feed merges my channels' lists at read time | **Redis** `channel:{id}` (last 20 ids) |
 | Like Service | Like / unlike | **Likes: Cosmos**, pk `userId`, id `videoId` (insert if new) |
 | Comment Service | Write and page comments | **Comments: Cosmos**, pk `videoId` (hot videos: `(videoId, hour)`); page-1 cache in **Redis** |
 | Counts | Like / comment / subscriber counts | **Cosmos** (durable) + **Redis** (what the watch page reads) |
-| Video Service | Watch page: metadata, counts, my like / subscribe state | **Redis** → Cosmos read copy on a miss |
+| Video Service | Watch page: metadata, counts, my like / subscribe state | **Redis (per region)** → nearest Cosmos read copy on a miss |
 | Kafka | `video-uploaded`, `video-ready`, `count-events` | Azure Event Hubs (Kafka API) |
 | CDN | Manifests + segments | **Azure Front Door** (edge POPs + origin shield) |
 
@@ -83,7 +83,7 @@ Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: 
 4. **Hot video:** the row writes stay the same (likes and subscriptions are keyed by `userId`, so 1M likes spread over all partitions). Only the **count** is hot, so the service emits a `count-event` instead and returns `202`; the count aggregator sums per video per second and writes **one** update per second.
 
 **Read path:**
-1. **Watch:** Video Service → Redis (`video:{id}` + counts) → Cosmos read copy on a miss → returns the manifest URL. The player streams segments from the CDN (edge → origin shield → Blob).
+1. **Watch:** Video Service (in the viewer's region) → Redis (`video:{id}` + counts) → nearest Cosmos read copy on a miss → returns the manifest URL. The player streams segments from the CDN: edge → origin shield → **nearest regional Blob copy** → home region only if the copy isn't there yet (a brand-new or long-tail video).
 2. **Search:** Search Service → AI Search (hot: popular-query cache in Redis, TTL 30 s).
 3. **Comments:** page 1 from the Redis cache, older pages from Cosmos by cursor.
 4. **Subscriptions feed (pull):** my ~50 channels from Subscriptions → `MGET` 50 channel lists from Redis → merge by time → hydrate from the metadata cache.
@@ -95,10 +95,12 @@ Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: 
 | Subscribe | Write | Subscribe Service → Subscriptions (pk `userId`) → count +1 | Same row write; the count goes **Kafka → aggregator → 1 write/s** |
 | Like | Write | Like Service → Likes (insert if new) → count +1 (sync) | Same row write (spread by `userId`); count async via aggregator, `202` |
 | Comment | Write | Comment Service → Comments (pk `videoId`) → count +1 | Comments pk `(videoId, hour)` so one partition doesn't take every write; count via aggregator, `202` |
-| Watch | Read | Video Service → Redis → Cosmos on a miss; segments CDN → Blob | **In-process cache (5 s)** → Redis replicas; segments CDN edge (~99%) → **origin shield** → Blob |
+| Watch | Read | Video Service → Redis → nearest Cosmos read copy on a miss; segments CDN → nearest regional Blob copy → home region if not copied yet | **In-process cache (5 s)** → Redis replicas; segments CDN edge (~99%) → **origin shield** → Blob |
 | Search | Read | Search Service → AI Search | **Popular-query cache** → AI Search replicas |
 | Comments | Read | Page-1 cache → Cosmos | **Top-comments cache rebuilt every 5 s** (not on every write) → Cosmos for older pages |
 | Subscriptions feed | Read | Feed Service → my channels → channel lists (Redis) | Same; the hot channel's list is read by millions → Redis replicas + in-process cache |
+
+**Both kinds of data are read in-region:** metadata from Cosmos read copies (built in), video bytes from regional Blob copies (object replication). Only a CDN miss for a video that isn't copied yet crosses regions.
 
 **What the read path never touches:** Kafka, the orchestrator, workers, indexer or aggregator. **What our services never touch:** the video bytes.
 
@@ -108,8 +110,9 @@ Diagram: [case-04-youtube.excalidraw](case-04-youtube.excalidraw), in two rows: 
 3. **Hot comments.** 30–3k writes/s and millions of page-1 reads on one video. Bucket the partition key by hour; rebuild the top-comments cache every few seconds instead of invalidating on every write; spam/moderation runs async.
 4. **Search freshness vs. cost.** Index on `video-ready` (seconds), but refresh like/view counts for ranking in batches every few minutes; per-like index updates would melt the index.
 5. **Chunked transcoding.** Minutes instead of hours; retry one chunk; idempotent output paths `{videoId}/{rendition}/seg_{n}.ts`. Why chunk boundaries must be keyframes.
-6. **CDN for a hot upload.** 10M viewers in an hour hit the same first segments. Pre-warm + origin shield so the first wave of misses doesn't stampede Blob.
-7. **Unsubscribe / unlike races.** A double click sends like then unlike out of order. Use a per-row version (last action wins by client timestamp + server seq), and the count derives from the row state change, not from the request count.
+6. **Regional copies of the video bytes.** Copying every rendition of every video to 4 regions quadruples ~750 TB/day. Copy **popular and recent** videos (and the low renditions first); the long tail stays in the home region, where a rare CDN miss crossing the ocean is acceptable. Compare Cosmos, where every metadata row is copied because rows are tiny.
+7. **CDN for a hot upload.** 10M viewers in an hour hit the same first segments. Pre-warm + origin shield so the first wave of misses doesn't stampede Blob.
+8. **Unsubscribe / unlike races.** A double click sends like then unlike out of order. Use a per-row version assigned by the server (never client timestamps: clock skew, M17), and the count changes only when the row's state changes, not per request.
 
 ## Interview follow-ups (answer these after the design)
 - A creator with 100M subscribers uploads. Walk through what happens before the first subscriber sees it in their feed, and why nothing is written per subscriber.
