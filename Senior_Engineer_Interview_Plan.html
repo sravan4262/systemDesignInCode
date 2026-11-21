@@ -630,7 +630,7 @@ td.bad{color:var(--fixfg)}
 <li>Implement timeouts, bounded retries, streaming responses, provider rate limits, and fallback models.</li>
 <li>Version prompts, models, and output schemas together.</li>
 <li>Build a RAG pipeline: chunking strategies, embedding models, a vector index (pgvector or Azure AI Search), and metadata filtering.</li>
-<li><span class="new">New</span> Vector index internals: exact KNN vs. ANN, HNSW, IVF, product quantization, filtered ANN, and the recall vs. latency vs. memory trade-off.</li>
+<li><span class="new">New</span> Vector index basics (light): exact KNN vs. approximate (ANN) search, HNSW at a high level, filtered search, and the recall vs. latency knob. (IVF and product quantization removed 2026-11-21: the index service handles them.)</li>
 <li>Implement hybrid retrieval (BM25 + vectors), <span class="new">New</span> Reciprocal Rank Fusion (on your resume), reranking, context assembly, and citations.</li>
 <li>Debug RAG stage by stage (indexing, filtering, ranking, context assembly, generation) when the correct document exists but the answer is wrong.</li>
 <li>Handle freshness, re-indexing, deletions, and embedding-model upgrades.</li>
@@ -640,16 +640,17 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>A tenant-scoped RAG service over the capstone's orders and policies, with citations and a written stage-by-stage debugging guide.</p></div>
 </article>
 
-<article class="week" id="m23"><h3><span class="wk">M23</span><span class="new">New</span> LLM internals, inference, and adaptation<label class="done"><input type="checkbox" data-k="m23">Done</label></h3>
+<article class="week" id="m23"><h3><span class="wk">M23</span><span class="new">New</span> LLM internals for model users (light, one session)<label class="done"><input type="checkbox" data-k="m23">Done</label></h3>
+<p><em>Trimmed on 2026-11-21: the learner uses models through APIs and doesn't build, train or host them. Only what an application engineer needs to explain cost, latency and design choices.</em></p>
 <ul>
-<li>Transformer basics: tokenization, embeddings, attention, decoder-only generation, why longer context costs more.</li>
-<li>Inference: prefill vs. decode, KV cache, continuous batching, PagedAttention/vLLM, quantization (INT8/INT4), speculative decoding, TTFT and TPOT, prefill-decode disaggregation.</li>
-<li>Self-hosting vs. API: GPU memory math, throughput and cost per million tokens, ONNX Runtime for CPU embeddings (Byte AI), Ollama or vLLM for local serving.</li>
-<li>The adaptation ladder: prompting → RAG → fine-tuning. SFT, LoRA/QLoRA, DPO at a conceptual level, distillation, fine-tuning embedding models and rerankers, preparing data and evals for a fine-tune.</li>
-<li>Recommendation and ranking: two-tower retrieval, candidate generation → ranking → re-ranking, cold start, feedback loops. Map this to Byte AI's “For You” feed.</li>
-<li>LLM moderation and classification pipelines: thresholds, precision/recall trade-offs, human review queues. Map this to your Gemini moderation pipeline.</li>
+<li>Tokens and context: why longer prompts are slower and more expensive; input vs. output token pricing.</li>
+<li>Prefill vs. decode and the KV cache, at the level of "why time to first token grows with prompt length" and "why prompt caching saves money".</li>
+<li>The adaptation ladder: prompting → RAG → fine-tuning, and when each one is worth it (no training methods).</li>
+<li>Self-hosting vs. an API in one line: cost at very high volume vs. the operational burden.</li>
+<li>Using an LLM as a classifier (moderation): thresholds, precision vs. recall, a human review queue.</li>
+<li><strong>Removed:</strong> attention math, inference engine internals (continuous batching, PagedAttention/vLLM, speculative decoding, prefill-decode disaggregation), quantization, GPU memory math and the local serving lab, fine-tuning methods (SFT, LoRA/QLoRA, DPO, distillation, fine-tuning embedders and rerankers), recommendation and ranking.</li>
 </ul>
-<div class="callout"><span class="label">Exit Deliverable</span><p>Serve a small model with vLLM or Ollama and measure TTFT and throughput; write a GPU capacity estimate for a 1k RPS chat feature and a one-page “fine-tune vs. RAG vs. prompting” decision memo.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A one-page “fine-tune vs. RAG vs. prompting” decision memo, and a short explanation of what drives LLM cost and latency.</p></div>
 </article>
 
 <article class="week" id="m24"><h3><span class="wk">M24</span>Agents and evals<label class="done"><input type="checkbox" data-k="m24">Done</label></h3>

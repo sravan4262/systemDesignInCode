@@ -1,9 +1,13 @@
-# M23 — LLM internals, inference, and adaptation
+# M23 — LLM internals for model users (light, one session)
 
 > Plan: `Senior_Engineer_Interview_Plan.html#m23` · Status lives in `/PROGRESS.md`
 
 ## Exit deliverable
-- [ ] Measured TTFT/throughput on a locally served model, a GPU capacity estimate, and a fine-tune vs. RAG vs. prompting memo.
+- [ ] A one-page fine-tune vs. RAG vs. prompting memo, and a short explanation of what drives LLM cost and latency.
+
+## Scope (trimmed 2026-11-21: the learner uses models via APIs; doesn't build, train or host them)
+- **Keep (light):** tokens and context cost; prefill vs. decode + KV cache (why TTFT grows with prompt length, why prompt caching saves money); prompting → RAG → fine-tuning and when each is worth it; self-host vs. API in one line; LLM as a classifier (moderation thresholds, precision vs. recall, human review).
+- **Removed:** attention math, inference engine internals (vLLM, PagedAttention, continuous batching, speculative decoding), quantization, GPU memory math and the serving lab, fine-tuning methods (SFT, LoRA, DPO, distillation), recommendation and ranking.
 
 ## Before starting
 - [ ] Reviewed the Apple Notes listed in the plan's 🟧 box for this module

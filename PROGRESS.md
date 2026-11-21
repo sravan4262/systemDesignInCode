@@ -16,7 +16,7 @@
      - Skipped (covered by the above or earlier modules): live comments, live streaming, Yelp, rate limiter (M8), distributed KV/cache (M17 + M8), hotel/meeting rooms (Ticketmaster + M3), job scheduler/leaderboard/metrics, typeahead, web crawler, design Kafka, auction, stock brokerage, own question bank.
      - Per-case prep (learner's request 2026-11-19): one folder per case `<module>/designs/case-NN-<name>/` holding `case-NN-<name>.md` (sections: prompt → FRs → NFRs → **short capacity table** (facts line + What/Math/Result/So… + 'what the numbers tell you') → **API** (endpoints, request, response, errors) → high-level design → components per path → deep dives → follow-ups) and the Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (1) URL shortener, (2) WhatsApp (prep; learner mid-case), (3) Twitter (learner reviewing, then refine). Next: the other 9. Python generator `excal.py` for Mac.
   - **Deferred, to look into later (learner, 2026-11-21):** S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
-- **Phase 4 changes (learner, 2026-11-21):** M24 gains two topics: **A2A** (agent-to-agent protocol) and **durable agent execution** (checkpoint/resume, long human-approval waits, Sagas for agent actions). Proposed but NOT applied yet: trim M23 to a light session (learner uses models via APIs, doesn't build or host them).
+- **Phase 4 changes (learner, 2026-11-21):** M24 gains two topics: **A2A** (agent-to-agent protocol) and **durable agent execution** (checkpoint/resume, long human-approval waits, Sagas for agent actions). **M23 trimmed to one light session** (learner uses models via APIs; no training, hosting or inference internals); M22 vector-index internals cut to basics (IVF / PQ removed). Phase 4 order: M22 → M23 (light) → M24 → M25 (ends with the practical build) → CP4.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Mac
@@ -51,8 +51,8 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
 | 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
 | 4 | M22 | LLM apps & RAG | ⬜ |
-| 4 | M23 | LLM internals, inference, adaptation | ⬜ |
-| 4 | M24 | Agents & evals | ⬜ |
+| 4 | M23 | LLM internals for model users (light) | ⬜ (trimmed 2026-11-21) |
+| 4 | M24 | Agents & evals | ⬜ (+ A2A, durable agent execution) |
 | 4 | M25 | Production AI & AI system design | ⬜ (practical build: AI chat over company documents, design drafted early) |
 | 4 | CP4 | Checkpoint: AI design | ⬜ |
 | 5 | M26 | AI coding, code review, comprehension | ⬜ |
