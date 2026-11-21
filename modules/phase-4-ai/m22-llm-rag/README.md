@@ -70,6 +70,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Answers that go to a person (stream plain text), huge nested schemas (split the call), cases a regex can do.
 - **Quick-check answers:** The schema only checks the shape, not the truth: `amount: 1200` passes, so code checks it (is the number in the email? does it match the PO? is it in range?) and evals test it before shipping. **Always check the finish reason**: `length` means cut off (50 tokens for 20 products ≈ 300–400 needed). Raise the limit or ask for fewer per call. A cut-off plain-text answer can look fine, so check every time.
 
+#### Tool calling
+- **In plain words:** I write C# methods and pass them as tools in `ChatOptions`. The model only sees each tool's name, `[Description]` and parameters. From the user's message it picks a tool and its arguments and **asks** for it; **my code runs it** (`UseFunctionInvocation`) and sends the result back, then the model answers.
+- **Problem it solves:** The model doesn't know my live data (order 123 shipped this morning). Without tools it says "I don't know" or makes something up.
+- **Analogy:** A manager (LLM) asks an assistant (my code) to look something up. Only the assistant has the keys to the database.
+- **Diagram:** question + tool list → model: "call GetRecentOrders()" → my code runs it → result → model: "call GetOrderStatus(124)" → result → final answer. Code: `src/M22.LlmApps/Controllers/OrderChatController.cs`.
+- **Variations / alternatives:** **Fetch first**: if I already know what data is needed (the "Ask about this order" button on the order page), my code fetches it and puts it in the prompt. One LLM call, cheaper, predictable. Use **tool calling** for an open chat box where users can ask anything. RAG = fetch first, for documents. MCP (M24) = sharing tools across apps.
+- **When not to use it:** When the data needed is always the same (fetch first), and with too many tools (the model picks wrong more often).
+- **Quick-check answers:** My code runs the tool, not OpenAI, so permission checks happen on my server. **Every tool checks the owner itself**: without it in `GetRecentOrders`, alice sees bob's order ids, items and dates. Tools that change data (cancel, refund) only **request**; the user confirms with a separate endpoint, because the model can misread ("thinking about cancelling"), pick the wrong id, or be tricked by text in a document (prompt injection). Cap the loop (`MaximumIterationsPerRequest = 5`).
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
