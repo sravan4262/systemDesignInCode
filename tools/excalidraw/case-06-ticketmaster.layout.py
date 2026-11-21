@@ -19,7 +19,7 @@ Box('Ag', Col(1), w1, BW, r4 + H - w1, "APIM (edge)\n\nauth (JWT),\nrate limit,\
 Arrow('Aa1', 'Au', 'Ag', "HTTPS", None, False, True)
 
 # write: hold seats (temporary -> Redis with TTL)
-Box('Ahs', Col(2), w1, BW, H, "Booking Service\nPOST /holds {seatIds}", SVC)
+Box('Ahs', Col(2), w1, BW, H, "Booking Service\nPOST /holds {seatIds}\nDELETE /holds (cancel)", SVC)
 Box('Ahr', Col(3), w1, BW, H, "Seat holds (Redis)\nLua: all seats NX\nEX 600 (10 min)", DATA)
 Arrow('Aw1', 'Ag', 'Ahs', '', W, False, True)
 Arrow('Aw2', 'Ahs', 'Ahr', "hold", W)
@@ -41,6 +41,10 @@ Arrow('Aw7', 'Apay', 'Atk', "2 confirm", W)
 Arrow('Aw8', 'Atk', 'Ak', "outbox", W, True)
 Arrow('Aw9', 'Ak', 'Ans', "consume", W, True)
 Arrow('Aw10', 'Ans', 'Aem', "send", W, True)
+Box('Arel', Col(3), w3, BW, H, "Release hold (Redis)\nLua: DEL only if value\n= my holdId", DATA)
+Box('Afail', Col(5), w1, BW, H, "Declined: KEEP hold,\nuser retries; release\non cancel or 3 fails", GREY)
+Arrow('Aw13', 'Atk', 'Arel', "4 release", W)
+Arrow('Aw14', 'Apay', 'Afail', "declined", RED, True)
 
 # write: keep the search index in sync with events (events are created elsewhere)
 Box('Aev', Col(3), w4, BW, H, "Events (SQL)\ncreated by organisers\n(out of scope)", DATA)
@@ -71,7 +75,7 @@ Arrow('Ar8', 'Ahr2', 'Atk2', "+ sold", R)
 Arrow('Ar9', 'Ag', 'Aos', '', R, False, True)
 Arrow('Ar10', 'Aos', 'Aor2', "", R)
 
-Note('Asum', Col(5) + 40, r1, "WRITE touches: hold = Booking Service -> Redis (all seats or none,\nexpire in 10 min: TEMPORARY). Checkout = Orders (pending) ->\nPayment: 1 authorize -> 2 Tickets INSERT, UNIQUE (event, seat)\n(PERMANENT, the real guard against double-selling) -> 3 capture,\nor void if a seat was taken -> outbox -> Kafka -> email.\n\nREAD touches: Search index, Event cache -> Events (SQL),\nseat map = held (Redis) + sold (SQL), orders from the replica.", 16, NOTE)
+Note('Asum', Col(5) + 40, r1, "WRITE touches: hold = Booking Service -> Redis (all seats or none,\nexpire in 10 min: TEMPORARY); cancel / TTL frees them. Checkout = Orders (pending) ->\nPayment: 1 authorize -> 2 Tickets INSERT, UNIQUE (event, seat)\n(PERMANENT, the real guard against double-selling) -> 3 capture,\nor void if a seat was taken -> 4 release the hold (DEL only if it's\nstill mine) -> outbox -> Kafka -> email. Declined card: keep the hold.\n\nREAD touches: Search index, Event cache -> Events (SQL),\nseat map = held (Redis) + sold (SQL), orders from the replica.", 16, NOTE)
 
 # =================== ROW B: HOT ON-SALE (only what differs) ===================
 T = 1110

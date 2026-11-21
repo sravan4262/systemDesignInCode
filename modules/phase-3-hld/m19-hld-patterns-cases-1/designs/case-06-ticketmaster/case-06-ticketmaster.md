@@ -77,8 +77,15 @@ Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in 
    1. Payment Service **authorizes** the card (money reserved, not taken).
    2. One SQL transaction: `INSERT tickets (event, seat, order)` for each seat (the **unique constraint** is the final guard) + `orders → confirmed` + outbox row.
    3. **Capture** the payment. If step 2 failed (a seat was somehow sold, or the hold expired and was re-sold), **void** the authorization instead and tell the user: they're never charged without a ticket.
-4. Delete the hold keys. Outbox → Kafka `order-confirmed` → Notification Service → email + in-app.
-5. **Expiry:** if the user never pays, the Redis TTL frees the seats after 10 minutes; nothing to clean up.
+4. **Release the hold** (the seats now read as *sold* from SQL). Use a **compare-and-delete** in Lua, never a plain `DEL`:
+   ```lua
+   if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) end
+   return 0
+   ```
+   If the user's hold expired and someone else now holds the seat, a plain `DEL` would delete *their* hold. Release only what you own.
+5. Outbox → Kafka `order-confirmed` → Notification Service → email + in-app.
+6. **Payment declined:** **keep the hold** so the user can retry with another card while the 10 minutes last. Release it (same compare-and-delete) only on cancel (`DELETE /holds/{id}`) or after ~3 failed attempts.
+7. **Expiry:** if the user never pays or never comes back, the Redis TTL frees the seats after 10 minutes. It's the backstop: even if every release call is lost, nothing stays held forever.
 
 **Read path:**
 1. **Search:** Search Service → AI Search (updated by CDC from Events).
@@ -101,7 +108,7 @@ Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in 
 | Seat map | Read | Holds (Redis) + sold (SQL), live | **Snapshot (CDN + Redis), rebuilt every 2 s** |
 | Get in | Write | — | **Waiting room:** queue (Redis) → admission controller → access token |
 | Hold seats | Write | Booking Service → Redis Lua (all `NX`, 10 min TTL) | Access token checked at APIM → per-user limit (≤ 4) → **dedicated Redis shard** |
-| Pay | Write | Orders (pending) → authorize → Tickets INSERT (unique) → capture / void | Same |
+| Pay | Write | Orders (pending) → authorize → Tickets INSERT (unique) → capture / void → **release the hold (compare-and-delete)**; declined → keep the hold for a retry | Same |
 | Confirmation | Write + read | Outbox → Kafka → Notification Service → email; `GET /orders/{id}` | Same |
 
 **What never protects against double-selling on its own:** the seat map (stale by design) and the Redis hold (temporary). **What does:** `UNIQUE (event_id, seat_id)` in SQL.
