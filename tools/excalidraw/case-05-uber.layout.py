@@ -125,3 +125,67 @@ Arrow('Br6', 'Bg', 'Brr', '', R, False, True)
 Arrow('Br7', 'Brr', 'Brd3', "", R)
 
 Note('Bsum', Col(5) + 40, r1 - 20, "WRITE touches: same services as A, but requests in a hot cell\nare matched in BATCHES every 2 s (best overall assignment,\nnot first-come grabs); riders without a driver wait for the\nnext round. A demand / supply counter per H3 cell sets the\nsurge multiplier; the estimate locks the surged price.\n\nREAD touches: surge (Redis) x route (Maps API, cached);\nride status + queue position from the SQL replica.", 16, NOTE)
+
+# =================== ROW C: RIDE JOURNEY (rider and driver side by side) ===================
+T = 1800
+DRV = '#d0bfff'
+Frame('fC', 0, T, 2640, 540)
+Note('Ct', 20, T + 12, "C. RIDE JOURNEY - left to right in time: rider app (top), services (middle), driver app (bottom)", 24, W)
+yR, yS, yD = T + 90, T + 250, T + 420
+Note('CrL', 40, T + 58, "RIDER APP", 18, RED)
+Note('CsL', 40, T + 218, "SERVICES", 18, W)
+
+
+def X(i):
+    return 40 + 260 * i
+
+
+CW = 220
+Note('CdL', X(1), T + 388, "DRIVER APP", 18, '#7048e8')
+steps = [
+    # (rider text, service text, driver text)
+    (None, "Ride Service: available\nLocation: GEOADD", "0 Go online\npings every 4 s"),
+    ("1 Enter pickup + drop\nsees $18", "Pricing Service\nMaps x rates (x surge)\nprice locked 2 min", None),
+    ("2 Tap Request\n'Finding a driver...'", "Ride Service\nride = matching\n-> Kafka", None),
+    (None, "Matching worker\nnearest (Redis) ->\navailable -> best ETA\n-> lock, offer", "3 Offer rings\n2 min to accept\n(decline -> next)"),
+    ("4 'Maria is coming'\nCamry, 4 min", "Ride Service\naccepted + busy\n(one transaction)", "4 Tap Accept"),
+    ("5 Watch the car\non the map", "Location -> Kafka ->\ntrip tracker ->\nrider's gateway", "5 Drive to pickup\n(pings)"),
+    ("6 'Ride started'", "Ride Service\nride = started", "6 Pick up, tap Start"),
+    ("7 Watch the trip", "Same as step 5\n(live location)", "7 Drive the trip\n(pings)"),
+    ("8 'You've arrived'", "Ride Service\nended, driver\navailable again", "8 Drop off, tap End"),
+    ("9 'Paid $18'", "Payment Service\ncharge once\n(rideId unique)", "9 Sees the fare"),
+]
+# (rider<->service label, direction 'down' = rider->service / 'up' = service->rider), (driver<->service label, 'up' = driver->service / 'down' = service->driver)
+links = [
+    (None, ("POST status\n+ pings", 'up')),
+    (("POST\n/fare-estimates", 'down'), None),
+    (("POST /rides", 'down'), None),
+    (None, ("offer (WS)", 'down')),
+    (("push", 'up'), ("POST /accept", 'up')),
+    (("driverLocation", 'up'), ("pings (WS)", 'up')),
+    (("push", 'up'), ("POST /start", 'up')),
+    (("driverLocation", 'up'), ("pings (WS)", 'up')),
+    (("push", 'up'), ("POST /end", 'up')),
+    (("push 'paid'", 'up'), ("push", 'down')),
+]
+for i, (rt, st, dt) in enumerate(steps):
+    Box(f'Cs{i}', X(i), yS, CW, 90, st, SVC)
+    if rt:
+        Box(f'Cr{i}', X(i), yR, CW, H, rt, EDGE)
+    if dt:
+        Box(f'Cd{i}', X(i), yD, CW, H, dt, DRV)
+    rl, dl = links[i]
+    if rl:
+        lab, d = rl
+        if d == 'down':
+            Arrow(f'Car{i}', f'Cr{i}', f'Cs{i}', lab, W)
+        else:
+            Arrow(f'Car{i}', f'Cs{i}', f'Cr{i}', lab, R)
+    if dl:
+        lab, d = dl
+        if d == 'up':
+            Arrow(f'Cad{i}', f'Cd{i}', f'Cs{i}', lab, W)
+        else:
+            Arrow(f'Cad{i}', f'Cs{i}', f'Cd{i}', lab, R)
+    if i:
+        Arrow(f'Cn{i}', f'Cs{i-1}', f'Cs{i}', '', NOTE, True)
