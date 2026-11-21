@@ -92,6 +92,7 @@ The diagram's row B shows **live editing only** (numbered 1–7); create, share,
 | **Owner** | The **one server** that handles every edit of a document right now | The one cashier serving a queue: first at the counter, first served |
 | **Rev** (revision) | The **number** the owner gives each accepted edit: 1, 2, 3… (like WhatsApp's per-chat `seq`) | The receipt number: everyone at receipt #9 has seen the same thing |
 | **Transform** | **Adjusting** an edit made on an older version so it still means what its author intended | "Meet at seat 3", but 4 people sat down in front of you: now it's seat 7 |
+| **Edit id** (`clientOpId`) | A unique id the app puts on every edit it sends, e.g. `alice-17` | A parcel's tracking number: if Alice's app never got "OK" and sends the same edit again, the server sees `alice-17` again and just replies "OK #9" again, so the text isn't typed twice |
 
 **Where things live once the doc is open:**
 - **Owner memory** (loaded once from the snapshot in Blob + the op-log tail): `text`, latest `rev`, the last ~100 ops (needed to transform late edits), the `clientOpId`s already seen, and an **inbox**: edits for this doc are handled **one at a time**, so "the same moment" just means "queued one after the other".

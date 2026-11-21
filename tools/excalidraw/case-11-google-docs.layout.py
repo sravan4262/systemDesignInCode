@@ -68,56 +68,56 @@ Arrow('Ar8', 'Avq2', 'Avq3', "", R)
 
 Note('Asum', Col(5) + 40, r1, "LOCK = a LEASE: 2 min, renewed every 30 s; a closed laptop\nfrees it by itself. The FENCING TOKEN (a number that grows\nwith every new lock) is checked on save, so an editor whose\nlock expired can't overwrite the new editor's work.\n\nSAVE: write the new content to Blob, then move the pointer\nin SQL only if the version is still 42 (optimistic check).\nNo merging ever: one writer at a time.", 16, NOTE)
 
-# =================== ROW B: REAL-TIME CO-EDITING (live editing only; numbers = order) ===================
+# =================== ROW B: REAL-TIME CO-EDITING (plain words; Alice + Bob; numbers = order) ===================
 T = 1000
 Frame('fB', 0, T, 2680, 740)
-Note('Bt', 20, T + 12, "B. REAL-TIME CO-EDITING (Alice + Bob type in doc-42 at the same time; no locks) - numbers show the order", 24, W)
+Note('Bt', 20, T + 12, "B. LIVE CO-EDITING: Alice and Bob type in doc-42 at the same time (no locks) - numbers show the order", 24, W)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
-Note('Bwl', Col(3), T + 55, "LIVE EDITING (WebSocket)", 18, W)
+Note('Bwl', Col(3), T + 55, "ONE EDIT, START TO FINISH", 18, W)
 
-Box('Bu', Col(0), T + 200, BW, 80, "Alice + Bob\n(editors)", EDGE)
-Box('Bcl', Col(0), T + 330, BW, H, "Each client keeps:\nconfirmedRev, 1 edit\nin flight + a buffer", GREY)
-Box('Bg', Col(1), w1, BW, w4 + H - w1, "APIM\n\nREST -> services\nWS -> WebSocket\ngateway", EDGE)
-Box('Bws', Col(2), w1, BW, w3 + H - w1, "WebSocket gateway\n(a pipe)\n\nsends doc-42's\nsockets to its\nowner node", EDGE)
+Box('Bu', Col(0), T + 200, BW, 80, "Alice + Bob\n(both editing doc-42)", EDGE)
+Box('Bcl', Col(0), T + 330, BW, H, "Each app shows your\ntyping instantly; waits\nfor 'OK' to send more", GREY)
+Box('Bg', Col(1), w1, BW, w4 + H - w1, "APIM\n\nREST -> services\nlive edits ->\ngateway servers", EDGE)
+Box('Bws', Col(2), w1, BW, w3 + H - w1, "Gateway servers\n\nhold the live\nconnections:\nAlice on gateway 3,\nBob on gateway 9", EDGE)
 Arrow('Ba1', 'Bu', 'Bg', "HTTPS + WS", None, False, True)
 Arrow('Ba2', 'Bg', 'Bws', "", None, False, True)
 Arrow('Ba3', 'Bu', 'Bcl', "", NOTE, True)
 
-# 1: find the owner; the owner holds the doc in memory (loaded once)
-Box('Brt', Col(3), w1, BW, H, "1 Doc router (Redis)\ndoc-42 -> node-7\n(lease)", DATA)
-Box('Bmem', Col(4), w1, BW, H, "Owner node-7 memory:\ntext, rev 9,520,\nrecent ops, seen ids", SVC)
-Box('Bld', Col(5), w1, BW, H, "Snapshot (Blob) +\nop-log tail: loaded\non first join", DATA)
-Arrow('Bw1', 'Bws', 'Brt', "which node?", W, False, True)
-Arrow('Bw2', 'Brt', 'Bmem', "route", W)
+# 1: which server has doc-42?
+Box('Brt', Col(3), w1, BW, H, "1 Which server has\ndoc-42? (Redis)\n-> server 7", DATA)
+Box('Bmem', Col(4), w1, BW, H, "Server 7 keeps doc-42\nin memory: the text +\nlatest edit number", SVC)
+Box('Bld', Col(5), w1, BW, H, "Saved copy (Blob) +\nrecent edits: loaded\nwhen first opened", DATA)
+Arrow('Bw1', 'Bws', 'Brt', "ask", W, False, True)
+Arrow('Bw2', 'Brt', 'Bmem', "", W)
 Arrow('Bw3', 'Bld', 'Bmem', "load once", W, True)
 
-# 2-5: every edit, one at a time per doc
-Box('Bin', Col(3), w2, BW, H, "2 Inbox for doc-42\none edit at a time\n('same time' = queue)", SVC)
-Box('Bdd', Col(4), w2, BW, H, "3 clientOpId seen?\nyes -> re-send the\nsame ack, stop", SVC)
-Box('Btr', Col(5), w2, BW, H, "4 Transform vs ops\nsince baseRev\n(too old -> resync)", SVC)
-Box('Brv', Col(6), w2, BW, H, "5 rev = n + 1\nappend FIRST", SVC)
-Box('Bop', Col(7), w2, BW, H, "Op log (Cosmos)\n(doc, rev) + opId\n= the truth", DATA)
-Box('Bsn', Col(8), w2, BW, H, "Snapshotter\nevery 500 ops", ASYNC)
-Box('Bbl', Col(8), w3, BW, H, "Snapshots (Blob)", DATA)
+# 2-5: server 7 handles each edit
+Box('Bin', Col(3), w2, BW, H, "2 Edits wait in line\n(one at a time,\nso no 'same time')", SVC)
+Box('Bdd', Col(4), w2, BW, H, "3 Got this edit id\nbefore? -> just say\n'OK' again, stop", SVC)
+Box('Btr', Col(5), w2, BW, H, "4 Someone edited first?\nfix the position\n(cat -> the cats)", SVC)
+Box('Brv', Col(6), w2, BW, H, "5 Give it the next\nnumber (#9) and\nsave it FIRST", SVC)
+Box('Bop', Col(7), w2, BW, H, "Edit history (Cosmos)\nevery edit, in order", DATA)
+Box('Bsn', Col(8), w2, BW, H, "Every 500 edits:\nsave a fresh copy", ASYNC)
+Box('Bbl', Col(8), w3, BW, H, "Saved copies (Blob)", DATA)
 Arrow('Bw4', 'Bws', 'Bin', "edit", W, False, True)
 Arrow('Bw5', 'Bin', 'Bdd', "", W)
 Arrow('Bw6', 'Bdd', 'Btr', "new", W)
 Arrow('Bw7', 'Btr', 'Brv', "", W)
-Arrow('Bw8', 'Brv', 'Bop', "append", W)
+Arrow('Bw8', 'Brv', 'Bop', "save", W)
 Arrow('Bw9', 'Bop', 'Bsn', "", W, True)
 Arrow('Bw10', 'Bsn', 'Bbl', "write", W, True)
 
-# 6-7: tell everyone: ack the sender, push the op to the others (1 message per gateway node)
-Box('Back', Col(6), w3, BW, H, "6 ack sender (rev),\npush op to others", EDGE)
-Box('Bcn', Col(7), w3, BW, H, "Connections (Redis)\nconns:{doc}: user ->\ngateway node", DATA)
+# 6-7: tell Alice OK, send the edit to Bob
+Box('Back', Col(6), w3, BW, H, "6 Tell Alice 'OK #9';\nsend her edit to Bob", EDGE)
+Box('Bcn', Col(7), w3, BW, H, "Who is on which\ngateway (Redis):\nAlice @3, Bob @9", DATA)
 Arrow('Bw11', 'Brv', 'Back', "then", W)
-Arrow('Bw12', 'Back', 'Bcn', "where?", W)
-Arrow('Bw13', 'Back', 'Bws', "7 push: 1 message per gateway node", R, True, True)
+Arrow('Bw12', 'Back', 'Bcn', "look up", W)
+Arrow('Bw13', 'Back', 'Bws', "7 send via gateway 3 (Alice) and gateway 9 (Bob)", R, True, True)
 
-Box('Bsame', Col(3), w4, BW, H, "Create, share, open,\nversions: as row A\n(open = snapshot + tail)", GREY)
+Box('Bsame', Col(3), w4, BW, H, "Create, share, open,\nversions: as row A", GREY)
 Arrow('Bw14', 'Bg', 'Bsame', '', W, False, True)
 
-Note('Bedge', Col(4), w4 - 10, "EDGE CASES (all handled at step 4 or 3):\n- different spots: shift positions ('the cat' + 's' -> 'the cats')\n- same spot, same moment: fixed tie rule, the earlier rev goes first\n- both delete the same word: the second delete becomes 'do nothing'\n- one deletes a sentence while the other types in it: the typing survives\n- both replace the same word: both inserts kept ('dogcow'), nobody's work silently lost\n- resend after a lost ack: same clientOpId -> same ack, not applied twice\n- client far behind: transform against all missed ops, or 'resync' if too old\n- owner crash: new owner rebuilds from snapshot + op log; resends are deduped", 16, NOTE)
+Note('Bedge', Col(4), w4 - 10, "EDIT ID: the app gives every edit a unique id (e.g. 'alice-17'). If Alice's app never gets 'OK'\nand sends the edit again, server 7 sees 'alice-17' again and just says 'OK #9' again: no double typing.\n\nEDGE CASES (step 4):\n- typing in different places: positions shift, both kept ('the cat' + 's' -> 'the cats')\n- both type at the same spot: the one that arrived first goes first, same order on every screen\n- both delete the same word: deleted once, not twice\n- both replace the same word: both new words kept ('dogcow'), nobody's work silently lost\n- server 7 crashes: another server loads the saved copy + edit history and takes over", 16, NOTE)
 
 # =================== ROW C: HOT DOCUMENT (only what differs; numbers = order) ===================
 T = 1820
