@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 12 AI chat over company data: learner sets the requirements first, then doc + diagram in `designs/case-12-ai-chat/`. Done: cases 1–8 and 11; postponed: 9 Top-K, 10 Dropbox. Then S8/S9, CP3.
+- **Next step:** Case 12 AI chat over company documents: doc + diagram ready in `designs/case-12-ai-chat/` (learner's requirements: logged-in employees, documents only, chat history 90 days, last 10 turns + summary; focus on efficiency, not CAP). Done: cases 1–8, 11, 12; postponed: 9 Top-K, 10 Dropbox. Then S8/S9, CP3.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
