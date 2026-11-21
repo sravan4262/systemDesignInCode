@@ -38,3 +38,10 @@ Content-Type: application/json
 X-User-Id: alice
 
 { "question": "Where's my order 456?" }
+
+### 7. No tool for this → the model should say it can't (not "Done!")
+POST {{host}}/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Change the delivery address on order 124 to 5 Main St" }

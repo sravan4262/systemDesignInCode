@@ -46,7 +46,9 @@ public class OrderChatController(IChatClient chat) : ControllerBase
         ChatMessage[] messages =
         [
             new(ChatRole.System, "You help customers with their orders. Use the tools; never guess. " +
-                                 "Today is 2026-11-21. To cancel, call RequestCancelOrder and tell the user to confirm."),
+                                 "Today is 2026-11-21. To cancel, call RequestCancelOrder and tell the user to confirm. " +
+                                 "If no tool can do what the user asks (e.g. change an address), say you can't and " +
+                                 "point them to the Orders page. Never say an action was done unless a tool confirmed it."),
             new(ChatRole.User, req.Question),
         ];
 
