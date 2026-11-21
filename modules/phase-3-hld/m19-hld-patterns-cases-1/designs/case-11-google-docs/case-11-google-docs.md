@@ -1,6 +1,6 @@
 # Case 11: Google Docs (collaborative editing)
 
-Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in three rows: **A. Edit lock** (one editor at a time; every path), **B. Real-time co-editing** (many editors, no locks; every path) and **C. Hot document** (1,000 open, ~50 editing; only what differs from B, numbered in order). Users → APIM (REST) and a **WebSocket gateway** (live editing) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in three rows: **A. Edit lock** (one editor at a time; every path), **B. Real-time co-editing** (many editors, no locks; live editing only, numbered 1–7; REST parts as in A) and **C. Hot document** (1,000 open, ~50 editing; only what differs from B, numbered in order). Users → APIM (REST) and a **WebSocket gateway** (live editing) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Google Docs. Several people can edit the same document at the same time."
@@ -84,17 +84,53 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 4. **Release:** compare-and-delete (as in Case 6): delete the key only if it's still mine.
 
 ### Row B: real-time co-editing
-**One owner per document.** All editors of a doc are routed (via the doc router) to the same collab node, which holds the doc in memory and **orders every edit**.
+The diagram's row B shows **live editing only** (numbered 1–7); create, share, open and versions work as in row A (open = latest snapshot + the ops after it).
 
-**Every edit:**
-1. The client applies the edit locally right away (it feels instant) and sends `{ clientOpId, baseRev, ops }`.
-2. The owner **transforms** the op against every op accepted since `baseRev` (**OT**), so it still means what the user intended.
-3. It assigns `rev = n + 1` and **appends** it to the op log (`clientOpId` unique: a resent op is accepted once).
-4. It **acks** the sender `{ clientOpId, rev }` and **broadcasts** the transformed op to the other editors.
+**The three words:**
+| Word | Plain meaning | Analogy |
+|---|---|---|
+| **Owner** | The **one server** that handles every edit of a document right now | The one cashier serving a queue: first at the counter, first served |
+| **Rev** (revision) | The **number** the owner gives each accepted edit: 1, 2, 3… (like WhatsApp's per-chat `seq`) | The receipt number: everyone at receipt #9 has seen the same thing |
+| **Transform** | **Adjusting** an edit made on an older version so it still means what its author intended | "Meet at seat 3", but 4 people sat down in front of you: now it's seat 7 |
 
-**OT in one example:** the doc is `"cat"`. Alice inserts `"s"` at position 3 (`"cats"`); at the same time Bob inserts `"the "` at position 0. The server takes Bob's first → `"the cat"`. Alice's op was based on the old text, so it's **transformed**: position 3 + 4 (the length of Bob's insert) = 7 → `"the cats"`. Everyone ends with `"the cats"`.
+**Where things live once the doc is open:**
+- **Owner memory** (loaded once from the snapshot in Blob + the op-log tail): `text`, latest `rev`, the last ~100 ops (needed to transform late edits), the `clientOpId`s already seen, and an **inbox**: edits for this doc are handled **one at a time**, so "the same moment" just means "queued one after the other".
+- **Op log (Cosmos)** = the truth: every rev is appended **before** anyone is told. Memory can always be rebuilt from snapshot + op log.
+- **Each client:** `confirmedRev`, at most **one edit in flight** (sent, waiting for its ack), and a **buffer** of keystrokes typed since.
+- **Doc router** (`doc → owner node`) and **connections** (`conns:{doc}`: user → gateway node) in Redis.
 
-**Open:** read the latest **snapshot** (Blob) + the ops after it from the op log → join the session at that rev.
+**Every edit (diagram steps):**
+1. The gateway asks the **doc router** which node owns doc-42 (node-7).
+2. The edit lands in doc-42's **inbox** on node-7.
+3. **Seen this `clientOpId` before?** Yes → re-send the same ack, stop (a resend after a lost ack).
+4. **Transform** it against every op accepted since its `baseRev` (too old to transform → tell the client to resync).
+5. Give it `rev = n + 1` and **append** it to the op log (durable first).
+6. **Ack** the sender with the rev; look up **connections** to find the other editors' gateway nodes.
+7. **Push** the op: one message per gateway node, which writes it to its sockets. The snapshotter writes a new snapshot every 500 ops.
+
+**One example, step by step** (doc `"cat"` at rev 7; Bob wants `"the cat"`, Alice wants `"cats"`):
+
+| Step | Alice's screen | Owner (server) | Bob's screen |
+|---|---|---|---|
+| 1 | `cat` (rev 7) | `cat`, **rev 7** | `cat` (rev 7) |
+| 2 | types "s" → **`cats`** right away; sends `insert "s" @3, baseRev 7` | | types "the " → **`the cat`** right away; sends `insert "the " @0, baseRev 7` |
+| 3 | | **Bob's arrives first**: based on rev 7 = current → nothing to fix → `the cat`, **rev 8** | |
+| 4 | | **Alice's arrives**: based on rev 7, doc is at rev 8. As-is it would give `thes cat` ✗. **Transform:** Bob added 4 characters before position 3 → `insert "s" @7` → `the cats`, **rev 9** | |
+| 5 | gets Bob's rev 8 (fitted around her own edit) → **`the cats`**; then `ack rev 9` | sends each person what they haven't seen | gets Alice's edit as `insert "s" @7` (rev 9) → **`the cats`** |
+| 6 | **`the cats`** ✓ | **`the cats`** ✓ | **`the cats`** ✓ |
+
+**Edge cases:**
+| Case | What happens |
+|---|---|
+| Different spots | Positions shift (`the cat` + `s` → `the cats`); both edits kept |
+| Same spot, same moment (both insert at 3) | A fixed tie rule: the earlier rev goes first → everyone gets `cat!?`, never different orders on different screens |
+| Both delete the same word | The second delete is transformed into "do nothing"; nothing is deleted twice |
+| One deletes a sentence while the other types inside it | The typing survives at the spot where the deleted text was |
+| **Both replace the same word** ("overwrite") | Each replace = delete + insert; the second delete becomes "do nothing", **both inserts stay** (`dogcow`). Nobody's work is silently lost; users fix it. (If you want "only one person may change this", that's row A's lock.) |
+| Resend after a lost ack | Same `clientOpId` → the same ack, not applied twice |
+| Client far behind (bad Wi-Fi) | Transformed against all missed ops; if they're no longer kept → "resync": reload snapshot + tail, re-apply unsent edits |
+| Owner crashes mid-edit | Its lease expires → a new owner rebuilds from snapshot + op log; clients reconnect and resend; already-appended edits are found by `clientOpId` and just acked |
+| User keeps typing while waiting for an ack | New keystrokes go to the buffer; incoming ops are transformed around the in-flight edit + buffer; after the ack, the buffer is sent with the new `baseRev` |
 
 **Who is connected where (needed to send real-time updates):**
 - **Doc router:** `doc → owner collab node` (a lease the owner renews).
@@ -103,9 +139,9 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 - **Failover:** a new owner reads `conns:{doc}` from Redis to know who to send to (and clients reconnect anyway).
 - Row C: viewers aren't tracked one by one; every gateway node holding viewers subscribes to the pub/sub channel `doc:{id}`.
 
-**Snapshots and history:** every 500 ops or 1 min, the snapshotter applies the ops to the last snapshot and writes a new one. Version history = a list of snapshot pointers; **restore** writes that old content as a **new** latest version (history is never rewritten).
+**Owner node fails:** its lease in the doc router expires → another node takes the doc, rebuilds it from snapshot + op log, and clients reconnect and resend unacked edits (deduped by `clientOpId`).
 
-**Owner node fails:** its lease in the doc router expires → another node takes the doc, rebuilds it from snapshot + op log, and clients reconnect and resend unacked ops (deduped by `clientOpId`).
+**Snapshots and history:** every 500 ops or 1 min, the snapshotter applies the ops to the last snapshot and writes a new one. Version history = a list of snapshot pointers; **restore** writes that old content as a **new** latest version (history is never rewritten).
 
 ### Row C: hot document (what changes, in order)
 1. **Cap live editors** at 100 (`INCR editors:{doc}`); everyone else joins as a **viewer**.

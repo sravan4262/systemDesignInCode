@@ -7,7 +7,7 @@ Note('legend', 0, -25, "Blue = write path   Green = read path   Dashed = async  
 
 # =================== ROW A: EDIT LOCK (one editor at a time) ===================
 T = 0
-Frame('fA', 0, T, 2400, 920)
+Frame('fA', 0, T, 2680, 920)
 Note('At', 20, T + 12, "A. EDIT LOCK: click 'Edit' -> only you can edit; everyone else is read-only", 24, W)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
 r1, r2, r3 = T + 600, T + 710, T + 820
@@ -68,63 +68,60 @@ Arrow('Ar8', 'Avq2', 'Avq3', "", R)
 
 Note('Asum', Col(5) + 40, r1, "LOCK = a LEASE: 2 min, renewed every 30 s; a closed laptop\nfrees it by itself. The FENCING TOKEN (a number that grows\nwith every new lock) is checked on save, so an editor whose\nlock expired can't overwrite the new editor's work.\n\nSAVE: write the new content to Blob, then move the pointer\nin SQL only if the version is still 42 (optimistic check).\nNo merging ever: one writer at a time.", 16, NOTE)
 
-# =================== ROW B: REAL-TIME CO-EDITING ===================
+# =================== ROW B: REAL-TIME CO-EDITING (live editing only; numbers = order) ===================
 T = 1000
-Frame('fB', 0, T, 2400, 810)
-Note('Bt', 20, T + 12, "B. REAL-TIME CO-EDITING (2-5 people typing in the same doc at once; no locks)", 24, W)
+Frame('fB', 0, T, 2680, 740)
+Note('Bt', 20, T + 12, "B. REAL-TIME CO-EDITING (Alice + Bob type in doc-42 at the same time; no locks) - numbers show the order", 24, W)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
-r1, r2 = T + 600, T + 710
-Note('Bwl', Col(3), T + 55, "WRITE PATH", 18, W)
-Note('Brl', Col(3), T + 565, "READ PATH", 18, R)
+Note('Bwl', Col(3), T + 55, "LIVE EDITING (WebSocket)", 18, W)
 
-Box('Bu', Col(0), T + 380, BW, 80, "Editors\n(2-5 typing)", EDGE)
-Box('Bg', Col(1), w1, BW, r2 + H - w1, "APIM\n\nREST -> services\nWS -> WebSocket\ngateway", EDGE)
-Box('Bws', Col(2), w1, BW, w3 + H - w1, "WebSocket gateway\n(a pipe)\n\nsends every socket\nof a doc to that\ndoc's OWNER node", EDGE)
+Box('Bu', Col(0), T + 200, BW, 80, "Alice + Bob\n(editors)", EDGE)
+Box('Bcl', Col(0), T + 330, BW, H, "Each client keeps:\nconfirmedRev, 1 edit\nin flight + a buffer", GREY)
+Box('Bg', Col(1), w1, BW, w4 + H - w1, "APIM\n\nREST -> services\nWS -> WebSocket\ngateway", EDGE)
+Box('Bws', Col(2), w1, BW, w3 + H - w1, "WebSocket gateway\n(a pipe)\n\nsends doc-42's\nsockets to its\nowner node", EDGE)
 Arrow('Ba1', 'Bu', 'Bg', "HTTPS + WS", None, False, True)
 Arrow('Ba2', 'Bg', 'Bws', "", None, False, True)
+Arrow('Ba3', 'Bu', 'Bcl', "", NOTE, True)
 
-# write: one owner node per doc orders every edit
-Box('Bcol', Col(3), w1, BW, H, "Collab Service (owner)\n1 transform (OT)\n2 rev = n + 1", SVC)
-Box('Bop', Col(4), w1, BW, H, "Op log (Cosmos)\n3 append (doc, rev)\nclientOpId unique", DATA)
-Box('Bsn', Col(5), w1, BW, H, "Snapshotter\nevery 500 ops / 1 min", ASYNC)
-Box('Bbl', Col(6), w1, BW, H, "Snapshots (Blob)\ndoc state at rev n", DATA)
-Box('Bbc', Col(3), w2, BW, H, "4 ack + broadcast:\n1 message per gateway\nnode -> its sockets", EDGE)
-Box('Bpr', Col(4), w2, BW, H, "Connections (Redis)\nconns:{doc}: user ->\ngateway node, cursor", DATA)
-Box('Brt', Col(3), w3, BW, H, "Doc router (Redis)\ndoc -> owner node;\njoin registers conn", DATA)
-Arrow('Bw1', 'Bws', 'Bcol', "op", W, False, True)
-Arrow('Bw2', 'Bcol', 'Bop', "3", W)
-Arrow('Bw3', 'Bop', 'Bsn', "", W, True)
-Arrow('Bw4', 'Bsn', 'Bbl', "write", W, True)
-Arrow('Bw5', 'Bcol', 'Bbc', "4", W)
-Arrow('Bw6', 'Bbc', 'Bws', "push", R, True, True)
-Arrow('Bw7', 'Bcol', 'Bpr', "where to send", W)
-Arrow('Bw7b', 'Brt', 'Bpr', "register", W)
-Arrow('Bw8', 'Bws', 'Brt', "which node?", W, False, True)
+# 1: find the owner; the owner holds the doc in memory (loaded once)
+Box('Brt', Col(3), w1, BW, H, "1 Doc router (Redis)\ndoc-42 -> node-7\n(lease)", DATA)
+Box('Bmem', Col(4), w1, BW, H, "Owner node-7 memory:\ntext, rev 9,520,\nrecent ops, seen ids", SVC)
+Box('Bld', Col(5), w1, BW, H, "Snapshot (Blob) +\nop-log tail: loaded\non first join", DATA)
+Arrow('Bw1', 'Bws', 'Brt', "which node?", W, False, True)
+Arrow('Bw2', 'Brt', 'Bmem', "route", W)
+Arrow('Bw3', 'Bld', 'Bmem', "load once", W, True)
 
-Box('Bds', Col(3), w4, BW, H, "Document Service\ncreate, share, restore", SVC)
-Box('Bdb', Col(4), w4, BW, H, "Docs, ACL, versions\n(SQL)", DATA)
-Arrow('Bw9', 'Bg', 'Bds', '', W, False, True)
-Arrow('Bw10', 'Bds', 'Bdb', "write", W)
+# 2-5: every edit, one at a time per doc
+Box('Bin', Col(3), w2, BW, H, "2 Inbox for doc-42\none edit at a time\n('same time' = queue)", SVC)
+Box('Bdd', Col(4), w2, BW, H, "3 clientOpId seen?\nyes -> re-send the\nsame ack, stop", SVC)
+Box('Btr', Col(5), w2, BW, H, "4 Transform vs ops\nsince baseRev\n(too old -> resync)", SVC)
+Box('Brv', Col(6), w2, BW, H, "5 rev = n + 1\nappend FIRST", SVC)
+Box('Bop', Col(7), w2, BW, H, "Op log (Cosmos)\n(doc, rev) + opId\n= the truth", DATA)
+Box('Bsn', Col(8), w2, BW, H, "Snapshotter\nevery 500 ops", ASYNC)
+Box('Bbl', Col(8), w3, BW, H, "Snapshots (Blob)", DATA)
+Arrow('Bw4', 'Bws', 'Bin', "edit", W, False, True)
+Arrow('Bw5', 'Bin', 'Bdd', "", W)
+Arrow('Bw6', 'Bdd', 'Btr', "new", W)
+Arrow('Bw7', 'Btr', 'Brv', "", W)
+Arrow('Bw8', 'Brv', 'Bop', "append", W)
+Arrow('Bw9', 'Bop', 'Bsn', "", W, True)
+Arrow('Bw10', 'Bsn', 'Bbl', "write", W, True)
 
-# read: open = latest snapshot + the ops after it
-Box('Bop2', Col(3), r1, BW, H, "Document Service\nGET /docs/{id} (open)", SVC)
-Box('Bdb2', Col(4), r1, BW, H, "Docs + ACL (SQL)\nallowed? snapshot rev", DATA)
-Box('Bbl2', Col(5), r1, BW, H, "Snapshot (Blob)\nrev 9,500", DATA)
-Box('Bot', Col(6), r1, BW, H, "Op log tail\nrevs 9,501 .. now", DATA)
-Box('Bvq', Col(3), r2, BW, H, "Document Service\nGET /versions", SVC)
-Box('Bvq2', Col(4), r2, BW, H, "Versions (SQL)\n-> snapshot pointers", DATA)
-Arrow('Br1', 'Bg', 'Bop2', '', R, False, True)
-Arrow('Br2', 'Bop2', 'Bdb2', "1", R)
-Arrow('Br3', 'Bdb2', 'Bbl2', "2", R)
-Arrow('Br4', 'Bbl2', 'Bot', "3 + ops", R)
-Arrow('Br5', 'Bg', 'Bvq', '', R, False, True)
-Arrow('Br6', 'Bvq', 'Bvq2', "", R)
+# 6-7: tell everyone: ack the sender, push the op to the others (1 message per gateway node)
+Box('Back', Col(6), w3, BW, H, "6 ack sender (rev),\npush op to others", EDGE)
+Box('Bcn', Col(7), w3, BW, H, "Connections (Redis)\nconns:{doc}: user ->\ngateway node", DATA)
+Arrow('Bw11', 'Brv', 'Back', "then", W)
+Arrow('Bw12', 'Back', 'Bcn', "where?", W)
+Arrow('Bw13', 'Back', 'Bws', "7 push: 1 message per gateway node", R, True, True)
 
-Note('Bsum', Col(5) + 40, w2 + 10, "EVERY EDIT: client sends { baseRev, op } -> the doc's owner node\n1 transforms it against ops the client hasn't seen (OT)\n2 gives it the next rev, 3 appends it to the op log,\n4 acks the sender and broadcasts: conns:{doc} says which\ngateway node each editor is on -> 1 message per node.\nOne node orders a doc's edits, so everyone converges.\n\nOPEN: latest snapshot + the ops after it. Owner node dies ->\nits lease expires, another node rebuilds from snapshot + log.", 16, NOTE)
+Box('Bsame', Col(3), w4, BW, H, "Create, share, open,\nversions: as row A\n(open = snapshot + tail)", GREY)
+Arrow('Bw14', 'Bg', 'Bsame', '', W, False, True)
+
+Note('Bedge', Col(4), w4 - 10, "EDGE CASES (all handled at step 4 or 3):\n- different spots: shift positions ('the cat' + 's' -> 'the cats')\n- same spot, same moment: fixed tie rule, the earlier rev goes first\n- both delete the same word: the second delete becomes 'do nothing'\n- one deletes a sentence while the other types in it: the typing survives\n- both replace the same word: both inserts kept ('dogcow'), nobody's work silently lost\n- resend after a lost ack: same clientOpId -> same ack, not applied twice\n- client far behind: transform against all missed ops, or 'resync' if too old\n- owner crash: new owner rebuilds from snapshot + op log; resends are deduped", 16, NOTE)
 
 # =================== ROW C: HOT DOCUMENT (only what differs; numbers = order) ===================
-T = 1890
-Frame('fC', 0, T, 2400, 810)
+T = 1820
+Frame('fC', 0, T, 2680, 810)
 Note('Ct', 20, T + 12, "C. HOT DOCUMENT (1,000 people open it, ~50 editing) - only what differs from row B; numbers = order", 24, RED)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
 r1 = T + 600
