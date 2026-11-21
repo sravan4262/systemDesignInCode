@@ -5,14 +5,14 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 11 Google Docs: doc + diagram ready in `designs/case-11-google-docs/` (rows: A edit lock, B co-editing with OT, C hot doc). Cases 9 Top-K and 10 Dropbox postponed by the learner. Then Case 12, S8/S9, CP3.
+- **Next step:** Case 12 AI chat over company data: learner sets the requirements first, then doc + diagram in `designs/case-12-ai-chat/`. Done: cases 1–8 and 11; postponed: 9 Top-K, 10 Dropbox. Then S8/S9, CP3.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
   3. **HLD patterns:** M19 sessions 1–9 (7 patterns + 2 worked examples).
   4. **HLD cases (cut to 12 + 2 worked examples, learner's choice 2026-11-19):** interview format: prompt only, learner drives.
      - Worked examples first (M19 S8–S9): one change applied to 100k users (Azure); one schema change across 10k tenant DBs.
-     - Cases in order: (1) URL shortener ✅ 6.5/10 (`case-01-url-shortener.*`, learner attempt in `.attempt.excalidraw`) → (2) WhatsApp → (3) Twitter / news feed → (4) YouTube / Netflix → (5) Uber → (6) Ticketmaster → (7) Payment system → (8) Notification system → (9) Top-K / ad-click aggregation → (10) Dropbox → (11) Google Docs → (12) Chat over company data (non-AI).
+     - Cases in order: (1) URL shortener ✅ 6.5/10 (`case-01-url-shortener.*`, learner attempt in `.attempt.excalidraw`) → (2) WhatsApp → (3) Twitter / news feed → (4) YouTube / Netflix → (5) Uber → (6) Ticketmaster → (7) Payment system → (8) Notification system → (9) Top-K / ad-click aggregation → (10) Dropbox → (11) Google Docs → (12) **AI chat over company data** (learner's choice 2026-11-21: build it WITH AI instead of the non-AI version; pulls M25's "AI chat over company/customer data" forward: RAG ingestion pipeline, per-user access filtering, plus the shared foundation: conversation service, real-time delivery, auth scoping, audit. The non-AI parts (rules, button flows, FAQ search, live-agent handoff) are dropped or folded in only where the AI version needs them).
      - Skipped (covered by the above or earlier modules): live comments, live streaming, Yelp, rate limiter (M8), distributed KV/cache (M17 + M8), hotel/meeting rooms (Ticketmaster + M3), job scheduler/leaderboard/metrics, typeahead, web crawler, design Kafka, auction, stock brokerage, own question bank.
      - Per-case prep (learner's request 2026-11-19): one folder per case `<module>/designs/case-NN-<name>/` holding `case-NN-<name>.md` (sections: prompt → FRs → NFRs → **short capacity table** (facts line + What/Math/Result/So… + 'what the numbers tell you') → **API** (endpoints, request, response, errors) → high-level design → components per path → deep dives → follow-ups) and the Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (1) URL shortener, (2) WhatsApp (prep; learner mid-case), (3) Twitter (learner reviewing, then refine). Next: the other 9. Python generator `excal.py` for Mac.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
@@ -51,7 +51,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 4 | M22 | LLM apps & RAG | ⬜ |
 | 4 | M23 | LLM internals, inference, adaptation | ⬜ |
 | 4 | M24 | Agents & evals | ⬜ |
-| 4 | M25 | Production AI & AI system design | ⬜ |
+| 4 | M25 | Production AI & AI system design | ⬜ (its AI chat-over-company-data case is done early as M19 Case 12) |
 | 4 | CP4 | Checkpoint: AI design | ⬜ |
 | 5 | M26 | AI coding, code review, comprehension | ⬜ |
 | 5 | M27 | Agentic tickets & live debugging | ⬜ |
