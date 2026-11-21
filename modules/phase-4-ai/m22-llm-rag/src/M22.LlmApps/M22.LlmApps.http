@@ -1,12 +1,39 @@
-### Alice asks about her own order → real status
-POST http://localhost:5000/api/chat
+@host = http://localhost:5000
+
+### 1. One tool: GetOrderStatus(123)
+POST {{host}}/api/chat
 Content-Type: application/json
 X-User-Id: alice
 
 { "question": "Where's my order 123?" }
 
-### Alice asks about Bob's order → "not found"
-POST http://localhost:5000/api/chat
+### 2. Two tools in a row: GetRecentOrders() → GetOrderStatus(124)
+POST {{host}}/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Where's my last order?" }
+
+### 3. A different tool: GetReturnPolicy("shoes")
+POST {{host}}/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Can I return shoes after 40 days?" }
+
+### 4. Cancel, step 1: the model calls RequestCancelOrder(124) → nothing cancelled yet
+POST {{host}}/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Cancel order 124" }
+
+### 5. Cancel, step 2: the user clicks "Yes, cancel" → now it's cancelled
+POST {{host}}/api/chat/cancel/124/confirm
+X-User-Id: alice
+
+### 6. Someone else's order → "not found"
+POST {{host}}/api/chat
 Content-Type: application/json
 X-User-Id: alice
 
