@@ -1,5 +1,5 @@
 # M20: Distributed job scheduler (50M cron jobs, second-level). Rows: A = normal jobs (every path),
-# B = top-of-the-hour spike + second-level jobs (only what differs; numbers = order), C = one job's life + node crash.
+# B = top-of-the-hour spike + second-level jobs (only what differs; numbers = order), C = one job's life + a Scheduler Service copy crashes.
 BW, H = 240, 70
 PRV = '#e599f7'
 
@@ -23,7 +23,7 @@ Arrow('Aa1', 'Ap', 'Ag', "HTTPS", None, False, True)
 Box('Aapi', Col(2), w1, BW, H, "Job API\nPOST/PUT/DELETE /jobs\n+ pause, run now", SVC)
 Box('Ajdb', Col(3), w1, BW, H, "Jobs (Cosmos)\npk shardId =\nhash(jobId) % 4096", DATA)
 Box('Ajc', Col(4), w1, BW, H, "Kafka topic:\njob-changes\n(from change feed)", ASYNC)
-Box('Asch', Col(5), w1, BW, w3 + H - w1, "Scheduler nodes\n\neach owns some\nshards (lease)\n\nin memory: next run\nof every job,\nsorted by second", ASYNC)
+Box('Asch', Col(5), w1, BW, w3 + H - w1, "Scheduler Service\n(32 copies, each owns\nsome shards: lease)\n\nIN: job-changes ->\nupdate the timetable\n\nEVERY SECOND:\n1 apply changes\n2 publish due jobs\n3 schedule next run\n4 checkpoint + renew", ASYNC)
 Box('Alease', Col(5), w4, BW, H, "Shard leases (etcd)\n+ fired-up-to\ncheckpoint per shard", DATA)
 Box('Akr', Col(6), w2, BW, H, "Kafka topic:\njob-runs\nkey = jobId", ASYNC)
 Box('Aex', Col(7), w2, BW, H, "Executor workers\n(consumer group)\nautoscale on lag", ASYNC)
@@ -53,7 +53,7 @@ Arrow('Ar2', 'Alist', 'Ajv', "", R)
 Arrow('Ar3', 'Ag', 'Ahist', '', R, False, True)
 Arrow('Ar4', 'Ahist', 'Aruns2', "", R)
 
-Note('Asum', Col(4) + 20, r1 - 30, "WRITE: Job API saves the job (Cosmos, pk = shard) -> change feed -> Kafka job-changes\n-> the scheduler node that OWNS that shard adds it to its in-memory list. Every second\nthe owner publishes each job due now to Kafka job-runs, then works out the next run\nIN MEMORY (no DB write per run). Executors: 1 INSERT run, UNIQUE (jobId, scheduledTime)\nstops duplicates -> 2 tenant rate limit -> 3 call the target with Idempotency-Key = runId\n-> 4 save the status; failures -> job-retries with backoff, then 'failed'.\nREAD: job list from a by-tenant view; run history from Runs.", 16, NOTE)
+Note('Asum', Col(4) + 20, r1 - 30, "WRITE: Job API saves the job (Cosmos, pk = shard) -> change feed -> Kafka job-changes\n-> the Scheduler Service copy that OWNS that shard adds it to its in-memory timetable.\nEvery second the owner publishes each job due now to Kafka job-runs, then works out the next run\nIN MEMORY (no DB write per run). Executors: 1 INSERT run, UNIQUE (jobId, scheduledTime)\nstops duplicates -> 2 tenant rate limit -> 3 call the target with Idempotency-Key = runId\n-> 4 save the status; failures -> job-retries with backoff, then 'failed'.\nREAD: job list from a by-tenant view; run history from Runs.", 16, NOTE)
 
 # =================== ROW B: TOP OF THE HOUR + SECOND-LEVEL JOBS (numbers = order) ===================
 T = 910
@@ -63,7 +63,7 @@ w1, w2, w3 = T + 90, T + 210, T + 330
 
 Box('Bclk', Col(0), w1, BW, H, "Clock: 23:59:30\n(30 s before\nthe hour)", EDGE)
 Box('Bsame', Col(0), w3, BW, H, "Create / edit jobs,\nrun history:\nsame as row A", GREY)
-Box('Bsch', Col(1), w1, BW, w3 + H - w1, "1 Scheduler nodes\n\nnext minute already\nin memory:\n10M jobs due\nat 00:00:00\n\n+ 1M second-level\njobs (every 10 s)", ASYNC)
+Box('Bsch', Col(1), w1, BW, w3 + H - w1, "1 Scheduler Service\n\nnext minute already\nin memory:\n10M jobs due\nat 00:00:00\n\n+ 1M second-level\njobs (every 10 s)", ASYNC)
 Arrow('Ba1', 'Bclk', 'Bsch', "tick", None, False, True)
 
 # 2-7: publish early with fireAt, executors pre-scaled and waiting
@@ -92,10 +92,10 @@ Arrow('Bw10', 'Bsec2', 'Bsec3', "", W)
 
 Note('Bnote', Col(5), w2, "ORDER: 1 the next minute is already in memory -> 2 at 23:59:30 publish all\n10M runs EARLY with fireAt = 00:00:00, interleaved by tenant -> 3 Kafka holds\nthem -> 4 executors (scaled out at 23:59: the spike is predictable) prefetch\nand wait -> at 00:00:00: 5 skip deleted / paused jobs, apply the tenant limit\n-> 6 call -> 7 save runs in batches.\nWHY: 10M calls can't all start in one second, so the burst drains in ~10 s,\nfairly across tenants. Jobs that don't need :00 exactly can pick 'spread'\n(a fixed random second in the minute), which flattens the spike.", 16, NOTE)
 
-# =================== ROW C: ONE JOB'S LIFE + A SCHEDULER NODE CRASH (left to right in time) ===================
+# =================== ROW C: ONE JOB'S LIFE + A SCHEDULER SERVICE COPY CRASHES (left to right in time) ===================
 T = 1470
 Frame('fC', 0, T, 2640, 660)
-Note('Ct', 20, T + 12, "C. ONE JOB, STEP BY STEP (every 10 s, webhook) + scheduler node B crashes - left to right in time", 24, RED)
+Note('Ct', 20, T + 12, "C. ONE JOB, STEP BY STEP (every 10 s, webhook) + Scheduler Service B crashes - left to right in time", 24, RED)
 yU, yS, yD = T + 90, T + 250, T + 420
 Note('CuL', 40, T + 58, "CUSTOMER", 18, RED)
 
@@ -111,14 +111,14 @@ Note('CdL', X(2), T + 388, "DATA", 18, '#2b8a3e')
 steps = [
     # (customer text, service text, service colour, data text)
     ("1 Creates a job:\nevery 10 s, webhook", "APIM -> Job API\nPOST /jobs", SVC, "Jobs (Cosmos)\nshard 17 =\nhash(jobId) % 4096"),
-    (None, "2 Change feed ->\nKafka job-changes", ASYNC, "job-changes\n(every node reads it)"),
-    (None, "3 Node B owns shard\n17: adds the job,\nnext run 10:00:10", ASYNC, None),
-    (None, "4 At 10:00:10 node B\npublishes run\njobId:10:00:10", ASYNC, "Kafka job-runs"),
+    (None, "2 Change feed ->\nKafka job-changes", ASYNC, "job-changes\n(every Scheduler\nService copy reads it)"),
+    (None, "3 Scheduler Service B\nowns shard 17: adds\nthe job, next 10:00:10", ASYNC, None),
+    (None, "4 At 10:00:10\nScheduler Service B\npublishes the run", ASYNC, "Kafka job-runs"),
     (None, "5 Executor:\nINSERT run (UNIQUE)\n-> rate limit", ASYNC, "Runs (Cosmos)\nstatus: running"),
     ("6 Webhook gets POST\n+ Idempotency-Key\n-> 200 OK", "Executor calls\nthe target,\nsaves 'success'", ASYNC, None),
     ("7 Sees the run in\nhistory: success", "APIM -> Run API\nGET /jobs/{id}/runs", SVC, "Runs (Cosmos)\npk (jobId, day)"),
-    (None, "8 Node B crashes:\nstops renewing\nits lease", GREY, "Shard leases (etcd)\nshard 17 lease\nexpires (10 s)"),
-    (None, "9 Node C takes 17:\nloads its jobs, starts\nfrom fired-up-to", ASYNC, "Re-fires missed runs;\nRuns UNIQUE drops\nany repeats"),
+    (None, "8 Scheduler Service B\ncrashes: stops\nrenewing its lease", GREY, "Shard leases (etcd)\nshard 17 lease\nexpires (10 s)"),
+    (None, "9 Scheduler Service C\ntakes shard 17, loads\nit, resumes from\nfired-up-to", ASYNC, "Re-fires missed runs;\nRuns UNIQUE drops\nany repeats"),
 ]
 # arrow between customer and service: ('down' = customer -> service, 'up' = service -> customer, label)
 ulinks = [('down', "POST"), None, None, None, None, ('up', "call"), ('down', "GET"), None, None]
@@ -140,4 +140,4 @@ for i, (ut, st, sc, dt) in enumerate(steps):
     if i:
         Arrow(f'Cn{i}', f'Cs{i-1}', f'Cs{i}', '', NOTE, True)
 
-Note('Cnote', 40, T + 530, "Steps 1-7: one job's life. Steps 8-9: leases are short (10 s) and renewed every 3 s. When node B dies, other nodes take its shards, reload them from Jobs\nand re-fire every run after the shard's fired-up-to checkpoint. A run can be sent twice (B may have published it just before dying), so the Runs\nUNIQUE (jobId, scheduledTime) check and the Idempotency-Key header make a repeat harmless: delivery is AT LEAST ONCE, not exactly once.", 16, NOTE)
+Note('Cnote', 40, T + 530, "Steps 1-7: one job's life. Steps 8-9: leases are short (10 s) and renewed every 3 s. When Scheduler Service B dies, the other copies take its shards, reload them from Jobs\nand re-fire every run after the shard's fired-up-to checkpoint. A run can be sent twice (B may have published it just before dying), so the Runs\nUNIQUE (jobId, scheduledTime) check and the Idempotency-Key header make a repeat harmless: delivery is AT LEAST ONCE, not exactly once.", 16, NOTE)
