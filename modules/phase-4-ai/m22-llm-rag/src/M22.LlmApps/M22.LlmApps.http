@@ -1,0 +1,13 @@
+### Alice asks about her own order → real status
+POST http://localhost:5000/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Where's my order 123?" }
+
+### Alice asks about Bob's order → "not found"
+POST http://localhost:5000/api/chat
+Content-Type: application/json
+X-User-Id: alice
+
+{ "question": "Where's my order 456?" }
