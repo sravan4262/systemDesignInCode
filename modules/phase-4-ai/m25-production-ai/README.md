@@ -5,6 +5,9 @@
 ## Exit deliverable
 - [ ] For each AI design: requirements, architecture, retrieval, eval plan, cost model, failure modes, security.
 
+## Practical build (after M22–M24)
+- [ ] **AI chat over company documents**: design drafted early (2026-11-21) in [`designs/ai-chat-company-docs/`](designs/ai-chat-company-docs/ai-chat-company-docs.md). Revisit it here once M22–M24 are done: walk it end to end, refine chunking / retrieval / evals / cost with what you learned, then build a small working version.
+
 ## Before starting
 - [ ] Reviewed the Apple Notes listed in the plan's 🟧 box for this module
 - [ ] Applied any corrections from plan section 10 to those notes

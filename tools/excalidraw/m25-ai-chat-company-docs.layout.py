@@ -1,9 +1,9 @@
-# Case 12: AI chat over company documents (RAG) for logged-in employees.
+# M25 practical build: AI chat over company documents (RAG) for logged-in employees.
 # Rows: A = normal day (ingestion = write path, asking = read path), B = all-hands spike (only what differs; numbers = order).
 BW, H = 240, 70
 AI = '#d0bfff'
 
-Note('title', 0, -70, "Case 12: AI chat over company documents - employee -> APIM -> INGEST documents vs. ASK a question", 28)
+Note('title', 0, -70, "M25: AI chat over company documents - employee -> APIM -> INGEST documents vs. ASK a question", 28)
 Note('legend', 0, -25, "Blue = write path (ingestion)   Green = read path (asking)   Dashed = async   Purple = AI model call   Grey = same as row A", 16, NOTE)
 
 # =================== ROW A: NORMAL DAY ===================

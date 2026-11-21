@@ -1,6 +1,8 @@
-# Case 12: AI chat over company documents (RAG)
+# AI chat over company documents (RAG): the M25 practical build
 
-Diagram: [case-12-ai-chat.excalidraw](case-12-ai-chat.excalidraw), in two rows: **A. Normal day** (write path = **ingest documents**, read path = **ask a question**, every step numbered) and **B. All-hands spike** (20k employees ask about one new policy in 10 minutes; only what differs). Employee → APIM (tall box) → paths. Purple boxes are AI model calls. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+> Moved from M19 (was Case 12) on 2026-11-21: build it **after** learning M22–M24 (RAG, model internals, agents and evals), as a practical end-to-end design.
+
+Diagram: [ai-chat-company-docs.excalidraw](ai-chat-company-docs.excalidraw), in two rows: **A. Normal day** (write path = **ingest documents**, read path = **ask a question**, every step numbered) and **B. All-hands spike** (20k employees ask about one new policy in 10 minutes; only what differs). Employee → APIM (tall box) → paths. Purple boxes are AI model calls. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 **How this case differs from the others:** it isn't about consistency or availability. It's about building it **efficiently**: good answers, low cost per question, fast first word, and never showing an employee a document they can't see.
 
