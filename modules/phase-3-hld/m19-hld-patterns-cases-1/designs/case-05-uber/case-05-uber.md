@@ -60,6 +60,7 @@ Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. N
 | `POST /rides` | `{ estimateId }` + `Idempotency-Key` | `202 { rideId, status: matching }` | A double tap creates one ride; `410` if the estimate expired |
 | `GET /rides/{id}` | — | `200 { status, driver?, etaSec, price, paymentStatus }` | Fallback after a WebSocket reconnect |
 | `POST /rides/{id}/accept` (driver) | — | `200` · `409` (taken, expired, or you're busy) | The **one** contested write |
+| `POST /drivers/me/status` (driver) | `{ status: available \| offline }` | `204` | Going online puts the driver in search; offline removes them at once |
 | `POST /rides/{id}/start` · `/end` (driver) | `{ ts }` | `200` | `end` → `ride-ended` → payment |
 
 There's no "pay" endpoint: the charge is triggered by `end`, server-side, with the card on file.
@@ -94,6 +95,72 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 **Read path:**
 1. **Fare estimate:** Pricing Service → Maps API (route, ETA) × rates (× surge in row B) → returns and stores the locked price.
 2. **Ride status:** Ride Service → SQL read replica. Live changes arrive by **push**; this GET is the fallback after a reconnect.
+
+## Ride lifecycle: rider and driver side by side
+**Who owns what:** the **Location Service** owns only *where* drivers are (Redis, overwritten every 4 s). The **Ride Service** owns the *ride* and the driver's *status* (SQL, the truth). The **matching worker** reads both; the **trip tracker** connects a driver's pings to their rider; the **Payment Service** acts once at the end.
+
+| # | Rider sees / does | Driver sees / does | Service doing the work | State after |
+|---|---|---|---|---|
+| 0 | — | Taps **Go online**; app opens the WebSocket and pings every 4 s | Ride Service: `drivers.status = available` (SQL). Location Service: `GEOADD` + last-seen on every ping | Driver: **available**, searchable |
+| 1 | Enters pickup + dropoff → sees **$18** | — | Pricing Service: Maps API route × rates (× surge) → locked for 2 min | Estimate stored |
+| 2 | Taps **Request** → "Finding your driver…" | — | Ride Service: insert `rides(matching)` + outbox → `202`; rider app opens its WebSocket | Ride: **matching** |
+| 3 | Still "Finding…" | Phone rings: **offer** (pickup, price), 2 min to accept | Matching worker: `GEOSEARCH` (Location index) → keep `available` (SQL/cache) → rank by ETA → Redis lock `NX` → offer via the driver's gateway | Driver: **offered** (Redis lock only) |
+| 3b | Still "Finding…" | Declines or ignores it | Lock expires (130 s) → matching worker offers the next driver | Ride: still **matching** |
+| 4 | "**Maria is coming**, Toyota Camry, 4 min" | Taps **Accept** → navigation to pickup | Ride Service: one transaction, `rides → accepted`, `drivers → busy` (conditional); outbox → `ride-events` → push to rider; trip tracker caches `driver → rider` | Ride: **accepted**; driver: **busy** (out of search) |
+| 5 | Watches the car move on the map | Drives to pickup; app keeps pinging | Location Service → Kafka → trip tracker → rider's gateway (every 4 s) | — |
+| 6 | "Your ride has started" | Picks up rider, taps **Start** | Ride Service: `rides → started` → push to rider | Ride: **started** |
+| 7 | Watches the trip on the map | Drives; app keeps pinging | Same as step 5 | — |
+| 8 | "You've arrived" | Taps **End** | Ride Service: `rides → ended`, `drivers → available`; outbox → `ride-ended`; trip tracker drops `driver → rider` | Ride: **ended**; driver: **available** again |
+| 9 | "**Paid $18**" receipt | Sees the fare | Payment Service: `payments(rideId UNIQUE)` → card processor (idempotency key) → `paid` → push to rider | Ride: **paid** |
+
+**State machines:**
+```
+Ride:    matching ──offer──► (driver locked) ──accept──► accepted ──start──► started ──end──► ended ──charge──► paid
+            │                     │ decline / 2 min
+            │                     └──────────► back to matching (next driver)
+            └── no driver after N tries ──► no_drivers
+
+Driver:  offline ──go online──► available ──offer (Redis lock)──► available + locked ──accept──► busy ──end──► available
+```
+
+**Sequence (the same flow):**
+```mermaid
+sequenceDiagram
+  participant R as Rider app
+  participant D as Driver app
+  participant L as Location Service
+  participant PR as Pricing Service
+  participant RS as Ride Service
+  participant M as Matching worker
+  participant P as Payment Service
+  D->>RS: POST /drivers/me/status (available)
+  loop every 4 s while online
+    D->>L: location ping (WS)
+    L->>L: GEOADD + last-seen (Redis)
+  end
+  R->>PR: POST /fare-estimates
+  PR-->>R: $18, locked 2 min
+  R->>RS: POST /rides
+  RS-->>R: 202 { rideId, matching }
+  RS->>M: ride-requested (Kafka, via outbox)
+  M->>L: GEOSEARCH 10 nearest
+  M->>M: keep available, rank by ETA, lock driver (NX)
+  M->>D: offer (WS, 2 min)
+  D->>RS: POST /rides/{id}/accept
+  RS->>RS: ride accepted + driver busy (one conditional transaction)
+  RS-->>R: push "assigned" (driver, car, ETA)
+  loop every 4 s until end
+    D->>L: location ping
+    L-->>R: driverLocation (Kafka → trip tracker → rider's gateway)
+  end
+  D->>RS: POST /rides/{id}/start
+  RS-->>R: push "started"
+  D->>RS: POST /rides/{id}/end
+  RS->>RS: ride ended + driver available
+  RS->>P: ride-ended (Kafka, via outbox)
+  P->>P: charge locked price once (unique rideId + idempotency key)
+  P-->>R: push "paid"
+```
 
 ## Which components each path touches
 | Requirement | Path | Normal ride (row A) | Hot spot (row B) |
