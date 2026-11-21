@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Phase 3 wrap-up: M19 S8–S9 worked examples (100k users; 10k tenant DBs) as HLD cases, then CP3. Done: cases 1–8, 11; postponed: 9 Top-K, 10 Dropbox; Case 12 moved to M25 (practical AI build).
+- **Next step:** Phase 3 cases done for now (1–8, 11; Case 12 moved to M25). **Deferred by the learner (2026-11-21), to look into later:** M19 S8–S9 worked examples (rolling out one change to 100k users; one schema change across 10k tenant DBs), **CP3**, and cases **9 Top-K** and **10 Dropbox**. Next: learner picks what to start (Phase 4 M22 is the natural next module).
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
@@ -15,6 +15,7 @@
      - Cases in order: (1) URL shortener ✅ 6.5/10 (`case-01-url-shortener.*`, learner attempt in `.attempt.excalidraw`) → (2) WhatsApp → (3) Twitter / news feed → (4) YouTube / Netflix → (5) Uber → (6) Ticketmaster → (7) Payment system → (8) Notification system → (9) Top-K / ad-click aggregation → (10) Dropbox → (11) Google Docs → (12) ~~AI chat over company data~~ → **moved to Phase 4 (M25 practical build)** on 2026-11-21: design drafted in `modules/phase-4-ai/m25-production-ai/designs/ai-chat-company-docs/`, to revisit and build after M22–M24.
      - Skipped (covered by the above or earlier modules): live comments, live streaming, Yelp, rate limiter (M8), distributed KV/cache (M17 + M8), hotel/meeting rooms (Ticketmaster + M3), job scheduler/leaderboard/metrics, typeahead, web crawler, design Kafka, auction, stock brokerage, own question bank.
      - Per-case prep (learner's request 2026-11-19): one folder per case `<module>/designs/case-NN-<name>/` holding `case-NN-<name>.md` (sections: prompt → FRs → NFRs → **short capacity table** (facts line + What/Math/Result/So… + 'what the numbers tell you') → **API** (endpoints, request, response, errors) → high-level design → components per path → deep dives → follow-ups) and the Excalidraw diagram `case-NN-<name>.excalidraw`, one case at a time. Diagram format (agreed on Case 3): one row per actor type, User → Gateway → write path (top) and read path (bottom), every FR mapped, plus a "touches" note and table. Generator: `tools/excalidraw/`. Done: (1) URL shortener, (2) WhatsApp (prep; learner mid-case), (3) Twitter (learner reviewing, then refine). Next: the other 9. Python generator `excal.py` for Mac.
+  - **Deferred, to look into later (learner, 2026-11-21):** S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Mac
@@ -44,10 +45,10 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 3 | M16 | HLD fundamentals & real-time | ✅ (all 8 + deep dives; designs in designs/) |
 | 3 | M17 | Distributed systems theory | ✅ |
 | 3 | M18 | Architecture & domain design | ✅ (lab → later) |
-| 3 | M19 | HLD patterns & case studies I | 🟨 (patterns 1–7 done; S8–S9 → cases) |
+| 3 | M19 | HLD patterns & case studies I | 🟨 (patterns 1–7 + cases 1–8, 11 done; S8–S9 and cases 9–10 deferred to later) |
 | 3 | M20 | HLD case studies II | ⬜ |
 | 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
-| 3 | CP3 | Checkpoint: HLD | ⬜ |
+| 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
 | 4 | M22 | LLM apps & RAG | ⬜ |
 | 4 | M23 | LLM internals, inference, adaptation | ⬜ |
 | 4 | M24 | Agents & evals | ⬜ |
