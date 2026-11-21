@@ -136,6 +136,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Small data (just scan), exact id/code lookups (normal index), tuning the knob before measuring recall on my data.
 - **Quick-check answers:** Comparing with every vector is too many operations per question; fine when the data is small or filtered down. 4 of 5 = 80% recall; raise `efSearch` → slower search, more CPU. Postgres + 200k chunks → pgvector: no new system, join/filter with my tables in one query (`WHERE tenant_id = @t ORDER BY embedding <=> @q LIMIT 5`); move to Azure AI Search for strong hybrid + reranking or many millions of chunks.
 
+#### Metadata filters
+- **In plain words:** Each chunk row stores labels next to its text and embedding (tenant, allowed groups, doc type, date, citation fields). At search time a `WHERE` on those labels limits the search to chunks the user may see.
+- **Problem it solves:** Without filters, alice (Sales) asks about salary bands and gets the HR-only chunk (score 0.94); or tenant A gets an answer from tenant B's documents.
+- **Analogy:** A library where the librarian only searches the rooms your badge opens.
+- **Diagram:** one row per chunk: `content, embedding, tenant_id, allowed_groups, doc_id, section, page`. Ingestion copies the document's permissions onto every chunk. Query: `WHERE tenant_id = @t AND allowed_groups && @groups ORDER BY embedding <=> @q LIMIT 5`, one SQL query (don't pull rows into C# and compare there). Permission change → `UPDATE allowed_groups`, no re-embedding.
+- **Variations / alternatives:** Filter fields in one shared index (default) vs. an index/database per tenant (strict isolation, more cost). Relevance filters (doc type, date). **pgvector catch:** HNSW collects ~`ef_search` candidates and then applies the `WHERE`, so it can return fewer than 5 → `SET hnsw.iterative_scan = relaxed_order`; a small tenant may get a B-tree + exact scan (100% recall); partition by tenant for big ones; check with `EXPLAIN`.
+- **When not to use it:** Public data (no security filter). Too many relevance filters over-narrow. Don't store per-user ids in every chunk; store group ids.
+- **Quick-check answers:** A prompt rule ("don't reveal HR data") is just text the model can ignore or be talked out of, and the data is already in the prompt; **security is enforced before data reaches the model**. Post-filter (top 5, then drop forbidden) can leave 1 chunk → pre-filter, then nearest neighbours. Groups come from the **JWT** (signed by the identity provider), never the question (anyone can type "I'm in HR"); with too many groups, look them up from Graph and cache.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
