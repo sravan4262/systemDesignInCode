@@ -91,16 +91,16 @@ Arrow('Ba1', 'Bd', 'Bg', "WS", None, False, True)
 Arrow('Ba2', 'Br', 'Bg', "HTTPS", None, False, True)
 Arrow('Ba3', 'Bg', 'Bws', "", None, False, True)
 
-# write: batch matching per cell; demand/supply drives surge
+# write: batch matching per zone; demand/supply drives surge
 Box('Brs', Col(3), w1, BW, H, "Ride Service\nPOST /rides -> 202", SVC)
 Box('Brd', Col(4), w1, BW, H, "Rides (SQL)\nstatus: matching,\nsurged price + outbox", DATA)
-Box('Bk', Col(5), w1, BW, w2 + H - w1, "Kafka topics\n\nride-requested\ndriver-locations\n\npartition by cell", ASYNC)
-Box('Bbm', Col(6), w1, BW, H, "Batch matcher (per cell)\nevery 2 s: N riders x\nM drivers, min total ETA", ASYNC)
+Box('Bk', Col(5), w1, BW, w2 + H - w1, "Kafka topics\n\nride-requested\ndriver-locations\n\npartition by zone", ASYNC)
+Box('Bbm', Col(6), w1, BW, H, "Batch matcher (per zone)\nevery 2 s: N riders x\nM drivers, min total ETA", ASYNC)
 Box('Blk', Col(7), w1, BW, H, "Driver lock (Redis)\nSET NX EX 130", DATA)
 Box('Bof', Col(8), w1, BW, H, "Offers to drivers\n(the rest wait in\nqueue for next round)", EDGE)
 Box('Bls', Col(3), w2, BW, H, "Location Service\n(same pings as A)", SVC)
-Box('Bag', Col(6), w2, BW, H, "Demand / supply counter\nper H3 cell, 30 s", ASYNC)
-Box('Bsg', Col(7), w2, BW, H, "Surge multipliers\n(Redis) cell -> x2.1", DATA)
+Box('Bag', Col(6), w2, BW, H, "Demand / supply counter\nper zone, 30 s", ASYNC)
+Box('Bsg', Col(7), w2, BW, H, "Surge multipliers\n(Redis) zone -> x2.1", DATA)
 Box('Bgeo', Col(4), w3, BW, H, "Driver geo index (Redis)\nsharded by city", DATA)
 Box('Bra', Col(3), w4, BW, H, "Accept / start / end,\nlive location, payment:\nsame as row A", GREY)
 Arrow('Bw1', 'Bg', 'Brs', '', W, False, True)
@@ -128,7 +128,7 @@ Arrow('Br3', 'Bsg2', 'Bmap', "2", R)
 Arrow('Br6', 'Bg', 'Brr', '', R, False, True)
 Arrow('Br7', 'Brr', 'Brd3', "", R)
 
-Note('Bsum', Col(6) + 40, r1 - 20, "WRITE touches: same services as A, but requests in a hot cell\nare matched in BATCHES every 2 s (best overall assignment,\nnot first-come grabs); riders without a driver wait for the\nnext round. A demand / supply counter per H3 cell sets the\nsurge multiplier; the estimate locks the surged price.\n\nREAD touches: surge (Redis) x route (Maps API, cached);\nride status + queue position from the SQL replica.", 16, NOTE)
+Note('Bsum', Col(6) + 40, r1 - 20, "WRITE touches: same services as A, but requests in a hot zone\nare matched in BATCHES every 2 s (best overall assignment,\nnot first-come grabs); riders without a driver wait for the\nnext round. A demand / supply counter per zone sets the\nsurge multiplier; the estimate locks the surged price.\n\nREAD touches: surge (Redis) x route (Maps API, cached);\nride status + queue position from the SQL replica.", 16, NOTE)
 
 # =================== ROW C: RIDE JOURNEY (rider and driver side by side) ===================
 T = 1800

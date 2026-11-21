@@ -14,7 +14,7 @@ Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. N
 
 **Supporting flows (needed, but not features):** drivers send their location every ~4 s (for 2 and 4); the driver taps accept / start / end (for 3, 4 and 5).
 
-**Row B has the same requirements**, with surge: in a hot cell the estimate includes a surge multiplier.
+**Row B has the same requirements**, with surge: in a hot **zone** the estimate includes a surge multiplier. *(A zone = one hexagon on the map, about 1 km across; Uber's H3 grid under the hood.)*
 
 **Out of scope (say this out loud):** trip history, ratings, cancellations, pooled and scheduled rides, metered fares, tips, adding a card (assume one is on file), driver payouts, maps and routing (an external Maps API gives routes and ETAs).
 
@@ -29,7 +29,7 @@ Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. N
 | Geography | Global, but every ride is **local to one city** | Shard by city / region |
 
 ## Capacity estimate (high level)
-**Facts:** 25M rides/day; ~1M drivers online at peak, pinging every 4 s; average trip 20 min; peak = 3× average; 1 day ≈ 10⁵ s. Hot spot: 50k requests in 15 min in a few cells.
+**Facts:** 25M rides/day; ~1M drivers online at peak, pinging every 4 s; average trip 20 min; peak = 3× average; 1 day ≈ 10⁵ s. Hot spot: 50k requests in 15 min in a few zones.
 
 | What | Math | Result | So… |
 |---|---|---|---|
@@ -38,7 +38,7 @@ Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. N
 | Ride requests/s | 25M ÷ 10⁵ | **250/s avg, ~1k/s peak** | Light; SQL is fine |
 | Concurrent rides | 25M × 20 min ÷ 1,440 min | **~350k avg, ~1M peak** | ~250k location pushes/s to riders |
 | Payments/s | 25M ÷ 10⁵ | **250/s avg, ~1k/s peak** | Light; the problem is correctness, not volume |
-| Hot spot | 50k ÷ 900 s | **~55 requests/s in a few cells** | The rate is small; the problem is **contention** (many riders, few drivers) and **price** |
+| Hot spot | 50k ÷ 900 s | **~55 requests/s in a few zones** | The rate is small; the problem is **contention** (many riders, few drivers) and **price** |
 
 **What the numbers tell you:** location pings dominate (250k/s) and are only useful for seconds, so they live in memory and are overwritten. Requests and payments are rare by comparison; their difficulty is **correctness** (no double booking, no double charge). Every ride is local to a city, so the city is the shard key.
 
@@ -76,7 +76,7 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 | Ride Service | Create ride, accept, start, end | **Azure SQL, sharded by city**: `rides`, `drivers` (status), outbox |
 | Matching worker | Nearest available drivers → rank by ETA → lock one → offer → wait up to 2 min → next | Kafka consumer of `ride-requested` (partitioned by city); **Redis** driver locks |
 | Payment Service | On `ride-ended`, charges the locked price once | **Payments (SQL)**, `rideId` unique; card processor (Stripe / Adyen) |
-| Surge (row B) | Requests vs. available drivers per H3 cell every 30 s → multiplier | Kafka consumer → Redis |
+| Surge (row B) | Requests vs. available drivers per zone every 30 s → multiplier | Kafka consumer → Redis |
 
 **Write path:**
 1. **Locations:** driver → WebSocket gateway → Location Service → `GEOADD drivers:{city}` (latest only) and `ZADD drivers:{city}:seen now driverId`. Members of a geo set **can't have their own TTL**, so a sweeper runs every few seconds: drivers not seen for 30 s are removed (`ZRANGEBYSCORE` on `:seen` → `ZREM` from both), so a vanished driver drops out of search and → Kafka `driver-locations`.
@@ -166,11 +166,11 @@ sequenceDiagram
 | Requirement | Path | Normal ride (row A) | Hot spot (row B) |
 |---|---|---|---|
 | Fare estimate | Read | Pricing → Maps API | Pricing → **surge multiplier** (Redis) × route (Maps API, cached per route) |
-| Request + find drivers | Write | Ride Service → Rides (SQL) + outbox → Kafka → matching worker (greedy: nearest first) → `GEOSEARCH` | Same up to Kafka → **batch matcher per cell every 2 s** (N riders × M drivers, minimise total ETA); the rest wait for the next round |
+| Request + find drivers | Write | Ride Service → Rides (SQL) + outbox → Kafka → matching worker (greedy: nearest first) → `GEOSEARCH` | Same up to Kafka → **batch matcher per zone every 2 s** (N riders × M drivers, minimise total ETA); the rest wait for the next round |
 | Assignment | Write | Driver lock (NX) → offer → accept = one conditional UPDATE on rides + drivers | Same (the conditional update makes simultaneous accepts safe) |
 | Live driver location | Write (push) | Location Service → geo index + Kafka → trip tracker → rider's gateway | Same |
 | Payment | Write | ride-ended → Payment Service → Payments (unique rideId) → card processor (idempotency key) | Same; charges the surged price that was locked at the estimate |
-| Surge | Write | — (multiplier 1.0) | Kafka (requests + locations) → demand / supply counter per H3 cell → Redis |
+| Surge | Write | — (multiplier 1.0) | Kafka (requests + locations) → demand / supply counter per zone → Redis |
 | Ride status | Read | Ride Service → SQL replica | Same, plus queue position while waiting |
 
 **What the read path never touches:** Kafka, the matching worker, the trip tracker or the Payment Service. **What never touches SQL:** location pings.
@@ -180,7 +180,7 @@ sequenceDiagram
 2. **No double booking:** two matchers pick the same driver; the same driver taps accept twice. Which line stops each? (Redis `NX`, then the conditional `UPDATE … WHERE status = …`.)
 3. **No double charge:** `ride-ended` is delivered twice, or the processor call times out. Unique `rideId` row + idempotency key at the processor; on a timeout, **ask the processor** before retrying (the charge may have gone through).
 4. **Card declined at the end:** the ride already happened. Options: authorize (hold) the price at request time, capture at the end; or charge at the end and chase failures. Trade-off: holds tie up the rider's money.
-5. **Greedy vs. batch matching:** greedy gives each rider the nearest driver *now*; a 2 s batch finds a better total. Why only in dense cells?
+5. **Greedy vs. batch matching:** greedy gives each rider the nearest driver *now*; a 2 s batch finds a better total. Why only in dense zones?
 6. **Location write load:** 250k writes/s. Shard Redis by city; drop out-of-order pings (`ts` older than stored); ping every 8 s while idle.
 7. **Driver disconnects:** mid-offer, the lock TTL frees them and the stale-driver sweep removes them from search. Mid-ride, the ride continues; the rider's map freezes until pings resume.
 
