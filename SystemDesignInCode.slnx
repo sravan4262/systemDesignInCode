@@ -37,4 +37,7 @@
   <Folder Name="/M17/">
     <Project Path="modules/phase-3-hld/m17-distributed-theory/src/M17.Theory/M17.Theory.csproj" />
   </Folder>
+  <Folder Name="/M22/">
+    <Project Path="modules/phase-4-ai/m22-llm-rag/src/M22.LlmApps/M22.LlmApps.csproj" />
+  </Folder>
 </Solution>
