@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 7 Payments: doc + diagram ready in `designs/case-07-payments/` (learner's requirements: charge, never double charge, refund, daily reconciliation; no ledger; row B = flash sale queue + rate limiter). Case 6 Ticketmaster done (row B = waiting room, row C = step lanes). Then the 12-case list below.
+- **Next step:** Case 8 Notifications: doc + diagram ready in `designs/case-08-notifications/` (requirements agreed: 4 channels, prefs + quiet hours, templates, reliable delivery, rate limits, priorities; row B = 50M campaign). Case 7 Payments done. Then Case 9 Top-K, 10 Dropbox, 11 Google Docs, 12 chat over company data, then S8/S9.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
