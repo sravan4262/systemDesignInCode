@@ -93,12 +93,22 @@ Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in 
 3. **Seat map:** sold seats (SQL) + held seats (Redis) → free / held / sold.
 4. **Confirmation:** `GET /orders/{id}` → SQL read replica (falls back to the primary right after checkout for read-your-writes).
 
-## Hot on-sale (row B): what changes
-1. **Virtual waiting room.** At 10:00 everyone calls `POST /events/{id}/queue` and gets a **queue token** + position (`ZADD queue:{event} <arrival time> user`). The waiting page is static and served from the CDN; the app polls `GET /queue/{token}` every ~10 s (`ZRANK` → position).
-2. **Admission control.** Every 10 s the admission controller lets in the next **K** users, where K = how many the booking path can serve (≈ seats still free and checkout capacity). Each admitted user gets a **signed access token** (eventId, userId, 15 min). APIM rejects booking calls without one.
-3. **Per-user limit + dedicated shard.** `POST /holds` first checks `user:{event}:{user} ≤ 4` (Redis), then runs the hold script on a **Redis shard dedicated to this event**, so one hot event can't slow down holds for everything else.
-4. **Seat map snapshot.** Admitted users load the seat map from a **snapshot rebuilt every 2 s** (Redis + CDN), not live per request. Picking a seat that was taken in the last 2 s just returns `409` → pick another.
-5. **Sold out:** when free seats hit 0, the admission controller stops, and everyone still waiting is told immediately instead of waiting for nothing.
+## Hot on-sale (row B): step by step
+Row B of the diagram is drawn as three lanes (user app, services, data), left to right in time:
+
+| # | User sees / does | Service | Data |
+|---|---|---|---|
+| 1 | Opens the event page at 10:00 | **CDN** serves a static waiting page (no servers hit) | — |
+| 2 | Taps "Join queue" | APIM → **Waiting Room Service** `POST /events/{id}/queue` | `ZADD queue:{event} <arrival time> user` |
+| 3 | Sees "You are #412,000" | Waiting Room Service returns a `queueToken` + position | — |
+| 4 | — | **Admission controller**, every 10 s: K = free seats + checkout capacity | `ZPOPMIN queue K` → `admitted:{queueToken}` |
+| 5 | Polls every 10 s; gets an access token | `GET /queue/{token}` → once admitted, returns a **signed access token** (eventId, userId, 15 min) | Lookup in `admitted:` |
+| 6 | Opens the seat map | APIM **checks the token** → Event Service `GET /seats` | Seat map **snapshot** (CDN + Redis, rebuilt every 2 s) |
+| 7 | Picks F12 + F13: held 10 min (`409` → pick again) | APIM checks the token → Booking Service `POST /holds` | 1) per-user limit ≤ 4, 2) Lua `NX` hold on a **Redis shard dedicated to this event** |
+| 8 | Pays → "Confirmed" + email | Checkout, payment, confirmation: **same as row A** | Tickets (SQL, `UNIQUE (event, seat)`); release the hold |
+| 9 | Everyone still waiting sees "Sold out" | Admission controller: free seats = 0 → stop admitting | — |
+
+**Why the token:** the queue decides who goes next; the token **enforces** it. Without it, bots and refreshers would call `POST /holds` directly and the booking path would see all 1M users anyway. APIM verifies the signature on every seat-map, hold and checkout call (no token / expired / wrong event → `403`), so rejected traffic costs one signature check at the edge.
 
 ## Which components each path touches
 | Requirement | Path | Regular event (row A) | Hot on-sale (row B) |
