@@ -118,6 +118,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **Cosine similarity:** a score for the angle between two vectors (1 = same meaning, 0 = unrelated). Calculated, not configured like temperature. I configure the metric once on the index, top K per search, and an optional minimum score in my code. Cosine = which pages to read (search); temperature = how creative the answer is (writing). A 0.92 chunk goes in the prompt; 0.15 is unrelated.
 - **Quick-check answers:** "PTO rules" vs. "Paid time off policy": keyword misses, embeddings match. Docs on model A + questions on model B → wrong chunks with **no error**, so always use the same model; switching models means re-embedding everything. "error E-4471" needs exact matching → keyword search; real systems combine both (hybrid).
 
+#### Chunking
+- **In plain words:** Split each document into chunks that each cover one idea; each chunk gets its own vector and is searched on its own.
+- **Problem it solves:** A whole document blurs into one vector that matches nothing; a tiny chunk ("See section 4.") means nothing. Bad splits cut an idea in half or lose context ("This applies after 6 months": what does?).
+- **Analogy:** Textbook → flashcards: one idea per card, chapter title at the top of each.
+- **Diagram:** doc → split at headings (then by size, ~300–800 tokens) → each chunk = {text with heading prefix, vector, docId, section, page (for citations)} + ~50-token overlap with the next chunk.
+- **Variations / alternatives:** Fixed size + overlap (simple); **by structure** (headings/sections, usual best default); semantic (split where the topic changes); parent–child (match on small chunks, send the bigger section); tables keep their header row, code split by function.
+- **When not to use it:** Short items that are already one idea (FAQ pairs, tickets, product descriptions): embed each whole. A few docs that fit in the prompt: skip RAG. Don't start with semantic chunking; measure first.
+- **Quick-check answers:** Lost context → add the heading to the chunk text, and split by structure so the heading stays with its text (or parent–child). Overlap repeats the end of one chunk at the start of the next, so an idea cut at the edge appears whole in at least one chunk (chunks are searched separately). 200 FAQ pairs → one chunk per pair (200 vectors), NOT one vector for all; or skip RAG and send all ~20k tokens (simpler, but paid on every call).
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
