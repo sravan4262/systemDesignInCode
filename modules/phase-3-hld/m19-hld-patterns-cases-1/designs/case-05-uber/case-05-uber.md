@@ -1,6 +1,6 @@
 # Case 5: Uber (ride hailing)
 
-Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. Normal ride** and **B. Hot spot** (a stadium lets out: 50k requests in 15 minutes, 2k drivers nearby, surge pricing). Both rows have the same requirements. Two clients (driver app, rider app) → **APIM** (tall box: auth, rate limit) → REST goes straight to the services; WebSocket traffic goes to the **WebSocket gateway** right after APIM (a pipe: it holds the sockets and stores no locations). Then a **write path** (top) and a **read path** (bottom). Row **C. Ride journey** shows the same flow in time order: rider app, services and driver app as three lanes. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in three rows: **A. Normal ride** (every path), **B. Hot spot: ride matching only** (a stadium lets out: 50k requests in 15 minutes, 2k drivers nearby; everything else is the same as A, plus surge in the estimate), and **C. Ride journey**. Both rows have the same requirements. Two clients (driver app, rider app) → **APIM** (tall box: auth, rate limit) → REST goes straight to the services; WebSocket traffic goes to the **WebSocket gateway** right after APIM (a pipe: it holds the sockets and stores no locations). Then a **write path** (top) and a **read path** (bottom). Row **C. Ride journey** shows the same flow in time order: rider app, services and driver app as three lanes. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Uber. Riders request a ride, and a nearby driver picks them up."
@@ -95,6 +95,24 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 **Read path:**
 1. **Fare estimate:** Pricing Service → Maps API (route, ETA) × rates (× surge in row B) → returns and stores the locked price.
 2. **Ride status:** Ride Service → SQL read replica. Live changes arrive by **push**; this GET is the fallback after a reconnect.
+
+## Hot-spot ride matching (row B)
+Only matching changes in a hot spot; estimate (plus surge), locations, live push, accept / start / end and payment work as in row A.
+
+**Why greedy breaks:** in row A each request is matched on its own, the moment it arrives: nearest available driver, lock, offer. With 50k riders and 2k drivers in a few zones, hundreds of matchers race for the same few cars (lock failures, retries), and first-come grabs give poor pairs (a rider 50 m from driver X gets driver Y 900 m away because X was grabbed a second earlier by someone 800 m away).
+
+**Batch matching, step by step:**
+1. `POST /rides` → Rides (SQL) + outbox → Kafka `ride-requested` (partitioned by zone) → the rider is added to the **zone queue**: Redis sorted set `waiting:{zone}`, score = request time.
+2. Every **2 s**, one **batch matcher per zone** (one Kafka partition = one owner, so no two matchers fight over a zone):
+   1. takes the **N oldest** waiting riders;
+   2. gets the **M available drivers** in the zone and its neighbour zones (geo index);
+   3. builds an **N × M ETA matrix** (Maps API, cached per road segment);
+   4. solves the **assignment**: the pairs with the lowest *total* ETA (Hungarian algorithm, or greedy on the sorted matrix when N × M is large), oldest riders first so nobody starves.
+3. For each pair: driver lock (`NX`) + offer (2 min). **Accept** → the same conditional `UPDATE` as row A → assigned, rider removed from the queue.
+4. **Decline / no answer** → the rider goes back into the queue **with their original request time**, so they keep their place.
+5. **Unmatched riders** (more riders than drivers) simply stay queued for the next tick; `GET /rides/{id}` shows their position (`ZRANK`).
+
+**Trade-off:** each rider waits up to 2 s longer before the first offer, in exchange for better pairs overall and no lock stampede. Use batching only in dense zones (e.g. more than ~20 waiting riders); quiet zones stay greedy.
 
 ## Ride lifecycle: rider and driver side by side
 **Who owns what:** the **Location Service** owns only *where* drivers are (Redis, overwritten every 4 s). The **Ride Service** owns the *ride* and the driver's *status* (SQL, the truth). The **matching worker** reads both; the **active-rides key** (`active:{driverId}`, set by the Ride Service on accept) tells the Location Service which rider gets each ping; the **Payment Service** acts once at the end.

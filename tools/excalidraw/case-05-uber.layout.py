@@ -74,64 +74,62 @@ Arrow('Ar6', 'Arr', 'Ard3', "", R)
 
 Note('Asum', Col(5) + 40, r1 - 20, "WRITE touches: APIM -> WebSocket gateway (pipe) -> Location Service\n-> geo index (latest only); if active:{driverId} is set (Ride Service\nsets it ONCE on accept) -> push straight back out to the rider. No Kafka.\nRequest: Ride Service -> Rides (SQL) + outbox -> Kafka -> matching\nworker -> driver lock (NX) -> offer. Accept: ONE conditional UPDATE.\nEnd -> ride-ended -> Payment Service charges once.\n\nREAD touches: Pricing (Maps API), Ride Service (SQL replica).", 16, NOTE)
 
-# =================== ROW B: HOT SPOT ===================
+# =================== ROW B: HOT SPOT - ride matching only ===================
 T = 900
-Frame('fB', 0, T, 2680, 820)
-Note('Bt', 20, T + 12, "B. HOT SPOT (stadium lets out: 50k ride requests in 15 min, 2k drivers nearby; surge)", 24, RED)
+Frame('fB', 0, T, 2680, 720)
+Note('Bt', 20, T + 12, "B. HOT SPOT: RIDE MATCHING (stadium lets out: 50k requests in 15 min, 2k drivers nearby)", 24, RED)
 w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
-r1, r2 = T + 610, T + 720
+r1 = T + 610
 Note('Bwl', Col(3), T + 55, "WRITE PATH", 18, W)
 Note('Brl', Col(3), T + 575, "READ PATH", 18, R)
 
-Box('Bd', Col(0), w1, BW, 80, "Driver apps\n(2k nearby)", EDGE)
-Box('Br', Col(0), w4, BW, 80, "Rider apps\n(50k at once)", EDGE)
-Box('Bg', Col(1), w1, BW, r2 + H - w1, "APIM (edge)\n\nrate limit per rider\n(no retry storms)", EDGE)
-Box('Bws', Col(2), w2, BW, H, "WebSocket gateway\n(same as row A)", EDGE)
-Arrow('Ba1', 'Bd', 'Bg', "WS", None, False, True)
-Arrow('Ba2', 'Br', 'Bg', "HTTPS", None, False, True)
-Arrow('Ba3', 'Bg', 'Bws', "", None, False, True)
+Box('Br', Col(0), w1, BW, 80, "Rider apps\n(50k at once)", EDGE)
+Box('Bd', Col(0), w3, BW, 80, "Driver apps\n(2k nearby)", EDGE)
+Box('Bg', Col(1), w1, BW, r1 + H - w1, "APIM (edge)\n\nrate limit per rider\n(no retry storms)", EDGE)
+Arrow('Ba1', 'Br', 'Bg', "HTTPS", None, False, True)
+Arrow('Ba2', 'Bd', 'Bg', "WS", None, False, True)
 
-# write: batch matching per zone; demand/supply drives surge
+# requests land in a per-zone queue
 Box('Brs', Col(3), w1, BW, H, "Ride Service\nPOST /rides -> 202", SVC)
-Box('Brd', Col(4), w1, BW, H, "Rides (SQL)\nstatus: matching,\nsurged price + outbox", DATA)
-Box('Bk', Col(5), w1, BW, w2 + H - w1, "Kafka topics\n\nride-requested\ndriver samples\n(every 30 s, for surge)\npartition by zone", ASYNC)
-Box('Bbm', Col(6), w1, BW, H, "Batch matcher (per zone)\nevery 2 s: N riders x\nM drivers, min total ETA", ASYNC)
-Box('Blk', Col(7), w1, BW, H, "Driver lock (Redis)\nSET NX EX 130", DATA)
-Box('Bof', Col(8), w1, BW, H, "Offers to drivers\n(the rest wait in\nqueue for next round)", EDGE)
-Box('Bls', Col(3), w2, BW, H, "Location Service\n(same as A) + a sample\nper driver every 30 s", SVC)
-Box('Bag', Col(6), w2, BW, H, "Demand / supply counter\nper zone, 30 s", ASYNC)
-Box('Bsg', Col(7), w2, BW, H, "Surge multipliers\n(Redis) zone -> x2.1", DATA)
-Box('Bgeo', Col(4), w3, BW, H, "Driver geo index (Redis)\nsharded by city", DATA)
-Box('Bra', Col(3), w4, BW, H, "Accept / start / end,\nlive location, payment:\nsame as row A", GREY)
+Box('Brd', Col(4), w1, BW, H, "Rides (SQL)\nstatus: matching\n+ outbox", DATA)
+Box('Bk', Col(5), w1, BW, H, "Kafka topic:\nride-requested\npartition by zone", ASYNC)
+Box('Bq', Col(6), w1, BW, H, "Zone queue (Redis)\nwaiting:{zone} sorted\nby request time", DATA)
 Arrow('Bw1', 'Bg', 'Brs', '', W, False, True)
 Arrow('Bw2', 'Brs', 'Brd', "insert", W)
 Arrow('Bw3', 'Brd', 'Bk', "outbox", W, True)
-Arrow('Bw4', 'Bk', 'Bbm', "consume", W, True)
-Arrow('Bw5', 'Bbm', 'Blk', "lock", W)
-Arrow('Bw6', 'Blk', 'Bof', "offer", W)
-Arrow('Bw7', 'Bws', 'Bls', "ping", W)
-Arrow('Bw8', 'Bls', 'Bk', "sample", W, True)
-Arrow('Bw9', 'Bls', 'Bgeo', "latest", W)
-Arrow('Bw10', 'Bk', 'Bag', "count", W, True)
-Arrow('Bw11', 'Bag', 'Bsg', "x2.1", W, True)
-Arrow('Bw12', 'Bg', 'Bra', '', W, False, True)
+Arrow('Bw4', 'Bk', 'Bq', "", W, True)
 
-# read: surged estimate; ride status with queue position
-Box('Bpr', Col(3), r1, BW, H, "Pricing Service\nfare estimate", SVC)
-Box('Bsg2', Col(4), r1, BW, H, "Surge multipliers\n(Redis) x2.1 here", DATA)
-Box('Bmap', Col(5), r1, BW, H, "Maps API\n(cached per route, 1 min)", DATA)
-Box('Brr', Col(3), r2, BW, H, "Ride Service\nGET /rides/{id}", SVC)
-Box('Brd3', Col(4), r2, BW, H, "Rides (SQL replica)\nstatus + queue position", DATA)
-Arrow('Br1', 'Bg', 'Bpr', '', R, False, True)
-Arrow('Br2', 'Bpr', 'Bsg2', "1", R)
-Arrow('Br3', 'Bsg2', 'Bmap', "2", R)
-Arrow('Br6', 'Bg', 'Brr', '', R, False, True)
-Arrow('Br7', 'Brr', 'Brd3', "", R)
+# every 2 s per zone: N riders x M drivers -> best overall pairs
+Box('Bbm', Col(6), w2, BW, H, "Batch matcher (per zone)\ntick every 2 s:\n1 riders 2 drivers 3 ETAs", ASYNC)
+Box('Bgeo', Col(5), w2, BW, H, "Driver geo index\navailable drivers in\nzone + neighbour zones", DATA)
+Box('Beta', Col(7), w2, BW, H, "ETA matrix N x M\n(Maps API, cached\nper road segment)", DATA)
+Box('Bas', Col(8), w2, BW, H, "Assignment\nbest pairs: min total\nETA, oldest first", ASYNC)
+Arrow('Bw5', 'Bq', 'Bbm', "1 take N oldest", W)
+Arrow('Bw6', 'Bbm', 'Bgeo', "2", W)
+Arrow('Bw7', 'Bbm', 'Beta', "3", W)
+Arrow('Bw8', 'Beta', 'Bas', "4", W)
 
-Note('Bsum', Col(6) + 40, r1 - 20, "WRITE touches: same services as A, but requests in a hot zone\nare matched in BATCHES every 2 s (best overall assignment,\nnot first-come grabs); riders without a driver wait for the\nnext round. A demand / supply counter per zone sets the\nsurge multiplier; the estimate locks the surged price.\n\nREAD touches: surge (Redis) x route (Maps API, cached);\nride status + queue position from the SQL replica.", 16, NOTE)
+# each pair: lock + offer; accept wins via the conditional UPDATE; decline -> back in the queue
+Box('Bof', Col(8), w3, BW, H, "Per pair: driver lock\n(NX) + offer via WS\n(2 min to accept)", EDGE)
+Box('Bacc', Col(7), w3, BW, H, "Accept: conditional\nUPDATE -> assigned\n(same as row A)", SVC)
+Box('Bdec', Col(8), w4, BW, H, "Decline / 2 min: rider\nback in the queue,\nkeeps their place", GREY)
+Box('Bleft', Col(6), w3, BW, H, "Unmatched riders stay\nqueued for next tick", GREY)
+Arrow('Bw9', 'Bas', 'Bof', "5 offer", W)
+Arrow('Bw10', 'Bof', 'Bacc', "accept", W)
+Arrow('Bw11', 'Bof', 'Bdec', "decline", RED, True)
+Arrow('Bw12', 'Bbm', 'Bleft', "no driver", RED, True)
+
+# read: where am I in the queue?
+Box('Brr', Col(3), r1, BW, H, "Ride Service\nGET /rides/{id}", SVC)
+Box('Bq2', Col(4), r1, BW, H, "Zone queue\nZRANK -> position", DATA)
+Arrow('Br1', 'Bg', 'Brr', '', R, False, True)
+Arrow('Br2', 'Brr', 'Bq2', "", R)
+
+Note('Bsame', Col(3), w3 - 10, "EVERYTHING ELSE IS THE SAME AS ROW A:\nfare estimate (plus a surge multiplier per zone),\ndriver location pings + live push to the rider,\naccept / start / end, payment at the end.", 16, NOTE)
+Note('Bsum', Col(5) + 40, r1 - 10, "WHY BATCH: greedy (row A) gives each rider the nearest\ndriver the moment they ask; with 50k riders and 2k drivers\nin a few zones that's a stampede of matchers grabbing\nthe same cars. Every 2 s, one matcher per zone pairs the\noldest N riders with M drivers for the best TOTAL ETA.", 16, NOTE)
 
 # =================== ROW C: RIDE JOURNEY (rider and driver side by side) ===================
-T = 1800
+T = 1700
 DRV = '#d0bfff'
 Frame('fC', 0, T, 2680, 540)
 Note('Ct', 20, T + 12, "C. RIDE JOURNEY - left to right in time: rider app (top), services (middle), driver app (bottom)", 24, W)
