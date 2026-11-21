@@ -106,6 +106,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Prototypes; a couple of prompts (a git file is enough). Don't pin snapshots forever: they get retired, so plan the upgrade with evals.
 - **Quick-check answers:** Before Monday I need: versioned bundles, **the version logged on every call** (prompt or provider?), and **evals** (catch the drop before shipping, measure it after). A dated snapshot never changes; a plain name can be moved to a newer snapshot by the provider. Renaming `amount` → `totalAmount` breaks code reading `amount` (silently $0). Roll out with expand/contract: new bundle v5, code reads both, evals → canary → 100%, then drop the old field.
 
+#### Embeddings
+- **In plain words:** An embedding model turns text into a list of numbers (a vector, e.g. 1,536). Similar meaning → similar numbers, even with different words.
+- **Problem it solves:** "How many days off do I get?" vs. "Annual leave entitlement is 25 days": no shared words, so keyword search misses it; embeddings put them close together.
+- **Analogy:** A map of meanings: "days off", "annual leave", "vacation" are pins in the same neighbourhood.
+- **Diagram:** text → vector; compare with cosine similarity (1 = same meaning, ~0 = unrelated). RAG = ingestion (chunk → embed → index) + query (embed question → search → top chunks → prompt → answer + citations).
+- **Variations / alternatives:** Hosted embedding model (`text-embedding-3-small`, cheap), a larger model (better, more storage), self-hosted (data stays in-house). Keyword search (BM25) for exact words. .NET: `IEmbeddingGenerator` in Microsoft.Extensions.AI.
+- **When not to use it:** Exact lookups (order id, error code, SKU), a few docs that fit in the prompt, structured questions (that's SQL).
+- **Quick-check answers:** "PTO rules" vs. "Paid time off policy": keyword misses, embeddings match. Docs on model A + questions on model B → wrong chunks with **no error**, so always use the same model; switching models means re-embedding everything. "error E-4471" needs exact matching → keyword search; real systems combine both (hybrid).
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
