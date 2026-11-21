@@ -79,6 +79,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** When the data needed is always the same (fetch first), and with too many tools (the model picks wrong more often).
 - **Quick-check answers:** My code runs the tool, not OpenAI, so permission checks happen on my server. **Every tool checks the owner itself**: without it in `GetRecentOrders`, alice sees bob's order ids, items and dates. Tools that change data (cancel, refund) only **request**; the user confirms with a separate endpoint, because the model can misread ("thinking about cancelling"), pick the wrong id, or be tricked by text in a document (prompt injection). Cap the loop (`MaximumIterationsPerRequest = 5`).
 
+#### When the model call fails (timeouts, retries, 429, fallback)
+- **In plain words:** Decide up front how long to wait, which errors to try again, and what to use when the main model is down.
+- **Problem it solves:** No timeout → calls hang, requests pile up, the whole API slows. Immediate retries in a 429 storm → 2,000 requests become 8,000, so the overload gets worse.
+- **Analogy:** A busy restaurant line: wait longer before each redial; "call back in 30 s" → wait 30 s; closed → call the other branch; "we don't serve that" → redialing won't help.
+- **Diagram:** 200 → done. 429 → wait (Retry-After, or backoff 1→2→4 s + jitter), max 2 retries. 5xx / timeout → retry once. Still failing → fallback (other region, smaller model, cached answer) + circuit breaker. 400 / 401 → don't retry, fix it. All failed → "try again in a minute".
+- **Variations / alternatives:** Fallback to the same model in another region (needs quota there), a smaller model (easy tasks), a semantic cache (repeated questions), or no AI (high-stakes answers). LLM specifics: rate limits are tokens per minute; set the timeout from the answer length (1,000 tokens ≈ 20 s, stream it); the OpenAI/Azure SDKs already retry, so don't stack my own retries on top (3 × 3 = 9).
+- **When not to use it:** Don't retry 400/401, after streaming has started, or after a tool already changed data (idempotency). Don't silently fall back to a weaker model for high-stakes answers.
+- **Quick-check answers:** 429 + Retry-After 20 → wait 20 s + random jitter (or use the fallback now, since a user is waiting), capped retries. 400 "prompt too long" → don't retry; shorten it (fewer turns + summary, fewer chunks) and count tokens before sending. Immediate retries during 429 only add load → backoff + jitter, cap, circuit breaker, or queue.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
