@@ -127,6 +127,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Short items that are already one idea (FAQ pairs, tickets, product descriptions): embed each whole. A few docs that fit in the prompt: skip RAG. Don't start with semantic chunking; measure first.
 - **Quick-check answers:** Lost context → add the heading to the chunk text, and split by structure so the heading stays with its text (or parent–child). Overlap repeats the end of one chunk at the start of the next, so an idea cut at the edge appears whole in at least one chunk (chunks are searched separately). 200 FAQ pairs → one chunk per pair (200 vectors), NOT one vector for all; or skip RAG and send all ~20k tokens (simpler, but paid on every call).
 
+#### Vector index basics
+- **In plain words:** A separate structure (like a non-clustered index, but for similarity) that finds the vectors closest to the question's vector without comparing against all of them.
+- **Problem it solves:** Exact search = compare with every vector: 1M × 1,536 ≈ 1.5 billion operations per question, the vector version of a full table scan.
+- **Analogy:** Nearest coffee shops: highway to the city → main roads → side streets, instead of measuring every shop in the country.
+- **Diagram:** HNSW = layers of a neighbour graph. Start at the top (few points, long jumps), always move to the neighbour closest to the question, drop a layer, repeat → top 5 after checking a few thousand points. It walks a graph; it doesn't scan or sort (1,536 dimensions have no single order).
+- **Variations / alternatives:** Exact KNN (100% recall, slow; fine ≤ ~50k vectors or after a strong filter). HNSW = ANN (Approximate Nearest Neighbour), the default, lives in RAM. Recall = of the true top 5, how many came back (4/5 = 80%). Knob `efSearch`: higher → better recall, slower. Stores: Azure AI Search (hybrid + filters managed), pgvector (already on Postgres), Cosmos DB vector search, Qdrant/Pinecone.
+- **When not to use it:** Small data (just scan), exact id/code lookups (normal index), tuning the knob before measuring recall on my data.
+- **Quick-check answers:** Comparing with every vector is too many operations per question; fine when the data is small or filtered down. 4 of 5 = 80% recall; raise `efSearch` → slower search, more CPU. Postgres + 200k chunks → pgvector: no new system, join/filter with my tables in one query (`WHERE tenant_id = @t ORDER BY embedding <=> @q LIMIT 5`); move to Azure AI Search for strong hybrid + reranking or many millions of chunks.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
