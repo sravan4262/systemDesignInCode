@@ -23,10 +23,10 @@ Arrow('Aa1', 'Asv', 'Ag', "HTTPS", None, False, True)
 Arrow('Aa2', 'Acb', 'Ag', "", None, False, True)
 Arrow('Aa3', 'Aapp', 'Ag', "", None, False, True)
 
-# write: accept -> priority topic -> router -> channel topics -> workers -> providers
+# write: accept -> one Kafka topic -> router -> channel topics -> workers -> providers
 Box('Aapi', Col(2), w1, BW, H, "Notification API\nPOST /notifications\n+ Idempotency-Key", SVC)
 Box('Adb', Col(3), w1, BW, H, "Notifications (SQL)\nkey UNIQUE\n+ outbox", DATA)
-Box('Akp', Col(4), w1, BW, w2 + H - w1, "Kafka topics\nby priority\n\nnotify-high (OTP)\nnotify-normal\nnotify-low (marketing)", ASYNC)
+Box('Akp', Col(4), w1, BW, w2 + H - w1, "Kafka topic:\nnotifications\n\n(transactional +\ncampaign batches)", ASYNC)
 Box('Art', Col(5), w1, BW, H, "Router\n1 prefs + quiet hours\n2 caps  3 render", ASYNC)
 Box('Apr', Col(5), w2, BW, H, "Prefs, devices,\ntemplates (Redis\ncache -> SQL)", DATA)
 Box('Akc', Col(6), w1, BW, w4 + H - w1, "Kafka topics\nby channel\n\npush\nsms\nemail\nin-app", ASYNC)
@@ -41,7 +41,7 @@ Box('Api', Col(8), w4, BW, H, "Inbox (Cosmos, pk\nuserId) + WebSocket\npush if o
 Arrow('Aw1', 'Ag', 'Aapi', '', W, False, True)
 Arrow('Aw2', 'Aapi', 'Adb', "insert", W)
 Arrow('Aw3', 'Adb', 'Akp', "outbox", W, True)
-Arrow('Aw4', 'Akp', 'Art', "high first", W, True)
+Arrow('Aw4', 'Akp', 'Art', "consume", W, True)
 Arrow('Aw5', 'Art', 'Apr', "read", W)
 Arrow('Aw6', 'Art', 'Akc', "", W, True, True)
 for wk, pv in [('Awp', 'App'), ('Aws', 'Aps'), ('Awe', 'Ape'), ('Awi', 'Api')]:
@@ -68,7 +68,7 @@ Arrow('Ar2', 'Ast', 'Adl2', "", R)
 Arrow('Ar3', 'Ag', 'Ain', '', R, False, True)
 Arrow('Ar4', 'Ain', 'Ain2', "", R)
 
-Note('Asum', Col(4) + 20, w5 + 10, "WRITE: accept once (key UNIQUE) -> Kafka by PRIORITY -> router:\n1 preferences, opt-outs, quiet hours (defer low priority)\n2 frequency caps (e.g. 5 marketing pushes / user / day)\n3 render the template per channel + language\n-> Kafka by CHANNEL -> one worker pool per channel -> provider.\nEach worker: provider rate limit, retries with backoff, dead-letter\nafter N tries; Deliveries (notif, channel) UNIQUE stops duplicates.\n\nREAD: status per channel from Deliveries; in-app inbox by userId.", 16, NOTE)
+Note('Asum', Col(4) + 20, w5 + 10, "WRITE: accept once (key UNIQUE) -> Kafka 'notifications' -> router:\n1 preferences, opt-outs, quiet hours (defer marketing)\n2 frequency caps (e.g. 5 marketing pushes / user / day)\n3 render the template per channel + language\n-> Kafka by CHANNEL -> one worker pool per channel -> provider.\nEach worker: provider rate limit, retries with backoff, dead-letter\nafter N tries; Deliveries (notif, channel) UNIQUE stops duplicates.\n\nREAD: status per channel from Deliveries; in-app inbox by userId.", 16, NOTE)
 
 # =================== ROW B: BROADCAST CAMPAIGN (numbers = order) ===================
 T = 1130
@@ -97,11 +97,11 @@ Arrow('Bw4', 'Bpr', 'Bkt', "produce", W, True)
 Arrow('Bw5', 'Btw', 'Bseg', "my range", W)
 Arrow('Bw5b', 'Bkt', 'Btw', "consume", W, True)
 
-# write 5-8: 1k-user batches on the LOW priority topic -> router -> throttle -> own worker pool
-Box('Bk', Col(6), w2, BW, H, "5 Kafka topic:\nnotify-low\n(1k-user batches)", ASYNC)
-Box('Brt', Col(7), w2, BW, H, "6 Consumer group:\nlow-priority router\nprefs, caps, kill switch", ASYNC)
+# write 5-8: 1k-user batches on the same topic -> router -> throttle -> channel workers
+Box('Bk', Col(6), w2, BW, H, "5 Kafka topic:\nnotifications\n(1k-user batches)", ASYNC)
+Box('Brt', Col(7), w2, BW, H, "6 Consumer group:\nrouter (as row A)\nprefs, caps, kill switch", ASYNC)
 Box('Bth', Col(8), w2, BW, H, "7 Campaign throttle\n~30k sends/s +\nprovider buckets", DATA)
-Box('Bwk', Col(8), w3, BW, H, "8 Consumer group:\npush / email workers\n(own pool, not OTPs)", ASYNC)
+Box('Bwk', Col(8), w3, BW, H, "8 Consumer group:\npush / email workers\n(as row A)", ASYNC)
 Box('Bdd', Col(7), w3, BW, H, "Deliveries:\n(campaign, user)\nUNIQUE -> no dupes", DATA)
 Arrow('Bw6', 'Btw', 'Bk', "batches", W, True)
 Arrow('Bw7', 'Bk', 'Brt', "consume", W, True)
@@ -109,7 +109,7 @@ Arrow('Bw8', 'Brt', 'Bth', "token?", W)
 Arrow('Bw9', 'Bth', 'Bwk', "send", W)
 Arrow('Bw9b', 'Bwk', 'Bdd', "record", W)
 
-Box('Bsame', Col(2), w3, BW, H, "Transactional sends:\nsame as row A, on\nnotify-high / normal", GREY)
+Box('Bsame', Col(2), w3, BW, H, "Transactional sends:\nsame as row A", GREY)
 Arrow('Bw10', 'Bg', 'Bsame', '', W, False, True)
 
 # read: campaign progress
@@ -118,4 +118,4 @@ Box('Brc', Col(3), r1, BW, H, "Progress counters\n(Redis: sent, failed,\nskipped
 Arrow('Br1', 'Bg', 'Brd', '', R, False, True)
 Arrow('Br2', 'Brd', 'Brc', "", R)
 
-Note('Bnote', Col(2), w3 + 110, "WHY SEPARATE PRIORITIES: 50M marketing messages on the same queue would put a\none-time password behind 50M others. Campaigns go on notify-low with their own\nrouter + worker pools and a send-rate cap, so OTPs and 'order shipped' stay fast.\nThe kill switch (campaign status = cancelled) is checked per batch: stop within seconds.", 16, NOTE)
+Note('Bnote', Col(2), w3 + 110, "ONE TOPIC FOR EVERYTHING (no priority lanes): campaign batches and transactional sends share the\n'notifications' topic and the same workers. The campaign throttle (~30k/s) keeps the campaign from taking all\nthe capacity; trade-off: an OTP sent mid-campaign can wait behind batches already queued (seconds with the cap).\nThe kill switch (campaign status = cancelled) is checked per batch: stop within seconds.", 16, NOTE)

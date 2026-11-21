@@ -11,9 +11,8 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 3. **Templates:** a caller sends `{ template: "order_shipped", userId, data }`; the system renders the text per channel and language.
 4. **Reliable delivery:** retries when a provider fails, **no duplicates**, delivery status tracked (sent → delivered / failed).
 5. **Rate limits:** per user (e.g. ≤ 5 marketing pushes a day) and per provider (stay under APNs / Twilio / email limits).
-6. **Priorities:** a one-time password (OTP) never waits behind a marketing campaign.
 
-**Out of scope (say this out loud):** scheduled sends ("9 AM in each user's time zone"), building the providers (we call **APNs / FCM** for push, **Twilio** for SMS, **SendGrid / Azure Communication Services** for email), A/B tests of message text, analytics dashboards, user segmentation itself (marketing gives us a segment).
+**Out of scope (say this out loud):** **priority lanes** (one topic for all notifications; see deep dive 1), scheduled sends ("9 AM in each user's time zone"), building the providers (we call **APNs / FCM** for push, **Twilio** for SMS, **SendGrid / Azure Communication Services** for email), A/B tests of message text, analytics dashboards, user segmentation itself (marketing gives us a segment).
 
 ## Non-functional requirements
 | Requirement | Target | Why it matters here |
@@ -21,7 +20,7 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | Latency (transactional) | p99 < 5 s from API call to provider; OTP < 10 s on the phone | An OTP that arrives late is useless |
 | Latency (campaign) | 50M users within ~30–60 min | Nobody needs a sale push in seconds |
 | Delivery semantics | **At least once + dedupe** → no duplicate a user can see | Exactly-once isn't possible across providers |
-| Isolation | A campaign never slows transactional sends | The design point of row B |
+| Campaign impact | A campaign may slow other sends a little, never stop them | The campaign throttle caps its share (no priority lanes) |
 | Compliance | Opt-outs and unsubscribes honoured always, immediately | Legal (spam / SMS consent laws), and trust |
 | Availability | Accepting notifications always works (AP); sending can lag | Callers shouldn't fail because a provider is slow |
 
@@ -32,16 +31,16 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 |---|---|---|---|
 | Transactional notifications/s | 500M ÷ 10⁵ | **5k/s avg, 15k/s peak** | Kafka + a small router fleet |
 | Provider sends/s | 15k × 1.5 channels | **~22k/s peak** | One worker pool per channel; per-provider token buckets |
-| OTP SMS/s | 10M ÷ 10⁵ | **~100/s avg, 300/s peak** | Small but **costly and urgent**: highest priority |
-| Campaign | 50M in 30 min | **~28k sends/s for 30 min** | Doubles the load: needs its **own** lane + a send-rate cap |
+| OTP SMS/s | 10M ÷ 10⁵ | **~100/s avg, 300/s peak** | Small but **costly and urgent** |
+| Campaign | 50M in 30 min | **~28k sends/s for 30 min** | Doubles the load: needs a **send-rate cap** |
 | Delivery rows | (500M + 50M) × ~1.5 × 300 B | **~250 GB/day** | Cosmos with a 30–90 day TTL |
 
-**What the numbers tell you:** steady transactional traffic is moderate; a single campaign **doubles** it in one burst. The design is about **isolation** (priorities, separate pools) and **politeness** (provider and user rate limits), not raw throughput.
+**What the numbers tell you:** steady transactional traffic is moderate; a single campaign **doubles** it in one burst. The design is about **politeness** (a campaign send-rate cap, provider and user rate limits), not raw throughput.
 
 ## API
 | Endpoint | Request | Response | Notes |
 |---|---|---|---|
-| `POST /notifications` | `{ userId, template, data, channels?, priority: high\|normal\|low }` + `Idempotency-Key` | `202 { notificationId }` · `409` key reused with a different body | Accept fast; send async |
+| `POST /notifications` | `{ userId, template, data, channels?, category: transactional\|marketing }` + `Idempotency-Key` | `202 { notificationId }` · `409` key reused with a different body | Accept fast; send async |
 | `GET /notifications/{id}` | — | `200 { channels: [{ channel, status, at }] }` | sent / delivered / failed / skipped (opt-out) |
 | `POST /campaigns` | `{ segmentId, template, data, channels }` | `202 { campaignId }` | Marketing tool only |
 | `GET /campaigns/{id}` · `POST /campaigns/{id}/cancel` | — | `200 { sent, failed, skipped, status }` | Cancel = kill switch |
@@ -55,18 +54,18 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | Component | What it does | Store / technology |
 |---|---|---|
 | Notification API | Accepts, dedupes (key UNIQUE), writes + outbox | **Notifications (SQL)** + outbox → Kafka |
-| Kafka by priority | `notify-high` (OTP), `notify-normal`, `notify-low` (marketing) | Separate consumer groups, so high is never behind low |
+| Kafka topic `notifications` | Every accepted notification (transactional and campaign batches) | Partitioned by userId |
 | Router | 1) preferences, opt-outs, quiet hours; 2) frequency caps; 3) render the template per channel + language; then fan out per channel | Prefs, devices, templates: **Redis cache → SQL**; caps: Redis counters |
 | Kafka by channel | `push`, `sms`, `email`, `in-app` | One worker pool per channel scales on its own |
 | Channel workers | Call the provider; token bucket per provider; retry with backoff; dead-letter after N tries | APNs / FCM, Twilio, SendGrid / ACS; in-app → **Inbox (Cosmos, pk userId)** + WebSocket push if online |
 | Deliveries | Status per (notification, channel); duplicates stop here | **Cosmos**, `(notificationId, channel)` unique, TTL 90 days |
 | Callback Handler | Provider receipts: delivered, bounced, invalid push token (→ delete the device) | Updates Deliveries / devices |
-| Campaign Service (row B) | Splits the audience into userId **ranges**; task workers read their range of the segment and publish 1k-user batches on `notify-low`; throttle; kill switch | Campaigns (SQL, status per range), segment source (warehouse or segment bitmap), progress in Redis |
+| Campaign Service (row B) | Splits the audience into userId **ranges**; task workers read their range of the segment and publish 1k-user batches on `notifications`; throttle; kill switch | Campaigns (SQL, status per range), segment source (warehouse or segment bitmap), progress in Redis |
 
 **Write path (transactional):**
-1. `POST /notifications` + `Idempotency-Key` → insert (key UNIQUE; a retry returns the same `notificationId`) + outbox → Kafka **by priority** → `202`.
-2. **Router** (high-priority consumers first):
-   1. load preferences and devices: channel opted out → `skipped`; quiet hours → defer low priority, send high (an OTP ignores quiet hours);
+1. `POST /notifications` + `Idempotency-Key` → insert (key UNIQUE; a retry returns the same `notificationId`) + outbox → Kafka topic **`notifications`** → `202`.
+2. **Router** (consumer group on `notifications`):
+   1. load preferences and devices: channel opted out → `skipped`; quiet hours → defer **marketing**, send **transactional** (an OTP ignores quiet hours: the user asked for it);
    2. frequency cap: `INCR cap:{user}:{day}` for marketing; over the cap → `skipped`;
    3. render the template per channel and language.
 3. One message per channel → Kafka **by channel** → channel worker:
@@ -82,18 +81,18 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 2. **Producer:** splits the userId space into **1,000 ranges** and publishes one tiny task per range (`{ campaignId, range }`). Nothing is exported: no 50M-row list, no files.
 3. Kafka topic **`campaign-tasks`** (1,000 messages, a few KB in total).
 4. **Consumer group: task workers**, one range at a time: page through "segment members in my range" from the segment source (the data warehouse, or a segment **bitmap**), 1k ids per page. Each range's status is recorded, so a crash re-runs only that range.
-5. Each page → one **1k-user batch** on Kafka topic **`notify-low`**.
-6. **Consumer group: low-priority router:** per user, preferences (always the *current* ones), quiet hours, caps, and the **kill switch** (campaign cancelled → drop).
+5. Each page → one **1k-user batch** on Kafka topic **`notifications`** (the same topic as row A).
+6. **Consumer group: router** (the same router as row A): per user, preferences (always the *current* ones), quiet hours, caps, and the **kill switch** (campaign cancelled → drop).
 7. **Campaign throttle:** a send-rate cap (~30k/s) plus the provider token buckets.
-8. **Consumer group: push / email workers**, its own pool (never shared with OTPs); Deliveries `(campaignId, userId)` UNIQUE, so a re-run range never sends twice.
+8. **Consumer group: push / email workers** (the same channel workers as row A); Deliveries `(campaignId, userId)` UNIQUE, so a re-run range never sends twice.
 
 **Why ranges instead of exporting the segment:** sending starts in seconds (no waiting for a 50M-row export), the work is parallel (add task workers to go faster), nothing large is stored, and resume / cancel work per range. *Upgrade:* if segments are kept as compressed bitmaps of userIds (Roaring), 50M members is a few MB, and "in segment AND opted in" is a fast bitwise AND.
-- Transactional sends keep flowing on `notify-high` / `notify-normal` as in row A. Progress (sent, failed, skipped) is counted in Redis.
+- Transactional sends share the same topic and workers. The **campaign throttle** keeps the campaign from using all the capacity, but an OTP sent mid-campaign can still wait behind campaign batches already in the topic (seconds, not minutes, with the cap). Progress (sent, failed, skipped) is counted in Redis.
 
 ## Which components each path touches
 | Requirement | Path | Transactional (row A) | Campaign (row B) |
 |---|---|---|---|
-| Send | Write | API (key UNIQUE) + outbox → Kafka by priority → router → Kafka by channel → worker → provider | Campaign Service → producer (1,000 range tasks) → topic `campaign-tasks` → consumer group: task workers (page their range, 1k at a time) → topic `notify-low` → consumer group: low router → throttle → consumer group: own workers |
+| Send | Write | API (key UNIQUE) + outbox → Kafka `notifications` → router → Kafka by channel → worker → provider | Campaign Service → producer (1,000 range tasks) → topic `campaign-tasks` → consumer group: task workers (page their range, 1k at a time) → topic `notifications` → consumer group: router → throttle → consumer group: channel workers |
 | Preferences + quiet hours | Write | Router, per notification | Router, per user in each batch |
 | No duplicates | Write | Idempotency key + Deliveries `(notification, channel)` UNIQUE | `(campaign, user)` UNIQUE |
 | Rate limits | Write | Per-user caps (Redis) + per-provider token buckets | + campaign send-rate cap |
@@ -101,7 +100,7 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | In-app inbox | Read | Inbox (Cosmos, pk userId) | Same |
 
 ## Deep dives to drive (learner leads, interviewer pushes)
-1. **Priority isolation:** separate topics *and* separate consumer groups / worker pools. Why one queue with a "priority" field isn't enough (head-of-line blocking).
+1. **Adding priorities later (out of scope now):** with one topic, a 50M-user campaign can put an OTP behind its batches (head-of-line blocking). The fix: separate topics (`notify-high` / `notify-low`) *and* separate consumer groups / worker pools. Why a "priority" field on one queue isn't enough.
 2. **Duplicates:** where each one comes from (caller retry, Kafka redelivery, worker crash after the provider call) and which check stops it. Which duplicates are unavoidable? (A crash after the provider accepted but before we recorded it.)
 3. **Provider failure:** Twilio is down. Circuit breaker → queue builds → fail over to a second SMS provider for OTPs only? Cost vs. reliability.
 4. **Quiet hours and time zones:** store the user's time zone; deferred messages go to a delay queue (or a "send-after" timestamp) instead of blocking the router.
@@ -110,6 +109,6 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 7. **Campaign kill switch:** someone sent the wrong price to 50M users. How fast can you stop it, and how do you know who already got it?
 
 ## Interview follow-ups (answer these after the design)
-- A 50M-user campaign starts at 10:00, and a user requests an OTP at 10:01. Walk through why their SMS still arrives in seconds.
+- A 50M-user campaign starts at 10:00, and a user requests an OTP at 10:01. How long can the OTP wait in this design, and what would you change to guarantee seconds?
 - The push worker crashes right after APNs accepted the push, before it recorded `sent`. What happens when the message is redelivered?
 - A user turns off marketing emails at 10:00:05 while a campaign is mid-flight. Will they get the email?
