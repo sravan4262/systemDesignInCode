@@ -1,6 +1,6 @@
 # Case 8: Notification system
 
-Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), in two rows: **A. Transactional** (every path) and **B. Broadcast campaign** (50M users; same layout, only what differs, numbered in order). Callers → APIM (tall box) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), in two rows: **A. Transactional** (every path) and **B. Broadcast campaign** (50M users; same layout, only what differs, numbered in order with the event count on each hop). Callers → APIM (tall box) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design a notification system that other services use to notify users."
@@ -11,6 +11,7 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 3. **Templates:** a caller sends `{ template: "order_shipped", userId, data }`; the system renders the text per channel and language.
 4. **Reliable delivery:** retries when a provider fails, **no duplicates**, delivery status tracked (sent → delivered / failed).
 5. **Rate limits:** per user (e.g. ≤ 5 marketing pushes a day) and per provider (stay under APNs / Twilio / email limits).
+6. **Status tracking:** for every notification and campaign, what succeeded, failed or was skipped, per user and channel, with the reason; campaign progress and totals; re-send only the failures.
 
 **Out of scope (say this out loud):** **priority lanes** (one topic for all notifications; see deep dive 1), scheduled sends ("9 AM in each user's time zone"), building the providers (we call **APNs / FCM** for push, **Twilio** for SMS, **SendGrid / Azure Communication Services** for email), A/B tests of message text, analytics dashboards, user segmentation itself (marketing gives us a segment).
 
@@ -43,7 +44,9 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | `POST /notifications` | `{ userId, template, data, channels?, category: transactional\|marketing }` + `Idempotency-Key` | `202 { notificationId }` · `409` key reused with a different body | Accept fast; send async |
 | `GET /notifications/{id}` | — | `200 { channels: [{ channel, status, at }] }` | sent / delivered / failed / skipped (opt-out) |
 | `POST /campaigns` | `{ segmentId, template, data, channels }` | `202 { campaignId }` | Marketing tool only |
-| `GET /campaigns/{id}` · `POST /campaigns/{id}/cancel` | — | `200 { sent, failed, skipped, status }` | Cancel = kill switch |
+| `GET /campaigns/{id}` · `POST /campaigns/{id}/cancel` | — | `200 { status, rangesDone, rangesTotal, perChannel: { sent, delivered, failed, skipped } }` | Cancel = kill switch |
+| `GET /campaigns/{id}/deliveries?status=failed&channel=&cursor=` | — | `200 { items: [{ userId, channel, reason, attempts }], nextCursor }` | Who failed and why |
+| `POST /campaigns/{id}/retry-failed` | — | `202` | Re-queues only failed deliveries; safe because of the unique row |
 | `PUT /users/{id}/preferences` | `{ channels: { push, sms, email, inApp }, quietHours, marketing: bool }` | `204` | User app |
 | `POST /devices` | `{ platform: ios\|android, pushToken }` | `204` | Registered on app start |
 | `GET /users/{id}/inbox?cursor=` | — | `200 { items[], nextCursor }` | In-app inbox |
@@ -58,9 +61,9 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | Router | 1) preferences, opt-outs, quiet hours; 2) frequency caps; 3) render the template per channel + language; then fan out per channel | Prefs, devices, templates: **Redis cache → SQL**; caps: Redis counters |
 | Kafka by channel | `push`, `sms`, `email`, `in-app` | One worker pool per channel scales on its own |
 | Channel workers | Call the provider; token bucket per provider; retry with backoff; dead-letter after N tries | APNs / FCM, Twilio, SendGrid / ACS; in-app → **Inbox (Cosmos, pk userId)** + WebSocket push if online |
-| Deliveries | Status per (notification, channel); duplicates stop here | **Cosmos**, `(notificationId, channel)` unique, TTL 90 days |
+| Deliveries | Status per (notification or campaign, user, channel): pending → sent → delivered / failed / bounced, or skipped, with reason and attempts; duplicates stop here | **Cosmos**, unique per (id, user, channel); pk `(campaignId, range)` for campaigns (one campaign would overflow a single partition); TTL 90 days |
 | Callback Handler | Provider receipts: delivered, bounced, invalid push token (→ delete the device) | Updates Deliveries / devices |
-| Campaign Service (row B) | Splits the audience into userId **ranges**; task workers read their range of the segment and publish 1k-user batches on `notifications`; throttle; kill switch | Campaigns (SQL: kill switch, status per range), segment members from the **data warehouse**, progress in Redis |
+| Campaign Service + range producer / range consumer (row B) | Range producer asks the warehouse for N ranges → 1 event per range; range consumers page their range → 1 event per 1,000 users on `notifications` | Campaigns (SQL: status, kill switch, ranges, totals), **data warehouse** (segment members), progress counters in **Redis** |
 
 **Write path (transactional):**
 1. `POST /notifications` + `Idempotency-Key` → insert (key UNIQUE; a retry returns the same `notificationId`) + outbox → Kafka topic **`notifications`** → `202`.
@@ -77,26 +80,38 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 **Read path:** status per channel from Deliveries; the in-app inbox from Cosmos by `userId` (newest first, cursor pages).
 
 ## Broadcast campaign (row B): what changes, in order
-1. `POST /campaigns` → `202`; Campaigns row (segment, template, status).
-2. **Producer:** asks the **data warehouse** for **1,000 range boundaries** with roughly equal numbers of segment members (one cheap aggregate query, no userIds returned), records each range as `pending` in Campaigns, and publishes one tiny task per range (`{ campaignId, range }`). Nothing is exported: no 50M-row list, no files.
-3. Kafka topic **`campaign-tasks`** (1,000 messages, a few KB in total).
-4. **Consumer group: task workers**, one range at a time: page through "segment members in my range" from the **data warehouse** (`WHERE userId >= @from AND userId < @to ORDER BY userId`, keyset pages of 1k). Each range's status is recorded, so a crash re-runs only that range.
-5. Each page → one **1k-user batch** on Kafka topic **`notifications`** (the same topic as row A).
-6. **Consumer group: router** (the same router as row A): per user, preferences (always the *current* ones), quiet hours, caps, and the **kill switch** (campaign cancelled → drop).
-7. **Campaign throttle:** a send-rate cap (~30k/s) plus the provider token buckets.
-8. **Consumer group: push / email workers** (the same channel workers as row A); Deliveries `(campaignId, userId)` UNIQUE, so a re-run range never sends twice.
+1. **Campaign Service:** `POST /campaigns` → Campaigns (SQL) row `c-77 | segment | template | status = running` → `202`.
+2. **Range producer:** asks the **data warehouse** to cut the segment into **N ranges** with about equal members (N ≈ members ÷ 50k; one aggregate query that returns only boundaries, e.g. `NTILE(N)`), and records N range rows `pending` in Campaigns.
+3. Kafka topic **`campaign-ranges`**: **1 event per range** `{ c-77, range 37, fromId, toId }`, keyed by campaign + range so they spread over partitions.
+4. **Range consumer** (consumer group): for each range event: kill switch? → page the warehouse `userId BETWEEN fromId AND toId`, 1,000 at a time → **publish 1 event per page** → mark the range `done` → ack. A crash re-runs only that range.
+5. Kafka topic **`notifications`**: **1 event per 1,000 users** `{ c-77, userIds[1000] }` (the same topic as row A).
+6. **Router** (consumer group, same as row A): for **each user** in the batch: kill switch, current preferences, quiet hours, marketing cap, render in their language → **1 event per user per allowed channel**: up to 1,000 events per channel per batch, each with its own text and address. Skipped users → Deliveries `skipped` with the reason.
+7. Kafka topics **`push` / `email` / `sms`** (1 event per user).
+8. **Push / Email / SMS workers** (one consumer group per channel): Deliveries row first (unique → no duplicates), campaign + provider token buckets, call the provider (grouped where it allows: FCM 500 tokens, SendGrid 1,000 recipients, Twilio 1 per call), retry with backoff, dead-letter after N.
+9. **Status:** workers write `sent` / `failed`, provider callbacks write `delivered` / `bounced` (our delivery id is passed to the provider, so callbacks map straight back).
 
-**Why ranges instead of exporting the segment:** sending starts in seconds (no waiting for a 50M-row export), the work is parallel (add task workers to go faster), nothing large is stored, and resume / cancel work per range. **Why the warehouse:** segments ("US users who bought in the last 90 days") are defined there anyway, it's built for big scans, and it's a **separate copy** fed by CDC, so campaign reads never touch the live user databases. It may be minutes to hours behind; that's fine, because the router checks each user's **current** preferences at send time. *Alternative if the warehouse is too slow for this:* a segment job writes the members into a Redis bitmap (1 bit per userId, 12.5 MB per segment) and task workers read their slice of bits.
-- Transactional sends share the same topic and workers. The **campaign throttle** keeps the campaign from using all the capacity, but an OTP sent mid-campaign can still wait behind campaign batches already in the topic (seconds, not minutes, with the cap). Progress (sent, failed, skipped) is counted in Redis.
+**Event counts:** 1 campaign → N range events → members ÷ 1,000 batch events → up to 1,000 events per channel per batch (one per user).
+
+**Status at three levels:**
+| Level | Where | Answers |
+|---|---|---|
+| Delivery (user + channel) | **Deliveries (Cosmos)**, pk `(campaignId, range)` | Did this user get it on this channel? If not, why? |
+| Range | **Campaigns (SQL)** range rows: pending / running / done + counts | What's finished, what to resume |
+| Campaign | Live counters in **Redis** (bumped only when a delivery row actually changes state, so retries and duplicate callbacks don't inflate them); final totals written to **Campaigns (SQL)** when all ranges are done | Progress, totals per channel |
+
+Status only moves forward (a conditional update: a late `sent` never overwrites `delivered`). `POST /campaigns/{id}/retry-failed` re-queues only the failed rows.
+
+**Why ranges + the warehouse:** sending starts in seconds (no 50M-row export), the work is parallel (add range consumers), nothing large is stored, resume / cancel work per range, and campaign reads never touch the live user databases. The warehouse may be minutes behind; the router checks each user's **current** preferences at send time.
+- Transactional sends share the same `notifications` topic and workers. The campaign throttle keeps the campaign from taking all the capacity; an OTP sent mid-campaign can still wait behind batches already queued (seconds with the cap).
 
 ## Which components each path touches
 | Requirement | Path | Transactional (row A) | Campaign (row B) |
 |---|---|---|---|
-| Send | Write | API (key UNIQUE) + outbox → Kafka `notifications` → router → Kafka by channel → worker → provider | Campaign Service → producer (1,000 range tasks) → topic `campaign-tasks` → consumer group: task workers (page their range from the warehouse, 1k at a time) → topic `notifications` → consumer group: router → throttle → consumer group: channel workers |
+| Send | Write | API (key UNIQUE) + outbox → Kafka `notifications` → router → Kafka by channel → worker → provider | Campaign Service → range producer (warehouse: N ranges) → `campaign-ranges` (1 per range) → range consumer (pages warehouse) → `notifications` (1 per 1,000 users) → router (1 per user per channel) → `push` / `email` / `sms` → channel workers |
 | Preferences + quiet hours | Write | Router, per notification | Router, per user in each batch |
 | No duplicates | Write | Idempotency key + Deliveries `(notification, channel)` UNIQUE | `(campaign, user)` UNIQUE |
 | Rate limits | Write | Per-user caps (Redis) + per-provider token buckets | + campaign send-rate cap |
-| Status | Read | Deliveries by notificationId | Progress counters (Redis) |
+| Status | Read | Deliveries by notificationId | Progress (Redis counters + ranges done) and failed deliveries by (campaign, range) |
 | In-app inbox | Read | Inbox (Cosmos, pk userId) | Same |
 
 ## Deep dives to drive (learner leads, interviewer pushes)

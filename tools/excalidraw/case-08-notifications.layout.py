@@ -8,7 +8,7 @@ Note('legend', 0, -25, "Blue = write path   Green = read path   Dashed = async  
 
 # =================== ROW A: TRANSACTIONAL ===================
 T = 0
-Frame('fA', 0, T, 2680, 1050)
+Frame('fA', 0, T, 2980, 1050)
 Note('At', 20, T + 12, "A. TRANSACTIONAL (one user, one event: 'order shipped', one-time password; must arrive in seconds)", 24, W)
 w1, w2, w3, w4, w5, w6 = T + 90, T + 210, T + 330, T + 450, T + 570, T + 690
 r1, r2 = T + 840, T + 950
@@ -72,51 +72,58 @@ Note('Asum', Col(4) + 20, w5 + 10, "WRITE: accept once (key UNIQUE) -> Kafka 'no
 
 # =================== ROW B: BROADCAST CAMPAIGN (numbers = order) ===================
 T = 1130
-Frame('fB', 0, T, 2680, 720)
-Note('Bt', 20, T + 12, "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order", 24, RED)
-w1, w2, w3 = T + 90, T + 210, T + 330
-r1 = T + 610
+Frame('fB', 0, T, 2980, 830)
+Note('Bt', 20, T + 12, "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order; event counts on each hop", 24, RED)
+w1, w2, w3, w4 = T + 90, T + 210, T + 330, T + 450
+r1, r2 = T + 610, T + 720
 Note('Bwl', Col(2), T + 55, "WRITE PATH", 18, W)
 Note('Brl', Col(2), T + 575, "READ PATH", 18, R)
 
 Box('Bmk', Col(0), T + 280, BW, 80, "Marketing tool\n(campaign:\n50M users)", EDGE)
-Box('Bg', Col(1), w1, BW, r1 + H - w1, "APIM\n\nmTLS + auth,\nquota per caller", EDGE)
+Box('Bg', Col(1), w1, BW, r2 + H - w1, "APIM\n\nmTLS + auth,\nquota per caller", EDGE)
 Arrow('Ba1', 'Bmk', 'Bg', "HTTPS", None, False, True)
 
-# write 1-4: split the audience into ranges; workers read only their range (no full export)
-Box('Bcs', Col(2), w1, BW, H, "Campaign Service\n1 POST /campaigns\n-> 202", SVC)
-Box('Bcd', Col(3), w1, BW, H, "Campaigns (SQL)\nstatus (kill switch)\n+ status per range", DATA)
-Box('Bpr', Col(4), w1, BW, H, "2 Producer: ask the\nwarehouse for 1,000\nequal-size ranges", ASYNC)
-Box('Bkt', Col(5), w1, BW, H, "3 Kafka topic:\ncampaign-tasks\n(1,000 tiny messages)", ASYNC)
-Box('Btw', Col(6), w1, BW, H, "4 Consumer group:\ntask workers: page\nmy range, 1k at a time", ASYNC)
+# 1-5: campaign -> ranges -> 1 event per range -> range consumer -> 1 event per 1,000 users
+Box('Bcs', Col(2), w1, BW, H, "1 Campaign Service\nPOST /campaigns\n-> 202", SVC)
+Box('Bcd', Col(3), w1, BW, H, "Campaigns (SQL)\nstatus, kill switch,\nranges done, totals", DATA)
+Box('Bpr', Col(4), w1, BW, H, "2 Range producer\nasks the warehouse\nfor N ranges", ASYNC)
+Box('Bkt', Col(5), w1, BW, H, "3 Kafka topic:\ncampaign-ranges\n1 event per RANGE", ASYNC)
+Box('Btw', Col(6), w1, BW, H, "4 Range consumer\n(consumer group)\npages its range", ASYNC)
+Box('Bk', Col(7), w1, BW, H, "5 Kafka topic:\nnotifications\n1 event per 1,000 users", ASYNC)
 Box('Bseg', Col(5), w2, BW, H, "Data warehouse\nsegment members\n(read-only copy)", DATA)
 Arrow('Bw1', 'Bg', 'Bcs', '', W, False, True)
 Arrow('Bw2', 'Bcs', 'Bcd', "insert", W)
 Arrow('Bw3', 'Bcd', 'Bpr', "start", W, True)
-Arrow('Bw4', 'Bpr', 'Bkt', "produce", W, True)
-Arrow('Bw5', 'Btw', 'Bseg', "my range", W)
-Arrow('Bw4b', 'Bpr', 'Bseg', "ranges", W)
+Arrow('Bw4', 'Bpr', 'Bkt', "N events", W, True)
+Arrow('Bw4b', 'Bpr', 'Bseg', "N ranges", W)
 Arrow('Bw5b', 'Bkt', 'Btw', "consume", W, True)
+Arrow('Bw5', 'Btw', 'Bseg', "1k at a time", W)
+Arrow('Bw6', 'Btw', 'Bk', "publish", W, True)
 
-# write 5-8: 1k-user batches on the same topic -> router -> throttle -> channel workers
-Box('Bk', Col(6), w2, BW, H, "5 Kafka topic:\nnotifications\n(1k-user batches)", ASYNC)
-Box('Brt', Col(7), w2, BW, H, "6 Consumer group:\nrouter (as row A)\nprefs, caps, kill switch", ASYNC)
-Box('Bth', Col(8), w2, BW, H, "7 Campaign throttle\n~30k sends/s +\nprovider buckets", DATA)
-Box('Bwk', Col(8), w3, BW, H, "8 Consumer group:\npush / email workers\n(as row A)", ASYNC)
-Box('Bdd', Col(7), w3, BW, H, "Deliveries:\n(campaign, user)\nUNIQUE -> no dupes", DATA)
-Arrow('Bw6', 'Btw', 'Bk', "batches", W, True)
+# 6-8: router fans each batch out to 1 event per user per allowed channel -> channel consumer groups
+Box('Brt', Col(7), w2, BW, H, "6 Router\n(consumer group)\nper user: prefs, render", ASYNC)
+Box('Bkc', Col(8), w1, BW, w3 + H - w1, "7 Kafka topics\nby channel\n\npush / email / sms\n\n1 event per USER\nper allowed channel\n(up to 1,000 per batch)", ASYNC)
+Box('Bwp', Col(9), w1, BW, H, "8 Push workers\n(consumer group)\n-> APNs / FCM", ASYNC)
+Box('Bwe', Col(9), w2, BW, H, "8 Email workers\n(consumer group)\n-> SendGrid", ASYNC)
+Box('Bws', Col(9), w3, BW, H, "8 SMS workers\n(consumer group)\n-> Twilio", ASYNC)
+Box('Bdd', Col(9), w4, BW, H, "9 Deliveries (Cosmos)\nper user + channel:\nsent/delivered/failed", DATA)
 Arrow('Bw7', 'Bk', 'Brt', "consume", W, True)
-Arrow('Bw8', 'Brt', 'Bth', "token?", W)
-Arrow('Bw9', 'Bth', 'Bwk', "send", W)
-Arrow('Bw9b', 'Bwk', 'Bdd', "record", W)
+Arrow('Bw8', 'Brt', 'Bkc', "", W, True, True)
+for wk in ['Bwp', 'Bwe', 'Bws']:
+    Arrow(f'Bw-{wk}', 'Bkc', wk, '', W, True, True)
+Arrow('Bw9', 'Bws', 'Bdd', "status", W)
 
 Box('Bsame', Col(2), w3, BW, H, "Transactional sends:\nsame as row A", GREY)
 Arrow('Bw10', 'Bg', 'Bsame', '', W, False, True)
 
-# read: campaign progress
+# read: progress and failures
 Box('Brd', Col(2), r1, BW, H, "Campaign Service\nGET /campaigns/{id}", SVC)
-Box('Brc', Col(3), r1, BW, H, "Progress counters\n(Redis: sent, failed,\nskipped by prefs)", DATA)
+Box('Brc', Col(3), r1, BW, H, "Progress: counters\n(Redis) + ranges done\n(Campaigns SQL)", DATA)
+Box('Brf', Col(2), r2, BW, H, "Campaign Service\nGET .../deliveries\n?status=failed", SVC)
+Box('Brf2', Col(3), r2, BW, H, "Deliveries (Cosmos)\npk (campaign, range)", DATA)
 Arrow('Br1', 'Bg', 'Brd', '', R, False, True)
 Arrow('Br2', 'Brd', 'Brc', "", R)
+Arrow('Br3', 'Bg', 'Brf', '', R, False, True)
+Arrow('Br4', 'Brf', 'Brf2', "", R)
 
-Note('Bnote', Col(2), w3 + 110, "ONE TOPIC FOR EVERYTHING (no priority lanes): campaign batches and transactional sends share the\n'notifications' topic and the same workers. The campaign throttle (~30k/s) keeps the campaign from taking all\nthe capacity; trade-off: an OTP sent mid-campaign can wait behind batches already queued (seconds with the cap).\nThe kill switch (campaign status = cancelled) is checked per batch: stop within seconds.", 16, NOTE)
+Note('Bnote', Col(4), w3 + 20, "EVENT COUNTS: 1 campaign -> N range events (campaign-ranges) -> members / 1,000 batch\nevents (notifications) -> the router turns each batch into up to 1,000 events per\nchannel, one per user (different text, language, address per user) -> channel workers.\n\nSTATUS at 3 levels: delivery (user + channel) in Deliveries -> range (done / failed)\nand campaign totals in Campaigns (SQL); live counters in Redis, bumped only when a\ndelivery row actually changes state. Workers write sent / failed, callbacks write\ndelivered / bounced, the router writes skipped (with the reason).", 16, NOTE)

@@ -80,7 +80,7 @@
       "type": "rectangle",
       "x": 0.0,
       "y": 0.0,
-      "width": 2680.0,
+      "width": 2980.0,
       "height": 1050.0,
       "angle": 0,
       "strokeColor": "#868e96",
@@ -3885,8 +3885,8 @@
       "type": "rectangle",
       "x": 0.0,
       "y": 1130.0,
-      "width": 2680.0,
-      "height": 720.0,
+      "width": 2980.0,
+      "height": 830.0,
       "angle": 0,
       "strokeColor": "#868e96",
       "backgroundColor": "transparent",
@@ -3914,7 +3914,7 @@
       "type": "text",
       "x": 20.0,
       "y": 1142.0,
-      "width": 1146.0,
+      "width": 1533.0,
       "height": 30.0,
       "angle": 0,
       "strokeColor": "#e03131",
@@ -3935,13 +3935,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order",
+      "text": "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order; event counts on each hop",
       "fontSize": 24,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order",
+      "originalText": "B. BROADCAST CAMPAIGN ('50% off today' to 50M users) - numbers show the order; event counts on each hop",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4097,7 +4097,7 @@
       "x": 330.0,
       "y": 1220.0,
       "width": 240.0,
-      "height": 590.0,
+      "height": 700.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffc9c9",
@@ -4135,6 +4135,10 @@
         {
           "type": "arrow",
           "id": "Br1"
+        },
+        {
+          "type": "arrow",
+          "id": "Br3"
         }
       ],
       "updated": 1700000000000,
@@ -4145,7 +4149,7 @@
       "id": "Bg-t",
       "type": "text",
       "x": 335.0,
-      "y": 1475.0,
+      "y": 1530.0,
       "width": 230.0,
       "height": 80.0,
       "angle": 0,
@@ -4339,13 +4343,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Campaign Service\n1 POST /campaigns\n-> 202",
+      "text": "1 Campaign Service\nPOST /campaigns\n-> 202",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bcs",
-      "originalText": "Campaign Service\n1 POST /campaigns\n-> 202",
+      "originalText": "1 Campaign Service\nPOST /campaigns\n-> 202",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4417,13 +4421,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Campaigns (SQL)\nstatus (kill switch)\n+ status per range",
+      "text": "Campaigns (SQL)\nstatus, kill switch,\nranges done, totals",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bcd",
-      "originalText": "Campaigns (SQL)\nstatus (kill switch)\n+ status per range",
+      "originalText": "Campaigns (SQL)\nstatus, kill switch,\nranges done, totals",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4499,13 +4503,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "2 Producer: ask the\nwarehouse for 1,000\nequal-size ranges",
+      "text": "2 Range producer\nasks the warehouse\nfor N ranges",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bpr",
-      "originalText": "2 Producer: ask the\nwarehouse for 1,000\nequal-size ranges",
+      "originalText": "2 Range producer\nasks the warehouse\nfor N ranges",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4577,13 +4581,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "3 Kafka topic:\ncampaign-tasks\n(1,000 tiny messages)",
+      "text": "3 Kafka topic:\ncampaign-ranges\n1 event per RANGE",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bkt",
-      "originalText": "3 Kafka topic:\ncampaign-tasks\n(1,000 tiny messages)",
+      "originalText": "3 Kafka topic:\ncampaign-ranges\n1 event per RANGE",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4618,11 +4622,11 @@
         },
         {
           "type": "arrow",
-          "id": "Bw5"
+          "id": "Bw5b"
         },
         {
           "type": "arrow",
-          "id": "Bw5b"
+          "id": "Bw5"
         },
         {
           "type": "arrow",
@@ -4659,13 +4663,91 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "4 Consumer group:\ntask workers: page\nmy range, 1k at a time",
+      "text": "4 Range consumer\n(consumer group)\npages its range",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Btw",
-      "originalText": "4 Consumer group:\ntask workers: page\nmy range, 1k at a time",
+      "originalText": "4 Range consumer\n(consumer group)\npages its range",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Bk",
+      "type": "rectangle",
+      "x": 2070.0,
+      "y": 1220.0,
+      "width": 240.0,
+      "height": 70.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffec99",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 2561,
+      "version": 1,
+      "versionNonce": 2568,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bk-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw6"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw7"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Bk-t",
+      "type": "text",
+      "x": 2075.0,
+      "y": 1225.0,
+      "width": 230.0,
+      "height": 60.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2575,
+      "version": 1,
+      "versionNonce": 2582,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "5 Kafka topic:\nnotifications\n1 event per 1,000 users",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bk",
+      "originalText": "5 Kafka topic:\nnotifications\n1 event per 1,000 users",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4689,9 +4771,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2561,
+      "seed": 2589,
       "version": 1,
-      "versionNonce": 2568,
+      "versionNonce": 2596,
       "isDeleted": false,
       "boundElements": [
         {
@@ -4700,11 +4782,11 @@
         },
         {
           "type": "arrow",
-          "id": "Bw5"
+          "id": "Bw4b"
         },
         {
           "type": "arrow",
-          "id": "Bw4b"
+          "id": "Bw5"
         }
       ],
       "updated": 1700000000000,
@@ -4729,9 +4811,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2575,
+      "seed": 2603,
       "version": 1,
-      "versionNonce": 2582,
+      "versionNonce": 2610,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -4767,9 +4849,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2589,
+      "seed": 2617,
       "version": 1,
-      "versionNonce": 2596,
+      "versionNonce": 2624,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -4820,9 +4902,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2603,
+      "seed": 2631,
       "version": 1,
-      "versionNonce": 2610,
+      "versionNonce": 2638,
       "isDeleted": false,
       "boundElements": [
         {
@@ -4876,9 +4958,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2617,
+      "seed": 2645,
       "version": 1,
-      "versionNonce": 2624,
+      "versionNonce": 2652,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -4914,9 +4996,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2631,
+      "seed": 2659,
       "version": 1,
-      "versionNonce": 2638,
+      "versionNonce": 2666,
       "isDeleted": false,
       "boundElements": [
         {
@@ -4970,9 +5052,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2645,
+      "seed": 2673,
       "version": 1,
-      "versionNonce": 2652,
+      "versionNonce": 2680,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5008,9 +5090,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2659,
+      "seed": 2687,
       "version": 1,
-      "versionNonce": 2666,
+      "versionNonce": 2694,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5049,102 +5131,8 @@
     {
       "id": "Bw4-t",
       "type": "text",
-      "x": 1437.0,
+      "x": 1433.0,
       "y": 1246.5,
-      "width": 56.0,
-      "height": 17.0,
-      "angle": 0,
-      "strokeColor": "#1971c2",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "seed": 2673,
-      "version": 1,
-      "versionNonce": 2680,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false,
-      "text": "produce",
-      "fontSize": 14,
-      "fontFamily": 1,
-      "textAlign": "center",
-      "verticalAlign": "middle",
-      "containerId": "Bw4",
-      "originalText": "produce",
-      "lineHeight": 1.25,
-      "autoResize": true
-    },
-    {
-      "id": "Bw5",
-      "type": "arrow",
-      "x": 1815.4166666666667,
-      "y": 1290.0,
-      "width": 120.83333333333348,
-      "height": 50.0,
-      "angle": 0,
-      "strokeColor": "#1971c2",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": {
-        "type": 2
-      },
-      "seed": 2687,
-      "version": 1,
-      "versionNonce": 2694,
-      "isDeleted": false,
-      "boundElements": [
-        {
-          "type": "text",
-          "id": "Bw5-t"
-        }
-      ],
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false,
-      "points": [
-        [
-          0,
-          0
-        ],
-        [
-          -120.83333333333348,
-          50.0
-        ]
-      ],
-      "lastCommittedPoint": null,
-      "startBinding": {
-        "elementId": "Btw",
-        "focus": 0,
-        "gap": 4
-      },
-      "endBinding": {
-        "elementId": "Bseg",
-        "focus": 0,
-        "gap": 4
-      },
-      "startArrowhead": null,
-      "endArrowhead": "arrow",
-      "elbowed": false
-    },
-    {
-      "id": "Bw5-t",
-      "type": "text",
-      "x": 1723.0,
-      "y": 1306.5,
       "width": 64.0,
       "height": 17.0,
       "angle": 0,
@@ -5166,13 +5154,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "my range",
+      "text": "N events",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bw5",
-      "originalText": "my range",
+      "containerId": "Bw4",
+      "originalText": "N events",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5237,9 +5225,9 @@
     {
       "id": "Bw4b-t",
       "type": "text",
-      "x": 1441.0,
+      "x": 1433.0,
       "y": 1306.5,
-      "width": 48.0,
+      "width": 64.0,
       "height": 17.0,
       "angle": 0,
       "strokeColor": "#1971c2",
@@ -5260,13 +5248,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "ranges",
+      "text": "N ranges",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bw4b",
-      "originalText": "ranges",
+      "originalText": "N ranges",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5365,15 +5353,15 @@
       "autoResize": true
     },
     {
-      "id": "Bk",
-      "type": "rectangle",
-      "x": 1780.0,
-      "y": 1340.0,
-      "width": 240.0,
-      "height": 70.0,
+      "id": "Bw5",
+      "type": "arrow",
+      "x": 1815.4166666666667,
+      "y": 1290.0,
+      "width": 120.83333333333348,
+      "height": 50.0,
       "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "#ffec99",
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -5382,7 +5370,7 @@
       "groupIds": [],
       "frameId": null,
       "roundness": {
-        "type": 3
+        "type": 2
       },
       "seed": 2771,
       "version": 1,
@@ -5391,30 +5379,46 @@
       "boundElements": [
         {
           "type": "text",
-          "id": "Bk-t"
-        },
-        {
-          "type": "arrow",
-          "id": "Bw6"
-        },
-        {
-          "type": "arrow",
-          "id": "Bw7"
+          "id": "Bw5-t"
         }
       ],
       "updated": 1700000000000,
       "link": null,
-      "locked": false
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -120.83333333333348,
+          50.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Btw",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bseg",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
     },
     {
-      "id": "Bk-t",
+      "id": "Bw5-t",
       "type": "text",
-      "x": 1785.0,
-      "y": 1345.0,
-      "width": 230.0,
-      "height": 60.0,
+      "x": 1707.0,
+      "y": 1306.5,
+      "width": 96.0,
+      "height": 17.0,
       "angle": 0,
-      "strokeColor": "#1e1e1e",
+      "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 2,
@@ -5432,13 +5436,107 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "5 Kafka topic:\nnotifications\n(1k-user batches)",
-      "fontSize": 16,
+      "text": "1k at a time",
+      "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bk",
-      "originalText": "5 Kafka topic:\nnotifications\n(1k-user batches)",
+      "containerId": "Bw5",
+      "originalText": "1k at a time",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Bw6",
+      "type": "arrow",
+      "x": 2020.0,
+      "y": 1255.0,
+      "width": 50.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 2799,
+      "version": 1,
+      "versionNonce": 2806,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bw6-t"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Btw",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bk",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "Bw6-t",
+      "type": "text",
+      "x": 2017.0,
+      "y": 1246.5,
+      "width": 56.0,
+      "height": 17.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2813,
+      "version": 1,
+      "versionNonce": 2820,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "publish",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bw6",
+      "originalText": "publish",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5462,9 +5560,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2799,
+      "seed": 2827,
       "version": 1,
-      "versionNonce": 2806,
+      "versionNonce": 2834,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5502,84 +5600,6 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2813,
-      "version": 1,
-      "versionNonce": 2820,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false,
-      "text": "6 Consumer group:\nrouter (as row A)\nprefs, caps, kill switch",
-      "fontSize": 16,
-      "fontFamily": 1,
-      "textAlign": "center",
-      "verticalAlign": "middle",
-      "containerId": "Brt",
-      "originalText": "6 Consumer group:\nrouter (as row A)\nprefs, caps, kill switch",
-      "lineHeight": 1.25,
-      "autoResize": true
-    },
-    {
-      "id": "Bth",
-      "type": "rectangle",
-      "x": 2360.0,
-      "y": 1340.0,
-      "width": 240.0,
-      "height": 70.0,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "#b2f2bb",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": {
-        "type": 3
-      },
-      "seed": 2827,
-      "version": 1,
-      "versionNonce": 2834,
-      "isDeleted": false,
-      "boundElements": [
-        {
-          "type": "text",
-          "id": "Bth-t"
-        },
-        {
-          "type": "arrow",
-          "id": "Bw8"
-        },
-        {
-          "type": "arrow",
-          "id": "Bw9"
-        }
-      ],
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false
-    },
-    {
-      "id": "Bth-t",
-      "type": "text",
-      "x": 2365.0,
-      "y": 1345.0,
-      "width": 230.0,
-      "height": 60.0,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
       "seed": 2841,
       "version": 1,
       "versionNonce": 2848,
@@ -5588,23 +5608,23 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "7 Campaign throttle\n~30k sends/s +\nprovider buckets",
+      "text": "6 Router\n(consumer group)\nper user: prefs, render",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bth",
-      "originalText": "7 Campaign throttle\n~30k sends/s +\nprovider buckets",
+      "containerId": "Brt",
+      "originalText": "6 Router\n(consumer group)\nper user: prefs, render",
       "lineHeight": 1.25,
       "autoResize": true
     },
     {
-      "id": "Bwk",
+      "id": "Bkc",
       "type": "rectangle",
       "x": 2360.0,
-      "y": 1460.0,
+      "y": 1220.0,
       "width": 240.0,
-      "height": 70.0,
+      "height": 310.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "#ffec99",
@@ -5625,15 +5645,23 @@
       "boundElements": [
         {
           "type": "text",
-          "id": "Bwk-t"
+          "id": "Bkc-t"
         },
         {
           "type": "arrow",
-          "id": "Bw9"
+          "id": "Bw8"
         },
         {
           "type": "arrow",
-          "id": "Bw9b"
+          "id": "Bw-Bwp"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw-Bwe"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw-Bws"
         }
       ],
       "updated": 1700000000000,
@@ -5641,12 +5669,12 @@
       "locked": false
     },
     {
-      "id": "Bwk-t",
+      "id": "Bkc-t",
       "type": "text",
       "x": 2365.0,
-      "y": 1465.0,
+      "y": 1295.0,
       "width": 230.0,
-      "height": 60.0,
+      "height": 160.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -5666,26 +5694,26 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "8 Consumer group:\npush / email workers\n(as row A)",
+      "text": "7 Kafka topics\nby channel\n\npush / email / sms\n\n1 event per USER\nper allowed channel\n(up to 1,000 per batch)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bwk",
-      "originalText": "8 Consumer group:\npush / email workers\n(as row A)",
+      "containerId": "Bkc",
+      "originalText": "7 Kafka topics\nby channel\n\npush / email / sms\n\n1 event per USER\nper allowed channel\n(up to 1,000 per batch)",
       "lineHeight": 1.25,
       "autoResize": true
     },
     {
-      "id": "Bdd",
+      "id": "Bwp",
       "type": "rectangle",
-      "x": 2070.0,
-      "y": 1460.0,
+      "x": 2650.0,
+      "y": 1220.0,
       "width": 240.0,
       "height": 70.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
-      "backgroundColor": "#b2f2bb",
+      "backgroundColor": "#ffec99",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -5703,11 +5731,11 @@
       "boundElements": [
         {
           "type": "text",
-          "id": "Bdd-t"
+          "id": "Bwp-t"
         },
         {
           "type": "arrow",
-          "id": "Bw9b"
+          "id": "Bw-Bwp"
         }
       ],
       "updated": 1700000000000,
@@ -5715,10 +5743,10 @@
       "locked": false
     },
     {
-      "id": "Bdd-t",
+      "id": "Bwp-t",
       "type": "text",
-      "x": 2075.0,
-      "y": 1465.0,
+      "x": 2655.0,
+      "y": 1225.0,
       "width": 230.0,
       "height": 60.0,
       "angle": 0,
@@ -5740,35 +5768,35 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Deliveries:\n(campaign, user)\nUNIQUE -> no dupes",
+      "text": "8 Push workers\n(consumer group)\n-> APNs / FCM",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bdd",
-      "originalText": "Deliveries:\n(campaign, user)\nUNIQUE -> no dupes",
+      "containerId": "Bwp",
+      "originalText": "8 Push workers\n(consumer group)\n-> APNs / FCM",
       "lineHeight": 1.25,
       "autoResize": true
     },
     {
-      "id": "Bw6",
-      "type": "arrow",
-      "x": 1900.0,
-      "y": 1290.0,
-      "width": 0.0,
-      "height": 50.0,
+      "id": "Bwe",
+      "type": "rectangle",
+      "x": 2650.0,
+      "y": 1340.0,
+      "width": 240.0,
+      "height": 70.0,
       "angle": 0,
-      "strokeColor": "#1971c2",
-      "backgroundColor": "transparent",
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffec99",
       "fillStyle": "solid",
       "strokeWidth": 2,
-      "strokeStyle": "dashed",
+      "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
       "roundness": {
-        "type": 2
+        "type": 3
       },
       "seed": 2911,
       "version": 1,
@@ -5777,46 +5805,26 @@
       "boundElements": [
         {
           "type": "text",
-          "id": "Bw6-t"
+          "id": "Bwe-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw-Bwe"
         }
       ],
       "updated": 1700000000000,
       "link": null,
-      "locked": false,
-      "points": [
-        [
-          0,
-          0
-        ],
-        [
-          0.0,
-          50.0
-        ]
-      ],
-      "lastCommittedPoint": null,
-      "startBinding": {
-        "elementId": "Btw",
-        "focus": 0,
-        "gap": 4
-      },
-      "endBinding": {
-        "elementId": "Bk",
-        "focus": 0,
-        "gap": 4
-      },
-      "startArrowhead": null,
-      "endArrowhead": "arrow",
-      "elbowed": false
+      "locked": false
     },
     {
-      "id": "Bw6-t",
+      "id": "Bwe-t",
       "type": "text",
-      "x": 1872.0,
-      "y": 1306.5,
-      "width": 56.0,
-      "height": 17.0,
+      "x": 2655.0,
+      "y": 1345.0,
+      "width": 230.0,
+      "height": 60.0,
       "angle": 0,
-      "strokeColor": "#1971c2",
+      "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 2,
@@ -5834,23 +5842,175 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "batches",
-      "fontSize": 14,
+      "text": "8 Email workers\n(consumer group)\n-> SendGrid",
+      "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bw6",
-      "originalText": "batches",
+      "containerId": "Bwe",
+      "originalText": "8 Email workers\n(consumer group)\n-> SendGrid",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Bws",
+      "type": "rectangle",
+      "x": 2650.0,
+      "y": 1460.0,
+      "width": 240.0,
+      "height": 70.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#ffec99",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 2939,
+      "version": 1,
+      "versionNonce": 2946,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bws-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw-Bws"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw9"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Bws-t",
+      "type": "text",
+      "x": 2655.0,
+      "y": 1465.0,
+      "width": 230.0,
+      "height": 60.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2953,
+      "version": 1,
+      "versionNonce": 2960,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "8 SMS workers\n(consumer group)\n-> Twilio",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bws",
+      "originalText": "8 SMS workers\n(consumer group)\n-> Twilio",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Bdd",
+      "type": "rectangle",
+      "x": 2650.0,
+      "y": 1580.0,
+      "width": 240.0,
+      "height": 70.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 2967,
+      "version": 1,
+      "versionNonce": 2974,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bdd-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw9"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Bdd-t",
+      "type": "text",
+      "x": 2655.0,
+      "y": 1585.0,
+      "width": 230.0,
+      "height": 60.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2981,
+      "version": 1,
+      "versionNonce": 2988,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "9 Deliveries (Cosmos)\nper user + channel:\nsent/delivered/failed",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bdd",
+      "originalText": "9 Deliveries (Cosmos)\nper user + channel:\nsent/delivered/failed",
       "lineHeight": 1.25,
       "autoResize": true
     },
     {
       "id": "Bw7",
       "type": "arrow",
-      "x": 2020.0,
-      "y": 1375.0,
-      "width": 50.0,
-      "height": 0.0,
+      "x": 2190.0,
+      "y": 1290.0,
+      "width": 0.0,
+      "height": 50.0,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
@@ -5864,9 +6024,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2939,
+      "seed": 2995,
       "version": 1,
-      "versionNonce": 2946,
+      "versionNonce": 3002,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5883,8 +6043,8 @@
           0
         ],
         [
-          50.0,
-          0.0
+          0.0,
+          50.0
         ]
       ],
       "lastCommittedPoint": null,
@@ -5905,8 +6065,8 @@
     {
       "id": "Bw7-t",
       "type": "text",
-      "x": 2017.0,
-      "y": 1366.5,
+      "x": 2162.0,
+      "y": 1306.5,
       "width": 56.0,
       "height": 17.0,
       "angle": 0,
@@ -5920,9 +6080,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2953,
+      "seed": 3009,
       "version": 1,
-      "versionNonce": 2960,
+      "versionNonce": 3016,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5950,7 +6110,7 @@
       "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 2,
-      "strokeStyle": "solid",
+      "strokeStyle": "dashed",
       "roughness": 1,
       "opacity": 100,
       "groupIds": [],
@@ -5958,16 +6118,11 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2967,
+      "seed": 3023,
       "version": 1,
-      "versionNonce": 2974,
+      "versionNonce": 3030,
       "isDeleted": false,
-      "boundElements": [
-        {
-          "type": "text",
-          "id": "Bw8-t"
-        }
-      ],
+      "boundElements": [],
       "updated": 1700000000000,
       "link": null,
       "locked": false,
@@ -5988,7 +6143,7 @@
         "gap": 4
       },
       "endBinding": {
-        "elementId": "Bth",
+        "elementId": "Bkc",
         "focus": 0,
         "gap": 4
       },
@@ -5997,46 +6152,169 @@
       "elbowed": false
     },
     {
-      "id": "Bw8-t",
-      "type": "text",
-      "x": 2311.0,
-      "y": 1366.5,
-      "width": 48.0,
-      "height": 17.0,
+      "id": "Bw-Bwp",
+      "type": "arrow",
+      "x": 2600.0,
+      "y": 1255.0,
+      "width": 50.0,
+      "height": 0.0,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "transparent",
       "fillStyle": "solid",
       "strokeWidth": 2,
-      "strokeStyle": "solid",
+      "strokeStyle": "dashed",
       "roughness": 1,
       "opacity": 100,
       "groupIds": [],
       "frameId": null,
-      "roundness": null,
-      "seed": 2981,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3037,
       "version": 1,
-      "versionNonce": 2988,
+      "versionNonce": 3044,
       "isDeleted": false,
-      "boundElements": null,
+      "boundElements": [],
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "token?",
-      "fontSize": 14,
-      "fontFamily": 1,
-      "textAlign": "center",
-      "verticalAlign": "middle",
-      "containerId": "Bw8",
-      "originalText": "token?",
-      "lineHeight": 1.25,
-      "autoResize": true
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Bkc",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bwp",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "Bw-Bwe",
+      "type": "arrow",
+      "x": 2600.0,
+      "y": 1375.0,
+      "width": 50.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3051,
+      "version": 1,
+      "versionNonce": 3058,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Bkc",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bwe",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "Bw-Bws",
+      "type": "arrow",
+      "x": 2600.0,
+      "y": 1495.0,
+      "width": 50.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3065,
+      "version": 1,
+      "versionNonce": 3072,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Bkc",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bws",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
     },
     {
       "id": "Bw9",
       "type": "arrow",
-      "x": 2480.0,
-      "y": 1410.0,
+      "x": 2770.0,
+      "y": 1530.0,
       "width": 0.0,
       "height": 50.0,
       "angle": 0,
@@ -6052,9 +6330,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2995,
+      "seed": 3079,
       "version": 1,
-      "versionNonce": 3002,
+      "versionNonce": 3086,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6077,101 +6355,7 @@
       ],
       "lastCommittedPoint": null,
       "startBinding": {
-        "elementId": "Bth",
-        "focus": 0,
-        "gap": 4
-      },
-      "endBinding": {
-        "elementId": "Bwk",
-        "focus": 0,
-        "gap": 4
-      },
-      "startArrowhead": null,
-      "endArrowhead": "arrow",
-      "elbowed": false
-    },
-    {
-      "id": "Bw9-t",
-      "type": "text",
-      "x": 2464.0,
-      "y": 1426.5,
-      "width": 32.0,
-      "height": 17.0,
-      "angle": 0,
-      "strokeColor": "#1971c2",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
-      "seed": 3009,
-      "version": 1,
-      "versionNonce": 3016,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false,
-      "text": "send",
-      "fontSize": 14,
-      "fontFamily": 1,
-      "textAlign": "center",
-      "verticalAlign": "middle",
-      "containerId": "Bw9",
-      "originalText": "send",
-      "lineHeight": 1.25,
-      "autoResize": true
-    },
-    {
-      "id": "Bw9b",
-      "type": "arrow",
-      "x": 2360.0,
-      "y": 1495.0,
-      "width": 50.0,
-      "height": 0.0,
-      "angle": 0,
-      "strokeColor": "#1971c2",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 1,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": {
-        "type": 2
-      },
-      "seed": 3023,
-      "version": 1,
-      "versionNonce": 3030,
-      "isDeleted": false,
-      "boundElements": [
-        {
-          "type": "text",
-          "id": "Bw9b-t"
-        }
-      ],
-      "updated": 1700000000000,
-      "link": null,
-      "locked": false,
-      "points": [
-        [
-          0,
-          0
-        ],
-        [
-          -50.0,
-          0.0
-        ]
-      ],
-      "lastCommittedPoint": null,
-      "startBinding": {
-        "elementId": "Bwk",
+        "elementId": "Bws",
         "focus": 0,
         "gap": 4
       },
@@ -6185,10 +6369,10 @@
       "elbowed": false
     },
     {
-      "id": "Bw9b-t",
+      "id": "Bw9-t",
       "type": "text",
-      "x": 2311.0,
-      "y": 1486.5,
+      "x": 2746.0,
+      "y": 1546.5,
       "width": 48.0,
       "height": 17.0,
       "angle": 0,
@@ -6202,21 +6386,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3037,
+      "seed": 3093,
       "version": 1,
-      "versionNonce": 3044,
+      "versionNonce": 3100,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "record",
+      "text": "status",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
-      "containerId": "Bw9b",
-      "originalText": "record",
+      "containerId": "Bw9",
+      "originalText": "status",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -6240,9 +6424,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3051,
+      "seed": 3107,
       "version": 1,
-      "versionNonce": 3058,
+      "versionNonce": 3114,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6276,9 +6460,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3065,
+      "seed": 3121,
       "version": 1,
-      "versionNonce": 3072,
+      "versionNonce": 3128,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6314,9 +6498,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3079,
+      "seed": 3135,
       "version": 1,
-      "versionNonce": 3086,
+      "versionNonce": 3142,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6367,9 +6551,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3093,
+      "seed": 3149,
       "version": 1,
-      "versionNonce": 3100,
+      "versionNonce": 3156,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6407,9 +6591,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3107,
+      "seed": 3163,
       "version": 1,
-      "versionNonce": 3114,
+      "versionNonce": 3170,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6445,9 +6629,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3121,
+      "seed": 3177,
       "version": 1,
-      "versionNonce": 3128,
+      "versionNonce": 3184,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6481,21 +6665,173 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3135,
+      "seed": 3191,
       "version": 1,
-      "versionNonce": 3142,
+      "versionNonce": 3198,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Progress counters\n(Redis: sent, failed,\nskipped by prefs)",
+      "text": "Progress: counters\n(Redis) + ranges done\n(Campaigns SQL)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Brc",
-      "originalText": "Progress counters\n(Redis: sent, failed,\nskipped by prefs)",
+      "originalText": "Progress: counters\n(Redis) + ranges done\n(Campaigns SQL)",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Brf",
+      "type": "rectangle",
+      "x": 620.0,
+      "y": 1850.0,
+      "width": 240.0,
+      "height": 70.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#a5d8ff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 3205,
+      "version": 1,
+      "versionNonce": 3212,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Brf-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Br3"
+        },
+        {
+          "type": "arrow",
+          "id": "Br4"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Brf-t",
+      "type": "text",
+      "x": 625.0,
+      "y": 1855.0,
+      "width": 230.0,
+      "height": 60.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 3219,
+      "version": 1,
+      "versionNonce": 3226,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "Campaign Service\nGET .../deliveries\n?status=failed",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Brf",
+      "originalText": "Campaign Service\nGET .../deliveries\n?status=failed",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Brf2",
+      "type": "rectangle",
+      "x": 910.0,
+      "y": 1850.0,
+      "width": 240.0,
+      "height": 70.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "#b2f2bb",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 3233,
+      "version": 1,
+      "versionNonce": 3240,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Brf2-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Br4"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Brf2-t",
+      "type": "text",
+      "x": 915.0,
+      "y": 1865.0,
+      "width": 230.0,
+      "height": 40.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 3247,
+      "version": 1,
+      "versionNonce": 3254,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "Deliveries (Cosmos)\npk (campaign, range)",
+      "fontSize": 16,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Brf2",
+      "originalText": "Deliveries (Cosmos)\npk (campaign, range)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -6519,9 +6855,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3149,
+      "seed": 3261,
       "version": 1,
-      "versionNonce": 3156,
+      "versionNonce": 3268,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6572,9 +6908,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3163,
+      "seed": 3275,
       "version": 1,
-      "versionNonce": 3170,
+      "versionNonce": 3282,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6606,12 +6942,118 @@
       "elbowed": false
     },
     {
+      "id": "Br3",
+      "type": "arrow",
+      "x": 570.0,
+      "y": 1885.0,
+      "width": 50.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3289,
+      "version": 1,
+      "versionNonce": 3296,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Bg",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Brf",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "Br4",
+      "type": "arrow",
+      "x": 860.0,
+      "y": 1885.0,
+      "width": 50.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 3303,
+      "version": 1,
+      "versionNonce": 3310,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          50.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Brf",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Brf2",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
       "id": "Bnote",
       "type": "text",
-      "x": 620.0,
-      "y": 1570.0,
-      "width": 1111.0,
-      "height": 80.0,
+      "x": 1200.0,
+      "y": 1480.0,
+      "width": 853.0,
+      "height": 160.0,
       "angle": 0,
       "strokeColor": "#495057",
       "backgroundColor": "transparent",
@@ -6623,21 +7065,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3177,
+      "seed": 3317,
       "version": 1,
-      "versionNonce": 3184,
+      "versionNonce": 3324,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "ONE TOPIC FOR EVERYTHING (no priority lanes): campaign batches and transactional sends share the\n'notifications' topic and the same workers. The campaign throttle (~30k/s) keeps the campaign from taking all\nthe capacity; trade-off: an OTP sent mid-campaign can wait behind batches already queued (seconds with the cap).\nThe kill switch (campaign status = cancelled) is checked per batch: stop within seconds.",
+      "text": "EVENT COUNTS: 1 campaign -> N range events (campaign-ranges) -> members / 1,000 batch\nevents (notifications) -> the router turns each batch into up to 1,000 events per\nchannel, one per user (different text, language, address per user) -> channel workers.\n\nSTATUS at 3 levels: delivery (user + channel) in Deliveries -> range (done / failed)\nand campaign totals in Campaigns (SQL); live counters in Redis, bumped only when a\ndelivery row actually changes state. Workers write sent / failed, callbacks write\ndelivered / bounced, the router writes skipped (with the reason).",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "ONE TOPIC FOR EVERYTHING (no priority lanes): campaign batches and transactional sends share the\n'notifications' topic and the same workers. The campaign throttle (~30k/s) keeps the campaign from taking all\nthe capacity; trade-off: an OTP sent mid-campaign can wait behind batches already queued (seconds with the cap).\nThe kill switch (campaign status = cancelled) is checked per batch: stop within seconds.",
+      "originalText": "EVENT COUNTS: 1 campaign -> N range events (campaign-ranges) -> members / 1,000 batch\nevents (notifications) -> the router turns each batch into up to 1,000 events per\nchannel, one per user (different text, language, address per user) -> channel workers.\n\nSTATUS at 3 levels: delivery (user + channel) in Deliveries -> range (done / failed)\nand campaign totals in Campaigns (SQL); live counters in Redis, bumped only when a\ndelivery row actually changes state. Workers write sent / failed, callbacks write\ndelivered / bounced, the router writes skipped (with the reason).",
       "lineHeight": 1.25,
       "autoResize": true
     }
