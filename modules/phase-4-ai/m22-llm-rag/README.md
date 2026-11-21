@@ -88,6 +88,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Don't retry 400/401, after streaming has started, or after a tool already changed data (idempotency). Don't silently fall back to a weaker model for high-stakes answers.
 - **Quick-check answers:** 429 + Retry-After 20 → wait 20 s + random jitter (or use the fallback now, since a user is waiting), capped retries. 400 "prompt too long" → don't retry; shorten it (fewer turns + summary, fewer chunks) and count tokens before sending. Immediate retries during 429 only add load → backoff + jitter, cap, circuit breaker, or queue.
 
+#### Streaming
+- **In plain words:** Send the answer to the user piece by piece as the model writes it, instead of waiting for the whole answer.
+- **Problem it solves:** A 300-token answer takes ~6 s. Without streaming the user sees a blank screen, thinks it's broken, clicks again (2 paid calls) or leaves. With streaming the first words show after ~0.5 s. Same total time, better experience.
+- **Analogy:** Live TV captions vs. waiting for the transcript.
+- **Diagram:** browser ◄SSE── API ◄stream── OpenAI. Tab closed → cancel the model call. Connection drops → keep the partial text, offer retry (no auto-retry). Finish reason `length` → "answer cut off".
+- **Variations / alternatives:** SSE for chat (one-way, plain HTTP; .NET 10 `TypedResults.ServerSentEvents`), WebSockets for two-way (voice, collaboration), no streaming for background jobs and JSON. Tool calls arrive in pieces; `UseFunctionInvocation` puts them together.
+- **When not to use it:** Background jobs, JSON for code, answers that must be checked before anyone sees them, very short answers.
+- **Quick-check answers:** It improves the experience, not the total time. Tab closed → pass the request's `CancellationToken` so the model call is cancelled: stop paying for tokens nobody reads. Invoice JSON for code → don't stream; the code needs the full, valid JSON.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
