@@ -23,16 +23,16 @@ Arrow('Aa1', 'Ad', 'Ag', "WS", None, False, True)
 Arrow('Aa2', 'Ar', 'Ag', "HTTPS", None, False, True)
 Arrow('Aa3', 'Ag', 'Aws', "", None, False, True)
 
-# write: ping in through the WS gateway -> geo index + Kafka -> trip tracker -> back out through the rider's node
-Box('Als', Col(3), w1, BW, H, "Location Service\nevery ping", SVC)
+# write: ping in through the WS gateway -> geo index; if the driver has an active ride (set ONCE at accept), push straight back out
+Box('Als', Col(3), w1, BW, H, "Location Service\n1 GEOADD (always)\n2 active ride? 3 push", SVC)
 Box('Ageo', Col(4), w1, BW, H, "Driver geo index (Redis)\nGEOADD drivers:{city}\nstale (>30 s) swept out", DATA)
-Box('Akl', Col(4), w2, BW, H, "Kafka topic:\ndriver-locations", ASYNC)
-Box('Att', Col(3), w2, BW, H, "Trip tracker\nactive ride? -> rider\n-> rider's node", ASYNC)
+Box('Aact', Col(4), w2, BW, H, "Active rides (Redis)\nactive:{driverId} -> rider\nSET on accept, DEL on end", DATA)
+Box('Apush', Col(3), w2, BW, H, "Push driverLocation\nto the rider's gateway\nnode (presence)", EDGE)
 Arrow('Aw1', 'Aws', 'Als', "ping", W, False, True)
-Arrow('Aw2', 'Als', 'Ageo', "latest", W)
-Arrow('Aw3', 'Als', 'Akl', "", W, True)
-Arrow('Aw4', 'Akl', 'Att', "consume", W, True)
-Arrow('Aw5', 'Att', 'Aws', "push", R, True, True)
+Arrow('Aw2', 'Als', 'Ageo', "1", W)
+Arrow('Aw3', 'Als', 'Aact', "2 lookup", W)
+Arrow('Aw4', 'Als', 'Apush', "3 if yes", R)
+Arrow('Aw5', 'Apush', 'Aws', "", R, False, True)
 
 # write: request -> match -> offer
 Box('Ars', Col(3), w3, BW, H, "Ride Service\nPOST /rides -> 202", SVC)
@@ -72,7 +72,7 @@ Arrow('Ar2', 'Apr', 'Amap', "", R)
 Arrow('Ar5', 'Ag', 'Arr', '', R, False, True)
 Arrow('Ar6', 'Arr', 'Ard3', "", R)
 
-Note('Asum', Col(5) + 40, r1 - 20, "WRITE touches: APIM -> WebSocket gateway (pipe) -> Location Service\n-> geo index (latest only) + Kafka -> trip tracker -> back out through\nthe rider's gateway node (live location, only on an active ride).\nRequest: Ride Service -> Rides (SQL) + outbox -> Kafka -> matching\nworker -> driver lock (NX) -> offer. Accept: ONE conditional UPDATE.\nEnd -> ride-ended -> Payment Service charges once.\n\nREAD touches: Pricing (Maps API), Ride Service (SQL replica).", 16, NOTE)
+Note('Asum', Col(5) + 40, r1 - 20, "WRITE touches: APIM -> WebSocket gateway (pipe) -> Location Service\n-> geo index (latest only); if active:{driverId} is set (Ride Service\nsets it ONCE on accept) -> push straight back out to the rider. No Kafka.\nRequest: Ride Service -> Rides (SQL) + outbox -> Kafka -> matching\nworker -> driver lock (NX) -> offer. Accept: ONE conditional UPDATE.\nEnd -> ride-ended -> Payment Service charges once.\n\nREAD touches: Pricing (Maps API), Ride Service (SQL replica).", 16, NOTE)
 
 # =================== ROW B: HOT SPOT ===================
 T = 900
@@ -94,11 +94,11 @@ Arrow('Ba3', 'Bg', 'Bws', "", None, False, True)
 # write: batch matching per zone; demand/supply drives surge
 Box('Brs', Col(3), w1, BW, H, "Ride Service\nPOST /rides -> 202", SVC)
 Box('Brd', Col(4), w1, BW, H, "Rides (SQL)\nstatus: matching,\nsurged price + outbox", DATA)
-Box('Bk', Col(5), w1, BW, w2 + H - w1, "Kafka topics\n\nride-requested\ndriver-locations\n\npartition by zone", ASYNC)
+Box('Bk', Col(5), w1, BW, w2 + H - w1, "Kafka topics\n\nride-requested\ndriver samples\n(every 30 s, for surge)\npartition by zone", ASYNC)
 Box('Bbm', Col(6), w1, BW, H, "Batch matcher (per zone)\nevery 2 s: N riders x\nM drivers, min total ETA", ASYNC)
 Box('Blk', Col(7), w1, BW, H, "Driver lock (Redis)\nSET NX EX 130", DATA)
 Box('Bof', Col(8), w1, BW, H, "Offers to drivers\n(the rest wait in\nqueue for next round)", EDGE)
-Box('Bls', Col(3), w2, BW, H, "Location Service\n(same pings as A)", SVC)
+Box('Bls', Col(3), w2, BW, H, "Location Service\n(same as A) + a sample\nper driver every 30 s", SVC)
 Box('Bag', Col(6), w2, BW, H, "Demand / supply counter\nper zone, 30 s", ASYNC)
 Box('Bsg', Col(7), w2, BW, H, "Surge multipliers\n(Redis) zone -> x2.1", DATA)
 Box('Bgeo', Col(4), w3, BW, H, "Driver geo index (Redis)\nsharded by city", DATA)
@@ -110,7 +110,7 @@ Arrow('Bw4', 'Bk', 'Bbm', "consume", W, True)
 Arrow('Bw5', 'Bbm', 'Blk', "lock", W)
 Arrow('Bw6', 'Blk', 'Bof', "offer", W)
 Arrow('Bw7', 'Bws', 'Bls', "ping", W)
-Arrow('Bw8', 'Bls', 'Bk', "", W, True)
+Arrow('Bw8', 'Bls', 'Bk', "sample", W, True)
 Arrow('Bw9', 'Bls', 'Bgeo', "latest", W)
 Arrow('Bw10', 'Bk', 'Bag', "count", W, True)
 Arrow('Bw11', 'Bag', 'Bsg', "x2.1", W, True)
@@ -152,11 +152,11 @@ steps = [
     ("1 Enter pickup + drop\nsees $18", "Pricing Service\nMaps x rates (x surge)\nprice locked 2 min", None),
     ("2 Tap Request\n'Finding a driver...'", "Ride Service\nride = matching\n-> Kafka", None),
     (None, "Matching worker\nnearest (Redis) ->\navailable -> best ETA\n-> lock, offer", "3 Offer rings\n2 min to accept\n(decline -> next)"),
-    ("4 'Maria is coming'\nCamry, 4 min", "Ride Service\naccepted + busy\n(one transaction)", "4 Tap Accept"),
-    ("5 Watch the car\non the map", "Location -> Kafka ->\ntrip tracker ->\nrider's gateway", "5 Drive to pickup\n(pings)"),
+    ("4 'Maria is coming'\nCamry, 4 min", "Ride Service\naccepted + busy;\nSET active:{driver}", "4 Tap Accept"),
+    ("5 Watch the car\non the map", "Location Service:\nactive ride? -> push\nto rider's gateway", "5 Drive to pickup\n(pings)"),
     ("6 'Ride started'", "Ride Service\nride = started", "6 Pick up, tap Start"),
     ("7 Watch the trip", "Same as step 5\n(live location)", "7 Drive the trip\n(pings)"),
-    ("8 'You've arrived'", "Ride Service\nended, driver\navailable again", "8 Drop off, tap End"),
+    ("8 'You've arrived'", "Ride Service\nended, available;\nDEL active:{driver}", "8 Drop off, tap End"),
     ("9 'Paid $18'", "Payment Service\ncharge once\n(rideId unique)", "9 Sees the fare"),
 ]
 # (rider<->service label, direction 'down' = rider->service / 'up' = service->rider), (driver<->service label, 'up' = driver->service / 'down' = service->driver)

@@ -70,8 +70,8 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 | Component | What it does | Store / technology |
 |---|---|---|
 | WebSocket gateway (behind APIM) | A pipe: holds driver sockets (and riders' during a ride); pings pass in, pushes pass out, nothing is stored. Registers `user → gateway node` in presence on connect | As in Case 2; ~200k sockets per node |
-| Location Service | Takes pings; overwrites the latest position; publishes the ping | **Redis geo index** (`GEOADD drivers:{city}`, status alongside); **Kafka** `driver-locations` |
-| Trip tracker | For a driver on a ride, pushes each ping to the rider's gateway | Kafka consumer; `driver → rideId, riderId` cached in Redis |
+| Location Service | Takes pings; overwrites the latest position; if the driver has an active ride, pushes the position straight to that rider's gateway node | **Redis geo index** (`GEOADD drivers:{city}`); **Redis** `active:{driverId} → riderId` (written by the Ride Service) |
+| Active rides (Redis) | Who is watching this driver: `active:{driverId} → riderId`. **Set once** by the Ride Service on accept, **deleted** on end | Redis; one `GET` per ping |
 | Pricing Service | Estimate = route (Maps API) × rates × surge; stores the locked price | Maps API; surge multipliers in **Redis** |
 | Ride Service | Create ride, accept, start, end | **Azure SQL, sharded by city**: `rides`, `drivers` (status), outbox |
 | Matching worker | Nearest available drivers → rank by ETA → lock one → offer → wait up to 2 min → next | Kafka consumer of `ride-requested` (partitioned by city); **Redis** driver locks |
@@ -79,14 +79,14 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 | Surge (row B) | Requests vs. available drivers per zone every 30 s → multiplier | Kafka consumer → Redis |
 
 **Write path:**
-1. **Locations:** driver → WebSocket gateway → Location Service → `GEOADD drivers:{city}` (latest only) and `ZADD drivers:{city}:seen now driverId`. Members of a geo set **can't have their own TTL**, so a sweeper runs every few seconds: drivers not seen for 30 s are removed (`ZRANGEBYSCORE` on `:seen` → `ZREM` from both), so a vanished driver drops out of search and → Kafka `driver-locations`.
+1. **Locations:** driver → WebSocket gateway → Location Service → `GEOADD drivers:{city}` (latest only) and `ZADD drivers:{city}:seen now driverId`. Members of a geo set **can't have their own TTL**, so a sweeper runs every few seconds: drivers not seen for 30 s are removed (`ZRANGEBYSCORE` on `:seen` → `ZREM` from both), so a vanished driver drops out of search. In row B it also sends one sample per driver every 30 s to Kafka for the surge counter.
 2. **Request:** rider → `POST /rides` → Ride Service inserts `rides(status = matching, price = locked estimate)` + outbox → Kafka `ride-requested` → `202`.
 3. **Match:** the matching worker runs `GEOSEARCH` (2 km, 10 nearest available), ranks by ETA, takes the best and **locks** it: `SET driver:{id}:offer rideId NX EX 130`. If the lock fails, another ride is offering to that driver, so try the next. Then it pushes the offer.
 4. **Accept (the contested write):** one SQL transaction on the city shard:
    `UPDATE rides SET driver_id = @d, status = 'accepted' WHERE id = @r AND status = 'matching'` and
    `UPDATE drivers SET status = 'busy' WHERE id = @d AND status = 'available'`.
    Both must change exactly 1 row, else roll back and return `409`. **The Redis lock is a fast filter; this conditional update is the truth.** No answer in 2 min → the lock expires → next driver.
-5. **Live location:** the trip tracker consumes `driver-locations`; if the driver is on a ride, it looks up the rider's gateway (presence) and pushes `driverLocation`. Nothing is stored per ping.
+5. **Live location:** on every ping the Location Service does `GET active:{driverId}`. Not set (no ride) → done. Set → look up the rider's gateway node (presence) and push `driverLocation` straight out. **No Kafka on this path:** who should see the driver is decided once at accept, so there's nothing to fan out. A failed push is fine; the next ping comes in 4 s.
 6. **End + pay:** the driver taps end → ride `ended` + outbox → Kafka `ride-ended` → Payment Service:
    1. insert `payments(rideId UNIQUE, amount, status = pending)`; a duplicate event hits the unique key and stops here;
    2. call the card processor with **idempotency key = rideId**;
@@ -97,7 +97,7 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 2. **Ride status:** Ride Service → SQL read replica. Live changes arrive by **push**; this GET is the fallback after a reconnect.
 
 ## Ride lifecycle: rider and driver side by side
-**Who owns what:** the **Location Service** owns only *where* drivers are (Redis, overwritten every 4 s). The **Ride Service** owns the *ride* and the driver's *status* (SQL, the truth). The **matching worker** reads both; the **trip tracker** connects a driver's pings to their rider; the **Payment Service** acts once at the end.
+**Who owns what:** the **Location Service** owns only *where* drivers are (Redis, overwritten every 4 s). The **Ride Service** owns the *ride* and the driver's *status* (SQL, the truth). The **matching worker** reads both; the **active-rides key** (`active:{driverId}`, set by the Ride Service on accept) tells the Location Service which rider gets each ping; the **Payment Service** acts once at the end.
 
 | # | Rider sees / does | Driver sees / does | Service doing the work | State after |
 |---|---|---|---|---|
@@ -106,11 +106,11 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 | 2 | Taps **Request** → "Finding your driver…" | — | Ride Service: insert `rides(matching)` + outbox → `202`; rider app opens its WebSocket | Ride: **matching** |
 | 3 | Still "Finding…" | Phone rings: **offer** (pickup, price), 2 min to accept | Matching worker: `GEOSEARCH` (Location index) → keep `available` (SQL/cache) → rank by ETA → Redis lock `NX` → offer via the driver's gateway | Driver: **offered** (Redis lock only) |
 | 3b | Still "Finding…" | Declines or ignores it | Lock expires (130 s) → matching worker offers the next driver | Ride: still **matching** |
-| 4 | "**Maria is coming**, Toyota Camry, 4 min" | Taps **Accept** → navigation to pickup | Ride Service: one transaction, `rides → accepted`, `drivers → busy` (conditional); outbox → `ride-events` → push to rider; trip tracker caches `driver → rider` | Ride: **accepted**; driver: **busy** (out of search) |
-| 5 | Watches the car move on the map | Drives to pickup; app keeps pinging | Location Service → Kafka → trip tracker → rider's gateway (every 4 s) | — |
+| 4 | "**Maria is coming**, Toyota Camry, 4 min" | Taps **Accept** → navigation to pickup | Ride Service: one transaction, `rides → accepted`, `drivers → busy` (conditional); outbox → `ride-events` → push to rider; `SET active:{driverId} riderId` (Redis) | Ride: **accepted**; driver: **busy** (out of search) |
+| 5 | Watches the car move on the map | Drives to pickup; app keeps pinging | Location Service: `GET active:{driverId}` → set → push to the rider's gateway node (every 4 s) | — |
 | 6 | "Your ride has started" | Picks up rider, taps **Start** | Ride Service: `rides → started` → push to rider | Ride: **started** |
 | 7 | Watches the trip on the map | Drives; app keeps pinging | Same as step 5 | — |
-| 8 | "You've arrived" | Taps **End** | Ride Service: `rides → ended`, `drivers → available`; outbox → `ride-ended`; trip tracker drops `driver → rider` | Ride: **ended**; driver: **available** again |
+| 8 | "You've arrived" | Taps **End** | Ride Service: `rides → ended`, `drivers → available`; outbox → `ride-ended`; `DEL active:{driverId}` | Ride: **ended**; driver: **available** again |
 | 9 | "**Paid $18**" receipt | Sees the fare | Payment Service: `payments(rideId UNIQUE)` → card processor (idempotency key) → `paid` → push to rider | Ride: **paid** |
 
 **State machines:**
@@ -151,7 +151,7 @@ sequenceDiagram
   RS-->>R: push "assigned" (driver, car, ETA)
   loop every 4 s until end
     D->>L: location ping
-    L-->>R: driverLocation (Kafka → trip tracker → rider's gateway)
+    L-->>R: driverLocation (active:{driverId} set → rider's gateway)
   end
   D->>RS: POST /rides/{id}/start
   RS-->>R: push "started"
@@ -168,12 +168,12 @@ sequenceDiagram
 | Fare estimate | Read | Pricing → Maps API | Pricing → **surge multiplier** (Redis) × route (Maps API, cached per route) |
 | Request + find drivers | Write | Ride Service → Rides (SQL) + outbox → Kafka → matching worker (greedy: nearest first) → `GEOSEARCH` | Same up to Kafka → **batch matcher per zone every 2 s** (N riders × M drivers, minimise total ETA); the rest wait for the next round |
 | Assignment | Write | Driver lock (NX) → offer → accept = one conditional UPDATE on rides + drivers | Same (the conditional update makes simultaneous accepts safe) |
-| Live driver location | Write (push) | Location Service → geo index + Kafka → trip tracker → rider's gateway | Same |
+| Live driver location | Write (push) | Location Service → geo index + `GET active:{driverId}` → push to the rider's gateway (no Kafka) | Same, plus one sample per driver every 30 s → Kafka → surge counter |
 | Payment | Write | ride-ended → Payment Service → Payments (unique rideId) → card processor (idempotency key) | Same; charges the surged price that was locked at the estimate |
-| Surge | Write | — (multiplier 1.0) | Kafka (requests + locations) → demand / supply counter per zone → Redis |
+| Surge | Write | — (multiplier 1.0) | Kafka (requests + 30 s driver samples) → demand / supply counter per zone → Redis |
 | Ride status | Read | Ride Service → SQL replica | Same, plus queue position while waiting |
 
-**What the read path never touches:** Kafka, the matching worker, the trip tracker or the Payment Service. **What never touches SQL:** location pings.
+**What the read path never touches:** Kafka, the matching worker or the Payment Service. **What never touches SQL:** location pings.
 
 ## Deep dives to drive (learner leads, interviewer pushes)
 1. **Geo indexing:** Redis `GEO` (geohash under the hood) vs. **H3 hexagon cells** vs. a quadtree. Why "my cell + neighbour cells" beats a radius query at scale; why hexagons (all neighbours are the same distance).
