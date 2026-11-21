@@ -5,6 +5,10 @@
 ## Exit deliverable
 - [ ] A support agent whose tools call the capstone Saga, plus an eval suite that blocks regressions in CI.
 
+## Added topics (learner, 2026-11-21: AI-powered distributed systems)
+- [ ] **A2A (agent-to-agent protocol):** agents discovering and calling each other across services and vendors; A2A vs. MCP (agent ↔ tools); handoffs, delegation, trust between agents.
+- [ ] **Durable agent execution:** checkpoint every step and resume after crashes / redeploys (Temporal, Durable Functions, LangGraph checkpointers); human-approval waits of hours or days; Sagas with compensation for multi-step agent actions.
+
 ## Before starting
 - [ ] Reviewed the Apple Notes listed in the plan's 🟧 box for this module
 - [ ] Applied any corrections from plan section 10 to those notes

@@ -659,6 +659,8 @@ td.bad{color:var(--fixfg)}
 <li>Debug agent loops and wrong tool calls by inspecting traces.</li>
 <li>Learn Model Context Protocol (MCP) basics: exposing tools and resources to agents.</li>
 <li><span class="new">New</span> Multi-agent patterns (orchestrator-worker, evaluator-optimizer), agent memory, and context engineering.</li>
+<li><span class="new">New</span> Agent-to-agent communication: the A2A protocol (agents discovering and calling each other across services and vendors) vs. MCP (agent to tools and data); handoffs, task delegation, and trust between agents.</li>
+<li><span class="new">New</span> Durable agent execution: long-running agents that survive crashes and redeploys (checkpoint every step and resume: Temporal, Durable Functions, LangGraph checkpointers), human-approval waits that last hours or days, and Sagas with compensation for multi-step agent actions.</li>
 <li>Build eval sets from production failures and edge cases; separate offline and online evals.</li>
 <li>Implement graders: exact and state-based checks, rubric-based LLM-as-judge, and human review.</li>
 <li>Calibrate LLM-as-judge against human labels; check for position, verbosity, and self-preference bias.</li>
