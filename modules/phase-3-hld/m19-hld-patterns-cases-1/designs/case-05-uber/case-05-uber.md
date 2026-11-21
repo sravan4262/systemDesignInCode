@@ -1,6 +1,6 @@
 # Case 5: Uber (ride hailing)
 
-Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. Normal ride** and **B. Hot spot** (a stadium lets out: 50k requests in 15 minutes, 2k drivers nearby, surge pricing). Both rows have the same requirements. Two clients (driver app, rider app) → one tall gateway (APIM for REST + a WebSocket gateway) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-05-uber.excalidraw](case-05-uber.excalidraw), in two rows: **A. Normal ride** and **B. Hot spot** (a stadium lets out: 50k requests in 15 minutes, 2k drivers nearby, surge pricing). Both rows have the same requirements. Two clients (driver app, rider app) → **APIM** (tall box: auth, rate limit) → REST goes straight to the services; WebSocket traffic goes to the **WebSocket gateway** right after APIM (a pipe: it holds the sockets and stores no locations). Then a **write path** (top) and a **read path** (bottom). Row **C. Ride journey** shows the same flow in time order: rider app, services and driver app as three lanes. To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Uber. Riders request a ride, and a nearby driver picks them up."
@@ -69,7 +69,7 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 **Services and stores:**
 | Component | What it does | Store / technology |
 |---|---|---|
-| WebSocket gateway | Driver connections (and riders during a ride); registers `user → gateway node` in presence | As in Case 2 |
+| WebSocket gateway (behind APIM) | A pipe: holds driver sockets (and riders' during a ride); pings pass in, pushes pass out, nothing is stored. Registers `user → gateway node` in presence on connect | As in Case 2; ~200k sockets per node |
 | Location Service | Takes pings; overwrites the latest position; publishes the ping | **Redis geo index** (`GEOADD drivers:{city}`, status alongside); **Kafka** `driver-locations` |
 | Trip tracker | For a driver on a ride, pushes each ping to the rider's gateway | Kafka consumer; `driver → rideId, riderId` cached in Redis |
 | Pricing Service | Estimate = route (Maps API) × rates × surge; stores the locked price | Maps API; surge multipliers in **Redis** |
