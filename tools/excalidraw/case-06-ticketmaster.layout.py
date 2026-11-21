@@ -77,13 +77,68 @@ Arrow('Ar10', 'Aos', 'Aor2', "", R)
 
 Note('Asum', Col(5) + 40, r1, "WRITE touches: hold = Booking Service -> Redis (all seats or none,\nexpire in 10 min: TEMPORARY); cancel / TTL frees them. Checkout = Orders (pending) ->\nPayment: 1 authorize -> 2 Tickets INSERT, UNIQUE (event, seat)\n(PERMANENT, the real guard against double-selling) -> 3 capture,\nor void if a seat was taken -> 4 release the hold (DEL only if it's\nstill mine) -> outbox -> Kafka -> email. Declined card: keep the hold.\n\nREAD touches: Search index, Event cache -> Events (SQL),\nseat map = held (Redis) + sold (SQL), orders from the replica.", 16, NOTE)
 
-# =================== ROW B: HOT ON-SALE - step by step, left to right ===================
-# Three lanes: user app (top), services (middle), data (bottom). Columns = steps in time order.
+# =================== ROW B: HOT ON-SALE (same layout as A; numbers = order) ===================
 T = 1110
-Frame('fB', 0, T, 2420, 660)
-Note('Bt', 20, T + 12, "B. HOT ON-SALE, STEP BY STEP (1M fans at 10:00:00 for 50k seats) - left to right in time", 24, RED)
+Frame('fB', 0, T, 2420, 690)
+Note('Bt', 20, T + 12, "B. HOT ON-SALE (1M fans at 10:00:00 for 50k seats) - numbers show the order; the rest is as in row A", 24, RED)
+w1, w2, w3 = T + 90, T + 210, T + 330
+r1, r2 = T + 480, T + 590
+Note('Bwl', Col(2), T + 55, "WRITE PATH", 18, W)
+Note('Brl', Col(2), T + 445, "READ PATH", 18, R)
+
+Box('Bwp', Col(0), w1, BW, H, "Waiting page (CDN)\nstatic; no servers hit", EDGE)
+Box('Bu', Col(0), T + 300, BW, 80, "Users\n(1M at 10:00)", EDGE)
+Box('Bg', Col(1), w1, BW, r2 + H - w1, "APIM (edge)\n\njoin / poll: open\n\nseat map, holds,\ncheckout: need a valid\nACCESS TOKEN\n(missing -> 403)\n\nbot checks,\nrate limit per user", EDGE)
+Arrow('Ba0', 'Bu', 'Bwp', "10:00", R)
+Arrow('Ba1', 'Bu', 'Bg', "HTTPS", None, False, True)
+
+# write 1-2: join the queue, admit K every 10 s
+Box('Bwr', Col(2), w1, BW, H, "Waiting Room Service\n1 POST /queue (join)\n-> queueToken", SVC)
+Box('Bq', Col(3), w1, BW, H, "Queue (Redis)\nZADD queue:{event}\nscore = arrival time", DATA)
+Box('Bad', Col(4), w1, BW, H, "Admission controller\n2 every 10 s: next K\n(stops when sold out)", ASYNC)
+Box('Badm', Col(5), w1, BW, H, "Admitted (Redis)\nadmitted:{queueToken}\n-> signed access token", DATA)
+Arrow('Bw1', 'Bg', 'Bwr', '', W, False, True)
+Arrow('Bw2', 'Bwr', 'Bq', "ZADD", W)
+Arrow('Bw3', 'Bq', 'Bad', "ZPOPMIN K", W, True)
+Arrow('Bw4', 'Bad', 'Badm', "write", W, True)
+
+# write 5: hold with a per-user limit on a dedicated shard
+Box('Bhs', Col(2), w2, BW, H, "Booking Service\n5 POST /holds\n(token checked)", SVC)
+Box('Blim', Col(3), w2, BW, H, "Per-user limit (Redis)\nuser:{event}:{user}\n<= 4 seats", DATA)
+Box('Bhr', Col(4), w2, BW, H, "Seat holds (Redis)\ndedicated shard for\nthis event; Lua NX", DATA)
+Box('Brej', Col(5), w2, BW, H, "409: seats taken\n-> pick others", GREY)
+Arrow('Bw5', 'Bg', 'Bhs', '', W, False, True)
+Arrow('Bw6', 'Bhs', 'Blim', "a limit", W)
+Arrow('Bw7', 'Blim', 'Bhr', "b hold", W)
+Arrow('Bw8', 'Bhr', 'Brej', "taken", RED, True)
+
+# write 6: checkout is unchanged
+Box('Bsame', Col(2), w3, BW, H, "6 Checkout, payment,\nconfirmation:\nsame as row A", GREY)
+Arrow('Bw9', 'Bg', 'Bsame', '', W, False, True)
+
+# read 3-4: poll for the token, then the seat map snapshot
+Box('Bqs', Col(2), r1, BW, H, "Waiting Room Service\n3 GET /queue/{token}\npoll every 10 s", SVC)
+Box('Badm2', Col(3), r1, BW, H, "Admitted (Redis)\nyes -> return token", DATA)
+Box('Bq2', Col(4), r1, BW, H, "Queue (Redis)\nno -> ZRANK position", DATA)
+Box('Bsm', Col(2), r2, BW, H, "Event Service\n4 GET /seats (token)", SVC)
+Box('Bsnap', Col(3), r2, BW, H, "Seat map snapshot\n(CDN + Redis, 2 s)", DATA)
+Box('Bhr2', Col(4), r2, BW, H, "Holds (Redis) + sold\n(SQL): rebuilt from", DATA)
+Arrow('Br1', 'Bg', 'Bqs', '', R, False, True)
+Arrow('Br2', 'Bqs', 'Badm2', "a", R)
+Arrow('Br3', 'Badm2', 'Bq2', "b else", R)
+Arrow('Br4', 'Bg', 'Bsm', '', R, False, True)
+Arrow('Br5', 'Bsm', 'Bsnap', "", R)
+Arrow('Br6', 'Bsnap', 'Bhr2', "every 2 s", R, True)
+
+Note('Bnote', Col(5) + 40, r1 - 40, "ORDER: 1 join -> 2 admitted in a batch of K -> 3 poll returns\nthe access token -> 4 seat map -> 5 hold -> 6 checkout (row A).\n\nWHY A TOKEN: the queue decides who goes next; the signed token\nENFORCES it. APIM checks it on seat map, holds and checkout, so\nbots and refreshers can't skip the line: booking only ever sees\nthe K users let in. Row C shows the same flow step by step.", 16, NOTE)
+
+# =================== ROW C: HOT ON-SALE - step by step, left to right ===================
+# Three lanes: user app (top), services (middle), data (bottom). Columns = steps in time order.
+T = 1880
+Frame('fC', 0, T, 2420, 660)
+Note('Ct', 20, T + 12, "C. HOT ON-SALE, STEP BY STEP (1M fans at 10:00:00 for 50k seats) - left to right in time", 24, RED)
 yU, yS, yD = T + 90, T + 250, T + 420
-Note('BuL', 40, T + 58, "USER APP", 18, RED)
+Note('CuL', 40, T + 58, "USER APP", 18, RED)
 
 
 def X(i):
@@ -91,8 +146,8 @@ def X(i):
 
 
 CW = 220
-Note('BsL', X(3), T + 218, "SERVICES", 18, W)
-Note('BdL', X(2), T + 388, "DATA", 18, '#2b8a3e')
+Note('CsL', X(3), T + 218, "SERVICES", 18, W)
+Note('CdL', X(2), T + 388, "DATA", 18, '#2b8a3e')
 
 steps = [
     # (user text, service text, service colour, data text)
@@ -112,19 +167,19 @@ ulinks = [('down', "GET"), ('down', "POST"), ('up', "position"), None, ('down', 
 dlinks = ["", "ZADD", "", "ZPOPMIN K", "lookup", "read", "hold", "INSERT", ""]
 
 for i, (ut, st, sc, dt) in enumerate(steps):
-    Box(f'Bs{i}', X(i), yS, CW, 90, st, sc)
+    Box(f'Cs{i}', X(i), yS, CW, 90, st, sc)
     if ut:
-        Box(f'Bu{i}', X(i), yU, CW, H, ut, EDGE)
+        Box(f'Cu{i}', X(i), yU, CW, H, ut, EDGE)
     if dt:
-        Box(f'Bd{i}', X(i), yD, CW, H, dt, DATA)
-        Arrow(f'Bad{i}', f'Bs{i}', f'Bd{i}', dlinks[i], W)
+        Box(f'Cd{i}', X(i), yD, CW, H, dt, DATA)
+        Arrow(f'Cad{i}', f'Cs{i}', f'Cd{i}', dlinks[i], W)
     if ulinks[i]:
         d, lab = ulinks[i]
         if d == 'down':
-            Arrow(f'Bau{i}', f'Bu{i}', f'Bs{i}', lab, W)
+            Arrow(f'Cau{i}', f'Cu{i}', f'Cs{i}', lab, W)
         else:
-            Arrow(f'Bau{i}', f'Bs{i}', f'Bu{i}', lab, R)
+            Arrow(f'Cau{i}', f'Cs{i}', f'Cu{i}', lab, R)
     if i:
-        Arrow(f'Bn{i}', f'Bs{i-1}', f'Bs{i}', '', NOTE, True)
+        Arrow(f'Cn{i}', f'Cs{i-1}', f'Cs{i}', '', NOTE, True)
 
-Note('Bnote', 40, T + 530, "Only admitted users get a signed ACCESS TOKEN (eventId, userId, 15 min). APIM checks it on every seat-map, hold and checkout call:\nno token / expired / wrong event -> 403, rejected at the edge. So the booking path only ever sees the K users the admission controller let in.\nSearch, the event page and confirmation work as in row A.", 16, NOTE)
+Note('Cnote', 40, T + 530, "Only admitted users get a signed ACCESS TOKEN (eventId, userId, 15 min). APIM checks it on every seat-map, hold and checkout call:\nno token / expired / wrong event -> 403, rejected at the edge. So the booking path only ever sees the K users the admission controller let in.\nSearch, the event page and confirmation work as in row A.", 16, NOTE)

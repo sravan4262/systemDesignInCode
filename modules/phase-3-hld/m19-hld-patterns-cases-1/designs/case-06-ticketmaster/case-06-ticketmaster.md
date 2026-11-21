@@ -1,6 +1,6 @@
 # Case 6: Ticketmaster (event tickets)
 
-Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in two rows: **A. Regular event** (every path) and **B. Hot on-sale** (1M fans at 10:00:00 for 50k seats; only what differs from A). User → APIM (tall box) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
+Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in three rows: **A. Regular event** (every path), **B. Hot on-sale** (1M fans at 10:00:00 for 50k seats; same layout as A, only what differs, numbered 1–6 in order) and **C. Hot on-sale step by step** (user app / services / data lanes, left to right in time). User → APIM (tall box) → a **write path** (top) and a **read path** (bottom). To view or edit it, open it at excalidraw.com (File → Open) or with the VS Code Excalidraw extension.
 
 ## Prompt (what the interviewer says)
 > "Design Ticketmaster. Users can find events and buy tickets."
@@ -93,8 +93,8 @@ Diagram: [case-06-ticketmaster.excalidraw](case-06-ticketmaster.excalidraw), in 
 3. **Seat map:** sold seats (SQL) + held seats (Redis) → free / held / sold.
 4. **Confirmation:** `GET /orders/{id}` → SQL read replica (falls back to the primary right after checkout for read-your-writes).
 
-## Hot on-sale (row B): step by step
-Row B of the diagram is drawn as three lanes (user app, services, data), left to right in time:
+## Hot on-sale (rows B and C): step by step
+Row B shows the hot on-sale in the same write / read layout as row A, numbered 1 join → 2 admit → 3 poll (token) → 4 seat map → 5 hold → 6 checkout. Row C walks the same flow as three lanes (user app, services, data), left to right in time:
 
 | # | User sees / does | Service | Data |
 |---|---|---|---|
