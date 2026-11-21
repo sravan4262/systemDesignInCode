@@ -60,7 +60,7 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 | Channel workers | Call the provider; token bucket per provider; retry with backoff; dead-letter after N tries | APNs / FCM, Twilio, SendGrid / ACS; in-app → **Inbox (Cosmos, pk userId)** + WebSocket push if online |
 | Deliveries | Status per (notification, channel); duplicates stop here | **Cosmos**, `(notificationId, channel)` unique, TTL 90 days |
 | Callback Handler | Provider receipts: delivered, bounced, invalid push token (→ delete the device) | Updates Deliveries / devices |
-| Campaign Service (row B) | Splits the audience into userId **ranges**; task workers read their range of the segment and publish 1k-user batches on `notifications`; throttle; kill switch | Campaigns (SQL, status per range), segment source (warehouse or segment bitmap), progress in Redis |
+| Campaign Service (row B) | Splits the audience into userId **ranges**; task workers read their range of the segment and publish 1k-user batches on `notifications`; throttle; kill switch | Campaigns (SQL: kill switch, status per range), segment members from the **data warehouse**, progress in Redis |
 
 **Write path (transactional):**
 1. `POST /notifications` + `Idempotency-Key` → insert (key UNIQUE; a retry returns the same `notificationId`) + outbox → Kafka topic **`notifications`** → `202`.
@@ -78,21 +78,21 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 
 ## Broadcast campaign (row B): what changes, in order
 1. `POST /campaigns` → `202`; Campaigns row (segment, template, status).
-2. **Producer:** splits the userId space into **1,000 ranges** and publishes one tiny task per range (`{ campaignId, range }`). Nothing is exported: no 50M-row list, no files.
+2. **Producer:** asks the **data warehouse** for **1,000 range boundaries** with roughly equal numbers of segment members (one cheap aggregate query, no userIds returned), records each range as `pending` in Campaigns, and publishes one tiny task per range (`{ campaignId, range }`). Nothing is exported: no 50M-row list, no files.
 3. Kafka topic **`campaign-tasks`** (1,000 messages, a few KB in total).
-4. **Consumer group: task workers**, one range at a time: page through "segment members in my range" from the segment source (the data warehouse, or a segment **bitmap**), 1k ids per page. Each range's status is recorded, so a crash re-runs only that range.
+4. **Consumer group: task workers**, one range at a time: page through "segment members in my range" from the **data warehouse** (`WHERE userId >= @from AND userId < @to ORDER BY userId`, keyset pages of 1k). Each range's status is recorded, so a crash re-runs only that range.
 5. Each page → one **1k-user batch** on Kafka topic **`notifications`** (the same topic as row A).
 6. **Consumer group: router** (the same router as row A): per user, preferences (always the *current* ones), quiet hours, caps, and the **kill switch** (campaign cancelled → drop).
 7. **Campaign throttle:** a send-rate cap (~30k/s) plus the provider token buckets.
 8. **Consumer group: push / email workers** (the same channel workers as row A); Deliveries `(campaignId, userId)` UNIQUE, so a re-run range never sends twice.
 
-**Why ranges instead of exporting the segment:** sending starts in seconds (no waiting for a 50M-row export), the work is parallel (add task workers to go faster), nothing large is stored, and resume / cancel work per range. *Upgrade:* if segments are kept as compressed bitmaps of userIds (Roaring), 50M members is a few MB, and "in segment AND opted in" is a fast bitwise AND.
+**Why ranges instead of exporting the segment:** sending starts in seconds (no waiting for a 50M-row export), the work is parallel (add task workers to go faster), nothing large is stored, and resume / cancel work per range. **Why the warehouse:** segments ("US users who bought in the last 90 days") are defined there anyway, it's built for big scans, and it's a **separate copy** fed by CDC, so campaign reads never touch the live user databases. It may be minutes to hours behind; that's fine, because the router checks each user's **current** preferences at send time. *Alternative if the warehouse is too slow for this:* a segment job writes the members into a Redis bitmap (1 bit per userId, 12.5 MB per segment) and task workers read their slice of bits.
 - Transactional sends share the same topic and workers. The **campaign throttle** keeps the campaign from using all the capacity, but an OTP sent mid-campaign can still wait behind campaign batches already in the topic (seconds, not minutes, with the cap). Progress (sent, failed, skipped) is counted in Redis.
 
 ## Which components each path touches
 | Requirement | Path | Transactional (row A) | Campaign (row B) |
 |---|---|---|---|
-| Send | Write | API (key UNIQUE) + outbox → Kafka `notifications` → router → Kafka by channel → worker → provider | Campaign Service → producer (1,000 range tasks) → topic `campaign-tasks` → consumer group: task workers (page their range, 1k at a time) → topic `notifications` → consumer group: router → throttle → consumer group: channel workers |
+| Send | Write | API (key UNIQUE) + outbox → Kafka `notifications` → router → Kafka by channel → worker → provider | Campaign Service → producer (1,000 range tasks) → topic `campaign-tasks` → consumer group: task workers (page their range from the warehouse, 1k at a time) → topic `notifications` → consumer group: router → throttle → consumer group: channel workers |
 | Preferences + quiet hours | Write | Router, per notification | Router, per user in each batch |
 | No duplicates | Write | Idempotency key + Deliveries `(notification, channel)` UNIQUE | `(campaign, user)` UNIQUE |
 | Rate limits | Write | Per-user caps (Redis) + per-provider token buckets | + campaign send-rate cap |
