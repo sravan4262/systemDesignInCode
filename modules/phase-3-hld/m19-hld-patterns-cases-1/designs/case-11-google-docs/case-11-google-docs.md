@@ -74,7 +74,7 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 | Collaboration Service | The doc's **owner**: orders edits, transforms them (OT), appends, acks, broadcasts | In-memory doc state per active doc |
 | Op log | Every accepted op, in order | **Cosmos**, pk `docId`, `rev` ascending, `clientOpId` unique |
 | Snapshotter | Applies ops to the last snapshot every 500 ops / 1 min | Writes **snapshots to Blob** |
-| Presence | Who's in the doc, cursors | **Redis** with TTL (ephemeral) |
+| Connections + presence | Which user is connected on which **gateway node** (and their cursor), per doc; used by the owner to send updates | **Redis** hash `conns:{docId}` (connId → user, gateway node, cursor), expiry refreshed by heartbeats; the owner keeps a copy in memory |
 | Pub/sub (row C) | Fan a batch out to many gateway nodes | **Azure Web PubSub** or Redis pub/sub |
 
 ### Row A: edit lock
@@ -96,6 +96,13 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 
 **Open:** read the latest **snapshot** (Blob) + the ops after it from the op log → join the session at that rev.
 
+**Who is connected where (needed to send real-time updates):**
+- **Doc router:** `doc → owner collab node` (a lease the owner renews).
+- **Connections:** `conns:{doc}` → `{ connId: user, gateway node, cursor }`. The gateway node **registers** a connection on join and removes it on leave; the expiry is refreshed by the socket heartbeat, so a dead gateway's entries vanish on their own.
+- **Broadcast:** the owner groups the doc's connections **by gateway node** and sends **one message per node**; each gateway writes it to its local sockets.
+- **Failover:** a new owner reads `conns:{doc}` from Redis to know who to send to (and clients reconnect anyway).
+- Row C: viewers aren't tracked one by one; every gateway node holding viewers subscribes to the pub/sub channel `doc:{id}`.
+
 **Snapshots and history:** every 500 ops or 1 min, the snapshotter applies the ops to the last snapshot and writes a new one. Version history = a list of snapshot pointers; **restore** writes that old content as a **new** latest version (history is never rewritten).
 
 **Owner node fails:** its lease in the doc router expires → another node takes the doc, rebuilds it from snapshot + op log, and clients reconnect and resend unacked ops (deduped by `clientOpId`).
@@ -104,7 +111,7 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 1. **Cap live editors** at 100 (`INCR editors:{doc}`); everyone else joins as a **viewer**.
 2. The owner **batches** ops every 50 ms and writes the op log **once per batch** (group commit).
 3. It publishes each batch **once** to a pub/sub channel `doc:{id}` instead of sending to 1,000 sockets itself.
-4. **Every gateway node** subscribed to that channel pushes the batch to its own viewers, **throttled** (e.g. every 500 ms); viewers see no live cursors.
+4. **Every gateway node that holds viewers** subscribes to that channel (instead of the owner tracking 1,000 connections) and pushes the batch to its own viewers, **throttled** (e.g. every 500 ms); viewers see no live cursors. Explicit connections are kept only for the ≤ 100 editors.
 5. **Late joiners** load a **CDN-cached snapshot** (taken every 30 s for hot docs) plus a short tail of ops.
 
 ## Which components each path touches
@@ -113,7 +120,7 @@ Diagram: [case-11-google-docs.excalidraw](case-11-google-docs.excalidraw), in th
 | Start editing | Write | Lock in Redis (NX, lease, fencing token) | Doc router → owner node | + editor cap (≤ 100) |
 | Edit | Write | Save: Blob new object → SQL pointer (version + token check) | Owner: transform → rev → op log → ack + broadcast | + 50 ms batches, one op-log write per batch |
 | See others' changes | Read | Reload after a save | Pushed by the owner | Pub/sub → every gateway node → viewers (throttled) |
-| Presence | Read | "Priya is editing" from the lock | Presence (Redis) + cursors via the owner | Editors only; viewers get no cursors |
+| Presence / who gets updates | Read | "Priya is editing" from the lock | Connections (Redis): user → gateway node + cursor; owner sends 1 message per gateway node | Editors in Connections; viewers via gateway nodes subscribed to `doc:{id}`; no cursors for viewers |
 | Open | Read | SQL (ACL, version) → Blob | SQL (ACL) → snapshot → op-log tail | CDN snapshot → short tail |
 | Versions | Read / write | Versions (SQL) → Blob | Snapshot pointers; restore = new version | Same as B |
 | Sharing | Write | ACL (SQL) | Same | Same |

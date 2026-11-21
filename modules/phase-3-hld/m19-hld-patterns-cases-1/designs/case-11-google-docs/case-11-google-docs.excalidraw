@@ -4266,13 +4266,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "4 ack sender (rev) +\nbroadcast the op to\nthe other editors",
+      "text": "4 ack + broadcast:\n1 message per gateway\nnode -> its sockets",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bbc",
-      "originalText": "4 ack sender (rev) +\nbroadcast the op to\nthe other editors",
+      "originalText": "4 ack + broadcast:\n1 message per gateway\nnode -> its sockets",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4308,6 +4308,10 @@
         {
           "type": "arrow",
           "id": "Bw7"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw7b"
         }
       ],
       "updated": 1700000000000,
@@ -4340,13 +4344,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Presence (Redis)\nwho's here + cursors\n(ephemeral, TTL)",
+      "text": "Connections (Redis)\nconns:{doc}: user ->\ngateway node, cursor",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bpr",
-      "originalText": "Presence (Redis)\nwho's here + cursors\n(ephemeral, TTL)",
+      "originalText": "Connections (Redis)\nconns:{doc}: user ->\ngateway node, cursor",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4378,6 +4382,10 @@
         {
           "type": "text",
           "id": "Brt-t"
+        },
+        {
+          "type": "arrow",
+          "id": "Bw7b"
         },
         {
           "type": "arrow",
@@ -4414,13 +4422,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "Doc router (Redis)\ndoc -> owner node\n(lease, renewed)",
+      "text": "Doc router (Redis)\ndoc -> owner node;\njoin registers conn",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Brt",
-      "originalText": "Doc router (Redis)\ndoc -> owner node\n(lease, renewed)",
+      "originalText": "Doc router (Redis)\ndoc -> owner node;\njoin registers conn",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5008,9 +5016,9 @@
     {
       "id": "Bw7-t",
       "type": "text",
-      "x": 1147.0,
+      "x": 1123.0,
       "y": 1176.5,
-      "width": 56.0,
+      "width": 104.0,
       "height": 17.0,
       "angle": 0,
       "strokeColor": "#1971c2",
@@ -5031,13 +5039,107 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "cursors",
+      "text": "where to send",
       "fontSize": 14,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bw7",
-      "originalText": "cursors",
+      "originalText": "where to send",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
+      "id": "Bw7b",
+      "type": "arrow",
+      "x": 1114.5833333333333,
+      "y": 1330.0,
+      "width": 120.83333333333348,
+      "height": 50.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 2673,
+      "version": 1,
+      "versionNonce": 2680,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bw7b-t"
+        }
+      ],
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          120.83333333333348,
+          -50.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startBinding": {
+        "elementId": "Brt",
+        "focus": 0,
+        "gap": 4
+      },
+      "endBinding": {
+        "elementId": "Bpr",
+        "focus": 0,
+        "gap": 4
+      },
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false
+    },
+    {
+      "id": "Bw7b-t",
+      "type": "text",
+      "x": 1143.0,
+      "y": 1296.5,
+      "width": 64.0,
+      "height": 17.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2687,
+      "version": 1,
+      "versionNonce": 2694,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "register",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bw7b",
+      "originalText": "register",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5061,9 +5163,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2673,
+      "seed": 2701,
       "version": 1,
-      "versionNonce": 2680,
+      "versionNonce": 2708,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5117,9 +5219,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2687,
+      "seed": 2715,
       "version": 1,
-      "versionNonce": 2694,
+      "versionNonce": 2722,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5155,9 +5257,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2701,
+      "seed": 2729,
       "version": 1,
-      "versionNonce": 2708,
+      "versionNonce": 2736,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5195,9 +5297,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2715,
+      "seed": 2743,
       "version": 1,
-      "versionNonce": 2722,
+      "versionNonce": 2750,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5233,9 +5335,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2729,
+      "seed": 2757,
       "version": 1,
-      "versionNonce": 2736,
+      "versionNonce": 2764,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5269,9 +5371,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2743,
+      "seed": 2771,
       "version": 1,
-      "versionNonce": 2750,
+      "versionNonce": 2778,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5307,9 +5409,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2757,
+      "seed": 2785,
       "version": 1,
-      "versionNonce": 2764,
+      "versionNonce": 2792,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -5360,9 +5462,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2771,
+      "seed": 2799,
       "version": 1,
-      "versionNonce": 2778,
+      "versionNonce": 2806,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5416,9 +5518,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2785,
+      "seed": 2813,
       "version": 1,
-      "versionNonce": 2792,
+      "versionNonce": 2820,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5454,9 +5556,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2799,
+      "seed": 2827,
       "version": 1,
-      "versionNonce": 2806,
+      "versionNonce": 2834,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5494,9 +5596,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2813,
+      "seed": 2841,
       "version": 1,
-      "versionNonce": 2820,
+      "versionNonce": 2848,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5532,9 +5634,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2827,
+      "seed": 2855,
       "version": 1,
-      "versionNonce": 2834,
+      "versionNonce": 2862,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5572,9 +5674,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2841,
+      "seed": 2869,
       "version": 1,
-      "versionNonce": 2848,
+      "versionNonce": 2876,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5610,9 +5712,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2855,
+      "seed": 2883,
       "version": 1,
-      "versionNonce": 2862,
+      "versionNonce": 2890,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5650,9 +5752,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2869,
+      "seed": 2897,
       "version": 1,
-      "versionNonce": 2876,
+      "versionNonce": 2904,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5688,9 +5790,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2883,
+      "seed": 2911,
       "version": 1,
-      "versionNonce": 2890,
+      "versionNonce": 2918,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5724,9 +5826,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2897,
+      "seed": 2925,
       "version": 1,
-      "versionNonce": 2904,
+      "versionNonce": 2932,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5762,9 +5864,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2911,
+      "seed": 2939,
       "version": 1,
-      "versionNonce": 2918,
+      "versionNonce": 2946,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5802,9 +5904,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2925,
+      "seed": 2953,
       "version": 1,
-      "versionNonce": 2932,
+      "versionNonce": 2960,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5840,9 +5942,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2939,
+      "seed": 2967,
       "version": 1,
-      "versionNonce": 2946,
+      "versionNonce": 2974,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5876,9 +5978,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2953,
+      "seed": 2981,
       "version": 1,
-      "versionNonce": 2960,
+      "versionNonce": 2988,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5914,9 +6016,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2967,
+      "seed": 2995,
       "version": 1,
-      "versionNonce": 2974,
+      "versionNonce": 3002,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -5967,9 +6069,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2981,
+      "seed": 3009,
       "version": 1,
-      "versionNonce": 2988,
+      "versionNonce": 3016,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6023,9 +6125,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2995,
+      "seed": 3023,
       "version": 1,
-      "versionNonce": 3002,
+      "versionNonce": 3030,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6061,9 +6163,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3009,
+      "seed": 3037,
       "version": 1,
-      "versionNonce": 3016,
+      "versionNonce": 3044,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6117,9 +6219,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3023,
+      "seed": 3051,
       "version": 1,
-      "versionNonce": 3030,
+      "versionNonce": 3058,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6155,9 +6257,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3037,
+      "seed": 3065,
       "version": 1,
-      "versionNonce": 3044,
+      "versionNonce": 3072,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6211,9 +6313,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3051,
+      "seed": 3079,
       "version": 1,
-      "versionNonce": 3058,
+      "versionNonce": 3086,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6249,9 +6351,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3065,
+      "seed": 3093,
       "version": 1,
-      "versionNonce": 3072,
+      "versionNonce": 3100,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6302,9 +6404,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3079,
+      "seed": 3107,
       "version": 1,
-      "versionNonce": 3086,
+      "versionNonce": 3114,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6341,7 +6443,7 @@
       "x": 1530.0,
       "y": 1220.0,
       "width": 635.0,
-      "height": 160.0,
+      "height": 180.0,
       "angle": 0,
       "strokeColor": "#495057",
       "backgroundColor": "transparent",
@@ -6353,21 +6455,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3093,
+      "seed": 3121,
       "version": 1,
-      "versionNonce": 3100,
+      "versionNonce": 3128,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "EVERY EDIT: client sends { baseRev, op } -> the doc's owner node\n1 transforms it against ops the client hasn't seen (OT)\n2 gives it the next rev, 3 appends it to the op log,\n4 acks the sender and broadcasts to the other editors.\nOne node orders a doc's edits, so everyone converges.\n\nOPEN: latest snapshot + the ops after it. Owner node dies ->\nits lease expires, another node rebuilds from snapshot + log.",
+      "text": "EVERY EDIT: client sends { baseRev, op } -> the doc's owner node\n1 transforms it against ops the client hasn't seen (OT)\n2 gives it the next rev, 3 appends it to the op log,\n4 acks the sender and broadcasts: conns:{doc} says which\ngateway node each editor is on -> 1 message per node.\nOne node orders a doc's edits, so everyone converges.\n\nOPEN: latest snapshot + the ops after it. Owner node dies ->\nits lease expires, another node rebuilds from snapshot + log.",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "EVERY EDIT: client sends { baseRev, op } -> the doc's owner node\n1 transforms it against ops the client hasn't seen (OT)\n2 gives it the next rev, 3 appends it to the op log,\n4 acks the sender and broadcasts to the other editors.\nOne node orders a doc's edits, so everyone converges.\n\nOPEN: latest snapshot + the ops after it. Owner node dies ->\nits lease expires, another node rebuilds from snapshot + log.",
+      "originalText": "EVERY EDIT: client sends { baseRev, op } -> the doc's owner node\n1 transforms it against ops the client hasn't seen (OT)\n2 gives it the next rev, 3 appends it to the op log,\n4 acks the sender and broadcasts: conns:{doc} says which\ngateway node each editor is on -> 1 message per node.\nOne node orders a doc's edits, so everyone converges.\n\nOPEN: latest snapshot + the ops after it. Owner node dies ->\nits lease expires, another node rebuilds from snapshot + log.",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -6391,9 +6493,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3107,
+      "seed": 3135,
       "version": 1,
-      "versionNonce": 3114,
+      "versionNonce": 3142,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6418,9 +6520,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3121,
+      "seed": 3149,
       "version": 1,
-      "versionNonce": 3128,
+      "versionNonce": 3156,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6454,9 +6556,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3135,
+      "seed": 3163,
       "version": 1,
-      "versionNonce": 3142,
+      "versionNonce": 3170,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6490,9 +6592,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3149,
+      "seed": 3177,
       "version": 1,
-      "versionNonce": 3156,
+      "versionNonce": 3184,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6528,9 +6630,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3163,
+      "seed": 3191,
       "version": 1,
-      "versionNonce": 3170,
+      "versionNonce": 3198,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6564,9 +6666,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3177,
+      "seed": 3205,
       "version": 1,
-      "versionNonce": 3184,
+      "versionNonce": 3212,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6602,9 +6704,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3191,
+      "seed": 3219,
       "version": 1,
-      "versionNonce": 3198,
+      "versionNonce": 3226,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6654,9 +6756,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3205,
+      "seed": 3233,
       "version": 1,
-      "versionNonce": 3212,
+      "versionNonce": 3240,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6692,9 +6794,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3219,
+      "seed": 3247,
       "version": 1,
-      "versionNonce": 3226,
+      "versionNonce": 3254,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6732,9 +6834,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3233,
+      "seed": 3261,
       "version": 1,
-      "versionNonce": 3240,
+      "versionNonce": 3268,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6770,9 +6872,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3247,
+      "seed": 3275,
       "version": 1,
-      "versionNonce": 3254,
+      "versionNonce": 3282,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6826,9 +6928,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3261,
+      "seed": 3289,
       "version": 1,
-      "versionNonce": 3268,
+      "versionNonce": 3296,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6864,9 +6966,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3275,
+      "seed": 3303,
       "version": 1,
-      "versionNonce": 3282,
+      "versionNonce": 3310,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6917,9 +7019,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3289,
+      "seed": 3317,
       "version": 1,
-      "versionNonce": 3296,
+      "versionNonce": 3324,
       "isDeleted": false,
       "boundElements": [
         {
@@ -6957,9 +7059,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3303,
+      "seed": 3331,
       "version": 1,
-      "versionNonce": 3310,
+      "versionNonce": 3338,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6995,9 +7097,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3317,
+      "seed": 3345,
       "version": 1,
-      "versionNonce": 3324,
+      "versionNonce": 3352,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7031,9 +7133,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3331,
+      "seed": 3359,
       "version": 1,
-      "versionNonce": 3338,
+      "versionNonce": 3366,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7069,9 +7171,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3345,
+      "seed": 3373,
       "version": 1,
-      "versionNonce": 3352,
+      "versionNonce": 3380,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -7122,9 +7224,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3359,
+      "seed": 3387,
       "version": 1,
-      "versionNonce": 3366,
+      "versionNonce": 3394,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7178,9 +7280,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3373,
+      "seed": 3401,
       "version": 1,
-      "versionNonce": 3380,
+      "versionNonce": 3408,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7216,9 +7318,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3387,
+      "seed": 3415,
       "version": 1,
-      "versionNonce": 3394,
+      "versionNonce": 3422,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7260,9 +7362,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3401,
+      "seed": 3429,
       "version": 1,
-      "versionNonce": 3408,
+      "versionNonce": 3436,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7298,9 +7400,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3415,
+      "seed": 3443,
       "version": 1,
-      "versionNonce": 3422,
+      "versionNonce": 3450,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7334,9 +7436,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3429,
+      "seed": 3457,
       "version": 1,
-      "versionNonce": 3436,
+      "versionNonce": 3464,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7372,9 +7474,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3443,
+      "seed": 3471,
       "version": 1,
-      "versionNonce": 3450,
+      "versionNonce": 3478,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7412,9 +7514,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3457,
+      "seed": 3485,
       "version": 1,
-      "versionNonce": 3464,
+      "versionNonce": 3492,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7450,9 +7552,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3471,
+      "seed": 3499,
       "version": 1,
-      "versionNonce": 3478,
+      "versionNonce": 3506,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7490,9 +7592,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3485,
+      "seed": 3513,
       "version": 1,
-      "versionNonce": 3492,
+      "versionNonce": 3520,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7528,9 +7630,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3499,
+      "seed": 3527,
       "version": 1,
-      "versionNonce": 3506,
+      "versionNonce": 3534,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7564,21 +7666,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3513,
+      "seed": 3541,
       "version": 1,
-      "versionNonce": 3520,
+      "versionNonce": 3548,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "4 every gateway node\npushes to its viewers\n(throttled, 500 ms)",
+      "text": "4 gateway nodes with\nviewers subscribe;\npush (throttled 500 ms)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Cfn",
-      "originalText": "4 every gateway node\npushes to its viewers\n(throttled, 500 ms)",
+      "originalText": "4 gateway nodes with\nviewers subscribe;\npush (throttled 500 ms)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -7602,9 +7704,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3527,
+      "seed": 3555,
       "version": 1,
-      "versionNonce": 3534,
+      "versionNonce": 3562,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7658,9 +7760,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3541,
+      "seed": 3569,
       "version": 1,
-      "versionNonce": 3548,
+      "versionNonce": 3576,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7696,9 +7798,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3555,
+      "seed": 3583,
       "version": 1,
-      "versionNonce": 3562,
+      "versionNonce": 3590,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7752,9 +7854,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3569,
+      "seed": 3597,
       "version": 1,
-      "versionNonce": 3576,
+      "versionNonce": 3604,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7790,9 +7892,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3583,
+      "seed": 3611,
       "version": 1,
-      "versionNonce": 3590,
+      "versionNonce": 3618,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -7843,9 +7945,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3597,
+      "seed": 3625,
       "version": 1,
-      "versionNonce": 3604,
+      "versionNonce": 3632,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -7896,9 +7998,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3611,
+      "seed": 3639,
       "version": 1,
-      "versionNonce": 3618,
+      "versionNonce": 3646,
       "isDeleted": false,
       "boundElements": [
         {
@@ -7952,9 +8054,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3625,
+      "seed": 3653,
       "version": 1,
-      "versionNonce": 3632,
+      "versionNonce": 3660,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -7990,9 +8092,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3639,
+      "seed": 3667,
       "version": 1,
-      "versionNonce": 3646,
+      "versionNonce": 3674,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8026,9 +8128,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3653,
+      "seed": 3681,
       "version": 1,
-      "versionNonce": 3660,
+      "versionNonce": 3688,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8064,9 +8166,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3667,
+      "seed": 3695,
       "version": 1,
-      "versionNonce": 3674,
+      "versionNonce": 3702,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -8117,9 +8219,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3681,
+      "seed": 3709,
       "version": 1,
-      "versionNonce": 3688,
+      "versionNonce": 3716,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8157,9 +8259,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3695,
+      "seed": 3723,
       "version": 1,
-      "versionNonce": 3702,
+      "versionNonce": 3730,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8195,9 +8297,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3709,
+      "seed": 3737,
       "version": 1,
-      "versionNonce": 3716,
+      "versionNonce": 3744,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8235,9 +8337,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3723,
+      "seed": 3751,
       "version": 1,
-      "versionNonce": 3730,
+      "versionNonce": 3758,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8273,9 +8375,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 3737,
+      "seed": 3765,
       "version": 1,
-      "versionNonce": 3744,
+      "versionNonce": 3772,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8309,9 +8411,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3751,
+      "seed": 3779,
       "version": 1,
-      "versionNonce": 3758,
+      "versionNonce": 3786,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8347,9 +8449,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3765,
+      "seed": 3793,
       "version": 1,
-      "versionNonce": 3772,
+      "versionNonce": 3800,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -8400,9 +8502,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3779,
+      "seed": 3807,
       "version": 1,
-      "versionNonce": 3786,
+      "versionNonce": 3814,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8456,9 +8558,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3793,
+      "seed": 3821,
       "version": 1,
-      "versionNonce": 3800,
+      "versionNonce": 3828,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8494,9 +8596,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3807,
+      "seed": 3835,
       "version": 1,
-      "versionNonce": 3814,
+      "versionNonce": 3842,
       "isDeleted": false,
       "boundElements": [
         {
@@ -8550,9 +8652,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3821,
+      "seed": 3849,
       "version": 1,
-      "versionNonce": 3828,
+      "versionNonce": 3856,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -8586,9 +8688,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3835,
+      "seed": 3863,
       "version": 1,
-      "versionNonce": 3842,
+      "versionNonce": 3870,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
