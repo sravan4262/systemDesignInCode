@@ -22,7 +22,7 @@ Arrow('Aa2', 'Ar', 'Ag', "HTTPS", None, False, True)
 
 # write: driver locations -> geo index (find drivers) + rider push (live location)
 Box('Als', Col(2), w1, BW, H, "Location Service\nWS: location ping", SVC)
-Box('Ageo', Col(3), w1, BW, H, "Driver geo index (Redis)\nGEOADD drivers:{city}\nlatest only, TTL 30 s", DATA)
+Box('Ageo', Col(3), w1, BW, H, "Driver geo index (Redis)\nGEOADD drivers:{city}\nstale (>30 s) swept out", DATA)
 Box('Akl', Col(3), w2, BW, H, "Kafka topic:\ndriver-locations", ASYNC)
 Box('Att', Col(4), w2, BW, H, "Trip tracker\nis this driver on a ride?", ASYNC)
 Box('Apush', Col(5), w2, BW, H, "Push to rider's gateway\n(presence lookup)", EDGE)

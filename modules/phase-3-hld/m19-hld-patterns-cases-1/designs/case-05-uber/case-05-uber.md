@@ -78,7 +78,7 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 | Surge (row B) | Requests vs. available drivers per H3 cell every 30 s → multiplier | Kafka consumer → Redis |
 
 **Write path:**
-1. **Locations:** driver → WebSocket gateway → Location Service → `GEOADD` (latest only; TTL 30 s, so a vanished driver drops out of search) and → Kafka `driver-locations`.
+1. **Locations:** driver → WebSocket gateway → Location Service → `GEOADD drivers:{city}` (latest only) and `ZADD drivers:{city}:seen now driverId`. Members of a geo set **can't have their own TTL**, so a sweeper runs every few seconds: drivers not seen for 30 s are removed (`ZRANGEBYSCORE` on `:seen` → `ZREM` from both), so a vanished driver drops out of search and → Kafka `driver-locations`.
 2. **Request:** rider → `POST /rides` → Ride Service inserts `rides(status = matching, price = locked estimate)` + outbox → Kafka `ride-requested` → `202`.
 3. **Match:** the matching worker runs `GEOSEARCH` (2 km, 10 nearest available), ranks by ETA, takes the best and **locks** it: `SET driver:{id}:offer rideId NX EX 130`. If the lock fails, another ride is offering to that driver, so try the next. Then it pushes the offer.
 4. **Accept (the contested write):** one SQL transaction on the city shard:
@@ -115,7 +115,7 @@ There's no "pay" endpoint: the charge is triggered by `end`, server-side, with t
 4. **Card declined at the end:** the ride already happened. Options: authorize (hold) the price at request time, capture at the end; or charge at the end and chase failures. Trade-off: holds tie up the rider's money.
 5. **Greedy vs. batch matching:** greedy gives each rider the nearest driver *now*; a 2 s batch finds a better total. Why only in dense cells?
 6. **Location write load:** 250k writes/s. Shard Redis by city; drop out-of-order pings (`ts` older than stored); ping every 8 s while idle.
-7. **Driver disconnects:** mid-offer, the lock TTL frees them and the location TTL removes them from search. Mid-ride, the ride continues; the rider's map freezes until pings resume.
+7. **Driver disconnects:** mid-offer, the lock TTL frees them and the stale-driver sweep removes them from search. Mid-ride, the ride continues; the rider's map freezes until pings resume.
 
 8. **The 2-minute accept window:** three drivers ignore the offer → the rider waits 6 minutes. Fixes: offer to the top 2–3 drivers at once (the conditional UPDATE lets only the first accept win; the others get `409`), shorten the window, or tell the rider "still finding a driver" with a cancel option.
 
