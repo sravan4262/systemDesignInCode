@@ -80,17 +80,17 @@ Diagram: [case-08-notifications.excalidraw](case-08-notifications.excalidraw), i
 ## Broadcast campaign (row B): what changes, in order
 1. `POST /campaigns` → `202`; Campaigns row (segment, template, status).
 2. **Segment export:** 50M userIds from the data warehouse → files in Blob.
-3. **Fan-out job:** one Kafka message per **1k-user batch** (50k messages, not 50M API calls).
-4. Batches go on **`notify-low`** only.
-5. **Router (low-priority pool):** per user, preferences, quiet hours, caps, and the **kill switch** (campaign cancelled → drop the batch).
+3. **Producer (fan-out job):** publishes one Kafka message per **1k-user batch** (50k messages, not 50M API calls).
+4. Kafka topic **`notify-low`** only.
+5. **Consumer group: low-priority router:** per user, preferences, quiet hours, caps, and the **kill switch** (campaign cancelled → drop the batch).
 6. **Campaign throttle:** a send-rate cap (~30k/s) plus the provider token buckets, so the campaign can't use the whole provider quota.
-7. **Own worker pools** (never shared with OTPs); Deliveries `(campaignId, userId)` UNIQUE, so a re-run batch never sends twice.
+7. **Consumer group: push / email workers**, its own pool (never shared with OTPs); Deliveries `(campaignId, userId)` UNIQUE, so a re-run batch never sends twice.
 - Transactional sends keep flowing on `notify-high` / `notify-normal` as in row A. Progress (sent, failed, skipped) is counted in Redis.
 
 ## Which components each path touches
 | Requirement | Path | Transactional (row A) | Campaign (row B) |
 |---|---|---|---|
-| Send | Write | API (key UNIQUE) + outbox → Kafka by priority → router → Kafka by channel → worker → provider | Campaign Service → segment export → fan-out job (1k batches) → `notify-low` → low router → throttle → own workers |
+| Send | Write | API (key UNIQUE) + outbox → Kafka by priority → router → Kafka by channel → worker → provider | Campaign Service → segment export → producer (1k batches) → topic `notify-low` → consumer group: low router → throttle → consumer group: own workers |
 | Preferences + quiet hours | Write | Router, per notification | Router, per user in each batch |
 | No duplicates | Write | Idempotency key + Deliveries `(notification, channel)` UNIQUE | `(campaign, user)` UNIQUE |
 | Rate limits | Write | Per-user caps (Redis) + per-provider token buckets | + campaign send-rate cap |

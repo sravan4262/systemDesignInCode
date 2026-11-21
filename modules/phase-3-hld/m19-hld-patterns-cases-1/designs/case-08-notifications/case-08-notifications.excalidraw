@@ -4573,13 +4573,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "3 Fan-out job\none message per\n1k-user batch",
+      "text": "3 Producer (fan-out)\none message per\n1k-user batch",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bfo",
-      "originalText": "3 Fan-out job\none message per\n1k-user batch",
+      "originalText": "3 Producer (fan-out)\none message per\n1k-user batch",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -4629,9 +4629,9 @@
       "id": "Bk-t",
       "type": "text",
       "x": 1785.0,
-      "y": 1235.0,
+      "y": 1225.0,
       "width": 230.0,
-      "height": 40.0,
+      "height": 60.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -4651,13 +4651,13 @@
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "4 Kafka: notify-low\n50k batch messages",
+      "text": "4 Kafka topic:\nnotify-low\n(50k batch messages)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bk",
-      "originalText": "4 Kafka: notify-low\n50k batch messages",
+      "originalText": "4 Kafka topic:\nnotify-low\n(50k batch messages)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5020,7 +5020,12 @@
       "version": 1,
       "versionNonce": 2666,
       "isDeleted": false,
-      "boundElements": [],
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Bw5-t"
+        }
+      ],
       "updated": 1700000000000,
       "link": null,
       "locked": false,
@@ -5050,6 +5055,42 @@
       "elbowed": false
     },
     {
+      "id": "Bw5-t",
+      "type": "text",
+      "x": 1727.0,
+      "y": 1246.5,
+      "width": 56.0,
+      "height": 17.0,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "seed": 2673,
+      "version": 1,
+      "versionNonce": 2680,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1700000000000,
+      "link": null,
+      "locked": false,
+      "text": "produce",
+      "fontSize": 14,
+      "fontFamily": 1,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "Bw5",
+      "originalText": "produce",
+      "lineHeight": 1.25,
+      "autoResize": true
+    },
+    {
       "id": "Brt",
       "type": "rectangle",
       "x": 1780.0,
@@ -5069,9 +5110,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2673,
+      "seed": 2687,
       "version": 1,
-      "versionNonce": 2680,
+      "versionNonce": 2694,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5109,21 +5150,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2687,
+      "seed": 2701,
       "version": 1,
-      "versionNonce": 2694,
+      "versionNonce": 2708,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "5 Router (low pool)\nprefs, quiet hours,\ncap, kill switch?",
+      "text": "5 Consumer group:\nlow-priority router\nprefs, caps, kill switch",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Brt",
-      "originalText": "5 Router (low pool)\nprefs, quiet hours,\ncap, kill switch?",
+      "originalText": "5 Consumer group:\nlow-priority router\nprefs, caps, kill switch",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5147,9 +5188,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2701,
+      "seed": 2715,
       "version": 1,
-      "versionNonce": 2708,
+      "versionNonce": 2722,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5187,9 +5228,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2715,
+      "seed": 2729,
       "version": 1,
-      "versionNonce": 2722,
+      "versionNonce": 2736,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5225,9 +5266,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2729,
+      "seed": 2743,
       "version": 1,
-      "versionNonce": 2736,
+      "versionNonce": 2750,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5265,21 +5306,21 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2743,
+      "seed": 2757,
       "version": 1,
-      "versionNonce": 2750,
+      "versionNonce": 2764,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
       "link": null,
       "locked": false,
-      "text": "7 Push / email workers\n(own pool, never\nshared with OTPs)",
+      "text": "7 Consumer group:\npush / email workers\n(own pool, not OTPs)",
       "fontSize": 16,
       "fontFamily": 1,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Bwk",
-      "originalText": "7 Push / email workers\n(own pool, never\nshared with OTPs)",
+      "originalText": "7 Consumer group:\npush / email workers\n(own pool, not OTPs)",
       "lineHeight": 1.25,
       "autoResize": true
     },
@@ -5303,9 +5344,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2757,
+      "seed": 2771,
       "version": 1,
-      "versionNonce": 2764,
+      "versionNonce": 2778,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5339,9 +5380,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2771,
+      "seed": 2785,
       "version": 1,
-      "versionNonce": 2778,
+      "versionNonce": 2792,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5377,9 +5418,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2785,
+      "seed": 2799,
       "version": 1,
-      "versionNonce": 2792,
+      "versionNonce": 2806,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5433,9 +5474,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2799,
+      "seed": 2813,
       "version": 1,
-      "versionNonce": 2806,
+      "versionNonce": 2820,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5471,9 +5512,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2813,
+      "seed": 2827,
       "version": 1,
-      "versionNonce": 2820,
+      "versionNonce": 2834,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5527,9 +5568,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2827,
+      "seed": 2841,
       "version": 1,
-      "versionNonce": 2834,
+      "versionNonce": 2848,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5565,9 +5606,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2841,
+      "seed": 2855,
       "version": 1,
-      "versionNonce": 2848,
+      "versionNonce": 2862,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5621,9 +5662,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2855,
+      "seed": 2869,
       "version": 1,
-      "versionNonce": 2862,
+      "versionNonce": 2876,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5659,9 +5700,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2869,
+      "seed": 2883,
       "version": 1,
-      "versionNonce": 2876,
+      "versionNonce": 2890,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5715,9 +5756,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2883,
+      "seed": 2897,
       "version": 1,
-      "versionNonce": 2890,
+      "versionNonce": 2904,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5753,9 +5794,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2897,
+      "seed": 2911,
       "version": 1,
-      "versionNonce": 2904,
+      "versionNonce": 2918,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5789,9 +5830,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2911,
+      "seed": 2925,
       "version": 1,
-      "versionNonce": 2918,
+      "versionNonce": 2932,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5827,9 +5868,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2925,
+      "seed": 2939,
       "version": 1,
-      "versionNonce": 2932,
+      "versionNonce": 2946,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -5880,9 +5921,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2939,
+      "seed": 2953,
       "version": 1,
-      "versionNonce": 2946,
+      "versionNonce": 2960,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5920,9 +5961,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2953,
+      "seed": 2967,
       "version": 1,
-      "versionNonce": 2960,
+      "versionNonce": 2974,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -5958,9 +5999,9 @@
       "roundness": {
         "type": 3
       },
-      "seed": 2967,
+      "seed": 2981,
       "version": 1,
-      "versionNonce": 2974,
+      "versionNonce": 2988,
       "isDeleted": false,
       "boundElements": [
         {
@@ -5994,9 +6035,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 2981,
+      "seed": 2995,
       "version": 1,
-      "versionNonce": 2988,
+      "versionNonce": 3002,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
@@ -6032,9 +6073,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 2995,
+      "seed": 3009,
       "version": 1,
-      "versionNonce": 3002,
+      "versionNonce": 3016,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6085,9 +6126,9 @@
       "roundness": {
         "type": 2
       },
-      "seed": 3009,
+      "seed": 3023,
       "version": 1,
-      "versionNonce": 3016,
+      "versionNonce": 3030,
       "isDeleted": false,
       "boundElements": [],
       "updated": 1700000000000,
@@ -6136,9 +6177,9 @@
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 3023,
+      "seed": 3037,
       "version": 1,
-      "versionNonce": 3030,
+      "versionNonce": 3044,
       "isDeleted": false,
       "boundElements": null,
       "updated": 1700000000000,
