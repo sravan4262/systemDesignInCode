@@ -5,7 +5,7 @@
 
 ## Now
 - **Current module:** M19 HLD cases (CP2 retry round still pending)
-- **Next step:** Case 6 Ticketmaster: doc + diagram ready in `designs/case-06-ticketmaster/` (learner's requirements: search, view, select + hold, pay, confirmation; row B = waiting room). Case 5 Uber done (learner's minimal requirements; row B = hot-spot batch matching; row C = ride journey). Then the 12-case list below.
+- **Next step:** Case 7 Payments: doc + diagram ready in `designs/case-07-payments/` (learner's requirements: charge, never double charge, refund, daily reconciliation; no ledger; row B = flash sale queue + rate limiter). Case 6 Ticketmaster done (row B = waiting room, row C = step lanes). Then the 12-case list below.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
