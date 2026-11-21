@@ -97,6 +97,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Background jobs, JSON for code, answers that must be checked before anyone sees them, very short answers.
 - **Quick-check answers:** It improves the experience, not the total time. Tab closed → pass the request's `CancellationToken` so the model call is cancelled: stop paying for tokens nobody reads. Invoice JSON for code → don't stream; the code needs the full, valid JSON.
 
+#### Versioning prompt + model + schema together
+- **In plain words:** Prompt, model, output schema and settings (temperature) all change the output, so they're one bundle with one version number. Change any part → new version, tested before it goes live.
+- **Problem it solves:** Someone edits the prompt and the provider updates the model in the same week; accuracy drops 98% → 85%, and nobody knows which change caused it or what to roll back to.
+- **Analogy:** A versioned recipe card: ingredients (model), steps (prompt), plating (schema). Taste-test before serving; go back to the old card if customers complain.
+- **Diagram:** `invoice-extract v3 = {prompt v3, gpt-4.1-mini-2025-04-14, Invoice v2, temp 0}` → edit → v4 → evals on 200 saved examples → 5% → 100%, or don't ship. Log the version on every call → roll back in one change.
+- **Variations / alternatives:** Prompts in git (start here, reviewed in PRs) vs. a config store / prompt registry (no deploy needed, A/B tests, but easy to change without evals). Dated model snapshots. Schema changes like API versioning: adding a field is safe; renaming/removing needs a new version.
+- **When not to use it:** Prototypes; a couple of prompts (a git file is enough). Don't pin snapshots forever: they get retired, so plan the upgrade with evals.
+- **Quick-check answers:** Before Monday I need: versioned bundles, **the version logged on every call** (prompt or provider?), and **evals** (catch the drop before shipping, measure it after). A dated snapshot never changes; a plain name can be moved to a newer snapshot by the provider. Renaming `amount` → `totalAmount` breaks code reading `amount` (silently $0). Roll out with expand/contract: new bundle v5, code reads both, evals → canary → 100%, then drop the old field.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
