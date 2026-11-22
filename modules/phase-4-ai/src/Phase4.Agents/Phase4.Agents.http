@@ -39,3 +39,18 @@ Content-Type: application/json
 ### { "summary": "The app closes when the customer presses Pay, so they can't complete a purchase.",
 ###   "classification": { "category": "Technical", "urgency": "High", "reason": "the customer can't buy anything" },
 ###   "queue": "engineering-oncall" }
+
+### 6. Multi-agent: one message, three workers in parallel
+POST {{host}}/multi-agent/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "c6", "message": "My headphones (order 124) arrived broken, refund please. Also where is my shoes order 123? And how long do I have to return shoes?" }
+
+### Expected:
+### plan:    Refunds "refund order 124, damaged" | Orders "status of order 123" | Policy "return window for shoes"
+### workers: Refunds → GetOrder(124), RefundOrder(124, 40, Damaged) → "refunded 40 on order 124"   (Answered)
+###          Orders  → GetOrder(123) → "Order 123 (running shoes) was delivered."                     (Answered)
+###          Policy  → GetReturnPolicy(shoes) → "Shoes can be returned within 30 days of delivery."   (Answered)
+### answer:  "Sorry about the headphones: I've refunded $40 for order 124. Your shoes (order 123) were delivered,
+###           and you can return shoes within 30 days of delivery."
