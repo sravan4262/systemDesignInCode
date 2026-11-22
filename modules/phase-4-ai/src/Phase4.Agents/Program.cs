@@ -23,6 +23,7 @@ builder.Services.AddSingleton<Orchestrator>();
 builder.Services.AddSingleton<MemoryStore>();
 builder.Services.AddSingleton<ConversationStore>();
 builder.Services.AddSingleton<ContextBuilder>();
+builder.Services.AddSingleton<CaseStore>();
 
 var app = builder.Build();
 app.MapControllers();

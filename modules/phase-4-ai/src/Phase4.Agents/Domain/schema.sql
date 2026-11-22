@@ -62,3 +62,15 @@ CREATE TABLE user_memories (
     updated_at datetime2     NOT NULL DEFAULT sysutcdatetime(),
     PRIMARY KEY (user_id, kind)
 );
+
+-- ---------- Shared state (step 4, part 2) ----------
+
+-- One support case that several agents update at the same time. version = optimistic concurrency:
+-- every UPDATE says "WHERE version = what I read" and bumps it; 0 rows changed = someone wrote first.
+CREATE TABLE support_cases (
+    id      varchar(50)   NOT NULL PRIMARY KEY,
+    user_id varchar(50)   NOT NULL,
+    status  varchar(30)   NOT NULL DEFAULT 'Open',      -- Open | WaitingForApproval | Resolved
+    notes   nvarchar(max) NOT NULL DEFAULT '',          -- one line per agent action
+    version int           NOT NULL DEFAULT 1
+);

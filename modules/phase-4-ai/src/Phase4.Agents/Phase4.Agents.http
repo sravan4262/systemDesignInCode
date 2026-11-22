@@ -77,3 +77,17 @@ Content-Type: application/json
 { "conversationId": "m2", "message": "My headphones (124) broke, can someone get in touch about it?" }
 
 ### Expected: the answer offers email follow-up, not a call.
+
+### 10. Shared state: 3 workers in parallel, all writing notes to case "case-1"
+POST {{host}}/case-agent/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "caseId": "case-1", "message": "My headphones (order 124) arrived broken, refund please. Also where is my order 123? And how long can I return shoes?" }
+
+### Expected "case": { "status": "Open", "version": 4, "notes":
+###   "[Policy] Told the customer shoes can be returned within 30 days.\n
+###    [Orders] Order 123 is delivered.\n
+###    [Refunds] Refunded $40 on order 124 (damaged).\n" }
+### All 3 notes are there, in whatever order the workers finished. Without the version check, two workers reading
+### version 1 at the same time would each write "notes + my line", and one line would be lost.
