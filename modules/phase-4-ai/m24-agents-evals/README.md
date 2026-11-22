@@ -58,6 +58,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it (agent):** Known repeatable processes, strict latency/cost limits, irreversible actions without approval, nothing to evaluate it with.
 - **Quick-check answers:** Nightly sales summary email → workflow (fixed steps). "Help with anything about their account" → **agent** (steps not fixed; say the word that matches the reason). `OrderChatController` is a small agent; risks: wrong tool / wrong id, loops, unintended actions, variable cost; already limited by `MaximumIterationsPerRequest = 5`, owner checks in every tool, cancel = request + user confirmation, no `UpdateOrder` tool + "say you can't".
 
+#### Tool design (least privilege, stop conditions, budgets, human approval)
+- **In plain words:** Only the tools the agent needs, each as narrow as possible, with limits on steps/cost/time and a human sign-off before anything risky.
+- **Problem it solves:** One `RunSql(query)` tool lets a prompt injection run `DELETE`; a looping bug costs $40 in one chat. The tools define the worst thing an agent can do.
+- **Analogy:** A new employee's badge: keys to the needed rooms only, a card limit, "call me if stuck", manager sign-off over $500.
+- **Diagram:** **A least privilege:** narrow typed tools + enums (`RequestRefund(orderId, amount ≤ total, reason enum)`), permission checks with the user's identity inside each tool, read and write tools separate, idempotency keys on writes. **B stop conditions:** text answer (normal), max steps, same tool + args 3×, timeout → "couldn't finish, connecting you with a person". **C budgets:** per task (steps, tokens, seconds) and per tenant per day. **D approval tiers:** read → auto; reversible write → auto + log; irreversible / money / external → human approves. The model proposes, code policy decides.
+- **Variations / alternatives:** Policy in code (`amount > 100 → approval`), auto-approve small amounts, dry-run tools, scoped DB credentials.
+- **When not to use it:** Approval on every read, budgets tighter than real traces (set from p99 + margin), too many narrow tools.
+- **Quick-check answers:** `RunSql` can do anything and an injection could make it destructive → small typed tools with enums. Same `SearchOrders("123")` 5× → the repeat stop condition; user sees "couldn't finish" + handoff; log the trace. Refunds: small amounts auto, big ones need approval; the rule lives in code, not the prompt.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
