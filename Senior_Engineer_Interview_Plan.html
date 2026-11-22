@@ -660,15 +660,11 @@ td.bad{color:var(--fixfg)}
 <li>Debug agent loops and wrong tool calls by inspecting traces.</li>
 <li>Learn Model Context Protocol (MCP) basics: exposing tools and resources to agents.</li>
 <li><span class="new">New</span> Multi-agent patterns (orchestrator-worker, evaluator-optimizer), agent memory, and context engineering.</li>
-<li>Removed 2026-11-22 (learner): the A2A agent-to-agent protocol.</li>
-<li><span class="new">New</span> Durable agent execution: long-running agents that survive crashes and redeploys (checkpoint every step and resume: Temporal, Durable Functions, LangGraph checkpointers), human-approval waits that last hours or days, and Sagas with compensation for multi-step agent actions.</li>
-<li>Build eval sets from production failures and edge cases; separate offline and online evals.</li>
-<li>Implement graders: exact and state-based checks, rubric-based LLM-as-judge, and human review.</li>
-<li>Calibrate LLM-as-judge against human labels; check for position, verbosity, and self-preference bias.</li>
-<li>Run repeated trials to handle non-determinism and add eval regression gates to CI.</li>
+<li>One eval example in code: a small golden set for the support agent, state-based checks (which tools ran) + answer checks, repeated trials, and a pass/fail gate.</li>
+<li>Trimmed 2026-11-22 (learner): A2A, durable agent execution, and eval-design details (eval-set strategy, offline vs. online, LLM-as-judge calibration and bias, CI gates in depth).</li>
 </ul>
 <div class="callout notes"><span class="label">From your notes</span><p>Azure → <em>Semantic Kernel</em> (plugins, memory, planners → modern equivalents are function calling and agent frameworks).</p></div>
-<div class="callout"><span class="label">Exit Deliverable</span><p>A support agent whose tools call into the capstone Saga, plus an eval suite that blocks regressions in CI.</p></div>
+<div class="callout"><span class="label">Exit Deliverable</span><p>A small support agent plus one code eval example (golden cases, tool + answer checks, repeated trials, a pass/fail gate).</p></div>
 </article>
 
 <article class="week" id="m25"><h3><span class="wk">M25</span>Production AI, LLM security, and AI system design<label class="done"><input type="checkbox" data-k="m25">Done</label></h3>

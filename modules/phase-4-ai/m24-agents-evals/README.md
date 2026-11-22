@@ -3,15 +3,12 @@
 > Plan: `Senior_Engineer_Interview_Plan.html#m24` · Status lives in `/PROGRESS.md`
 
 ## Exit deliverable
-- [ ] A support agent whose tools call the capstone Saga, plus an eval suite that blocks regressions in CI.
-
-## Added topics (learner, 2026-11-21: AI-powered distributed systems)
-- [ ] **Durable agent execution:** checkpoint every step and resume after crashes / redeploys (Temporal, Durable Functions, LangGraph checkpointers); human-approval waits of hours or days; Sagas with compensation for multi-step agent actions.
+- [ ] A small support agent plus one code eval example (golden cases, tool + answer checks, repeated trials, a pass/fail gate).
 
 ## Learning plan
 
 ### Big picture (read first)
-An **agent** is an LLM in a loop: it decides which tool to call next, sees the result, and repeats until done. That flexibility is powerful and risky (loops, wrong actions, cost). Sessions 1–6 cover when to use agents and how to make them safe, debuggable and durable; sessions 7–9 cover **evals**: how you prove an agent or RAG system works and keeps working. The exit deliverable goes into the end-of-Phase-4 code-only build (backlog in the M25 README).
+An **agent** is an LLM in a loop: it decides which tool to call next, sees the result, and repeats until done. Sessions 1–5 cover when to use agents and how to make them safe and debuggable, multi-agent patterns, memory and context engineering. Session 6 is **one eval example in code**: how you check an agent still works after a change.
 
 ### Sessions (in order)
 1. **Agent vs. workflow:** when an agent is justified.
@@ -19,18 +16,14 @@ An **agent** is an LLM in a loop: it decides which tool to call next, sees the r
 3. **Debugging agents:** loops and wrong tool calls, from traces.
 4. **MCP basics:** exposing tools and resources to agents.
 5. **Multi-agent patterns:** orchestrator–worker, evaluator–optimizer; memory; context engineering.
-6. **Durable agent execution:** checkpoint/resume, long approval waits, Sagas with compensation.
-7. **Eval sets:** from production failures and edge cases; offline vs. online.
-8. **Graders:** exact/state checks, LLM-as-judge with a rubric, human review; judge calibration and bias.
-9. **Running evals:** repeated trials, CI regression gates.
+6. **One eval example (code):** golden cases, tool + answer checks, repeated trials, a pass/fail gate.
 
-_A2A (agent-to-agent protocol) removed by the learner on 2026-11-22._
+_Trimmed by the learner on 2026-11-22: A2A, durable agent execution, and eval-design details._
 
 ### Done when you can answer
 - When would you build a fixed workflow instead of an agent?
 - How do you stop an agent from looping forever or doing something dangerous?
 - MCP vs. plain function calling: when do you build an MCP server?
-- An agent crashes halfway through a 5-step task that already charged a card. What happens?
 - How do you know a prompt change didn't make the agent worse?
 
 ## Before starting
