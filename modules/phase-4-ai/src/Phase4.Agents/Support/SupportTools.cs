@@ -11,8 +11,6 @@ public enum RefundReason { Damaged, NotDelivered, WrongItem }   // an enum: the 
 // Least privilege: 2 reads + 1 write. No "update order", no "run SQL", no "send email".
 public class SupportTools(OrderStore store, string userId, string conversationId)
 {
-    public const decimal AutoRefundLimit = 50m;   // approval tier: up to this the agent may refund alone
-
     public IList<AITool> All =>
     [
         AIFunctionFactory.Create(GetOrder),
@@ -30,7 +28,7 @@ public class SupportTools(OrderStore store, string userId, string conversationId
     private async Task<string> ListMyOrders(CancellationToken ct) =>
         string.Join("\n", (await store.ListForAsync(userId, ct)).Select(o => $"{o.Id}: {o.Item}, total {o.Total}, status {o.Status}"));
 
-    [Description("Refund part or all of a delivered order. Up to 50 USD is refunded now; more needs a human's approval.")]
+    [Description("Refund part or all of a delivered order. Up to 50 USD in total per order is refunded now; more needs a human's approval.")]
     private async Task<string> RefundOrder(
         [Description("The order id")] string orderId,
         [Description("Amount in USD")] decimal amount,
@@ -44,7 +42,8 @@ public class SupportTools(OrderStore store, string userId, string conversationId
 
         var key = $"{conversationId}:{orderId}:{amount}";   // idempotency key: a repeated call in this chat refunds once
 
-        if (amount <= AutoRefundLimit) return await store.RefundAsync(key, orderId, amount, ct);   // tier 1: automatic
+        if (RefundPolicy.Decide(o, amount) == RefundTier.Auto)   // Fix 1: counts what was already refunded on this order
+            return await store.RefundAsync(key, orderId, amount, ct);   // tier 1: automatic
 
         var approvalId = await store.RequestApprovalAsync(key, orderId, amount, reason.ToString(), userId, ct);   // tier 2: a human
         return $"waiting for approval {approvalId}: tell the customer a team member will review it within 24 hours";
