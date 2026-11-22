@@ -69,6 +69,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it (self-host):** Spiky/low traffic, no GPU-ops team, need for the best (API-only) models.
 - **Quick-check answers:** Startup with 50k spiky messages/day → API. Bank with "no data leaves" → first check Azure OpenAI in their tenant over private endpoints, or managed open models in their account; self-host only if it must be on-premises / full control.
 
+#### LLM as a classifier (moderation)
+- **In plain words:** The model puts each item in a category with a score; a threshold decides: above it act automatically, a middle band goes to a human, below it allow.
+- **Problem it solves:** 1M posts/day is too many for people, and a classifier is never perfect: blocking good posts (false positives) vs. missing bad ones (false negatives). The threshold makes that trade-off on purpose.
+- **Analogy:** Airport security: very sensitive = many false alarms; relaxed = things slip through; a person checks the bags the scanner is unsure about.
+- **Diagram:** score ≥ 0.90 block · 0.50–0.90 human review · < 0.50 allow. **Precision** = of what I blocked, how much was bad. **Recall** = of all bad items, how many I caught. Higher threshold → precision up, recall down. Fraud/child safety → favour recall; blocking a seller → favour precision. Humans decide the middle band, audit a sample, and produce labels.
+- **Variations / alternatives:** Moderation APIs (OpenAI moderation, Azure AI Content Safety) as a first layer; an LLM with my policy + structured output `{category, score, reason}`; a fine-tuned small classifier at scale; rules first (banned words, known spam URLs).
+- **When not to use it:** Exact rules (regex); high-stakes actions with no human review or appeal; thresholds picked by gut instead of a labelled sample; trusting raw LLM scores as calibrated.
+- **Quick-check answers:** 150 bad of 200 blocked = 75% precision (raise the threshold to improve it). Catch more fraud → lower the threshold; precision drops (more good posts blocked) and the review queue grows. A middle band avoids both mistakes on unsure cases, and the human decisions become labelled data.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
