@@ -1,7 +1,9 @@
 using Microsoft.Extensions.AI;
 using Npgsql;
+using OpenAI.Chat;
 using OpenAI.Embeddings;
 using Phase4.Rag.Ingestion;
+using Phase4.Rag.Query;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -18,6 +20,17 @@ builder.Services.AddSingleton(NpgsqlDataSource.Create(builder.Configuration.GetC
 builder.Services.AddSingleton(new Chunker());
 builder.Services.AddSingleton<ChunkStore>();
 builder.Services.AddHostedService<EmbeddingBackfill>();   // does nothing unless Embeddings:DualWrite = true
+
+// Query path
+builder.Services.AddChatClient(new ChatClient(builder.Configuration["OpenAI:Model"] ?? "gpt-4.1-mini", apiKey).AsIChatClient());
+builder.Services.AddHttpClient<Reranker>(http =>
+{
+    http.BaseAddress = new Uri("https://api.cohere.com/");
+    http.DefaultRequestHeaders.Authorization = new("Bearer", builder.Configuration["Cohere:ApiKey"]);   // user-secrets
+});
+builder.Services.AddSingleton<HybridSearch>();
+builder.Services.AddSingleton<PromptBuilder>();
+builder.Services.AddSingleton<CitationChecker>();
 
 var app = builder.Build();
 app.MapControllers();

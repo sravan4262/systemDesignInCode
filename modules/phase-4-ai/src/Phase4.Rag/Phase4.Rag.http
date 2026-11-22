@@ -28,3 +28,22 @@ X-Tenant-Id: acme
 
 ### Model upgrade: set Embeddings:DualWrite = true (new uploads get v1 + v2, backfill fills old rows),
 ### wait for "v2 backfill done" in the log, then set Embeddings:QueryVersion = "v2". Roll back = set it to "v1".
+
+### 5. Ask: hybrid search → rerank → LLM → checked citations
+POST {{host}}/ask
+X-Tenant-Id: acme
+X-User-Groups: all-staff
+Content-Type: application/json
+
+{ "question": "How long do I have to return headphones?" }
+
+### Expected: { "answer": "Electronics can be returned within 15 days if unopened [1].",
+###             "citations": [{ "number": 1, "title": "Refund policy", "heading": "Electronics", "url": "https://intranet/policies/refunds" }] }
+
+### 6. A question no document covers → "I don't know", with no LLM call (reranker scores below MinScore)
+POST {{host}}/ask
+X-Tenant-Id: acme
+X-User-Groups: all-staff
+Content-Type: application/json
+
+{ "question": "What is the parking policy?" }
