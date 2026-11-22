@@ -87,6 +87,17 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+### Final questions: graded 2026-11-22 (6.1 / 10)
+| # | Topic | Score | Gap to fix |
+|---|---|---|---|
+| 1 | TTFT vs. total time | 5 | TTFT = prompt length (prefill); caching is a FIX, not the cause. Total = TTFT + output tokens one at a time (the big part); fixes: shorter answer, smaller model, streaming |
+| 2 | Prompt caching order | 9 | Order: system prompt → RAG sources → name + question |
+| 3 | Fine-tune for the catalogue | 6.5 | Say why RAG: weekly price changes (re-index vs. retrain), citations. Fine-tune example: consistent format at scale / narrow high-volume task |
+| 4 | 5M steady calls/day | 7 | Check cost (API vs. 24/7 GPUs + team), quality on evals, and the managed / private-cloud middle option |
+| 5 | Scams getting through | 3 | That's low RECALL → LOWER the threshold; precision drops and the review queue grows. Recall = did I catch them all; precision = was everything I caught really bad |
+
+**Retry later:** Q1 and Q5. **Exit memo:** not written yet (learner chose to close the module on the questions).
+
 ### Problem
 _What real engineering problem does this concept solve?_
 
