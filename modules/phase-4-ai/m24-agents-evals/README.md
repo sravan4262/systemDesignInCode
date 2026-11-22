@@ -49,6 +49,15 @@ An **agent** is an LLM in a loop: it decides which tool to call next, sees the r
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### Agent vs. workflow
+- **In plain words:** Workflow = steps I write in code in a fixed order (an LLM may do some steps; my code decides what's next). Agent = a loop where the LLM decides what to do next (which tool, how often, when it's done).
+- **Problem it solves:** Using an agent for a known process (summarise → classify → route a ticket) adds skipped/looped steps, variable cost and hard debugging for no gain.
+- **Analogy:** Workflow = a recipe (maybe using a food processor); agent = a chef told "make dinner with what's in the fridge".
+- **Diagram:** single LLM call → workflow (chain, router, parallel, capped evaluator loop) → agent (LLM picks tools in a loop). Decide: can I write the steps? → workflow; one decision point → workflow + LLM router; path depends on what the model finds → agent; costly actions → agent only with tight tools + approval, or a workflow.
+- **Variations / alternatives:** Chain, router, parallel calls, evaluator loop with a cap. Default: start with a workflow; agent only where the path can't be known.
+- **When not to use it (agent):** Known repeatable processes, strict latency/cost limits, irreversible actions without approval, nothing to evaluate it with.
+- **Quick-check answers:** Nightly sales summary email → workflow (fixed steps). "Help with anything about their account" → **agent** (steps not fixed; say the word that matches the reason). `OrderChatController` is a small agent; risks: wrong tool / wrong id, loops, unintended actions, variable cost; already limited by `MaximumIterationsPerRequest = 5`, owner checks in every tool, cancel = request + user confirmation, no `UpdateOrder` tool + "say you can't".
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
