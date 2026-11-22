@@ -67,6 +67,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Approval on every read, budgets tighter than real traces (set from p99 + margin), too many narrow tools.
 - **Quick-check answers:** `RunSql` can do anything and an injection could make it destructive → small typed tools with enums. Same `SearchOrders("123")` 5× → the repeat stop condition; user sees "couldn't finish" + handoff; log the trace. Refunds: small amounts auto, big ones need approval; the rule lives in code, not the prompt.
 
+#### Debugging agents from traces
+- **In plain words:** Record every step (model input/output, tool + arguments + result, decision); replay the trace and find the FIRST bad step.
+- **Problem it solves:** "It cancelled 123 instead of 124": the final answer doesn't say why (vague tool description? unclear result? injection?).
+- **Analogy:** A flight recorder.
+- **Diagram:** trace = steps with tool calls/results + tokens, cost, time, prompt version, model, outcome. Example: `GetRecentOrders()` returned orders without saying which is newest → the model guessed `RequestCancelOrder("123")` → fix the tool output (newest first / `latest: true`), not the prompt. Failure → cause → fix: repeats ← unclear result/error; wrong tool ← vague/overlapping descriptions; wrong args ← ambiguous data; contradicts a result ← buried in long context; odd action after reading a doc ← injection; long runs ← no budget.
+- **Variations / alternatives:** OpenTelemetry spans per model/tool call → App Insights, or Langfuse / Azure AI Foundry tracing / LangSmith; replay saved traces against a fix; every failure → an eval case.
+- **When not to use it:** Don't keep full prompts forever (retention, PII redaction, access); sample successes at high volume; most agent bugs are tool design, so don't jump to "change the model".
+- **Quick-check answers:** Wrong order → find the first bad step; fix the tool result (it didn't mark the newest). `GetOrderStatus("999")` ×4 returning "error" → the vague error makes it retry; fix = a clear error ("order not found: no order 999 for this user"), repeat stop condition as the backup. Failures → eval cases so a regression can't come back silently on the next prompt/model change.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
