@@ -26,7 +26,7 @@ An LLM app is a normal distributed service with one slow, costly, non-determinis
 4. **RAG ingestion.** Chunking, embedding models, vector index basics (exact vs. ANN, HNSW high level, recall vs. latency), metadata filters.
 5. **Retrieval.** Hybrid search (BM25 + vectors), Reciprocal Rank Fusion, reranking, context assembly, citations.
 6. **Debugging and freshness.** Stage-by-stage RAG debugging; re-indexing, deletions, embedding-model upgrades.
-7. 🧪 **Build: deferred to the end of Phase 4** (learner, 2026-11-22). It is built once, as the M25 practical build; the scope and backlog live in [the M25 README](../m25-production-ai/README.md#practical-build-end-of-phase-4).
+7. 🧪 **Build: deferred to the end of Phase 4** (learner, 2026-11-22). It becomes **build 1 of 3** (the RAG service); the scope lives in [the M25 README](../m25-production-ai/README.md#phase-4-builds-three-code-only-projects-built-in-order-learner-2026-11-22).
 
 ### Done when you can answer
 - Why does a longer prompt cost more and respond slower, and what is temperature for?

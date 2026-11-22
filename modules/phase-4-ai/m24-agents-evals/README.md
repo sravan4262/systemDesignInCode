@@ -16,7 +16,7 @@ An **agent** is an LLM in a loop: it decides which tool to call next, sees the r
 3. **Debugging agents:** loops and wrong tool calls, from traces.
 4. **MCP basics:** exposing tools and resources to agents.
 5. **Multi-agent patterns:** orchestrator–worker, evaluator–optimizer; memory; context engineering.
-6. **One eval example (code):** golden cases, tool + answer checks, repeated trials, a pass/fail gate.
+6. **One eval example (code):** golden cases, tool + answer checks, repeated trials, a pass/fail gate. Built inside **build 2 of 3** (`M24.Agents`; scope in the M25 README).
 
 _Trimmed by the learner on 2026-11-22: A2A, durable agent execution, and eval-design details._
 

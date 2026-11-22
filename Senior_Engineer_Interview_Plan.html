@@ -671,7 +671,8 @@ td.bad{color:var(--fixfg)}
 <ul>
 <li>Analyze quality, latency, and cost trade-offs; measure cost per resolved task and tail latency.</li>
 <li>Implement prompt and semantic caching, context trimming, and routing to smaller models.</li>
-<li><span class="new">New</span> LLM gateway design: provider routing, quotas per tenant, key management, fallbacks, and usage metering. Add guardrails (input/output validation, PII, moderation).</li>
+<li>Add guardrails (input/output validation, PII, moderation). (LLM gateway design removed 2026-11-22 by the learner.)</li>
+<li>Learned through code (learner, 2026-11-22): M25 is covered while building three code-only projects (RAG, agents, production AI/security); see the M25 README.</li>
 <li>Add LLM observability: per-call traces, token usage, cost, latency, and quality metrics.</li>
 <li>Run an incident drill: a model or prompt change regresses quality → roll back, reproduce, add a regression eval, and canary the fix.</li>
 <li>Defend against direct and indirect prompt injection, cross-tenant retrieval leaks, data exfiltration through tools, and tool misuse.</li>
