@@ -4,7 +4,7 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M22 LLM apps & RAG (started 2026-11-21; sessions 1–5 done)
+- **Current module:** M22 LLM apps & RAG (started 2026-11-21; sessions 1–6 done; next: Session 7 code-only build)
 - **Next step:** Phase 3 cases done for now (1–8, 11; Case 12 moved to M25). **Deferred by the learner (2026-11-21), to look into later:** M19 S8–S9 worked examples (rolling out one change to 100k users; one schema change across 10k tenant DBs), **CP3**, and cases **9 Top-K** and **10 Dropbox**. Next: learner picks what to start (Phase 4 M22 is the natural next module).
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).

@@ -197,6 +197,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** No dashboards before a golden set; don't keep sensitive traces forever (retention, access control); a one-off bug only needs the trace.
 - **Quick-check answers:** HR-only chunk hidden from a Sales user → filter stage, working correctly (unless the doc was tagged wrong at ingestion: then it's a data bug). Chunk in the prompt but wrong answer → stage 6: check finish reason, conflicting sources, instructions, then change the prompt or model. Prompt tweaks come last because the prompt is the last stage.
 
+#### Freshness (edits, deletions, permission changes, embedding upgrades)
+- **In plain words:** Keep the index in step with the real documents: re-chunk and re-embed only what changed, remove deleted content fast, update permissions in place, and rebuild alongside for a new embedding model.
+- **Problem it solves:** The index is a copy, and copies go stale: "25 days [1]" after HR changed it to 28 (wrong but cited); deleted or revoked documents still searchable; a new embedding model on one side → junk with no error.
+- **Analogy:** A library catalogue: new edition replaces the card, a withdrawn book's card is pulled at once, a new catalogue system is built next to the old one before switching.
+- **Diagram:** detect changes (source events + a scheduled scan; content hash per doc/chunk to skip unchanged) → edit = `BEGIN; DELETE chunks of doc; INSERT new chunks; UPDATE documents version/hash; COMMIT` (embeddings computed before) → delete = `DELETE ... WHERE doc_id` within ~1 min + clear the semantic cache → permissions = `UPDATE allowed_groups` (no re-embedding) → model upgrade = add `embedding_v2` + index, backfill in batches, evals v1 vs. v2, switch the query side, keep v1 for rollback, then drop.
+- **Variations / alternatives:** Incremental (events + hashes) vs. a full nightly rebuild (small corpora); Azure AI Search indexers with change and deletion detection. NFR: deletions / permissions ~1 min, edits / new docs ~15 min.
+- **When not to use it:** Small corpora → just rebuild nightly; don't re-embed millions of chunks for a tiny gain without evals; deletions are never "eventually" (security, GDPR).
+- **Quick-check answers:** One transaction because separate steps leave a window where search sees nothing (delete first) or both versions (insert first), and a crash in between leaves the doc missing or doubled. Permission change → `UPDATE allowed_groups`, no re-embedding, fast, clear cached answers. Switch the query side only after ALL chunks are re-embedded: two models' vectors can't be compared, so a half-migrated index silently misses half the corpus; run evals v1 vs. v2 first and keep v1 for rollback.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
