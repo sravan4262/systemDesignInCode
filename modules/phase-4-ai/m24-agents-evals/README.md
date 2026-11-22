@@ -9,6 +9,30 @@
 - [ ] **A2A (agent-to-agent protocol):** agents discovering and calling each other across services and vendors; A2A vs. MCP (agent ↔ tools); handoffs, delegation, trust between agents.
 - [ ] **Durable agent execution:** checkpoint every step and resume after crashes / redeploys (Temporal, Durable Functions, LangGraph checkpointers); human-approval waits of hours or days; Sagas with compensation for multi-step agent actions.
 
+## Learning plan
+
+### Big picture (read first)
+An **agent** is an LLM in a loop: it decides which tool to call next, sees the result, and repeats until done. That flexibility is powerful and risky (loops, wrong actions, cost). Sessions 1–7 cover when to use agents and how to make them safe, debuggable and durable; sessions 8–10 cover **evals**: how you prove an agent or RAG system works and keeps working. The exit deliverable goes into the end-of-Phase-4 code-only build (backlog in the M25 README).
+
+### Sessions (in order)
+1. **Agent vs. workflow:** when an agent is justified.
+2. **Tool design:** least privilege, stop conditions, step and cost budgets, human approval.
+3. **Debugging agents:** loops and wrong tool calls, from traces.
+4. **MCP basics:** exposing tools and resources to agents.
+5. **Multi-agent patterns:** orchestrator–worker, evaluator–optimizer; memory; context engineering.
+6. **A2A vs. MCP:** agents calling agents; handoffs, delegation, trust.
+7. **Durable agent execution:** checkpoint/resume, long approval waits, Sagas with compensation.
+8. **Eval sets:** from production failures and edge cases; offline vs. online.
+9. **Graders:** exact/state checks, LLM-as-judge with a rubric, human review; judge calibration and bias.
+10. **Running evals:** repeated trials, CI regression gates.
+
+### Done when you can answer
+- When would you build a fixed workflow instead of an agent?
+- How do you stop an agent from looping forever or doing something dangerous?
+- MCP vs. A2A: what does each connect?
+- An agent crashes halfway through a 5-step task that already charged a card. What happens?
+- How do you know a prompt change didn't make the agent worse?
+
 ## Before starting
 - [ ] Reviewed the Apple Notes listed in the plan's 🟧 box for this module
 - [ ] Applied any corrections from plan section 10 to those notes
