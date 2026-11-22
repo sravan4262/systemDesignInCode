@@ -173,6 +173,17 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Latency-critical search (autocomplete), search already good (answer nearly always in the top 3), tiny lists.
 - **Quick-check answers:** Rerank all 1M = one model run per chunk (~80 min per question), so search narrows first. More accurate because it reads question + chunk together. "Dress code on Mars": RRF #1 still scores ~0.033, but the reranker scores it ~0.05 → "I don't know".
 
+#### Context assembly and citations
+- **In plain words:** Build the prompt from the top chunks: number them, drop duplicates, stay within a token budget, tell the model to answer only from them and cite `[n]`, then check the citations in code.
+- **Problem it solves:** Raw pasted chunks → the model mixes in its own knowledge, nobody knows where the answer came from, overlapping chunks waste tokens, old and new policy versions contradict, and document text can hijack the model (prompt injection).
+- **Analogy:** A lawyer's brief with numbered exhibits; claims without an exhibit are thrown out.
+- **Diagram:** system rules + `<source id="1" doc section updated>...</source>` ... + question → "Yes, up to 5 days [1]..." → code checks every `[n]` and turns it into a link.
+- **Assembly rules:** best chunk first ("lost in the middle"); dedupe / merge neighbours; newest version wins; ~3k-token budget; chunk text inside tags, marked as data.
+- **How citations are found:** NOT by parsing chunks per query. Source info (doc, section, page, url) is stored with each chunk at ingestion; search returns the top 5 rows with it; my code numbers them 1–5 for this question; the model writes only `[n]`; a regex over the short answer (or structured output `{ answer, citations }`) maps `[n]` back to row n's metadata.
+- **Variations / alternatives:** Inline `[n]` (common), structured output, a sources list, exact quotes.
+- **When not to use it:** Small talk, tool answers (nothing to cite), one tiny document. Don't trust citations blindly: check high-stakes claims against the cited chunk (evals).
+- **Quick-check answers:** Best chunk first because models attend most to the start and end. Invented `[3]` (only 1–2 sent) → the prompt asks, the **code checks**: drop it, treat that sentence as unsupported (remove / regenerate / mark it), log it for evals. Injection in a chunk → citations don't help (the bad chunk is a source); layers instead: mark chunk text as data, no secrets in the system prompt, least-privilege tools + confirmations, filter at ingestion, check the output. Assume it sometimes works and limit the damage.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
