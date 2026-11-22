@@ -60,6 +60,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it (fine-tuning):** For changing facts / citations / permissions (use RAG); before trying prompting + evals; with fewer than a few hundred good examples; without budget to retrain when the base model changes.
 - **Quick-check answers:** "Knows our HR policies" → RAG: policies change (re-index in minutes vs. retrain) and RAG gives citations + permission filtering. Inconsistent format → prompting first (format instructions, 2–3 examples, structured output, temp 0); the same model alone doesn't fix it. 10M tickets/day into 12 categories → fine-tune a small model: narrow stable task, huge volume, no long prompt needed, training data from the large model's labels (human-checked); evals vs. the large model; route low-confidence tickets to the large model or a human.
 
+#### Self-hosting vs. an API
+- **In plain words:** API = pay per token, the provider runs the GPUs. Self-host = run an open-weight model on my own GPUs.
+- **Problem it solves:** Per-token cost at very high steady volume, and data that can't leave the network.
+- **Analogy:** Taxi (API) vs. owning a car (self-host): owning only pays off if you drive all day, and you do the servicing.
+- **Diagram:** API by default; self-host only for very high STEADY volume (GPUs busy), strict "no cloud" compliance, or full control of a custom open model. GPUs cost money 24/7, busy or idle, plus the team to run them.
+- **Variations / alternatives:** Managed open models in my own cloud account (Azure AI Foundry, Bedrock); Azure OpenAI with private endpoints + data residency.
+- **When not to use it (self-host):** Spiky/low traffic, no GPU-ops team, need for the best (API-only) models.
+- **Quick-check answers:** Startup with 50k spiky messages/day → API. Bank with "no data leaves" → first check Azure OpenAI in their tenant over private endpoints, or managed open models in their account; self-host only if it must be on-premises / full control.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
