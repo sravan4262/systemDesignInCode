@@ -28,3 +28,14 @@ Content-Type: application/json
 ### 4. A human approves the big refund (paste the id from request 2)
 POST {{host}}/support/approvals/PASTE_APPROVAL_ID/approve
 X-User-Role: support
+
+### 5. Workflow: summarise → classify → route (fixed steps, 2 LLM calls + code)
+POST {{host}}/tickets
+Content-Type: application/json
+
+{ "subject": "App crashes at checkout", "body": "Every time I press Pay the app closes. I've tried 3 times, I can't buy anything. iPhone 15, latest version." }
+
+### Expected:
+### { "summary": "The app closes when the customer presses Pay, so they can't complete a purchase.",
+###   "classification": { "category": "Technical", "urgency": "High", "reason": "the customer can't buy anything" },
+###   "queue": "engineering-oncall" }

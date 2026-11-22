@@ -2,6 +2,7 @@ using Microsoft.Extensions.AI;
 using OpenAI.Chat;
 using Phase4.Agents.Domain;
 using Phase4.Agents.Support;
+using Phase4.Agents.Workflow;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -15,6 +16,7 @@ builder.Services.AddChatClient(new ChatClient(builder.Configuration["OpenAI:Mode
 
 builder.Services.AddSingleton<OrderStore>();
 builder.Services.AddSingleton<AgentLoop>();
+builder.Services.AddSingleton<TicketWorkflow>();
 
 var app = builder.Build();
 app.MapControllers();
