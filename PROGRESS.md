@@ -4,7 +4,7 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** Phase 4 builds (next: build 1, the RAG service `M22.Rag`). M22 done 2026-11-22 (6.3/10; retry Q1–Q3), M23 done 2026-11-22 (6.1/10; retry TTFT vs. total time and precision/recall). The M22 build is deferred to the end of Phase 4 (backlog in the M25 README).
+- **Current module:** Phase 4 builds (next: build 1, the RAG service `M22.Rag`). M22 done 2026-11-22 (6.3/10; retry Q1–Q3), M23 done 2026-11-22 (6.1/10; retry TTFT vs. total time and precision/recall). M24 sessions 1–5 done. Build scope for all three projects: M25 README.
 - **Next step:** Phase 3 cases done for now (1–8, 11; Case 12 moved to M25). **Deferred by the learner (2026-11-21), to look into later:** M19 S8–S9 worked examples (rolling out one change to 100k users; one schema change across 10k tenant DBs), **CP3**, and cases **9 Top-K** and **10 Dropbox**. Next: learner picks what to start (Phase 4 M22 is the natural next module).
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
