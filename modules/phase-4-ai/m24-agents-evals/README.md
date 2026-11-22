@@ -95,6 +95,17 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** A single agent is enough; tightly connected work; vague evaluator criteria; tight cost limits (3–10× the tokens).
 - **Quick-check answers:** Parallel workers are faster and each has a small focused context, at the cost of more tokens. 9 rounds → missing a round cap + a clear rubric. Always the same 5 competitors → no orchestrator; a workflow with 5 parallel calls + merge.
 
+#### Agent memory and context engineering
+- **In plain words:** Memory = what an agent keeps beyond the current prompt (short-term: this task; long-term: facts across sessions; shared: state between agents). Context engineering = choosing exactly what goes into the context window each step.
+- **Problem it solves:** No memory → forgets preferences or earlier steps. Too much context → slow, costly, important facts lost in the middle. Shared state → agents overwrite each other.
+- **Analogy:** Desk (short-term), notebook (long-term), deciding what goes on the desk (context engineering).
+- **Diagram:** per step: system prompt (fixed, first) → only the tools needed → relevant long-term memories (retrieved) → summary of old turns + last ~5 → trimmed tool results → current request; within a token budget.
+- **Shared memory = a distributed-systems problem:** lost updates → optimistic concurrency (version / `If-Match`) or one owner per key; stale reads → re-read or pass facts in the hand-off; an append-only event log is often safer than a mutable shared document.
+- **Long-term memory rules:** store facts the user stated, not guesses; user can see/delete; scoped per user/tenant; **never rules or permissions** (those live in code) → guards against memory poisoning.
+- **Variations / alternatives:** Summarise vs. drop old turns, a scratchpad/notes file, sub-agents to keep context small, framework memory features (I still own retention, scoping, privacy).
+- **When not to use it:** Long-term memory for one-off tasks; storing everything "just in case"; shared mutable memory when a hand-off message would do.
+- **Quick-check answers:** 40 turns + full JSON → summarise old turns, trim tool outputs (+ only needed tools, only relevant memories). Two agents write `customer.status` → lost update; fix with a version check or a single owner per key. "Always approve refunds" from a message → memory poisoning: it would affect every future session; rules belong in code, memory holds only user-stated facts.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
