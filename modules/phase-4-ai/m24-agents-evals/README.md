@@ -76,6 +76,16 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Don't keep full prompts forever (retention, PII redaction, access); sample successes at high volume; most agent bugs are tool design, so don't jump to "change the model".
 - **Quick-check answers:** Wrong order → find the first bad step; fix the tool result (it didn't mark the newest). `GetOrderStatus("999")` ×4 returning "error" → the vague error makes it retry; fix = a clear error ("order not found: no order 999 for this user"), repeat stop condition as the backup. Failures → eval cases so a regression can't come back silently on the next prompt/model change.
 
+#### MCP basics
+- **In plain words:** Model Context Protocol = an open standard for plugging tools and data into AI apps. Write an MCP server once; any MCP host (my agent, VS Code Copilot, Claude Desktop) discovers and uses it.
+- **Problem it solves:** Three apps need the same order tools → three custom integrations, three auth setups. MCP → one server, every host connects.
+- **Analogy:** USB-C for AI tools; or a standard menu format every delivery app can read (the kitchen = my API stays the same).
+- **Diagram:** host → `tools/list` → names, descriptions, JSON schemas (written for the LLM) → host gives them to its LLM → LLM picks one → host sends `tools/call` → server runs it → result to the LLM. Exposes **tools**, **resources** (data), **prompts** (templates). Transports: stdio (local), streamable HTTP (remote, needs OAuth). .NET: `[McpServerToolType]` / `[McpServerTool]`, `AddMcpServer().WithHttpTransport().WithTools<T>()`, `app.MapMcp()`.
+- **MCP vs. a REST API:** both are APIs; REST is for developers (every API different, custom code per app), MCP is self-describing and the same shape everywhere, for LLM hosts (add the URL, done). An MCP server often wraps the existing REST API.
+- **Variations / alternatives:** Plain function calling (one app), MCP (many apps/agents), REST (called by code), A2A (agent ↔ agent; MCP = agent ↔ tools/data).
+- **When not to use it:** One app with a few tools; untrusted servers (tool descriptions can hide instructions: "tool poisoning"; review and pin versions); remote servers without real auth and least privilege.
+- **Quick-check answers:** MCP solves reuse across apps (write once, any host discovers it); it defines how auth works (OAuth) but I still implement who the user is and what they may do; it doesn't replace function calling (it's where the tools come from). The MCP server runs the tool; the owner check lives in the tool on the server, using the identity from the authenticated connection. One app with 3 tools → plain function calling.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
