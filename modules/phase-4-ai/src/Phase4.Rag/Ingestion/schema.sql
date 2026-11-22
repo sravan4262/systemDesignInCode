@@ -28,3 +28,9 @@ CREATE INDEX ON chunks USING hnsw (embedding_v1 vector_cosine_ops);  -- vector s
 CREATE INDEX ON chunks USING gin (content_tsv);                     -- keyword search
 CREATE INDEX ON chunks USING gin (allowed_groups);                  -- allowed_groups && @userGroups
 CREATE INDEX ON chunks (tenant_id, document_id);                    -- replace / delete one document
+
+-- Model upgrade (blue/green, see EmbeddingVersions.cs): add v2 NEXT TO v1, backfill, switch reads, then drop v1.
+-- text-embedding-3-large shortened to 1536 numbers: a pgvector HNSW index allows at most 2,000.
+ALTER TABLE chunks ADD COLUMN embedding_v2 vector(1536);                         -- NULL until dual write / backfill fills it
+CREATE INDEX CONCURRENTLY ON chunks USING hnsw (embedding_v2 vector_cosine_ops);  -- after the backfill: faster, no table lock
+-- after the switch has run fine for a while:  ALTER TABLE chunks DROP COLUMN embedding_v1;

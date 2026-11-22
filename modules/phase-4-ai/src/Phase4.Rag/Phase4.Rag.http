@@ -14,3 +14,17 @@ Content-Type: application/json
 }
 
 ### 2. Same request again → "unchanged" (same hash, no embedding call)
+
+### 3. Permissions changed → plain UPDATE, no re-embedding
+PUT {{host}}/documents/refund-policy/permissions
+X-Tenant-Id: acme
+Content-Type: application/json
+
+{ "allowedGroups": ["hr"] }
+
+### 4. Source document deleted → document + chunks gone (cascade)
+DELETE {{host}}/documents/refund-policy
+X-Tenant-Id: acme
+
+### Model upgrade: set Embeddings:DualWrite = true (new uploads get v1 + v2, backfill fills old rows),
+### wait for "v2 backfill done" in the log, then set Embeddings:QueryVersion = "v2". Roll back = set it to "v1".
