@@ -5,8 +5,20 @@
 ## Exit deliverable
 - [ ] For each AI design: requirements, architecture, retrieval, eval plan, cost model, failure modes, security.
 
-## Practical build (after M22–M24)
-- [ ] **AI chat over company documents**: design drafted early (2026-11-21) in [`designs/ai-chat-company-docs/`](designs/ai-chat-company-docs/ai-chat-company-docs.md). Revisit it here once M22–M24 are done: walk it end to end, refine chunking / retrieval / evals / cost with what you learned, then build a small working version.
+## Practical build (end of Phase 4)
+One **code-only** build (it compiles; no Docker or tools to run) at the end of Phase 4: **AI chat over company documents** = the M22 RAG service + whatever M23–M25 add. Design drafted 2026-11-21 in [`designs/ai-chat-company-docs/`](designs/ai-chat-company-docs/ai-chat-company-docs.md); revisit it before building. While learning M23, M24 and M25, add anything worth building to the backlog below.
+
+### Base scope (from M22), one small class per concept
+- **Ingestion:** `POST /documents` → `Chunker` (split by headings + size, heading prefix, overlap) → embed → `ChunkStore` (Postgres/pgvector SQL: tenant, groups, citation fields; content hash to skip unchanged; replace a document's chunks in **one transaction**).
+- **Freshness:** `DELETE /documents/{id}` (chunks + cache), `PUT /documents/{id}/permissions` (update `allowed_groups`, no re-embedding), `embedding_v1` / `embedding_v2` columns with a config switch for blue/green model upgrades.
+- **Query:** `POST /ask` → `HybridSearch` (keyword + vector + RRF, filtered by JWT tenant/groups) → `Reranker` (top 20 → top 5, "I don't know" threshold) → `PromptBuilder` (best first, dedupe, token budget, `<source>` tags) → LLM (temperature 0, streamed) → `CitationChecker` (drop invented `[n]`, map to links).
+- **Debugging:** a `RagTrace` per question recording every stage (keyword / vector / RRF ids, rerank scores, prompt sources, tokens, prompt version, model, answer, citations), plus `GET /ask/{traceId}/trace` to see which stage lost the right chunk.
+
+### Backlog: additions from M23–M25
+_Add an item whenever a topic is worth showing in the build._
+- **M23:** _(none yet)_
+- **M24:** _(none yet)_
+- **M25:** _(none yet)_
 
 ## Before starting
 - [ ] Reviewed the Apple Notes listed in the plan's 🟧 box for this module

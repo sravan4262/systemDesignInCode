@@ -26,11 +26,7 @@ An LLM app is a normal distributed service with one slow, costly, non-determinis
 4. **RAG ingestion.** Chunking, embedding models, vector index basics (exact vs. ANN, HNSW high level, recall vs. latency), metadata filters.
 5. **Retrieval.** Hybrid search (BM25 + vectors), Reciprocal Rank Fusion, reranking, context assembly, citations.
 6. **Debugging and freshness.** Stage-by-stage RAG debugging; re-indexing, deletions, embedding-model upgrades.
-7. 🧪 **Build.** Tenant-scoped RAG service with Microsoft.Extensions.AI, **code only** (builds, but no Docker or tools to run). One small class per concept:
-   - **Ingestion:** `POST /documents` → `Chunker` (split by headings + size, heading prefix, overlap) → embed → `ChunkStore` (Postgres/pgvector SQL: tenant, groups, citation fields; content hash to skip unchanged; replace a document's chunks in **one transaction**).
-   - **Freshness:** `DELETE /documents/{id}` (chunks + cache), `PUT /documents/{id}/permissions` (update `allowed_groups`, no re-embedding), `embedding_v1` / `embedding_v2` columns with a config switch for blue/green model upgrades.
-   - **Query:** `POST /ask` → `HybridSearch` (keyword + vector + RRF, filtered by JWT tenant/groups) → `Reranker` (top 20 → top 5, "I don't know" threshold) → `PromptBuilder` (best first, dedupe, token budget, `<source>` tags) → LLM (temperature 0, streamed) → `CitationChecker` (drop invented `[n]`, map to links).
-   - **Debugging:** a `RagTrace` per question recording every stage (keyword / vector / RRF ids, rerank scores, prompt sources, tokens, prompt version, model, answer, citations), plus `GET /ask/{traceId}/trace` to see which stage lost the right chunk.
+7. 🧪 **Build: deferred to the end of Phase 4** (learner, 2026-11-22). It is built once, as the M25 practical build; the scope and backlog live in [the M25 README](../m25-production-ai/README.md#practical-build-end-of-phase-4).
 
 ### Done when you can answer
 - Why does a longer prompt cost more and respond slower, and what is temperature for?
