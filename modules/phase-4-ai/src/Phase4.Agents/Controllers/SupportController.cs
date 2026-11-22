@@ -24,13 +24,14 @@ public class SupportController(AgentLoop agent, OrderStore store) : ControllerBa
     public async Task<IActionResult> Chat(ChatRequest req, [FromHeader(Name = "X-User-Id")] string userId, CancellationToken ct)
     {
         // real app: userId from the JWT. The tools are built for THIS user, so the model can't act for anyone else.
-        var tools = new SupportTools(store, userId, req.ConversationId).All;
+        var gate = new ApprovalGate();   // Fix 2: shared by the tools (mark) and the loop (stop)
+        var tools = new SupportTools(store, userId, req.ConversationId, gate).All;
         List<ChatMessage> messages = [new(ChatRole.System, SystemPrompt), new(ChatRole.User, req.Message)];
 
-        var result = await agent.RunAsync(messages, tools, new AgentBudget(), ct);
+        var result = await agent.RunAsync(messages, tools, new AgentBudget(), gate, ct);
 
         // Steps are returned here to SEE the agent work; a real app logs them (step 5: traces) and returns only the answer.
-        return Ok(new { answer = result.Answer, stopReason = result.StopReason.ToString(), result.Tokens, result.Steps });
+        return Ok(new { answer = result.Answer, stopReason = result.StopReason.ToString(), approvalId = gate.PendingApprovalId, result.Tokens, result.Steps });
     }
 
     // POST /support/approvals/apr-1a2b/approve   header X-User-Role: support   tier 2: a human approves big refunds

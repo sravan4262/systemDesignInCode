@@ -9,7 +9,7 @@ public enum RefundReason { Damaged, NotDelivered, WrongItem }   // an enum: the 
 // The tools the support agent may use. Created PER REQUEST with the user from the JWT, so every tool
 // checks ownership with the real user, never with an id the model typed.
 // Least privilege: 2 reads + 1 write. No "update order", no "run SQL", no "send email".
-public class SupportTools(OrderStore store, string userId, string conversationId)
+public class SupportTools(OrderStore store, string userId, string conversationId, ApprovalGate gate)
 {
     public IList<AITool> All =>
     [
@@ -46,6 +46,7 @@ public class SupportTools(OrderStore store, string userId, string conversationId
             return await store.RefundAsync(key, orderId, amount, ct);   // tier 1: automatic
 
         var approvalId = await store.RequestApprovalAsync(key, orderId, amount, reason.ToString(), userId, ct);   // tier 2: a human
+        gate.MarkWaiting(approvalId);   // Fix 2: tells the loop to stop taking actions
         return $"waiting for approval {approvalId}: tell the customer a team member will review it within 24 hours";
     }
 }
