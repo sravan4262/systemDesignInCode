@@ -1,0 +1,16 @@
+@host = http://localhost:5000
+
+### 1. Index a document (2 headings → at least 2 chunks)
+POST {{host}}/documents
+X-Tenant-Id: acme
+Content-Type: application/json
+
+{
+  "documentId": "refund-policy",
+  "title": "Refund policy",
+  "url": "https://intranet/policies/refunds",
+  "allowedGroups": ["all-staff"],
+  "text": "# Refunds\nCustomers can return shoes within 30 days.\n# Electronics\nElectronics can be returned within 15 days, unopened."
+}
+
+### 2. Same request again → "unchanged" (same hash, no embedding call)
