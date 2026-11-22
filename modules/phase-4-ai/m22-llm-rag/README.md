@@ -163,6 +163,16 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** One search only; as an "I don't know" signal (the #1 result always scores ~0.033 even if it's junk); when one list is much worse (weight or drop it).
 - **Quick-check answers:** Different scales → use positions. "Dress code on Mars?" → the RRF score is high even for junk, and keyword search would match the real dress-code policy, so the "I don't know" check uses the reranker score or the raw cosine of the best chunk, with a threshold tested on my data.
 
+#### Reranking
+- **In plain words:** After hybrid search + RRF give the top ~20, a reranker model reads the question and each chunk TOGETHER and scores how well the chunk answers it; keep the top 5.
+- **Problem it solves:** Search is fast but shallow: RRF ranks only by position, and embeddings were made separately. The answer chunk ("Up to 5 unused days can be carried over") sits at #7 behind chunks that are merely about leave, and only 5 go into the prompt.
+- **Analogy:** A keyword filter shortlists 20 CVs from 1,000; a person reads those 20 against the job and picks 5.
+- **Diagram:** 1M chunks → hybrid + RRF (~20 ms) → top 20 → reranker (~100–300 ms) → top 5 → LLM. Best score below a tested threshold → "I don't know" (no LLM call).
+- **Three different models in RAG:** embedding model (one text → vector; a bi-encoder), **reranker** (question + chunk → relevance score; a cross-encoder), LLM (writes the answer). Not the LLM for ranking: slow, ~10k tokens per question, less consistent.
+- **Where it runs:** Postgres has none: a separate API call from my C# code after the SQL (LIMIT 20 → rerank → top 5). Azure AI Search: built in (`QueryType = Semantic`, `RerankerScore` 0–4), so hybrid + RRF + rerank in one request.
+- **When not to use it:** Latency-critical search (autocomplete), search already good (answer nearly always in the top 3), tiny lists.
+- **Quick-check answers:** Rerank all 1M = one model run per chunk (~80 min per question), so search narrows first. More accurate because it reads question + chunk together. "Dress code on Mars": RRF #1 still scores ~0.033, but the reranker scores it ~0.05 → "I don't know".
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
