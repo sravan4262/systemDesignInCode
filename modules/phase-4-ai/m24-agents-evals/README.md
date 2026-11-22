@@ -86,6 +86,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** One app with a few tools; untrusted servers (tool descriptions can hide instructions: "tool poisoning"; review and pin versions); remote servers without real auth and least privilege.
 - **Quick-check answers:** MCP solves reuse across apps (write once, any host discovers it); it defines how auth works (OAuth) but I still implement who the user is and what they may do; it doesn't replace function calling (it's where the tools come from). The MCP server runs the tool; the owner check lives in the tool on the server, using the identity from the authenticated connection. One app with 3 tools → plain function calling.
 
+#### Multi-agent patterns (orchestrator–worker, evaluator–optimizer)
+- **In plain words:** Orchestrator–worker: a lead agent splits a task into parts, workers do them (often in parallel), the lead combines. Evaluator–optimizer: one writes, another checks against criteria, repeat until pass or a cap.
+- **Problem it solves:** One agent doing "compare 5 competitors" fills its context (quality drops), works one at a time, and nothing checks the result.
+- **Analogy:** A project lead splitting work across a team; a writer and an editor.
+- **Diagram:** lead → workers (narrow tools, small contexts, return short summaries) → lead merges. Writer → evaluator (rubric) → feedback → max ~3 rounds. Whole-run budgets across all agents.
+- **Variations / alternatives:** Single agent (default), a workflow with parallel calls when subtasks are known, orchestrator–worker when subtasks are decided at run time, evaluator–optimizer when criteria are clear, handoff to a specialist.
+- **When not to use it:** A single agent is enough; tightly connected work; vague evaluator criteria; tight cost limits (3–10× the tokens).
+- **Quick-check answers:** Parallel workers are faster and each has a small focused context, at the cost of more tokens. 9 rounds → missing a round cap + a clear rubric. Always the same 5 competitors → no orchestrator; a workflow with 5 parallel calls + merge.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
