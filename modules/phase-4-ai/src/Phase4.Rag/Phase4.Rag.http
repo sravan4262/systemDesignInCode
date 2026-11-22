@@ -47,3 +47,15 @@ X-User-Groups: all-staff
 Content-Type: application/json
 
 { "question": "What is the parking policy?" }
+
+### 7. Debug an answer: paste the traceId from request 5
+GET {{host}}/ask/PASTE_TRACE_ID/trace
+X-Tenant-Id: acme
+
+### Expected (shortened):
+### { "TraceId": "...", "Question": "How long do I have to return headphones?", "EmbeddingVersion": "v1",
+###   "KeywordIds": [2], "VectorIds": [2, 1], "RrfIds": [2, 1],
+###   "RerankScores": [{ "ChunkId": 2, "Score": 0.94 }, { "ChunkId": 1, "Score": 0.12 }],
+###   "PromptSourceIds": [2], "PromptVersion": "rag-v1", "Model": "gpt-4.1-mini",
+###   "InputTokens": 310, "CachedInputTokens": 0, "OutputTokens": 18, "CostUsd": 0.000153,
+###   "StageMs": { "search": 140, "rerank": 210, "llm": 900 } }

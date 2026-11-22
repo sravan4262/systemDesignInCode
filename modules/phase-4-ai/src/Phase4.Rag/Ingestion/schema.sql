@@ -34,3 +34,12 @@ CREATE INDEX ON chunks (tenant_id, document_id);                    -- replace /
 ALTER TABLE chunks ADD COLUMN embedding_v2 vector(1536);                         -- NULL until dual write / backfill fills it
 CREATE INDEX CONCURRENTLY ON chunks USING hnsw (embedding_v2 vector_cosine_ops);  -- after the backfill: faster, no table lock
 -- after the switch has run fine for a while:  ALTER TABLE chunks DROP COLUMN embedding_v1;
+
+-- Debugging: one row per question (RagTrace as JSON). Delete rows older than ~30 days.
+CREATE TABLE rag_traces (
+    id         text        PRIMARY KEY,
+    tenant_id  text        NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    trace      jsonb       NOT NULL
+);
+CREATE INDEX ON rag_traces (created_at);   -- the retention job: DELETE ... WHERE created_at < now() - interval '30 days'

@@ -15,8 +15,9 @@ public class HybridSearch(NpgsqlDataSource db, EmbeddingVersions models)
         WHERE c.tenant_id = @t AND c.allowed_groups && @g
         """;   // && = "arrays overlap": the user is in at least one allowed group
 
-    public async Task<List<SearchHit>> SearchAsync(string question, string tenantId, string[] userGroups, int topK, CancellationToken ct)
+    public async Task<List<SearchHit>> SearchAsync(string question, string tenantId, string[] userGroups, int topK, RagTrace trace, CancellationToken ct)
     {
+        trace.EmbeddingVersion = models.QueryVersion;
         // Same model (and column) for the question as for the chunks, or the vectors can't be compared.
         var questionVector = (await models.EmbedAsync([question], models.QueryVersion, ct))[0];
 
@@ -38,7 +39,12 @@ public class HybridSearch(NpgsqlDataSource db, EmbeddingVersions models)
             """, ct, ("t", tenantId), ("g", userGroups), ("e", ChunkStore.ToVector(questionVector)), ("k", topK));
         // <=> = cosine distance (0 = same direction). QueryColumn is "embedding_v1"/"embedding_v2", never user input.
 
-        return Rrf(topK, keyword, vector);
+        var fused = Rrf(topK, keyword, vector);
+
+        trace.KeywordIds = keyword.Select(h => h.ChunkId).ToList();   // each list separately: shows WHICH search missed
+        trace.VectorIds = vector.Select(h => h.ChunkId).ToList();
+        trace.RrfIds = fused.Select(h => h.ChunkId).ToList();
+        return fused;
     }
 
     // Reciprocal Rank Fusion: score = Σ 1 / (60 + rank) over both lists. Uses positions only, so a ts_rank

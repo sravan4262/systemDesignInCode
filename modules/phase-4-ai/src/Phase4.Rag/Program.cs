@@ -31,6 +31,7 @@ builder.Services.AddHttpClient<Reranker>(http =>
 builder.Services.AddSingleton<HybridSearch>();
 builder.Services.AddSingleton<PromptBuilder>();
 builder.Services.AddSingleton<CitationChecker>();
+builder.Services.AddSingleton<TraceStore>();
 
 var app = builder.Build();
 app.MapControllers();
