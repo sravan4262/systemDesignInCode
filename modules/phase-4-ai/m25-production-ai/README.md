@@ -16,7 +16,7 @@ One **code-only** build (it compiles; no Docker or tools to run) at the end of P
 
 ### Backlog: additions from M23–M25
 _Add an item whenever a topic is worth showing in the build._
-- **M23:** _(none yet)_
+- **M23:** `PromptBuilder` puts fixed parts first (system prompt, tools) and changing parts last (sources, question, time) so prompt caching hits; `RagTrace` logs input / cached / output tokens and the cost per call.
 - **M24:** _(none yet)_
 - **M25:** _(none yet)_
 
