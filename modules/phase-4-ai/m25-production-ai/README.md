@@ -18,7 +18,7 @@ Code to read, not to run: each project builds with `dotnet build`; no Docker, da
 ### 2. Agents: `modules/phase-4-ai/src/Phase4.Agents` (M24)
 - **Support agent** (agent vs. workflow): typed least-privilege tools (read vs. write, enums, owner checks with the user's identity, idempotency keys), stop conditions (max steps, repeat detection, timeout), per-task budgets (steps, tokens, time), approval tiers in code (auto for reads / small refunds, human approval above a limit).
 - **Workflow next to it:** a fixed ticket pipeline (summarise → classify → route) to contrast with the agent.
-- **Multi-agent:** orchestrator–worker (parallel workers with small contexts, returning summaries) and evaluator–optimizer (rubric, max 3 rounds).
+- **Multi-agent:** orchestrator–worker (parallel workers with small contexts, returning summaries). _Evaluator–optimizer build removed by the learner on 2026-11-22 (concept covered in M24 session 5)._
 - **Memory + context engineering:** a per-step `ContextBuilder` (budget, only needed tools, summary of old turns, trimmed tool results); long-term memory of user-stated facts only (scoped per user); shared state with a version check.
 - **Traces:** each step's tool, arguments, result, tokens and cost.
 - **MCP:** the order tools also exposed as an MCP server.
