@@ -211,6 +211,18 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:**
 - **Quick-check answers:**
 
+### "Done when" questions: graded 2026-11-22 (6.3 / 10)
+| # | Question | Score | Gap to fix |
+|---|---|---|---|
+| 1 | Longer prompt cost/latency, temperature | 4 | Long prompt = more input tokens billed + longer time to first token (the model reads the whole prompt first); total time is driven by the answer length (one token at a time, ~4–5× the price). Not "tokens finding chunks" (search happens before the model) |
+| 2 | 2% invalid / cut-off JSON | 4 | Strict schema (structured output), check finish reason every call, validate → retry once with the error → dead-letter, business checks, temperature 0 |
+| 3 | 429 under load | 5 | Retry-After / backoff + jitter, ~2 retries; fallback region/deployment or smaller model; circuit breaker = stop calling for ~30 s (not a queue); per-tenant token budgets; don't retry 400/401 |
+| 4 | Right doc, wrong answer | 9 | Mention the per-question trace that shows each stage |
+| 5 | Hybrid + RRF | 7.5 | Vectors = synonyms, keywords = exact codes; RRF merges by position (`1/(60+rank)`) because the scores are on different scales |
+| 6 | Embedding upgrade | 8 | Evals v1 vs. v2 before switching, keep v1 for rollback; content isn't stale during the backfill, only search quality differs |
+
+**Retry later:** Q1–Q3 (Sessions 1–3).
+
 ### Problem
 _What real engineering problem does this concept solve?_
 

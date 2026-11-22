@@ -4,7 +4,7 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** M22 LLM apps & RAG (started 2026-11-21; sessions 1–6 done; Session 7 build deferred to the end of Phase 4)
+- **Current module:** M23 LLM internals for model users (next). M22 concepts done 2026-11-22 ("done when" 6.3/10; retry Q1–Q3 on single-call basics later); its build is deferred to the end of Phase 4.
 - **Next step:** Phase 3 cases done for now (1–8, 11; Case 12 moved to M25). **Deferred by the learner (2026-11-21), to look into later:** M19 S8–S9 worked examples (rolling out one change to 100k users; one schema change across 10k tenant DBs), **CP3**, and cases **9 Top-K** and **10 Dropbox**. Next: learner picks what to start (Phase 4 M22 is the natural next module).
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
@@ -50,7 +50,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 3 | M20 | HLD case studies II | ⬜ |
 | 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
 | 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
-| 4 | M22 | LLM apps & RAG | 🟨 sessions 1–6 done; build deferred to end of Phase 4 |
+| 4 | M22 | LLM apps & RAG | ✅ concepts done, "done when" 6.3/10 (retry Q1–Q3 later); build deferred to end of Phase 4 |
 | 4 | M23 | LLM internals for model users (light) | ⬜ (trimmed 2026-11-21) |
 | 4 | M24 | Agents & evals | ⬜ (+ A2A, durable agent execution) |
 | 4 | M25 | Production AI & AI system design | ⬜ (practical build: AI chat over company documents, design drafted early) |
