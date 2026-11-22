@@ -6,13 +6,12 @@
 - [ ] A support agent whose tools call the capstone Saga, plus an eval suite that blocks regressions in CI.
 
 ## Added topics (learner, 2026-11-21: AI-powered distributed systems)
-- [ ] **A2A (agent-to-agent protocol):** agents discovering and calling each other across services and vendors; A2A vs. MCP (agent ↔ tools); handoffs, delegation, trust between agents.
 - [ ] **Durable agent execution:** checkpoint every step and resume after crashes / redeploys (Temporal, Durable Functions, LangGraph checkpointers); human-approval waits of hours or days; Sagas with compensation for multi-step agent actions.
 
 ## Learning plan
 
 ### Big picture (read first)
-An **agent** is an LLM in a loop: it decides which tool to call next, sees the result, and repeats until done. That flexibility is powerful and risky (loops, wrong actions, cost). Sessions 1–7 cover when to use agents and how to make them safe, debuggable and durable; sessions 8–10 cover **evals**: how you prove an agent or RAG system works and keeps working. The exit deliverable goes into the end-of-Phase-4 code-only build (backlog in the M25 README).
+An **agent** is an LLM in a loop: it decides which tool to call next, sees the result, and repeats until done. That flexibility is powerful and risky (loops, wrong actions, cost). Sessions 1–6 cover when to use agents and how to make them safe, debuggable and durable; sessions 7–9 cover **evals**: how you prove an agent or RAG system works and keeps working. The exit deliverable goes into the end-of-Phase-4 code-only build (backlog in the M25 README).
 
 ### Sessions (in order)
 1. **Agent vs. workflow:** when an agent is justified.
@@ -20,16 +19,17 @@ An **agent** is an LLM in a loop: it decides which tool to call next, sees the r
 3. **Debugging agents:** loops and wrong tool calls, from traces.
 4. **MCP basics:** exposing tools and resources to agents.
 5. **Multi-agent patterns:** orchestrator–worker, evaluator–optimizer; memory; context engineering.
-6. **A2A vs. MCP:** agents calling agents; handoffs, delegation, trust.
-7. **Durable agent execution:** checkpoint/resume, long approval waits, Sagas with compensation.
-8. **Eval sets:** from production failures and edge cases; offline vs. online.
-9. **Graders:** exact/state checks, LLM-as-judge with a rubric, human review; judge calibration and bias.
-10. **Running evals:** repeated trials, CI regression gates.
+6. **Durable agent execution:** checkpoint/resume, long approval waits, Sagas with compensation.
+7. **Eval sets:** from production failures and edge cases; offline vs. online.
+8. **Graders:** exact/state checks, LLM-as-judge with a rubric, human review; judge calibration and bias.
+9. **Running evals:** repeated trials, CI regression gates.
+
+_A2A (agent-to-agent protocol) removed by the learner on 2026-11-22._
 
 ### Done when you can answer
 - When would you build a fixed workflow instead of an agent?
 - How do you stop an agent from looping forever or doing something dangerous?
-- MCP vs. A2A: what does each connect?
+- MCP vs. plain function calling: when do you build an MCP server?
 - An agent crashes halfway through a 5-step task that already charged a card. What happens?
 - How do you know a prompt change didn't make the agent worse?
 
@@ -82,7 +82,7 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **Analogy:** USB-C for AI tools; or a standard menu format every delivery app can read (the kitchen = my API stays the same).
 - **Diagram:** host → `tools/list` → names, descriptions, JSON schemas (written for the LLM) → host gives them to its LLM → LLM picks one → host sends `tools/call` → server runs it → result to the LLM. Exposes **tools**, **resources** (data), **prompts** (templates). Transports: stdio (local), streamable HTTP (remote, needs OAuth). .NET: `[McpServerToolType]` / `[McpServerTool]`, `AddMcpServer().WithHttpTransport().WithTools<T>()`, `app.MapMcp()`.
 - **MCP vs. a REST API:** both are APIs; REST is for developers (every API different, custom code per app), MCP is self-describing and the same shape everywhere, for LLM hosts (add the URL, done). An MCP server often wraps the existing REST API.
-- **Variations / alternatives:** Plain function calling (one app), MCP (many apps/agents), REST (called by code), A2A (agent ↔ agent; MCP = agent ↔ tools/data).
+- **Variations / alternatives:** Plain function calling (one app), MCP (many apps/agents), REST (called by code).
 - **When not to use it:** One app with a few tools; untrusted servers (tool descriptions can hide instructions: "tool poisoning"; review and pin versions); remote servers without real auth and least privilege.
 - **Quick-check answers:** MCP solves reuse across apps (write once, any host discovers it); it defines how auth works (OAuth) but I still implement who the user is and what they may do; it doesn't replace function calling (it's where the tools come from). The MCP server runs the tool; the owner check lives in the tool on the server, using the identity from the authenticated connection. One app with 3 tools → plain function calling.
 
