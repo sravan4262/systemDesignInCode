@@ -35,9 +35,9 @@ public class SupportController(AgentLoop agent, OrderStore store) : ControllerBa
 
     // POST /support/approvals/apr-1a2b/approve   header X-User-Role: support   tier 2: a human approves big refunds
     [HttpPost("approvals/{approvalId}/approve")]
-    public IActionResult Approve(string approvalId, [FromHeader(Name = "X-User-Role")] string role)
+    public async Task<IActionResult> Approve(string approvalId, [FromHeader(Name = "X-User-Role")] string role, CancellationToken ct)
     {
-        if (role != "support") return Forbid();   // real app: [Authorize(Roles = "support")]
-        return store.Approve(approvalId) is { } result ? Ok(new { approvalId, result }) : NotFound();
+        if (role != "support") return StatusCode(403);   // real app: [Authorize(Roles = "support")]
+        return await store.ApproveAsync(approvalId, ct) is { } result ? Ok(new { approvalId, result }) : NotFound();
     }
 }

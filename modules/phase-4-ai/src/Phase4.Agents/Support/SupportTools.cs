@@ -21,31 +21,32 @@ public class SupportTools(OrderStore store, string userId, string conversationId
     ];
 
     [Description("Get one of the current customer's orders: item, total, already refunded, status")]
-    private string GetOrder([Description("The order id, e.g. 123")] string orderId) =>
-        store.Get(orderId) is { } o && o.Owner == userId
+    private async Task<string> GetOrder([Description("The order id, e.g. 123")] string orderId, CancellationToken ct) =>
+        await store.GetAsync(orderId, ct) is { } o && o.Owner == userId
             ? $"order {o.Id}: {o.Item}, total {o.Total}, refunded {o.Refunded}, status {o.Status}"
             : "order not found";   // same answer for "doesn't exist" and "not yours": reveals nothing
 
     [Description("List the current customer's orders")]
-    private string ListMyOrders() =>
-        string.Join("\n", store.ListFor(userId).Select(o => $"{o.Id}: {o.Item}, total {o.Total}, status {o.Status}"));
+    private async Task<string> ListMyOrders(CancellationToken ct) =>
+        string.Join("\n", (await store.ListForAsync(userId, ct)).Select(o => $"{o.Id}: {o.Item}, total {o.Total}, status {o.Status}"));
 
     [Description("Refund part or all of a delivered order. Up to 50 USD is refunded now; more needs a human's approval.")]
-    private string RefundOrder(
+    private async Task<string> RefundOrder(
         [Description("The order id")] string orderId,
         [Description("Amount in USD")] decimal amount,
-        RefundReason reason)
+        RefundReason reason,
+        CancellationToken ct)
     {
-        if (store.Get(orderId) is not { } o || o.Owner != userId) return "order not found";
+        if (await store.GetAsync(orderId, ct) is not { } o || o.Owner != userId) return "order not found";
         if (o.Status != "delivered") return $"can't refund: order is {o.Status}, not delivered yet";
         if (amount <= 0 || amount > o.Total - o.Refunded)
             return $"error: amount must be more than 0 and at most {o.Total - o.Refunded}";   // clear, so the model can fix it
 
         var key = $"{conversationId}:{orderId}:{amount}";   // idempotency key: a repeated call in this chat refunds once
 
-        if (amount <= AutoRefundLimit) return store.Refund(key, orderId, amount);   // tier 1: automatic
+        if (amount <= AutoRefundLimit) return await store.RefundAsync(key, orderId, amount, ct);   // tier 1: automatic
 
-        var approvalId = store.RequestApproval(key, orderId, amount, reason.ToString(), userId);   // tier 2: a human decides
+        var approvalId = await store.RequestApprovalAsync(key, orderId, amount, reason.ToString(), userId, ct);   // tier 2: a human
         return $"waiting for approval {approvalId}: tell the customer a team member will review it within 24 hours";
     }
 }
