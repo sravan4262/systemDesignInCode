@@ -145,6 +145,24 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Public data (no security filter). Too many relevance filters over-narrow. Don't store per-user ids in every chunk; store group ids.
 - **Quick-check answers:** A prompt rule ("don't reveal HR data") is just text the model can ignore or be talked out of, and the data is already in the prompt; **security is enforced before data reaches the model**. Post-filter (top 5, then drop forbidden) can leave 1 chunk → pre-filter, then nearest neighbours. Groups come from the **JWT** (signed by the identity provider), never the question (anyone can type "I'm in HR"); with too many groups, look them up from Graph and cache.
 
+#### Hybrid search (keyword + vectors)
+- **In plain words:** Run two searches on the same question, keyword (BM25) and vector (meaning), then merge them into one list.
+- **Problem it solves:** Vectors miss exact codes and internal names ("error E-4471", "SKU-88213", "Project Falcon"); keywords miss synonyms ("PTO" vs. "paid time off"). Users ask both kinds.
+- **Analogy:** Two librarians: one uses the index at the back of the book (exact words), one understands what you mean.
+- **Diagram:** question → keyword search (top 20) + vector search (top 20) → merge (RRF) → top 5. One chunk row = `content` (my chunking code), `embedding` (my code calls the embedding model), `content_tsv` (Postgres builds it from `content`: stop words dropped, words stemmed, positions kept; GIN index). There's no "hybrid column": hybrid = using both search columns at query time, with the same tenant/group filters in both halves. One SQL statement, two CTEs. Azure AI Search: send text + vector in one request.
+- **BM25:** keyword scoring that rewards rare words ("E-4471" in 2 of 1,000 chunks ≫ "when" in all of them), gives less credit for each repeat, and prefers short focused chunks. Postgres `ts_rank` is simpler than true BM25 (no rare-word weighting); use an extension or Azure AI Search for real BM25.
+- **When not to use it:** Only exact ids → a database lookup (analyzers may even split "TCK-55102"). Only natural language → vectors may be enough. Always test on my own questions.
+- **Quick-check answers:** "PTO rules" → vector half. "SKU-88213" → keyword half (a code has no meaning for the embedding model). "Reset my password" vs. an article saying "recover your login credentials" → keyword finds nothing, vector has it at #2, so it still ends up near the top.
+
+#### Reciprocal Rank Fusion (RRF)
+- **In plain words:** Merge two ranked lists using positions, not scores: each chunk gets `1 / (60 + rank)` from each list it's in, added up; chunks high in both lists win.
+- **Problem it solves:** BM25 (e.g. 12.4) and cosine (e.g. 0.87) are on different scales; adding them lets one search swamp the other.
+- **Analogy:** Two judges scoring out of 100 and out of 10: compare their rankings, not their numbers.
+- **Diagram:** rank = position after sorting by that search's score (`ROW_NUMBER()`), computed per question, never stored. X = #1 in keyword only → 1/61 = 0.0164; Y = #4 in both → 2/64 = 0.0313 → Y wins. k = 60 keeps the gap between #1 and #5 small so one list can't dominate.
+- **Variations / alternatives:** Weighted RRF (tune with evals), normalise scores and add (fragile), a reranker after RRF.
+- **When not to use it:** One search only; as an "I don't know" signal (the #1 result always scores ~0.033 even if it's junk); when one list is much worse (weight or drop it).
+- **Quick-check answers:** Different scales → use positions. "Dress code on Mars?" → the RRF score is high even for junk, and keyword search would match the real dress-code policy, so the "I don't know" check uses the reranker score or the raw cosine of the best chunk, with a threshold tested on my data.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
