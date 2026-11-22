@@ -33,3 +33,32 @@ INSERT INTO orders (id, owner, item, total, status) VALUES
     ('123', 'alice', 'running shoes', 120, 'delivered'),
     ('124', 'alice', 'headphones',     40, 'delivered'),
     ('456', 'bob',   'laptop',       1500, 'shipped');
+
+-- ---------- Memory (step 4) ----------
+
+-- Short-term memory: the turns of one chat. Only user + assistant TEXT is kept; tool calls and raw tool
+-- results are not (they were needed inside that turn, not later), which keeps later prompts small.
+CREATE TABLE conversations (
+    id                varchar(50)   NOT NULL PRIMARY KEY,
+    user_id           varchar(50)   NOT NULL,              -- only this user can continue the chat
+    summary           nvarchar(max) NULL,                  -- older turns, compressed by the LLM
+    summarized_up_to  bigint        NOT NULL DEFAULT 0     -- turns with seq <= this are in the summary
+);
+CREATE TABLE conversation_messages (
+    seq             bigint IDENTITY PRIMARY KEY,           -- order of the turns
+    conversation_id varchar(50)   NOT NULL REFERENCES conversations (id),
+    role            varchar(10)   NOT NULL,                -- user | assistant
+    text            nvarchar(max) NOT NULL,
+    created_at      datetime2     NOT NULL DEFAULT sysutcdatetime()
+);
+CREATE INDEX ix_messages_conversation ON conversation_messages (conversation_id, seq);
+
+-- Long-term memory: facts the customer stated about themselves. One value per kind (upsert), so
+-- "call me" later replaces "email me" instead of both being kept and contradicting each other.
+CREATE TABLE user_memories (
+    user_id    varchar(50)   NOT NULL,
+    kind       varchar(30)   NOT NULL,                     -- ContactChannel | Language | DeliveryNote
+    value      nvarchar(100) NOT NULL,
+    updated_at datetime2     NOT NULL DEFAULT sysutcdatetime(),
+    PRIMARY KEY (user_id, kind)
+);

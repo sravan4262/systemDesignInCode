@@ -1,6 +1,7 @@
 using Microsoft.Extensions.AI;
 using OpenAI.Chat;
 using Phase4.Agents.Domain;
+using Phase4.Agents.Memory;
 using Phase4.Agents.MultiAgent;
 using Phase4.Agents.Support;
 using Phase4.Agents.Workflow;
@@ -19,6 +20,9 @@ builder.Services.AddSingleton<OrderStore>();
 builder.Services.AddSingleton<AgentLoop>();
 builder.Services.AddSingleton<TicketWorkflow>();
 builder.Services.AddSingleton<Orchestrator>();
+builder.Services.AddSingleton<MemoryStore>();
+builder.Services.AddSingleton<ConversationStore>();
+builder.Services.AddSingleton<ContextBuilder>();
 
 var app = builder.Build();
 app.MapControllers();

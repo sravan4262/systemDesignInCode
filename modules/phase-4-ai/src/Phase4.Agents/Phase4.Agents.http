@@ -54,3 +54,26 @@ Content-Type: application/json
 ###          Policy  → GetReturnPolicy(shoes) → "Shoes can be returned within 30 days of delivery."   (Answered)
 ### answer:  "Sorry about the headphones: I've refunded $40 for order 124. Your shoes (order 123) were delivered,
 ###           and you can return shoes within 30 days of delivery."
+
+### 7. Memory, turn 1: a stated preference → RememberPreference(ContactChannel, "email only")
+POST {{host}}/memory-agent/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "m1", "message": "Hi, please only contact me by email, never call. Where is my order 123?" }
+
+### 8. Memory, turn 2 (same chat): "it" = order 123 from turn 1 (short-term memory)
+POST {{host}}/memory-agent/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "m1", "message": "Can I still return it?" }
+
+### 9. A NEW chat days later: no turns, but "memories": [{ "kind": "ContactChannel", "value": "email only" }] (long-term memory)
+POST {{host}}/memory-agent/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "m2", "message": "My headphones (124) broke, can someone get in touch about it?" }
+
+### Expected: the answer offers email follow-up, not a call.
