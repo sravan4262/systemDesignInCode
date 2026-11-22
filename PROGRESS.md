@@ -51,7 +51,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
 | 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
 | 4 | M22 | LLM apps & RAG | ✅ concepts done, "done when" 6.3/10 (retry Q1–Q3 later); build deferred to end of Phase 4 |
-| 4 | M23 | LLM internals for model users (light) | ⬜ (trimmed 2026-11-21) |
+| 4 | M23 | LLM internals for model users (light) | 🟨 in progress (started 2026-11-22) |
 | 4 | M24 | Agents & evals | ⬜ (+ A2A, durable agent execution) |
 | 4 | M25 | Production AI & AI system design | ⬜ (practical build: AI chat over company documents, design drafted early) |
 | 4 | CP4 | Checkpoint: AI design | ⬜ |
