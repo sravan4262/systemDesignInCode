@@ -40,4 +40,9 @@
   <Folder Name="/M22/">
     <Project Path="modules/phase-4-ai/m22-llm-rag/src/M22.LlmApps/M22.LlmApps.csproj" />
   </Folder>
+  <Folder Name="/Phase4/">
+    <Project Path="modules/phase-4-ai/src/Phase4.Agents/Phase4.Agents.csproj" />
+    <Project Path="modules/phase-4-ai/src/Phase4.ProductionAi/Phase4.ProductionAi.csproj" />
+    <Project Path="modules/phase-4-ai/src/Phase4.Rag/Phase4.Rag.csproj" />
+  </Folder>
 </Solution>

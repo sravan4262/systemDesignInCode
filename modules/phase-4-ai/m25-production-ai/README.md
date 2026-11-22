@@ -8,14 +8,14 @@
 ## Phase 4 builds: three code-only projects, built in order (learner, 2026-11-22)
 Code to read, not to run: each project builds with `dotnet build`; no Docker, databases or tools to start. One small class per concept. New topics are learned **while building**, when they show up in the code. The rest of M25 is learned this way instead of as separate sessions.
 
-### 1. RAG service: `modules/phase-4-ai/m22-llm-rag/src/M22.Rag` (M22 + M23)
+### 1. RAG service: `modules/phase-4-ai/src/Phase4.Rag` (M22 + M23)
 - **Ingestion:** `POST /documents` → `Chunker` (split by headings + size, heading prefix, overlap) → embed → `ChunkStore` (Postgres/pgvector SQL: tenant, groups, citation fields; content hash to skip unchanged; replace a document's chunks in **one transaction**).
 - **Freshness:** `DELETE /documents/{id}` (chunks + cache), `PUT /documents/{id}/permissions` (update `allowed_groups`, no re-embedding), `embedding_v1` / `embedding_v2` columns with a config switch for blue/green model upgrades.
 - **Query:** `POST /ask` → `HybridSearch` (keyword + vector + RRF, filtered by JWT tenant/groups) → `Reranker` (top 20 → top 5, "I don't know" threshold) → `PromptBuilder` (best first, dedupe, token budget, `<source>` tags) → LLM (temperature 0, streamed) → `CitationChecker` (drop invented `[n]`, map to links).
 - **Debugging:** a `RagTrace` per question recording every stage (keyword / vector / RRF ids, rerank scores, prompt sources, tokens, prompt version, model, answer, citations), plus `GET /ask/{traceId}/trace` to see which stage lost the right chunk.
 - **M23 additions:** `PromptBuilder` puts fixed parts first (system prompt, tools) and changing parts last (sources, question, time) so prompt caching hits; `RagTrace` logs input / cached / output tokens and the cost per call.
 
-### 2. Agents: `modules/phase-4-ai/m24-agents-evals/src/M24.Agents` (M24)
+### 2. Agents: `modules/phase-4-ai/src/Phase4.Agents` (M24)
 - **Support agent** (agent vs. workflow): typed least-privilege tools (read vs. write, enums, owner checks with the user's identity, idempotency keys), stop conditions (max steps, repeat detection, timeout), per-task budgets (steps, tokens, time), approval tiers in code (auto for reads / small refunds, human approval above a limit).
 - **Workflow next to it:** a fixed ticket pipeline (summarise → classify → route) to contrast with the agent.
 - **Multi-agent:** orchestrator–worker (parallel workers with small contexts, returning summaries) and evaluator–optimizer (rubric, max 3 rounds).
@@ -24,7 +24,7 @@ Code to read, not to run: each project builds with `dotnet build`; no Docker, da
 - **MCP:** the order tools also exposed as an MCP server.
 - **One eval example:** golden cases, tool + answer checks, repeated trials, a pass/fail gate.
 
-### 3. Production AI and security: `modules/phase-4-ai/m25-production-ai/src/M25.ProductionAi` (M25)
+### 3. Production AI and security: `modules/phase-4-ai/src/Phase4.ProductionAi` (M25)
 - **Cost/latency:** semantic cache (key = question vector + user groups + doc versions), routing easy steps to a smaller model, context trimming, cost per resolved task.
 - **Guardrails:** input/output checks, PII redaction, a moderation step (threshold + human review band).
 - **Security:** prompt injection defences (sources as data, no secrets in the system prompt, tool tiers), cross-tenant isolation, authorisation at retrieval time AND action time, no data exfiltration through tools.
