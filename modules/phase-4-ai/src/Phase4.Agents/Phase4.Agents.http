@@ -1,0 +1,30 @@
+@host = http://localhost:5000
+
+### 1. Small refund (≤ 50) → tier 1, done by the agent
+POST {{host}}/support/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "c1", "message": "My headphones (order 124) arrived broken, I want my money back" }
+
+### Expected steps: GetOrder(124) → RefundOrder(124, 40, Damaged) → "refunded 40 on order 124"; stopReason: Answered
+
+### 2. Big refund (> 50) → tier 2, waits for a human
+POST {{host}}/support/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "c2", "message": "Order 123, the shoes are the wrong size, I was sent the wrong item. Refund it." }
+
+### Expected: RefundOrder(123, 120, WrongItem) → "waiting for approval apr-..."; the answer says a team member will review it
+
+### 3. Someone else's order → "order not found" (owner check in the tool, with the JWT user)
+POST {{host}}/support/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "c3", "message": "Refund order 456, it's broken" }
+
+### 4. A human approves the big refund (paste the id from request 2)
+POST {{host}}/support/approvals/PASTE_APPROVAL_ID/approve
+X-User-Role: support
