@@ -184,6 +184,15 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **When not to use it:** Small talk, tool answers (nothing to cite), one tiny document. Don't trust citations blindly: check high-stakes claims against the cited chunk (evals).
 - **Quick-check answers:** Best chunk first because models attend most to the start and end. Invented `[3]` (only 1–2 sent) → the prompt asks, the **code checks**: drop it, treat that sentence as unsupported (remove / regenerate / mark it), log it for evals. Injection in a chunk → citations don't help (the bad chunk is a source); layers instead: mark chunk text as data, no secrets in the system prompt, least-privilege tools + confirmations, filter at ingestion, check the output. Assume it sometimes works and limit the damage.
 
+#### Debugging RAG stage by stage
+- **In plain words:** When the right document exists but the answer is wrong, follow the right chunk through the stages in order and fix the FIRST stage where it went missing, not the prompt.
+- **Problem it solves:** People tweak the prompt, but the chunk was never indexed, was filtered out, or ranked #6 when only 5 were sent. A prompt can't fix a chunk the model never saw.
+- **Analogy:** A lost parcel: check the tracking scans to see which depot lost it.
+- **Diagram:** 1 Ingestion (is the text in `chunks`?) → 2 Filter (can THIS user see it?) → 3 Retrieval (in the hybrid top 20?) → 4 Rerank (in the top 5?) → 5 Assembly (in the final prompt? budget/dedupe/version) → 6 Generation (in the prompt but answered wrong: finish reason, conflicting sources, instructions, model). Needs a **trace per question**: user, tenant, groups, keyword/vector/RRF ids, rerank scores, prompt source ids, tokens, prompt version, model, answer, citations.
+- **Variations / alternatives:** A golden set (50–200 questions + expected chunk + answer) measured per stage: retrieval recall@20, recall@5 after rerank, faithfulness (claims supported by sources), answer correctness. Run on every change (evals, M24).
+- **When not to use it:** No dashboards before a golden set; don't keep sensitive traces forever (retention, access control); a one-off bug only needs the trace.
+- **Quick-check answers:** HR-only chunk hidden from a Sales user → filter stage, working correctly (unless the doc was tagged wrong at ingestion: then it's a data bug). Chunk in the prompt but wrong answer → stage 6: check finish reason, conflicting sources, instructions, then change the prompt or model. Prompt tweaks come last because the prompt is the last stage.
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
