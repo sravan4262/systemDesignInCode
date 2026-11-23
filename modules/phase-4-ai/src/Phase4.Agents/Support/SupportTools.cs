@@ -19,17 +19,17 @@ public class SupportTools(IOrderStore store, string userId, string conversationI
     ];
 
     [Description("Get one of the current customer's orders: item, total, already refunded, status")]
-    private async Task<string> GetOrder([Description("The order id, e.g. 123")] string orderId, CancellationToken ct) =>
+    public async Task<string> GetOrder([Description("The order id, e.g. 123")] string orderId, CancellationToken ct) =>
         await store.GetAsync(orderId, ct) is { } o && o.Owner == userId
             ? $"order {o.Id}: {o.Item}, total {o.Total}, refunded {o.Refunded}, status {o.Status}"
             : "order not found";   // same answer for "doesn't exist" and "not yours": reveals nothing
 
     [Description("List the current customer's orders")]
-    private async Task<string> ListMyOrders(CancellationToken ct) =>
+    public async Task<string> ListMyOrders(CancellationToken ct) =>
         string.Join("\n", (await store.ListForAsync(userId, ct)).Select(o => $"{o.Id}: {o.Item}, total {o.Total}, status {o.Status}"));
 
     [Description("Refund part or all of a delivered order. Up to 50 USD in total per order is refunded now; more needs a human's approval.")]
-    private async Task<string> RefundOrder(
+    public async Task<string> RefundOrder(
         [Description("The order id")] string orderId,
         [Description("Amount in USD")] decimal amount,
         RefundReason reason,

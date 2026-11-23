@@ -1,0 +1,13 @@
+{
+  // VS Code (Copilot agent mode) as an MCP client for the Phase4.Agents orders server.
+  // Start the app (dotnet run in modules/phase-4-ai/src/Phase4.Agents), then Start this server here,
+  // and ask Copilot: "What's the status of my order 124?"
+  // X-User-Id stands in for an OAuth token in this study build.
+  "servers": {
+    "orders": {
+      "type": "http",
+      "url": "http://localhost:5000/mcp",
+      "headers": { "X-User-Id": "alice" }
+    }
+  }
+}

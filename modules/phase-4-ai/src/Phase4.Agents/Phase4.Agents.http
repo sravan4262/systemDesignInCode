@@ -117,3 +117,41 @@ X-User-Id: alice
 
 ### 6. Run the golden cases 3 times each → 200 = gate passed, 422 = blocked (see cases[].trials[].failures)
 POST {{host}}/evals/run?trials=3
+
+### ---------- MCP server (step 7): raw JSON-RPC, what an MCP client sends for you ----------
+
+### 7a. Discover the tools: names, descriptions, JSON Schemas, read-only / destructive hints
+POST {{host}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+X-User-Id: alice
+
+{ "jsonrpc": "2.0", "id": 1, "method": "tools/list" }
+
+### 7b. Call a tool (same owner check as the agent: alice can't see order 456)
+POST {{host}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+X-User-Id: alice
+
+{ "jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": { "name": "GetOrder", "arguments": { "orderId": "124" } } }
+
+### 7c. No identity → isError: true, "Not signed in"
+POST {{host}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{ "jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": { "name": "ListMyOrders", "arguments": {} } }
+
+### ---------- MCP client (step 7b): a .NET app USING an MCP server ----------
+
+### 7d. The client connects, sends initialize + tools/list, shows what it discovered
+GET {{host}}/mcp-client/tools
+X-User-Id: alice
+
+### 7e. Agent with tools discovered over MCP (no SupportTools in the client): same answer as /support/chat
+POST {{host}}/mcp-client/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "message": "Has my order 123 been delivered?" }

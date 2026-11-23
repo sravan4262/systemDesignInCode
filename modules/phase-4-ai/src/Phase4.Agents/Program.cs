@@ -2,6 +2,7 @@ using Microsoft.Extensions.AI;
 using OpenAI.Chat;
 using Phase4.Agents.Domain;
 using Phase4.Agents.Evals;
+using Phase4.Agents.Mcp;
 using Phase4.Agents.Memory;
 using Phase4.Agents.MultiAgent;
 using Phase4.Agents.Support;
@@ -29,6 +30,14 @@ builder.Services.AddSingleton<CaseStore>();
 builder.Services.AddSingleton<AgentTraceStore>();
 builder.Services.AddSingleton<EvalRunner>();
 
+// Step 7: the same order tools as an MCP server (Streamable HTTP at /mcp). Stateless: every request stands
+// alone (no server-side session), so any instance behind a load balancer can serve it.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMcpServer()
+    .WithHttpTransport(o => o.Stateless = true)
+    .WithTools<McpOrderTools>();
+
 var app = builder.Build();
 app.MapControllers();
+app.MapMcp("/mcp");   // real app: .RequireAuthorization()
 app.Run();
