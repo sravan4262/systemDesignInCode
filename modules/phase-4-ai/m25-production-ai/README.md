@@ -50,6 +50,17 @@ _Removed by the learner on 2026-11-22: the LLM gateway (provider routing, per-te
 ### Concepts
 _One entry per topic, written in your own words after the 7-step concept walkthrough (see CLAUDE.md). Copy the block for each topic._
 
+#### Guardrails (2026-11-23, build 3 step 1)
+- **In plain words:** Checks before and after the LLM (and around tool calls) that decide allow / redact / review / block. PII is sanitised (masked, the text continues); harmful content is judged (allowed, held for a human, or blocked).
+- **Problem it solves:** Card numbers ending up in the model provider's logs and our traces; abusive or harmful replies; replies leaking another customer's data from a document or tool.
+- **Analogy:** Airport security on the way in, customs on the way out; unclear bags go to a person.
+- **Diagram:** input (length → PII → moderation) → LLM sees the redacted text → output (PII leak → moderation) → reply or safe fallback. Two thresholds: review 0.5, block 0.8.
+- **Variations / alternatives:** In code (regex, word lists: free, crude) vs. by calling an endpoint (Azure AI Language PII, Azure AI Content Safety: smarter, costs a call, can fail) vs. LLM judge (most flexible, slowest). Built both behind `IPiiRedactor` / `IModerator`; keyed DI picks `code` or `service`.
+- **When not to use it / limits:** Not the security boundary (authorisation in code is); don't put an LLM judge on every call; over-blocking frustrates users; tune thresholds against real traffic.
+- **Built + verified:** card + email → `[CreditCard]`, `[Email]`; "Order 1234567890123" → wrongly masked as a phone number (regex false positive); "idiot" → Review 0.6; "kill you" → Block 0.95; service mode without keys → PII fails closed (Block); moderation service down → in-code fallback.
+- **Full checklist** (input, output, action checks, fail-open/closed, metrics): [designs/guardrails-checklist.md](designs/guardrails-checklist.md).
+- **Quick-check answers:** _(open: what the model saw in the card example and why redact before the LLM; why two thresholds; why PII fails closed but moderation falls back)_
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**

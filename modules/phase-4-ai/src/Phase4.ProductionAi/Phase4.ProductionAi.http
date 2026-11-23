@@ -1,0 +1,46 @@
+@host = http://localhost:5000
+
+### ---------- Guardrails: /guardrails/code/... (in code) vs /guardrails/service/... (Azure endpoints) ----------
+### /check = input guards only, no LLM, no OpenAI key needed. Swap "code" ↔ "service" to compare.
+
+### 1. PII: card (Luhn-valid) + email → masked before the model sees them; action Redact
+POST {{host}}/guardrails/code/check
+Content-Type: application/json
+
+{ "message": "My card 4111-1111-1111-1111 got charged twice for order 124, email jo@x.com" }
+
+### 2. Regex false positive: a long order number is masked as a phone number (Azure's model would not)
+POST {{host}}/guardrails/code/check
+Content-Type: application/json
+
+{ "message": "Order 1234567890123 is late" }
+
+### 3. Rude → review band (0.6): held for a human, the model is not called
+POST {{host}}/guardrails/code/check
+Content-Type: application/json
+
+{ "message": "you are an idiot, where is my order" }
+
+### 4. Threat → block (0.95)
+POST {{host}}/guardrails/code/check
+Content-Type: application/json
+
+{ "message": "I will kill you if my order is late" }
+
+### 5. Word-list miss/hit test: "kill the process" is harmless (allowed here only because the list says "kill you")
+POST {{host}}/guardrails/code/check
+Content-Type: application/json
+
+{ "message": "How do I kill the stuck process?" }
+
+### 6. Service mode without Azure keys → PII service fails → fail CLOSED: Block
+POST {{host}}/guardrails/service/check
+Content-Type: application/json
+
+{ "message": "My card 4111-1111-1111-1111 got charged twice" }
+
+### 7. Full flow: input guards → LLM (sees the redacted text) → output guards (needs the OpenAI key)
+POST {{host}}/guardrails/code/chat
+Content-Type: application/json
+
+{ "message": "My card 4111-1111-1111-1111 got charged twice for order 124, what should I do?" }
