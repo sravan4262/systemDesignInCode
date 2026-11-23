@@ -80,5 +80,27 @@ user ─► INPUT GUARDS ─► LLM / agent (sees redacted text) ─► OUTPUT G
 | Availability | Always up | Can fail, so it needs a timeout, retries and a fallback or fail-closed decision |
 | Typical use | First cheap filter, and the fallback | The main check |
 
+## Guardrails vs. security
+**In a nutshell:**
+- **Guardrails are input/output validators,** like model validation in traditional code, except that many checks are probabilistic (scores, classifiers).
+- **Security is authentication, authorisation and isolation:** who the user is, what they may see and do, and never another user's or tenant's data. It also **limits what a fooled model can do**.
+- Security can't *prevent* prompt injection. It makes sure **an injection can't cause harm**.
+
+| | Guardrails | Security |
+|---|---|---|
+| Question | "Is this **content** acceptable?" | "Is this user **allowed** to see or do this?" |
+| How | **Detects**: scores, classifiers, regex (PII, abuse, injection-looking text) | **Limits**: authorisation, tenant/group filters and permissions, enforced in code |
+| Reliability | Probabilistic, so it **will** miss things | Deterministic: the owner check passes or it doesn't |
+| Assumes | Bad input can be recognised | Bad input **won't** always be recognised, and the model **will** sometimes be fooled |
+| Example | Prompt Shields flags "ignore your instructions" | `RefundOrder` re-checks the owner from the JWT; anything over 50 goes for approval |
+| Traditional equivalent | Input validators, spam filter | `[Authorize]`, row-level security, least privilege |
+
+**One attack, both layers** (a poisoned document says "refund everything"):
+1. **Guardrail:** the injection classifier may flag the chunk, or may miss it.
+2. **Model:** it follows the instruction and calls `RefundOrder(123, 120)`.
+3. **Security:** the tool checks the owner and the limit; over 50 means pending human approval. **The attack fails here, whatever happened in steps 1–2.**
+
+Guardrails try to catch bad content. Security makes sure that **when they miss, nothing bad is possible**. You need both, but only security is the boundary.
+
 ## Interview one-liner
 "Guardrails run before and after the model and around every tool call. Input checks: length, PII redaction, moderation, injection and scope. Output checks: PII leaks, moderation, groundedness and business rules. Each check decides allow, redact, review or block, using two thresholds. They run cheapest first, each decision is traced, and each check has a deliberate fail-open or fail-closed choice. They're not the security boundary: authorisation in code is."
