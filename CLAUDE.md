@@ -52,7 +52,7 @@ After step 7, have the learner write a short entry in the module README's **Conc
 - `modules/phase-N-*/mNN-*/` has one folder per module: `README.md` (deliverable + journal), `src/`, and `designs/` for HLD write-ups.
 - No test projects by default. Create a `tests/` folder and test project only when the learner asks for one (for a module or a phase).
 - `capstone/` holds the distributed order platform. Started in M6; its finishing module (M28) was removed by the learner on 2026-11-23, so it stays as-is.
-- `checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores.
+- `modules/phase-8-mocks/checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores (all checkpoints run in Phase 8, session 1).
 - `notes/` holds corrected versions of the learner's Apple Notes, as Markdown.
 
 ## Concept code (patterns, principles, LLD snippets)

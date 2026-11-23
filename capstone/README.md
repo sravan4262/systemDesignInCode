@@ -1,6 +1,6 @@
 # Capstone: reliable distributed order platform
 
-One evolving system that connects every concept in the plan. Started in M6, extended in each module after, then integrated, hardened, and published in M28.
+One evolving system that connects every concept in the plan. Started in M6, extended in each module after, M28 (integrate, harden, publish) was removed by the learner on 2026-11-23, so the capstone stays as it is.
 
 See the plan's section 6 for components, the core order workflow, and the exit criterion.
 
