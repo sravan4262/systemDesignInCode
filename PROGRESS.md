@@ -18,6 +18,7 @@
   - **Deferred, to look into later (learner, 2026-11-21):** S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
 - **Phase 4 changes (learner, 2026-11-21):** M24 trimmed by the learner on 2026-11-22: **A2A, durable agent execution and eval-design details removed**; evals = one code example. **M23 trimmed to one light session** (learner uses models via APIs; no training, hosting or inference internals); M22 vector-index internals cut to basics (IVF / PQ removed). Phase 4 order (2026-11-22): M22 ✅ → M23 ✅ → M24 sessions 1–5 ✅ → **three code-only builds, in order, learning new topics while building**: (1) RAG service `Phase4.Rag`, (2) agents + one eval example `Phase4.Agents`, (3) production AI + security `Phase4.ProductionAi` (covers M25; LLM gateway removed; text-to-SQL removed by the learner 2026-11-23) → CP4. Scope in the M25 README.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
+- **Plan order change (learner, 2026-11-23):** after CP4: **Phase 6 (behavioral) → Phase 7 (resume) → Phase 5 (AI coding: M26, M27, CP5) → Phase 8 (final mocks)**. **M28 (capstone integration) removed completely**; `capstone/` stays as-is. Phases 6–7 involve personal career details: keep them out of tracked files unless the learner confirms the repo is private (CLAUDE.md privacy rule).
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Windows
 
@@ -55,15 +56,14 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 4 | M24 | Agents & evals | ✅ done 2026-11-23 (sessions 1–5 + build 2 `Phase4.Agents`: traces, one eval example, MCP server + client; eval not run yet) |
 | 4 | M25 | Production AI & AI system design | ✅ done 2026-11-23 (build 3 `Phase4.ProductionAi`: guardrails in code + via Azure, security demo, router + scoped semantic cache; hybrid-router design; gateway + text-to-SQL removed; AI-chat doc gaps (failure modes, eval plan, security sections) skipped by choice) |
 | 4 | CP4 | Checkpoint: AI design | ⬜ |
-| 5 | M26 | AI coding, code review, comprehension | ⬜ |
-| 5 | M27 | Agentic tickets & live debugging | ⬜ |
-| 5 | M28 | Capstone integration | ⬜ |
-| 5 | CP5 | Checkpoint: AI coding | ⬜ |
-| 6 | M29 | Story bank & question bank | ⬜ |
+| 6 | M29 | Story bank & question bank | ⬜ (next after CP4) |
 | 6 | M30 | Deep dives, motivation, leveling | ⬜ |
 | 6 | CP6 | Checkpoint: behavioral | ⬜ |
 | 7 | M31 | Resume & positioning | ⬜ |
 | 7 | CP7 | Checkpoint: recruiter screen | ⬜ |
+| 5 | M26 | AI coding, code review, comprehension | ⬜ (Phase 5 moved after Phase 7, 2026-11-23) |
+| 5 | M27 | Agentic tickets & live debugging | ⬜ |
+| 5 | CP5 | Checkpoint: AI coding | ⬜ |
 | 8 | M32 | Final mock interviews | ⬜ |
 
 ## Failure checklist (plan section 4)

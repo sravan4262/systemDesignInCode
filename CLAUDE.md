@@ -51,7 +51,7 @@ After step 7, have the learner write a short entry in the module README's **Conc
 - `Senior_Engineer_Interview_Plan.html` is the plan (source of truth for scope). Its checkboxes are browser-only, so `PROGRESS.md` is the synced status.
 - `modules/phase-N-*/mNN-*/` has one folder per module: `README.md` (deliverable + journal), `src/`, and `designs/` for HLD write-ups.
 - No test projects by default. Create a `tests/` folder and test project only when the learner asks for one (for a module or a phase).
-- `capstone/` holds the distributed order platform. Started in M6, extended every module after, finished in M28.
+- `capstone/` holds the distributed order platform. Started in M6; its finishing module (M28) was removed by the learner on 2026-11-23, so it stays as-is.
 - `checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores.
 - `notes/` holds corrected versions of the learner's Apple Notes, as Markdown.
 

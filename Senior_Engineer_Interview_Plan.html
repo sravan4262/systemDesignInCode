@@ -136,15 +136,14 @@ td.bad{color:var(--fixfg)}
 <a class="t2" href="#m24"><b>M24</b> Agents &amp; evals</a>
 <a class="t2" href="#m25"><b>M25</b> Production AI &amp; AI system design</a>
 <a class="t2 ck" href="#ck4"><b>CP4</b> Checkpoint: AI design</a>
-<a class="t2" href="#m26"><b>M26</b> AI coding, code review, comprehension</a>
-<a class="t2" href="#m27"><b>M27</b> Agentic tickets &amp; live debugging</a>
-<a class="t2" href="#m28"><b>M28</b> Capstone integration</a>
-<a class="t2 ck" href="#ck5"><b>CP5</b> Checkpoint: AI coding</a>
 <a class="t2" href="#m29"><b>M29</b> Story bank &amp; question bank</a>
 <a class="t2" href="#m30"><b>M30</b> Deep dives, motivation, leveling</a>
 <a class="t2 ck" href="#ck6"><b>CP6</b> Checkpoint: behavioral</a>
 <a class="t2" href="#m31"><b>M31</b> Resume &amp; positioning</a>
 <a class="t2 ck" href="#ck7"><b>CP7</b> Checkpoint: recruiter screen</a>
+<a class="t2" href="#m26"><b>M26</b> AI coding, code review, comprehension</a>
+<a class="t2" href="#m27"><b>M27</b> Agentic tickets &amp; live debugging</a>
+<a class="t2 ck" href="#ck5"><b>CP5</b> Checkpoint: AI coding</a>
 <a class="t2" href="#m32"><b>M32</b> Final mock interviews</a>
 <a class="t1" href="#s-failure">4. Failure-engineering checklist</a>
 <a class="t1" href="#s-deep">5. Deep-dive requirements</a>
@@ -176,9 +175,9 @@ td.bad{color:var(--fixfg)}
 <tr><td>2. Distributed Systems Engineering</td><td>M6–M15 + CP2</td><td>Databases, NoSQL, search, Redis, RabbitMQ, NServiceBus/MassTransit, Kafka, event sourcing, outbox/inbox, Saga, concurrency, resilience, security, API design, observability, testing</td><td>Build and fault-test reliable, secure distributed components.</td></tr>
 <tr><td>3. HLD &amp; Architecture</td><td>M16–M21 + CP3</td><td>Fundamentals, real-time delivery, distributed theory, DDD and decomposition, migrations, classic and real-world cases, multi-region, cloud operations</td><td>Design systems under realistic scale and reliability constraints, and defend the architecture.</td></tr>
 <tr><td>4. AI Engineering</td><td>M22–M25 + CP4</td><td>LLM apps, RAG, vector index internals, inference and fine-tuning, ranking, agents, evals, production AI, LLM security</td><td>Design, evaluate, secure and operate production LLM systems.</td></tr>
-<tr><td>5. AI Coding + Capstone</td><td>M26–M28 + CP5</td><td>Unfamiliar repos, code review, code comprehension, AI-assisted coding, live debugging, capstone</td><td>Solve unfamiliar engineering tasks and ship a portfolio-grade capstone.</td></tr>
 <tr><td>6. Behavioral &amp; Leadership</td><td>M29–M30 + CP6</td><td>STAR story bank, full question bank, resume-specific questions, deep dives, leveling, negotiation</td><td>Demonstrate senior-level scope, ownership and influence.</td></tr>
 <tr><td>7. <span class="new">New</span> Resume &amp; Positioning</td><td>M31 + CP7</td><td>Target lanes, bullet rewrite, defend-every-line, profiles, search logistics</td><td>A resume that matches what you can defend, and a working application pipeline.</td></tr>
+<tr><td>5. AI Coding (after Phase 7)</td><td>M26–M27 + CP5</td><td>Unfamiliar repos, code review, code comprehension, AI-assisted coding, live debugging</td><td>Solve unfamiliar engineering tasks with AI while keeping control of design, correctness and tests.</td></tr>
 <tr><td>8. Final Mock Interviews</td><td>M32</td><td>Every round type, including code review, debugging and product architecture</td><td>Perform consistently across every round type.</td></tr>
 </tbody></table></div>
 </section>
@@ -695,53 +694,6 @@ td.bad{color:var(--fixfg)}
 
 <div class="callout ckpt" id="ck4"><span class="label">Checkpoint 4: AI system design<label class="done" style="float:right"><input type="checkbox" data-k="ck4">Done</label></span><p>A 45-minute AI design mock (e.g., multi-tenant document Q&amp;A or a support agent). The interviewer must push on evals, cost per request, prompt injection, and “the right document exists but the answer is wrong”.</p></div>
 
-<div class="phase">Phase 5: AI Coding + Capstone</div>
-
-<article class="week" id="m26"><h3><span class="wk">M26</span>AI-assisted coding, code review, and code comprehension<label class="done"><input type="checkbox" data-k="m26">Done</label></h3>
-<ul>
-<li>Explore an unfamiliar .NET repository before editing: architecture, entry points, dependencies, tests, and conventions.</li>
-<li>Use AI to locate code paths and explain behavior, then verify findings yourself.</li>
-<li>Implement a feature across API, domain, persistence, and tests.</li>
-<li>Debug an existing production-style defect and write a regression test.</li>
-<li>Refactor safely, inspect diffs, run tests, and challenge AI-generated assumptions.</li>
-<li>Use Copilot, Claude Code, Codex, or IDE agents as available.</li>
-<li><span class="new">New</span> <strong>Code-review round:</strong> review a PR with planted defects (race condition, SQL/command injection, N+1, missing authorization, missing tests) in 30 minutes; rank findings by severity and explain each fix.</li>
-<li><span class="new">New</span> <strong>Code-comprehension round:</strong> read unfamiliar code cold and explain data flow, invariants, and how it fails.</li>
-<li><span class="new">New</span> <strong>AI-assisted coding round:</strong> practice in a CoderPad-style editor with an assistant; narrate how you verify each generated piece, and when you refuse a suggestion.</li>
-</ul>
-<div class="callout"><span class="label">Exit Deliverable</span><p>Complete a repository task while retaining control of design, correctness, security, and test quality, plus three timed code-review drills.</p></div>
-</article>
-
-<article class="week" id="m27"><h3><span class="wk">M27</span>Agentic tickets and live production debugging<label class="done"><input type="checkbox" data-k="m27">Done</label></h3>
-<ul>
-<li>Practice multi-file feature work with an explicit plan and incremental implementation.</li>
-<li>Add tenant-level distributed rate limiting to an existing application.</li>
-<li>Diagnose duplicate order notifications and fix the underlying delivery/idempotency issue.</li>
-<li>Replace in-memory caching with Redis without changing public API contracts.</li>
-<li>Add Docker Compose for API, SQL Server, Redis, and RabbitMQ.</li>
-<li>Implement retry/DLQ handling and validate failure behavior.</li>
-<li>Review generated changes for security, race conditions, missing tests, and unintended scope.</li>
-<li><span class="new">New</span> <strong>Live production-debugging round:</strong> a simulated incident where clues (logs, metrics, traces) arrive gradually; state hypotheses out loud, rank them, and pick the cheapest discriminating check each time.</li>
-</ul>
-<div class="callout"><span class="label">Exit Deliverable</span><p>Complete realistic engineering tickets and explain how AI was used, what was verified, and what was rejected; run two live-debugging drills.</p></div>
-</article>
-
-<article class="week" id="m28"><h3><span class="wk">M28</span>Capstone integration<label class="done"><input type="checkbox" data-k="m28">Done</label></h3>
-<ul>
-<li>Complete a distributed order platform using .NET, SQL Server, Redis, RabbitMQ (raw and via NServiceBus/MassTransit), outbox/inbox, Saga, and idempotent consumers.</li>
-<li>Add OpenTelemetry, Prometheus/Grafana, Docker Compose, and automated tests.</li>
-<li>Run the failure-simulation suite and document recovery behavior.</li>
-<li>Review gaps and prepare concise explanations of architecture decisions and trade-offs.</li>
-<li>Integrate the AI support assistant: tenant-scoped RAG, tool calls into the Saga with human approval, and the eval suite.</li>
-<li>Add OAuth2/OIDC between services and keep secrets in a vault.</li>
-<li><span class="new">New</span> Add a SignalR channel that pushes order-status updates to the UI.</li>
-<li><span class="new">New</span> Publish it as a portfolio repo: README, architecture diagram, ADRs, failure-test results, and a short demo recording. M31 uses this.</li>
-</ul>
-<div class="callout"><span class="label">Exit Deliverable</span><p>A demonstrable, public, production-style capstone covering distributed reliability, security, real-time updates, and AI components.</p></div>
-</article>
-
-<div class="callout ckpt" id="ck5"><span class="label">Checkpoint 5: AI coding<label class="done" style="float:right"><input type="checkbox" data-k="ck5">Done</label></span><p>A 60-minute AI-assisted coding mock in an unfamiliar repo, plus a 20-minute code-review drill on a PR you have not seen.</p></div>
-
 <div class="phase">Phase 6: Behavioral &amp; Leadership</div>
 
 <article class="week" id="m29"><h3><span class="wk">M29</span>Story bank and full question bank<label class="done"><input type="checkbox" data-k="m29">Done</label></h3>
@@ -927,7 +879,7 @@ td.bad{color:var(--fixfg)}
 <li>Shrink Accenture to 1–2 bullets. Fix “two production applications — including…”.</li>
 <li>Byte AI “~50 DAU”: frame it honestly with context (solo build, live on the App Store). Never inflate it.</li>
 <li>Trim skills to each lane; match keywords to each job description.</li>
-<li>Add the capstone repo under Projects.</li>
+<li>Add a portfolio repo under Projects (e.g., the Phase 4 AI builds: RAG service, agents, production AI). The capstone (M28) was removed by the learner on 2026-11-23.</li>
 <li>Reconcile your notes with the resume. For each claim in <a href="#s-fixes">section 10 → “Claims to verify”</a>, either add it to the resume (if true and defensible) or drop it from your answers.</li>
 </ul>
 <h4>Verification</h4>
@@ -935,7 +887,7 @@ td.bad{color:var(--fixfg)}
 <li>ATS check: single column, standard headings, PDF text extracts cleanly.</li>
 <li>Defend every line: a 60-second explanation plus answers to “how exactly?” and “what went wrong?” for each bullet. Cut anything you can't defend.</li>
 <li>Get 2–3 people to review it, ideally engineers at target companies.</li>
-<li>Make public profiles match: LinkedIn, GitHub pinned repos (capstone first), personal site.</li>
+<li>Make public profiles match: LinkedIn, GitHub pinned repos (strongest project first), personal site.</li>
 </ul>
 <h4>Search logistics</h4>
 <ul>
@@ -947,6 +899,39 @@ td.bad{color:var(--fixfg)}
 </article>
 
 <div class="callout ckpt" id="ck7"><span class="label">Checkpoint 7: Recruiter screen<label class="done" style="float:right"><input type="checkbox" data-k="ck7">Done</label></span><p>A 20-minute recruiter-screen mock: tell me about yourself, why leaving, salary expectations, timeline. Then have someone pick any three resume bullets and drill into each for five minutes.</p></div>
+
+<div class="phase">Phase 5: AI Coding (moved after Phase 7 by the learner, 2026-11-23; M28 removed)</div>
+
+<article class="week" id="m26"><h3><span class="wk">M26</span>AI-assisted coding, code review, and code comprehension<label class="done"><input type="checkbox" data-k="m26">Done</label></h3>
+<ul>
+<li>Explore an unfamiliar .NET repository before editing: architecture, entry points, dependencies, tests, and conventions.</li>
+<li>Use AI to locate code paths and explain behavior, then verify findings yourself.</li>
+<li>Implement a feature across API, domain, persistence, and tests.</li>
+<li>Debug an existing production-style defect and write a regression test.</li>
+<li>Refactor safely, inspect diffs, run tests, and challenge AI-generated assumptions.</li>
+<li>Use Copilot, Claude Code, Codex, or IDE agents as available.</li>
+<li><span class="new">New</span> <strong>Code-review round:</strong> review a PR with planted defects (race condition, SQL/command injection, N+1, missing authorization, missing tests) in 30 minutes; rank findings by severity and explain each fix.</li>
+<li><span class="new">New</span> <strong>Code-comprehension round:</strong> read unfamiliar code cold and explain data flow, invariants, and how it fails.</li>
+<li><span class="new">New</span> <strong>AI-assisted coding round:</strong> practice in a CoderPad-style editor with an assistant; narrate how you verify each generated piece, and when you refuse a suggestion.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Complete a repository task while retaining control of design, correctness, security, and test quality, plus three timed code-review drills.</p></div>
+</article>
+
+<article class="week" id="m27"><h3><span class="wk">M27</span>Agentic tickets and live production debugging<label class="done"><input type="checkbox" data-k="m27">Done</label></h3>
+<ul>
+<li>Practice multi-file feature work with an explicit plan and incremental implementation.</li>
+<li>Add tenant-level distributed rate limiting to an existing application.</li>
+<li>Diagnose duplicate order notifications and fix the underlying delivery/idempotency issue.</li>
+<li>Replace in-memory caching with Redis without changing public API contracts.</li>
+<li>Add Docker Compose for API, SQL Server, Redis, and RabbitMQ.</li>
+<li>Implement retry/DLQ handling and validate failure behavior.</li>
+<li>Review generated changes for security, race conditions, missing tests, and unintended scope.</li>
+<li><span class="new">New</span> <strong>Live production-debugging round:</strong> a simulated incident where clues (logs, metrics, traces) arrive gradually; state hypotheses out loud, rank them, and pick the cheapest discriminating check each time.</li>
+</ul>
+<div class="callout"><span class="label">Exit Deliverable</span><p>Complete realistic engineering tickets and explain how AI was used, what was verified, and what was rejected; run two live-debugging drills.</p></div>
+</article>
+
+<div class="callout ckpt" id="ck5"><span class="label">Checkpoint 5: AI coding<label class="done" style="float:right"><input type="checkbox" data-k="ck5">Done</label></span><p>A 60-minute AI-assisted coding mock in an unfamiliar repo, plus a 20-minute code-review drill on a PR you have not seen.</p></div>
 
 <div class="phase">Phase 8: Final Mock Interviews</div>
 
