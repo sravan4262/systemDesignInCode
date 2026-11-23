@@ -82,3 +82,56 @@ X-Tenant-Id: acme
 X-Groups: support
 
 { "question": "What is the refund policy?" }
+
+### ---------- Cost and latency: router + semantic cache (?dryRun=true = no OpenAI key needed) ----------
+
+### C1. Greeting → Canned: no model call, cost 0
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+
+{ "question": "thanks!" }
+
+### C2. First question → Small model, cache MISS (stored in scope acme|support|kb1)
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+X-Tenant-Id: acme
+X-Groups: support
+
+{ "question": "What is your refund policy?" }
+
+### C3. Similar wording → cache HIT (0.816), cost 0
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+X-Tenant-Id: acme
+X-Groups: support
+
+{ "question": "how does the refund policy work" }
+
+### C4. Same words, other tenant → MISS (different scope: never served acme's answer)
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+X-Tenant-Id: globex
+X-Groups: support
+
+{ "question": "how does the refund policy work" }
+
+### C5. Personal → answered, never cached
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+
+{ "question": "Where is my order 124?" }
+
+### C6. Reasoning / multi-part → Large model (~4× the cost)
+POST {{host}}/cost/ask?dryRun=true
+Content-Type: application/json
+
+{ "question": "Compare the refund policy with the shipping policy, why are they different?" }
+
+### C7. A document changed → kb version +1 → old answers are in an old scope: C3 now MISSES
+POST {{host}}/cost/documents-changed
+
+### C8. Real models (needs the OpenAI key): ttftMs vs. totalMs, real tokens and cost
+POST {{host}}/cost/ask
+Content-Type: application/json
+
+{ "question": "What is your refund policy?" }

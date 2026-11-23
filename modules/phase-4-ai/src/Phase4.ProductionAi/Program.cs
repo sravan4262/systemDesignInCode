@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.AI;
 using OpenAI.Chat;
+using Phase4.ProductionAi.CostLatency;
 using Phase4.ProductionAi.Guardrails;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,25 @@ builder.Services.AddKeyedTransient("service", (sp, _) => new GuardrailPipeline(
     sp.GetRequiredService<AzurePiiRedactor>(), sp.GetRequiredService<AzureContentSafetyModerator>(), thresholds,
     sp.GetRequiredService<ILogger<GuardrailPipeline>>(),
     fallbackModerator: sp.GetRequiredService<KeywordModerator>()));   // service down → in-code check, not no check
+
+// ---------- Cost and latency ----------
+// Two models for the router: the controller asks for the keyed client "small" or "large".
+var models = builder.Configuration.GetSection("Models");
+builder.Services.AddKeyedChatClient("small", new ChatClient(models["Small"] ?? "gpt-4.1-nano", apiKey).AsIChatClient());
+builder.Services.AddKeyedChatClient("large", new ChatClient(models["Large"] ?? "gpt-4.1-mini", apiKey).AsIChatClient());
+
+// Embeddings for the semantic cache: "local" (in code, offline) or "openai" (by calling an endpoint).
+// The similarity threshold depends on the embedder: a crude local one needs a lower bar than a real model.
+if (builder.Configuration["SemanticCache:Embedder"] == "openai")
+{
+    builder.Services.AddEmbeddingGenerator(new OpenAI.Embeddings.EmbeddingClient("text-embedding-3-small", apiKey).AsIEmbeddingGenerator());
+    builder.Services.AddSingleton<ITextEmbedder, OpenAiEmbedder>();
+}
+else builder.Services.AddSingleton<ITextEmbedder, LocalHashEmbedder>();
+
+builder.Services.AddSingleton(new SemanticCache(
+    threshold: builder.Configuration.GetValue("SemanticCache:Threshold", 0.8),
+    ttl: TimeSpan.FromMinutes(builder.Configuration.GetValue("SemanticCache:TtlMinutes", 60))));
 
 var app = builder.Build();
 app.MapControllers();

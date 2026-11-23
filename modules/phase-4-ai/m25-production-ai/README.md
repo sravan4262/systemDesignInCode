@@ -71,6 +71,17 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **Quick-check grades:** ~2.4/4. Q1 gap: the two code stops are action-time authZ AND removing the exfiltration channel (prompt techniques don't count). Q2: the model's output is steered by untrusted input; the JWT is signed by the IdP. Q3: right (+ rate limits, no secrets). Open: why retrieving d3 is acceptable and how to reduce it; no `to` parameter vs. an allowlisted one.
 - **Full checklist:** [designs/security-checklist.md](designs/security-checklist.md).
 
+#### Cost and latency: router + semantic cache (2026-11-23, build 3 step 3, plan A)
+- **Already covered elsewhere (so only the new parts were built):** TTFT vs. total (M23), prompt caching (M23 / `PromptBuilder`), cost per call (`RagTrace`), cost per resolved task (`AgentTrace`), context trimming (`ContextBuilder`), observability and the prompt-regression drill (M15, M22 prompt versioning, `EvalRunner`). Observability/incident drill marked covered.
+- **In plain words:** Cost = tokens × price for every model call; latency = TTFT (grows with input) + output tokens one at a time. Lower both without hurting answers: cheapest exit first.
+- **Request path (`CostController`):** route (greeting → canned, no model) → semantic cache (scoped) → top 3 permitted docs only → small or large model, streamed (TTFT measured separately) → store if cacheable.
+- **Router (`ModelRouter`):** Canned / Small / Large by rules; personal questions ("my order") answered but never cached. Production: a small-model classifier, and routing proven with evals before moving traffic.
+- **Semantic cache (`SemanticCache`):** answers for similar questions. **Key = scope (tenant | groups | knowledge-base version), matched exactly, THEN similarity inside the scope.** Same words from another tenant or group = different scope; a document change bumps the version, so old answers are never found again (invalidation by key). TTL + bounded size. Threshold depends on the embedder.
+- **Embedders:** `LocalHashEmbedder` (in code, bag of words, no synonyms) vs. `OpenAiEmbedder` (endpoint, understands meaning), picked by config.
+- **Verified (dry run):** "thanks!" → Canned, 0 cost; "What is your refund policy?" → Small, MISS; "how does the refund policy work" → HIT 0.816, 0 cost; "Refund policy please" → HIT 1.0; "shipping policy" → MISS; same question as globex → MISS (other scope); "my order" → not cached; "compare… why…" → Large (~4× cost); after documents-changed → MISS (kb2). Bug found while testing: stemming ran before stop-word removal ("does" → "doe"), lowering similarity; fixed.
+- **When not to use it:** Personal/transactional answers; low traffic; a small model without evals; a semantic cache with a low threshold (wrong answers served confidently).
+- **Quick-check answers:** _(open: 6 s answer with 600 output tokens: which two levers, which one only changes the perceived wait; why groups + document version in the key; what to do with "hi"/"thanks")_
+
 #### <Topic name>
 - **In plain words:**
 - **Problem it solves:**
