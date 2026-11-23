@@ -38,12 +38,20 @@ function Edge($b, $tx, $ty) {
   $s = [math]::Min($sx, $sy)
   return @(($cx + $dx * $s), ($cy + $dy * $s))
 }
-function Arrow($id, $from, $to, $label, $color, $dashed) {
+# $flat = a horizontal arrow at the height both boxes share (for tall boxes like a gateway spanning several rows).
+function Arrow($id, $from, $to, $label, $color, $dashed, $flat = $false) {
   $a = $script:boxes[$from]; $b = $script:boxes[$to]
   $acx = $a.x + $a.width / 2; $acy = $a.y + $a.height / 2
   $bcx = $b.x + $b.width / 2; $bcy = $b.y + $b.height / 2
-  $p1 = Edge $a $bcx $bcy; $p2 = Edge $b $acx $acy
-  $x1 = $p1[0]; $y1 = $p1[1]; $x2 = $p2[0]; $y2 = $p2[1]
+  if ($flat) {
+    $top = [math]::Max($a.y, $b.y); $bottom = [math]::Min($a.y + $a.height, $b.y + $b.height)
+    $y = if ($bottom -gt $top) { ($top + $bottom) / 2 } else { $bcy }
+    if ($bcx -ge $acx) { $x1 = $a.x + $a.width; $x2 = $b.x } else { $x1 = $a.x; $x2 = $b.x + $b.width }
+    $y1 = $y; $y2 = $y
+  } else {
+    $p1 = Edge $a $bcx $bcy; $p2 = Edge $b $acx $acy
+    $x1 = $p1[0]; $y1 = $p1[1]; $x2 = $p2[0]; $y2 = $p2[1]
+  }
   $ar = Base $id 'arrow' $x1 $y1 ([math]::Abs($x2 - $x1)) ([math]::Abs($y2 - $y1))
   $ar.roundness = @{ type = 2 }
   if ($color) { $ar.strokeColor = $color }

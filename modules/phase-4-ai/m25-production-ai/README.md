@@ -29,7 +29,7 @@ Code to read, not to run: each project builds with `dotnet build`; no Docker, da
 - **Guardrails:** input/output checks, PII redaction, a moderation step (threshold + human review band).
 - **Security:** prompt injection defences (sources as data, no secrets in the system prompt, tool tiers), cross-tenant isolation, authorisation at retrieval time AND action time, no data exfiltration through tools.
 - **Observability + incident drill:** per-call metrics; a "prompt change made it worse" flow: roll back, reproduce, add a regression eval, canary the fix.
-- **System design:** the AI chat over company documents ([design](designs/ai-chat-company-docs/ai-chat-company-docs.md)) and a hybrid router: deterministic flows for transactional intents, AI for open questions, a human for the rest.
+- **System design:** the AI chat over company documents ([design](designs/ai-chat-company-docs/ai-chat-company-docs.md)) and a hybrid router ([design](designs/hybrid-router/hybrid-router.md), built 2026-11-23): deterministic flows for transactional intents, AI for open questions, a human for the rest.
 
 _Removed by the learner on 2026-11-22: the LLM gateway (provider routing, per-tenant quotas, key management, metering). Removed on 2026-11-23: text-to-SQL / LLM-generated filters (default = tools; the one rule kept in the security checklist: a model-generated filter never decides authorisation)._
 
