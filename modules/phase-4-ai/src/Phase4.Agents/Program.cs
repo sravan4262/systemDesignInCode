@@ -1,6 +1,7 @@
 using Microsoft.Extensions.AI;
 using OpenAI.Chat;
 using Phase4.Agents.Domain;
+using Phase4.Agents.Evals;
 using Phase4.Agents.Memory;
 using Phase4.Agents.MultiAgent;
 using Phase4.Agents.Support;
@@ -26,6 +27,7 @@ builder.Services.AddSingleton<ConversationStore>();
 builder.Services.AddSingleton<ContextBuilder>();
 builder.Services.AddSingleton<CaseStore>();
 builder.Services.AddSingleton<AgentTraceStore>();
+builder.Services.AddSingleton<EvalRunner>();
 
 var app = builder.Build();
 app.MapControllers();

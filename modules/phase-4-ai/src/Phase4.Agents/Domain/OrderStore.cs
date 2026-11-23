@@ -6,11 +6,21 @@ namespace Phase4.Agents.Domain;
 
 public record Order(string Id, string Owner, string Item, decimal Total, decimal Refunded, string Status);
 
+// What the tools need. The app uses OrderStore (SQL); the eval uses InMemoryOrderStore (fresh data per trial),
+// so evals run the REAL tool code (owner checks, tiers, idempotency) without touching real orders.
+public interface IOrderStore
+{
+    Task<Order?> GetAsync(string orderId, CancellationToken ct);
+    Task<List<Order>> ListForAsync(string owner, CancellationToken ct);
+    Task<string> RefundAsync(string idempotencyKey, string orderId, decimal amount, CancellationToken ct);
+    Task<string> RequestApprovalAsync(string idempotencyKey, string orderId, decimal amount, string reason, string userId, CancellationToken ct);
+}
+
 // Orders + refunds in SQL Server (schema.sql). The tools call this; the model never does.
 // Concurrency is handled by the database, not by the model behaving well:
 //   - refunds.idempotency_key is the PK → the same refund runs once;
 //   - the UPDATE only succeeds if enough is left to refund → two parallel refunds can't go over the total.
-public class OrderStore(IConfiguration config)
+public class OrderStore(IConfiguration config) : IOrderStore
 {
     private readonly string _connectionString = config.GetConnectionString("Orders")!;
 

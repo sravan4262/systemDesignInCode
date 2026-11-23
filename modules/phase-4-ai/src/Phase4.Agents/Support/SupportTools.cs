@@ -9,7 +9,7 @@ public enum RefundReason { Damaged, NotDelivered, WrongItem }   // an enum: the 
 // The tools the support agent may use. Created PER REQUEST with the user from the JWT, so every tool
 // checks ownership with the real user, never with an id the model typed.
 // Least privilege: 2 reads + 1 write. No "update order", no "run SQL", no "send email".
-public class SupportTools(OrderStore store, string userId, string conversationId, ApprovalGate gate)
+public class SupportTools(IOrderStore store, string userId, string conversationId, ApprovalGate gate)
 {
     public IList<AITool> All =>
     [

@@ -112,3 +112,8 @@ X-User-Id: bob
 ### 5d. Cost per resolved task over the last 7 days
 GET {{host}}/traces/summary?days=7
 X-User-Id: alice
+
+### ---------- Evals (step 6) ----------
+
+### 6. Run the golden cases 3 times each → 200 = gate passed, 422 = blocked (see cases[].trials[].failures)
+POST {{host}}/evals/run?trials=3
