@@ -676,16 +676,16 @@ td.bad{color:var(--fixfg)}
 <li>Add LLM observability: per-call traces, token usage, cost, latency, and quality metrics.</li>
 <li>Run an incident drill: a model or prompt change regresses quality → roll back, reproduce, add a regression eval, and canary the fix.</li>
 <li>Defend against direct and indirect prompt injection, cross-tenant retrieval leaks, data exfiltration through tools, and tool misuse.</li>
-<li><span class="new">New</span> LLM-generated queries and filters (your NL → Azure AI Search filter design): validate against a schema/allowlist, never trust generated filters for authorization, enforce security trimming server-side. Define what “low confidence” means, measured with grounding checks or eval scores.</li>
+<li>Define what “low confidence” means, measured with grounding checks or eval scores.</li>
 <li>Enforce authorization at retrieval time and at action time; handle PII redaction and data retention (PHI if healthcare).</li>
 <li>Design AI systems: enterprise document Q&amp;A, customer-support agent, code-review assistant, semantic search platform, and multi-tenant RAG SaaS.</li>
 <li><span class="new">New</span> <strong>AI chat over company/customer data</strong> (builds on the shared foundation and non-AI version in M19):
   <ul>
   <li>Unstructured data (documents, policies): RAG with an ingestion pipeline (connectors, CDC, chunking, embeddings), access-control metadata stored per chunk, per-user filtering at retrieval, freshness and deletions.</li>
-  <li>Structured data (orders, accounts): prefer tool/function calling to typed, read-only APIs over open-ended text-to-SQL. If you use text-to-SQL: a read-only login with row-level security, a semantic layer or allowlisted views, query validation, and cost/row limits.</li>
+  <li>Structured data (orders, accounts): tool/function calling to typed, read-only APIs.</li>
   <li>Answers with citations, “I don't know” when retrieval finds nothing relevant, and escalation to a human.</li>
   <li>Security: injection hidden in documents, cross-tenant leaks, PII redaction; a model-generated query never decides what the user is authorized to see.</li>
-  <li>Evals: golden Q&amp;A set, execution accuracy for generated SQL, cost and latency per answer.</li>
+  <li>Evals: golden Q&amp;A set, cost and latency per answer.</li>
   <li><strong>The comparison to be ready for:</strong> deterministic bots are cheap, predictable and auditable; AI handles open-ended questions. The usual production answer is a hybrid: deterministic flows for transactional intents (refunds, address changes), AI for open questions, a human for everything else.</li>
   </ul></li>
 </ul>
@@ -1051,9 +1051,7 @@ td.bad{color:var(--fixfg)}
 <li><label><input type="checkbox" data-k="c47"> <span>Embedding model changes and the index becomes inconsistent.</span></label></li>
 <li><label><input type="checkbox" data-k="c48"> <span>Index is stale after source data is updated or deleted.</span></label></li>
 <li><label><input type="checkbox" data-k="c55"> <span><span class="new">New</span> Self-hosted inference or embedding service saturates; search falls back to lexical only.</span></label></li>
-<li><label><input type="checkbox" data-k="c56"> <span><span class="new">New</span> An LLM-generated search filter tries to widen scope beyond the user's tenant or permissions.</span></label></li>
 <li><label><input type="checkbox" data-k="c57"> <span><span class="new">New</span> Moderation/classification false positives spike after a model change.</span></label></li>
-<li><label><input type="checkbox" data-k="c65"> <span><span class="new">New</span> A chat's generated SQL tries to write data or read another tenant's rows.</span></label></li>
 </ul>
 </section>
 
