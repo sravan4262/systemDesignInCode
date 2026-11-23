@@ -112,7 +112,6 @@ td.bad{color:var(--fixfg)}
 <a class="t2" href="#m3"><b>M3</b> LLD interview problems</a>
 <a class="t2" href="#m4"><b>M4</b> Concurrent LLD &amp; machine coding</a>
 <a class="t2" href="#m5"><b>M5</b> .NET platform internals</a>
-<a class="t2 ck" href="#ck1"><b>CP1</b> Checkpoint: LLD &amp; .NET</a>
 <a class="t2" href="#m6"><b>M6</b> Database internals &amp; sharding</a>
 <a class="t2" href="#m7"><b>M7</b> NoSQL, storage engines, search</a>
 <a class="t2" href="#m8"><b>M8</b> Redis &amp; distributed caching</a>
@@ -123,27 +122,28 @@ td.bad{color:var(--fixfg)}
 <a class="t2" href="#m13"><b>M13</b> Concurrency &amp; resilience</a>
 <a class="t2" href="#m14"><b>M14</b> Security &amp; API design</a>
 <a class="t2" href="#m15"><b>M15</b> Observability, testing, ops</a>
-<a class="t2 ck" href="#ck2"><b>CP2</b> Checkpoint: distributed systems</a>
 <a class="t2" href="#m16"><b>M16</b> HLD fundamentals &amp; real-time</a>
 <a class="t2" href="#m17"><b>M17</b> Distributed systems theory</a>
 <a class="t2" href="#m18"><b>M18</b> Architecture &amp; domain design</a>
 <a class="t2" href="#m19"><b>M19</b> HLD patterns &amp; case studies I</a>
 <a class="t2" href="#m20"><b>M20</b> HLD case studies II</a>
 <a class="t2" href="#m21"><b>M21</b> Advanced architecture &amp; cloud ops</a>
-<a class="t2 ck" href="#ck3"><b>CP3</b> Checkpoint: HLD</a>
 <a class="t2" href="#m22"><b>M22</b> LLM apps &amp; RAG</a>
 <a class="t2" href="#m23"><b>M23</b> LLM internals, inference, adaptation</a>
 <a class="t2" href="#m24"><b>M24</b> Agents &amp; evals</a>
 <a class="t2" href="#m25"><b>M25</b> Production AI &amp; AI system design</a>
-<a class="t2 ck" href="#ck4"><b>CP4</b> Checkpoint: AI design</a>
 <a class="t2" href="#m29"><b>M29</b> Story bank &amp; question bank</a>
 <a class="t2" href="#m30"><b>M30</b> Deep dives, motivation, leveling</a>
-<a class="t2 ck" href="#ck6"><b>CP6</b> Checkpoint: behavioral</a>
 <a class="t2" href="#m31"><b>M31</b> Resume &amp; positioning</a>
-<a class="t2 ck" href="#ck7"><b>CP7</b> Checkpoint: recruiter screen</a>
 <a class="t2" href="#m26"><b>M26</b> AI coding, code review, comprehension</a>
 <a class="t2" href="#m27"><b>M27</b> Agentic tickets &amp; live debugging</a>
+<a class="t2 ck" href="#ck1"><b>CP1</b> Checkpoint: LLD &amp; .NET</a>
+<a class="t2 ck" href="#ck2"><b>CP2</b> Checkpoint: distributed systems</a>
+<a class="t2 ck" href="#ck3"><b>CP3</b> Checkpoint: HLD</a>
+<a class="t2 ck" href="#ck4"><b>CP4</b> Checkpoint: AI design</a>
 <a class="t2 ck" href="#ck5"><b>CP5</b> Checkpoint: AI coding</a>
+<a class="t2 ck" href="#ck6"><b>CP6</b> Checkpoint: behavioral</a>
+<a class="t2 ck" href="#ck7"><b>CP7</b> Checkpoint: recruiter screen</a>
 <a class="t2" href="#m32"><b>M32</b> Final mock interviews</a>
 <a class="t1" href="#s-failure">4. Failure-engineering checklist</a>
 <a class="t1" href="#s-deep">5. Deep-dive requirements</a>
@@ -171,14 +171,14 @@ td.bad{color:var(--fixfg)}
 <p>There is no calendar. Finish each module when its exit deliverable is met, then move on. A short checkpoint mock closes each phase so weak areas show up early, not in the last module.</p>
 <div class="tablewrap"><table>
 <thead><tr><th>Phase</th><th>Modules</th><th>Focus</th><th>Primary outcome</th></tr></thead><tbody>
-<tr><td>1. LLD &amp; .NET</td><td>M1–M5 + CP1</td><td>OOP, SOLID, patterns, LLD problems, concurrent machine coding, .NET runtime, ASP.NET Core and EF Core internals</td><td>Design extensible, testable, thread-safe components and explain how .NET executes them.</td></tr>
-<tr><td>2. Distributed Systems Engineering</td><td>M6–M15 + CP2</td><td>Databases, NoSQL, search, Redis, RabbitMQ, NServiceBus/MassTransit, Kafka, event sourcing, outbox/inbox, Saga, concurrency, resilience, security, API design, observability, testing</td><td>Build and fault-test reliable, secure distributed components.</td></tr>
-<tr><td>3. HLD &amp; Architecture</td><td>M16–M21 + CP3</td><td>Fundamentals, real-time delivery, distributed theory, DDD and decomposition, migrations, classic and real-world cases, multi-region, cloud operations</td><td>Design systems under realistic scale and reliability constraints, and defend the architecture.</td></tr>
-<tr><td>4. AI Engineering</td><td>M22–M25 + CP4</td><td>LLM apps, RAG, vector index internals, inference and fine-tuning, ranking, agents, evals, production AI, LLM security</td><td>Design, evaluate, secure and operate production LLM systems.</td></tr>
-<tr><td>6. Behavioral &amp; Leadership</td><td>M29–M30 + CP6</td><td>STAR story bank, full question bank, resume-specific questions, deep dives, leveling, negotiation</td><td>Demonstrate senior-level scope, ownership and influence.</td></tr>
-<tr><td>7. <span class="new">New</span> Resume &amp; Positioning</td><td>M31 + CP7</td><td>Target lanes, bullet rewrite, defend-every-line, profiles, search logistics</td><td>A resume that matches what you can defend, and a working application pipeline.</td></tr>
-<tr><td>5. AI Coding (after Phase 7)</td><td>M26–M27 + CP5</td><td>Unfamiliar repos, code review, code comprehension, AI-assisted coding, live debugging</td><td>Solve unfamiliar engineering tasks with AI while keeping control of design, correctness and tests.</td></tr>
-<tr><td>8. Final Mock Interviews</td><td>M32</td><td>Every round type, including code review, debugging and product architecture</td><td>Perform consistently across every round type.</td></tr>
+<tr><td>1. LLD &amp; .NET</td><td>M1–M5</td><td>OOP, SOLID, patterns, LLD problems, concurrent machine coding, .NET runtime, ASP.NET Core and EF Core internals</td><td>Design extensible, testable, thread-safe components and explain how .NET executes them.</td></tr>
+<tr><td>2. Distributed Systems Engineering</td><td>M6–M15</td><td>Databases, NoSQL, search, Redis, RabbitMQ, NServiceBus/MassTransit, Kafka, event sourcing, outbox/inbox, Saga, concurrency, resilience, security, API design, observability, testing</td><td>Build and fault-test reliable, secure distributed components.</td></tr>
+<tr><td>3. HLD &amp; Architecture</td><td>M16–M21</td><td>Fundamentals, real-time delivery, distributed theory, DDD and decomposition, migrations, classic and real-world cases, multi-region, cloud operations</td><td>Design systems under realistic scale and reliability constraints, and defend the architecture.</td></tr>
+<tr><td>4. AI Engineering</td><td>M22–M25</td><td>LLM apps, RAG, vector index internals, inference and fine-tuning, ranking, agents, evals, production AI, LLM security</td><td>Design, evaluate, secure and operate production LLM systems.</td></tr>
+<tr><td>6. Behavioral &amp; Leadership</td><td>M29–M30</td><td>STAR story bank, full question bank, resume-specific questions, deep dives, leveling, negotiation</td><td>Demonstrate senior-level scope, ownership and influence.</td></tr>
+<tr><td>7. <span class="new">New</span> Resume &amp; Positioning</td><td>M31</td><td>Target lanes, bullet rewrite, defend-every-line, profiles, search logistics</td><td>A resume that matches what you can defend, and a working application pipeline.</td></tr>
+<tr><td>5. AI Coding (after Phase 7)</td><td>M26–M27</td><td>Unfamiliar repos, code review, code comprehension, AI-assisted coding, live debugging</td><td>Solve unfamiliar engineering tasks with AI while keeping control of design, correctness and tests.</td></tr>
+<tr><td>8. Checkpoint Mocks + Final Mock Interviews</td><td>CP1–CP7 + M32</td><td>Every round type, including code review, debugging and product architecture</td><td>Perform consistently across every round type.</td></tr>
 </tbody></table></div>
 </section>
 
@@ -292,7 +292,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>Find and fix a seeded ThreadPool-starvation bug and a seeded N+1 bug using dotnet-counters and dotnet-trace. Explain in writing how a request flows through Kestrel → middleware → DI scope → EF Core.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck1"><span class="label">Checkpoint 1: LLD &amp; .NET<label class="done" style="float:right"><input type="checkbox" data-k="ck1">Done</label></span><p>A 45-minute machine-coding mock (e.g., thread-safe rate limiter or parking lot), then 10 minutes of .NET rapid-fire: DI lifetimes, async internals, EF tracking, HttpClientFactory.</p></div>
 
 <div class="phase">Phase 2: Distributed Systems Engineering</div>
 
@@ -453,7 +452,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>A useful operational dashboard and the ability to diagnose a failure from telemetry rather than guesswork.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck2"><span class="label">Checkpoint 2: Distributed systems<label class="done" style="float:right"><input type="checkbox" data-k="ck2">Done</label></span><p>A 45-minute deep-dive mock. The interviewer picks one of outbox/inbox, Saga, or idempotent consumers, asks you to whiteboard it, then injects failures (“the relay crashes after publish”, “compensation times out”). Grade yourself on precise guarantees, not vocabulary.</p></div>
 
 <div class="phase">Phase 3: High-Level Design &amp; Architecture</div>
 
@@ -618,7 +616,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>Design a multi-region SaaS platform with tenant isolation, regional data strategy, disaster recovery, and deployment plan.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck3"><span class="label">Checkpoint 3: HLD<label class="done" style="float:right"><input type="checkbox" data-k="ck3">Done</label></span><p>A 45-minute HLD mock on an unseen prompt from M19/M20 (e.g., Dropbox or the notification system), run end to end with your framework, followed by 10 minutes of “how would this survive a region outage?”.</p></div>
 
 <div class="phase">Phase 4: AI Engineering</div>
 
@@ -692,7 +689,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>For each AI design: requirements, architecture, retrieval strategy, eval plan, cost model, failure modes, and security controls.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck4"><span class="label">Checkpoint 4: AI system design<label class="done" style="float:right"><input type="checkbox" data-k="ck4">Done</label></span><p>A 45-minute AI design mock (e.g., multi-tenant document Q&amp;A or a support agent). The interviewer must push on evals, cost per request, prompt injection, and “the right document exists but the answer is wrong”.</p></div>
 
 <div class="phase">Phase 6: Behavioral &amp; Leadership</div>
 
@@ -861,7 +857,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>Two rehearsed deep dives that survive five levels of “why”, plus clear motivation answers.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck6"><span class="label">Checkpoint 6: Behavioral<label class="done" style="float:right"><input type="checkbox" data-k="ck6">Done</label></span><p>A 45-minute behavioral mock with aggressive follow-up probing (“what exactly did <em>you</em> do?”), then a 20-minute deep-dive mock on one of your two projects.</p></div>
 
 <div class="phase">Phase 7: Resume &amp; Positioning</div>
 
@@ -898,7 +893,6 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>2–3 reviewed resume variants, aligned profiles, a target list with referrals requested, and the first applications sent.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck7"><span class="label">Checkpoint 7: Recruiter screen<label class="done" style="float:right"><input type="checkbox" data-k="ck7">Done</label></span><p>A 20-minute recruiter-screen mock: tell me about yourself, why leaving, salary expectations, timeline. Then have someone pick any three resume bullets and drill into each for five minutes.</p></div>
 
 <div class="phase">Phase 5: AI Coding (moved after Phase 7 by the learner, 2026-11-23; M28 removed)</div>
 
@@ -931,9 +925,17 @@ td.bad{color:var(--fixfg)}
 <div class="callout"><span class="label">Exit Deliverable</span><p>Complete realistic engineering tickets and explain how AI was used, what was verified, and what was rejected; run two live-debugging drills.</p></div>
 </article>
 
-<div class="callout ckpt" id="ck5"><span class="label">Checkpoint 5: AI coding<label class="done" style="float:right"><input type="checkbox" data-k="ck5">Done</label></span><p>A 60-minute AI-assisted coding mock in an unfamiliar repo, plus a 20-minute code-review drill on a PR you have not seen.</p></div>
 
-<div class="phase">Phase 8: Final Mock Interviews</div>
+<div class="phase">Phase 8: Checkpoint Mocks + Final Mock Interviews</div>
+
+<p><strong>Session 1: checkpoint mocks.</strong> All checkpoints were moved here by the learner on 2026-11-23 (none are taken at the end of their phase). Run them in order CP1 to CP7, plus the CP2 retry round, as the first mock interviews; then M32.</p>
+<div class="callout ckpt" id="ck1"><span class="label">Checkpoint 1: LLD &amp; .NET<label class="done" style="float:right"><input type="checkbox" data-k="ck1">Done</label></span><p>A 45-minute machine-coding mock (e.g., thread-safe rate limiter or parking lot), then 10 minutes of .NET rapid-fire: DI lifetimes, async internals, EF tracking, HttpClientFactory.</p></div>
+<div class="callout ckpt" id="ck2"><span class="label">Checkpoint 2: Distributed systems<label class="done" style="float:right"><input type="checkbox" data-k="ck2">Done</label></span><p>A 45-minute deep-dive mock. The interviewer picks one of outbox/inbox, Saga, or idempotent consumers, asks you to whiteboard it, then injects failures (“the relay crashes after publish”, “compensation times out”). Grade yourself on precise guarantees, not vocabulary.</p></div>
+<div class="callout ckpt" id="ck3"><span class="label">Checkpoint 3: HLD<label class="done" style="float:right"><input type="checkbox" data-k="ck3">Done</label></span><p>A 45-minute HLD mock on an unseen prompt from M19/M20 (e.g., Dropbox or the notification system), run end to end with your framework, followed by 10 minutes of “how would this survive a region outage?”.</p></div>
+<div class="callout ckpt" id="ck4"><span class="label">Checkpoint 4: AI system design<label class="done" style="float:right"><input type="checkbox" data-k="ck4">Done</label></span><p>A 45-minute AI design mock (e.g., multi-tenant document Q&amp;A or a support agent). The interviewer must push on evals, cost per request, prompt injection, and “the right document exists but the answer is wrong”.</p></div>
+<div class="callout ckpt" id="ck5"><span class="label">Checkpoint 5: AI coding<label class="done" style="float:right"><input type="checkbox" data-k="ck5">Done</label></span><p>A 60-minute AI-assisted coding mock in an unfamiliar repo, plus a 20-minute code-review drill on a PR you have not seen.</p></div>
+<div class="callout ckpt" id="ck6"><span class="label">Checkpoint 6: Behavioral<label class="done" style="float:right"><input type="checkbox" data-k="ck6">Done</label></span><p>A 45-minute behavioral mock with aggressive follow-up probing (“what exactly did <em>you</em> do?”), then a 20-minute deep-dive mock on one of your two projects.</p></div>
+<div class="callout ckpt" id="ck7"><span class="label">Checkpoint 7: Recruiter screen<label class="done" style="float:right"><input type="checkbox" data-k="ck7">Done</label></span><p>A 20-minute recruiter-screen mock: tell me about yourself, why leaving, salary expectations, timeline. Then have someone pick any three resume bullets and drill into each for five minutes.</p></div>
 
 <article class="week" id="m32"><h3><span class="wk">M32</span>Final mock interviews<label class="done"><input type="checkbox" data-k="m32">Done</label></h3>
 <ul>

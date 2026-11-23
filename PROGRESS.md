@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** **CP4** (AI design mock). Phase 4 builds all done: build 1 `Phase4.Rag` ✅ 2026-11-22, **build 3 `Phase4.ProductionAi` ✅ 2026-11-23** (M25 ✅), **build 2 `Phase4.Agents` ✅ 2026-11-23** (support agent, workflow, multi-agent, memory, shared case state, traces, one eval example, MCP server + .NET MCP client) → M24 ✅. M22 ✅ (6.3/10; retry Q1–Q3), M23 ✅ (6.1/10; retry TTFT vs. total time and precision/recall). Build scope for all three projects: M25 README.
-- **Next step:** **CP4**: a 45-minute AI design mock (multi-tenant document Q&A or a support agent); the interviewer pushes on evals, cost per request, prompt injection, and "the right document exists but the answer is wrong". Log in `checkpoints/CP4-mock.md`. Before that, optionally: run `POST /evals/run` and the MCP tools against SQL Server (not run yet: no SQL Server on the Windows machine). Phase 3 deferred items still open: M19 S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
+- **Current module:** **Phase 6, M29** (story bank & question bank), not started. Phase 4 ✅ (CP4 moved to Phase 8). Phase 4 builds all done: build 1 `Phase4.Rag` ✅ 2026-11-22, **build 3 `Phase4.ProductionAi` ✅ 2026-11-23** (M25 ✅), **build 2 `Phase4.Agents` ✅ 2026-11-23** (support agent, workflow, multi-agent, memory, shared case state, traces, one eval example, MCP server + .NET MCP client) → M24 ✅. M22 ✅ (6.3/10; retry Q1–Q3), M23 ✅ (6.1/10; retry TTFT vs. total time and precision/recall). Build scope for all three projects: M25 README.
+- **Next step:** **M29 story bank** (Phase 6). First settle where personal stories live (gitignored folder or outside the repo) unless the learner confirms the repo is private. CP4 (45-min AI design mock: evals, cost per request, prompt injection, "right document, wrong answer") now runs in Phase 8, session 1, with all the other CPs. Optionally: run `POST /evals/run` and the MCP tools against SQL Server (not run yet: no SQL Server on the Windows machine). Phase 3 deferred items still open: M19 S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
@@ -18,7 +18,7 @@
   - **Deferred, to look into later (learner, 2026-11-21):** S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
 - **Phase 4 changes (learner, 2026-11-21):** M24 trimmed by the learner on 2026-11-22: **A2A, durable agent execution and eval-design details removed**; evals = one code example. **M23 trimmed to one light session** (learner uses models via APIs; no training, hosting or inference internals); M22 vector-index internals cut to basics (IVF / PQ removed). Phase 4 order (2026-11-22): M22 ✅ → M23 ✅ → M24 sessions 1–5 ✅ → **three code-only builds, in order, learning new topics while building**: (1) RAG service `Phase4.Rag`, (2) agents + one eval example `Phase4.Agents`, (3) production AI + security `Phase4.ProductionAi` (covers M25; LLM gateway removed; text-to-SQL removed by the learner 2026-11-23) → CP4. Scope in the M25 README.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
-- **Plan order change (learner, 2026-11-23):** after CP4: **Phase 6 (behavioral) → Phase 7 (resume) → Phase 5 (AI coding: M26, M27, CP5) → Phase 8 (final mocks)**. **M28 (capstone integration) removed completely**; `capstone/` stays as-is. Phases 6–7 involve personal career details: keep them out of tracked files unless the learner confirms the repo is private (CLAUDE.md privacy rule).
+- **Plan order change (learner, 2026-11-23):** **Phase 6 (behavioral) → Phase 7 (resume) → Phase 5 (AI coding: M26, M27) → Phase 8 (session 1: ALL checkpoint mocks CP1–CP7 + the CP2 retry; then M32 final mocks)**. No checkpoint is taken at the end of its phase any more. **M28 (capstone integration) removed completely**; `capstone/` stays as-is. Phases 6–7 involve personal career details: keep them out of tracked files unless the learner confirms the repo is private (CLAUDE.md privacy rule).
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
 - **Machine last used:** Windows
 
@@ -32,7 +32,6 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 1 | M3 | LLD interview problems | ✅ (moved on; design-only, no tests/walkthroughs) |
 | 1 | M4 | Concurrent LLD & machine coding | ✅ (concepts + core code; no tests by choice) |
 | 1 | M5 | .NET platform internals | 🟨 (6 hot topics covered; rest deferred) |
-| 1 | CP1 | Checkpoint: LLD & .NET | ⬜ (deferred) |
 | 2 | M6 | Database internals & sharding | ✅ (code samples, no Docker; see open questions) |
 | 2 | M7 | NoSQL, storage engines, search | ✅ (overview by choice) |
 | 2 | M8 | Redis & distributed caching | ✅ (overview by choice; see open questions) |
@@ -43,27 +42,28 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 2 | M13 | Concurrency & resilience | ✅ (Sessions 1–6; load shedding skipped; see open questions) |
 | 2 | M14 | Security & API design | ✅ (7-session cut; see open questions) |
 | 2 | M15 | Observability, testing, ops | ✅ (sessions 1–4 + 6; SLOs skipped) |
-| 2 | CP2 | Checkpoint: distributed systems | 🟨 (mock 4.7/10; retry weak list) |
 | 3 | M16 | HLD fundamentals & real-time | ✅ (all 8 + deep dives; designs in designs/) |
 | 3 | M17 | Distributed systems theory | ✅ |
 | 3 | M18 | Architecture & domain design | ✅ (lab → later) |
 | 3 | M19 | HLD patterns & case studies I | 🟨 (patterns 1–7 + cases 1–8, 11 done; S8–S9 and cases 9–10 deferred to later) |
 | 3 | M20 | HLD case studies II | ⬜ |
 | 3 | M21 | Advanced architecture & cloud ops | ✅ (S7 skipped) |
-| 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
 | 4 | M22 | LLM apps & RAG | ✅ concepts done, "done when" 6.3/10 (retry Q1–Q3 later); build deferred to end of Phase 4 |
 | 4 | M23 | LLM internals for model users (light) | ✅ done 2026-11-22 (6.1/10; retry Q1 TTFT vs total, Q5 precision/recall; memo not written) |
 | 4 | M24 | Agents & evals | ✅ done 2026-11-23 (sessions 1–5 + build 2 `Phase4.Agents`: traces, one eval example, MCP server + client; eval not run yet) |
 | 4 | M25 | Production AI & AI system design | ✅ done 2026-11-23 (build 3 `Phase4.ProductionAi`: guardrails in code + via Azure, security demo, router + scoped semantic cache; hybrid-router design; gateway + text-to-SQL removed; AI-chat doc gaps (failure modes, eval plan, security sections) skipped by choice) |
-| 4 | CP4 | Checkpoint: AI design | ⬜ |
-| 6 | M29 | Story bank & question bank | ⬜ (next after CP4) |
+| 6 | M29 | Story bank & question bank | ⬜ (NEXT) |
 | 6 | M30 | Deep dives, motivation, leveling | ⬜ |
-| 6 | CP6 | Checkpoint: behavioral | ⬜ |
 | 7 | M31 | Resume & positioning | ⬜ |
-| 7 | CP7 | Checkpoint: recruiter screen | ⬜ |
 | 5 | M26 | AI coding, code review, comprehension | ⬜ (Phase 5 moved after Phase 7, 2026-11-23) |
 | 5 | M27 | Agentic tickets & live debugging | ⬜ |
-| 5 | CP5 | Checkpoint: AI coding | ⬜ |
+| 8 | CP1 | Checkpoint: LLD & .NET | ⬜ (deferred) |
+| 8 | CP2 | Checkpoint: distributed systems | 🟨 (mock 4.7/10; retry weak list) |
+| 8 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
+| 8 | CP4 | Checkpoint: AI design | ⬜ |
+| 8 | CP5 | Checkpoint: AI coding | ⬜ |
+| 8 | CP6 | Checkpoint: behavioral | ⬜ |
+| 8 | CP7 | Checkpoint: recruiter screen | ⬜ |
 | 8 | M32 | Final mock interviews | ⬜ |
 
 ## Failure checklist (plan section 4)
