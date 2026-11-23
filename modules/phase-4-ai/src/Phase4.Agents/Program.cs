@@ -4,6 +4,7 @@ using Phase4.Agents.Domain;
 using Phase4.Agents.Memory;
 using Phase4.Agents.MultiAgent;
 using Phase4.Agents.Support;
+using Phase4.Agents.Traces;
 using Phase4.Agents.Workflow;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddSingleton<MemoryStore>();
 builder.Services.AddSingleton<ConversationStore>();
 builder.Services.AddSingleton<ContextBuilder>();
 builder.Services.AddSingleton<CaseStore>();
+builder.Services.AddSingleton<AgentTraceStore>();
 
 var app = builder.Build();
 app.MapControllers();

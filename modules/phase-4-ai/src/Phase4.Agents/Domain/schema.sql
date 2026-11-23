@@ -74,3 +74,17 @@ CREATE TABLE support_cases (
     notes   nvarchar(max) NOT NULL DEFAULT '',          -- one line per agent action
     version int           NOT NULL DEFAULT 1
 );
+
+-- ---------- Traces (step 5) ----------
+
+-- One row per agent run. The whole AgentTrace is JSON (model calls, tool calls, tokens, ms, cost);
+-- stop_reason and cost_usd are copied out as columns so the summary can filter and SUM without parsing JSON.
+CREATE TABLE agent_traces (
+    id          varchar(32)   NOT NULL PRIMARY KEY,
+    user_id     varchar(50)   NOT NULL,
+    stop_reason varchar(30)   NOT NULL,                 -- Answered = resolved; everything else = handed off / waiting
+    cost_usd    decimal(12,6) NOT NULL,
+    trace       nvarchar(max) NOT NULL,
+    created_at  datetime2     NOT NULL DEFAULT sysutcdatetime()
+);
+CREATE INDEX ix_traces_user ON agent_traces (user_id, created_at);

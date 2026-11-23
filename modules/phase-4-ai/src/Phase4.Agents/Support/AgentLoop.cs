@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Extensions.AI;
+using Phase4.Agents.Traces;
 
 namespace Phase4.Agents.Support;
 
@@ -16,7 +18,9 @@ public class AgentLoop(IChatClient chat)
 {
     private const string HandOff = "I couldn't finish this automatically. A support team member will follow up.";
 
-    public async Task<AgentResult> RunAsync(List<ChatMessage> messages, IList<AITool> tools, AgentBudget budget, ApprovalGate gate, CancellationToken ct)
+    // trace (optional, step 5): when given, every model call and tool call is recorded in it.
+    public async Task<AgentResult> RunAsync(List<ChatMessage> messages, IList<AITool> tools, AgentBudget budget, ApprovalGate gate, CancellationToken ct,
+        AgentTrace? trace = null)
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
         timeout.CancelAfter(TimeSpan.FromSeconds(budget.TimeoutSeconds));
@@ -31,11 +35,13 @@ public class AgentLoop(IChatClient chat)
         {
             for (int step = 1; step <= budget.MaxSteps; step++)
             {
+                var modelWatch = Stopwatch.StartNew();
                 var response = await chat.GetResponseAsync(messages, options, timeout.Token);
                 tokens += response.Usage?.TotalTokenCount ?? 0;
                 messages.AddRange(response.Messages);   // keep the model's tool requests in the history
 
                 var calls = response.Messages.SelectMany(m => m.Contents).OfType<FunctionCallContent>().ToList();
+                trace?.AddModelCall(step, response.Usage, modelWatch.ElapsedMilliseconds, calls.Select(c => c.Name));
                 if (calls.Count == 0) return new(response.Text, StopReason.Answered, steps, tokens);   // done
                 if (tokens > budget.MaxTokens) return Stop(StopReason.TokenBudget);
 
@@ -44,17 +50,21 @@ public class AgentLoop(IChatClient chat)
                     var args = JsonSerializer.Serialize(call.Arguments);
                     if (!seenCalls.Add($"{call.Name}:{args}")) return Stop(StopReason.RepeatedCall);   // same call again = stuck
 
+                    var toolWatch = Stopwatch.StartNew();
                     var result = gate.IsWaiting
                         ? "skipped: an action is waiting for human approval; no more actions in this task"   // Fix 2 (every call still needs a result)
                         : await RunToolAsync(tools, call, timeout.Token);
                     steps.Add(new(step, call.Name, args, result));
+                    trace?.AddToolCall(step, call.Name, args, result, toolWatch.ElapsedMilliseconds);
                     messages.Add(new(ChatRole.Tool, [new FunctionResultContent(call.CallId, result)]));
                 }
 
                 if (gate.IsWaiting)   // Fix 2: one last call with NO tools, so the model can only write text
                 {
+                    var finalWatch = Stopwatch.StartNew();
                     var final = await chat.GetResponseAsync(messages, new ChatOptions { Temperature = 0 }, timeout.Token);
                     tokens += final.Usage?.TotalTokenCount ?? 0;
+                    trace?.AddModelCall(step, final.Usage, finalWatch.ElapsedMilliseconds, []);
                     return new(final.Text, StopReason.AwaitingApproval, steps, tokens);
                 }
             }

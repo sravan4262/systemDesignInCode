@@ -12,7 +12,9 @@ public class SupportController(AgentLoop agent, OrderStore store) : ControllerBa
 {
     public record ChatRequest(string ConversationId, string Message);
 
-    private const string SystemPrompt = """
+    // Shared with TracesController (same agent, traced). Bump PromptVersion whenever SystemPrompt changes.
+    internal const string PromptVersion = "support-v1";
+    internal const string SystemPrompt = """
         You are a support agent for an online shop. Use the tools; never guess order details.
         Refund only delivered orders, and only for a reason the customer gave (damaged, not delivered, wrong item).
         If a tool says a refund is waiting for approval, tell the customer that; never say it was refunded.

@@ -91,3 +91,24 @@ Content-Type: application/json
 ###    [Refunds] Refunded $40 on order 124 (damaged).\n" }
 ### All 3 notes are there, in whatever order the workers finished. Without the version check, two workers reading
 ### version 1 at the same time would each write "notes + my line", and one line would be lost.
+
+### ---------- Traces (step 5) ----------
+
+### 5a. Same small refund, traced → returns answer + traceId + tokens + costUsd
+POST {{host}}/traces/support/chat
+X-User-Id: alice
+Content-Type: application/json
+
+{ "conversationId": "t1", "message": "My headphones (order 124) arrived broken, I want my money back" }
+
+### 5b. Open the trace (paste the traceId from 5a): modelCalls (tokens, ms, cost, toolsRequested) + toolCalls (args, result, ms)
+GET {{host}}/traces/PASTE_TRACE_ID
+X-User-Id: alice
+
+### 5c. Another user can't see it → 404
+GET {{host}}/traces/PASTE_TRACE_ID
+X-User-Id: bob
+
+### 5d. Cost per resolved task over the last 7 days
+GET {{host}}/traces/summary?days=7
+X-User-Id: alice
