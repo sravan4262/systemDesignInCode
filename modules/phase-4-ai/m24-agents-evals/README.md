@@ -3,7 +3,7 @@
 > Plan: `Senior_Engineer_Interview_Plan.html#m24` · Status lives in `/PROGRESS.md`
 
 ## Exit deliverable
-- [ ] A small support agent plus one code eval example (golden cases, tool + answer checks, repeated trials, a pass/fail gate).
+- [x] A small support agent plus one code eval example (golden cases, tool + answer checks, repeated trials, a pass/fail gate). Built in `Phase4.Agents` (2026-11-23); the eval hasn't been run yet (needs the OpenAI key; ~45 model calls).
 
 ## Learning plan
 
@@ -98,6 +98,14 @@ _One entry per topic, written in your own words after the 7-step concept walkthr
 - **Variations / alternatives:** Summarise vs. drop old turns, a scratchpad/notes file, sub-agents to keep context small, framework memory features (I still own retention, scoping, privacy).
 - **When not to use it:** Long-term memory for one-off tasks; storing everything "just in case"; shared mutable memory when a hand-off message would do.
 - **Quick-check answers:** 40 turns + full JSON → summarise old turns, trim tool outputs (+ only needed tools, only relevant memories). Two agents write `customer.status` → lost update; fix with a version check or a single owner per key. "Always approve refunds" from a message → memory poisoning: it would affect every future session; rules belong in code, memory holds only user-stated facts.
+
+#### Build 2 wrap-up (2026-11-23, Windows): shared state, traces, evals, MCP in `Phase4.Agents`
+- **Shared case state (`CaseAgentController`):** the same orchestrator and workers, each given 3 case tools. The orchestrator doesn't know about cases; the notes are written when a worker's model chooses to call `AddCaseNote` (`AgentLoop` → `tool.InvokeAsync` → `CaseStore.TryUpdateAsync`, `WHERE version = @v`). In this flow it behaves mostly like a shared **log**; `status` is where agents actually coordinate (a conflict forces a re-read and a new decision). A note that must always exist → write it in code, not by instruction.
+- **Dependency waves (explained, not built):** tasks whose inputs are ready run together (`Task.WhenAll`), then the next wave gets their answers in its task text. Latency = the longest chain, not the sum. Skip a task whose dependency failed; stop on a cycle. Pass results in code within one request; use the shared case only across time or a human.
+- **Traces (`TracesController`, `AgentTrace`):** one trace per run; each model call adds tokens (incl. cached), ms, cost, the tools it asked for; each tool call adds args, result, ms. Saved once at the end as JSON + `stop_reason`/`cost_usd` columns; owner check on read. Cost per **resolved** task = all spend ÷ runs that answered. Input tokens grow every step (the history is re-sent). Production = OpenTelemetry spans exported as each finishes; distributed tracing = one trace id in the W3C `traceparent` header (automatic for HTTP, inject/extract by hand for Kafka/RabbitMQ), spans with parent ids.
+- **Evals (`EvalsController`, `EvalRunner`, `GoldenCases`):** regression tests for model behaviour. Real `AgentLoop` + real prompt + real `SupportTools`, fake data (`InMemoryOrderStore`, new per trial, behind `IOrderStore`). Checks in code: stop reason, tools + args (by value), answer must / must-not contain, and the **store state** (truth vs. the answer's claim). 3 trials per case; critical cases 3/3, others ≥ 2/3; 422 blocks the change. Never compare the exact sentence; word checks are a rough net (a faithfulness check or an LLM judge given the facts covers meaning). Every production failure from a trace → a new golden case.
+- **MCP server (`Mcp/McpOrderTools.cs`, `/mcp`):** the 3 order tools via `[McpServerTool]`, delegating to `SupportTools` (same owner check, tiers, idempotency). Caller from the request (stand-in for OAuth), never a tool argument. Stateless Streamable HTTP. Annotations: reads `ReadOnly`, `RefundOrder` `Destructive` + `Idempotent`. Verified: `tools/list` returns the schemas (the `RefundReason` enum becomes a JSON Schema `enum`); no identity → `isError`; internal exceptions are hidden from the client.
+- **MCP client (`McpClientController`):** the whole integration = URL + transport + identity (`HttpClientTransport` + `McpClient.CreateAsync`). `ListToolsAsync()` returns `McpClientTool`s, which are `AIFunction`s, so they plug into the existing `AgentLoop` unchanged. The client's `ApprovalGate` can't see the server's approval, so the server must enforce the rules; the client only follows the result text. VS Code is configured in `.vscode/mcp.json`.
 
 #### <Topic name>
 - **In plain words:**

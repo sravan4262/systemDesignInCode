@@ -4,8 +4,8 @@
 > Ask Claude: "continue from PROGRESS.md" to start, and "wrap up" to update this file.
 
 ## Now
-- **Current module:** Phase 4 builds: build 1 `Phase4.Rag` done 2026-11-22 (ingestion, freshness, query path, RagTrace); next: build 2 `Phase4.Agents`. M22 done 2026-11-22 (6.3/10; retry Q1–Q3), M23 done 2026-11-22 (6.1/10; retry TTFT vs. total time and precision/recall). M24 sessions 1–5 done. Build scope for all three projects: M25 README.
-- **Next step:** Phase 3 cases done for now (1–8, 11; Case 12 moved to M25). **Deferred by the learner (2026-11-21), to look into later:** M19 S8–S9 worked examples (rolling out one change to 100k users; one schema change across 10k tenant DBs), **CP3**, and cases **9 Top-K** and **10 Dropbox**. Next: learner picks what to start (Phase 4 M22 is the natural next module).
+- **Current module:** Phase 4 builds. Build 1 `Phase4.Rag` ✅ 2026-11-22. **Build 2 `Phase4.Agents` ✅ 2026-11-23** (support agent, workflow, multi-agent, memory, shared case state, traces, one eval example, MCP server + .NET MCP client) → M24 ✅. M22 ✅ (6.3/10; retry Q1–Q3), M23 ✅ (6.1/10; retry TTFT vs. total time and precision/recall). Build scope for all three projects: M25 README.
+- **Next step:** **Build 3 `Phase4.ProductionAi` (M25)**: cost/latency (semantic cache, model routing, context trimming), guardrails, security (prompt injection, cross-tenant isolation, auth at retrieval AND action time), text-to-SQL safety, observability + incident drill, the AI chat over company documents design → then CP4. Before that, optionally: run `POST /evals/run` and the MCP tools against SQL Server (not run yet: no SQL Server on the Windows machine). Phase 3 deferred items still open: M19 S8–S9 worked examples, CP3, cases 9 Top-K and 10 Dropbox.
 - **Phase 3 order (learner's choice, updated 2026-11-18): all concepts + cloud ops first, no cuts → then HLD patterns → then cases.**
   1. **Concepts:** M16 (all 8; short deep dives on load balancer → API gateway → object storage next) → M17 (all 7) → M18 (all 7).
   2. **Cloud ops:** M21 (all 8).
@@ -19,7 +19,7 @@
 - **Phase 4 changes (learner, 2026-11-21):** M24 trimmed by the learner on 2026-11-22: **A2A, durable agent execution and eval-design details removed**; evals = one code example. **M23 trimmed to one light session** (learner uses models via APIs; no training, hosting or inference internals); M22 vector-index internals cut to basics (IVF / PQ removed). Phase 4 order (2026-11-22): M22 ✅ → M23 ✅ → M24 sessions 1–5 ✅ → **three code-only builds, in order, learning new topics while building**: (1) RAG service `Phase4.Rag`, (2) agents + one eval example `Phase4.Agents`, (3) production AI + security `Phase4.ProductionAi` (covers M25; LLM gateway removed) → CP4. Scope in the M25 README.
   - CP2 retry round (weak list in `checkpoints/CP2-mock.md`) still pending; fold into CP3 if not done.
 - **Study mode:** Code samples instead of Docker. Mechanism topics: core mechanism + one worked example; concise blocks when asked. CP1 deferred.
-- **Machine last used:** Mac
+- **Machine last used:** Windows
 
 ## Status
 Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
@@ -52,7 +52,7 @@ Legend: ⬜ not started · 🟨 in progress · ✅ done (exit deliverable met)
 | 3 | CP3 | Checkpoint: HLD | ⬜ (deferred to later) |
 | 4 | M22 | LLM apps & RAG | ✅ concepts done, "done when" 6.3/10 (retry Q1–Q3 later); build deferred to end of Phase 4 |
 | 4 | M23 | LLM internals for model users (light) | ✅ done 2026-11-22 (6.1/10; retry Q1 TTFT vs total, Q5 precision/recall; memo not written) |
-| 4 | M24 | Agents & evals | 🟨 in progress (started 2026-11-22; sessions 1–5 done; next: one eval example in code) |
+| 4 | M24 | Agents & evals | ✅ done 2026-11-23 (sessions 1–5 + build 2 `Phase4.Agents`: traces, one eval example, MCP server + client; eval not run yet) |
 | 4 | M25 | Production AI & AI system design | ⬜ (learned through build 3 `Phase4.ProductionAi`; gateway removed) |
 | 4 | CP4 | Checkpoint: AI design | ⬜ |
 | 5 | M26 | AI coding, code review, comprehension | ⬜ |
@@ -71,6 +71,7 @@ Ticked items (by ID, e.g., c1, c13): —
 
 ## Session log
 <!-- Newest first. Format: YYYY-MM-DD · machine · module · what was done · what's next -->
+- 2026-11-23 · Windows · M24 / build 2 · Walked through shared case state (orchestrator unchanged; notes written when a worker's model calls `AddCaseNote`; mostly a log, `status` is the coordination point) and dependency waves (explained, not built). Built: traces (`AgentTrace` per run, per model/tool call tokens + ms + cost, `TracesController` with trace view and cost per resolved task; OpenTelemetry/`traceparent` discussed), one eval example (`EvalRunner` + 5 golden cases, real agent + fake `InMemoryOrderStore` via new `IOrderStore`, tool/answer/state checks, 3 trials, critical 3/3 gate, 422 on fail), MCP server at `/mcp` (stateless HTTP, delegates to `SupportTools`; `tools/list` verified) and a .NET MCP client controller (`/mcp-client`, verified discovery). Also: Twitter case refinements on 11-19/20 (Follow Service, store types, tweet cache write). Next: build 3 `Phase4.ProductionAi`.
 - 2026-11-18 · Mac · M19 · Case 1 URL shortener 6.5/10 (review in designs/case-01-url-shortener/): estimates per month slip, redirect lookup missing in diagram, duplicate services; good decisions on 302 + edge TTL, random code + 409 retry, single write region. Next: Case 2 WhatsApp.
 - 2026-11-18 · Mac · M19 · Patterns 1–7: real-time (gateways + backplane, DB catch-up by seq), contention (holds with TTL, auth→capture/void), multi-step (state machine, Saga, Durable; idempotent activities), scaling reads (read models, fan-out on write vs. read for celebrities), scaling writes (queue, batch, sharded counters, shard key), large blobs (SAS, staged blocks, Range, claim-check), long-running tasks (202 + job/chunk tables, staged blocks as merge). Learner chose: cases next; S8–S9 become cases.
 - 2026-11-18 · Mac · M21 · S5 Azure compute (Functions/App Service/Container Apps/AKS; App Service plan = managed VMs; isolated worker, Durable), S6 safe delivery (rolling/blue-green/canary on new instances; weights at the routing layer shifted in pipeline stages; feature flags; Helm = templated YAML + env values, Kubernetes orchestrates), S7 skipped, S8 trade-offs (cost/compliance/ops + triggers). Next: M19 patterns.
@@ -98,6 +99,7 @@ Ticked items (by ID, e.g., c1, c13): —
 - 2026-11-15 · Mac · setup · Plan finalized; repo scaffolded (CLAUDE.md, PROGRESS.md, module folders). Next: start M1.
 
 ## Open questions
+- Build 2 quick checks left unanswered (2026-11-23): dependency waves (sequential vs. waves latency for 2 s + 2 s + 3 s; cycle handling; why code passes results instead of `GetCase`); traces (why divide by resolved runs; first place to look for "refunded the wrong order"; why a failed trace save only logs); evals (why the state check on top of the answer check; why critical 3/3; pass rate 1.0 → 0.87 after a prompt change); MCP (what still stops a 120 refund if a custom client skips the confirmation). Not run yet: `POST /evals/run`, MCP tools against SQL Server.
 - M21 S8: startup pushback 6/10 → say modular monolith, Container Apps, one EU region + zones, reasons on 3 axes, triggers. S6 rename: breaks during the release (v1 still live), not just on rollback.
 - M21 K8s drill gaps: Service (internal) vs. Ingress (external L7) vs. LoadBalancer Service (L4); KEDA for queue scaling; OOMKilled → raise limit/fix leak, not autoscale; `kubectl rollout undo`; sidecar = 2nd container in same pod; topologySpreadConstraints; never secrets in ConfigMap (Secrets only base64); Pending → cluster autoscaler/quota; HPA/VPA/Helm skipped. Multi-tenancy: separate table ≠ isolation (own DB); reports → read replica not search index. M21 S1 RPO/RTO definitions.
 - M18 → CP3: lab (RFC + 2 ADRs + strangler plan) deferred; done-when unanswered; S1–S3 checks skipped; S5 sync/async split; S4 Q&A: name 'distributed monolith', backward-compatible contracts, module boundary via public interface/events; S6 dual-write before backfill.
