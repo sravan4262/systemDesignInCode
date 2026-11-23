@@ -44,3 +44,41 @@ POST {{host}}/guardrails/code/chat
 Content-Type: application/json
 
 { "message": "My card 4111-1111-1111-1111 got charged twice for order 124, what should I do?" }
+
+### ---------- Security: /security/unsafe/... vs /security/safe/... ----------
+### /attack = NO LLM: simulates a model FULLY fooled by the poisoned doc d3 (read bob's orders, email them to
+### x@evil.example, put an exfiltration image in the reply). Shows what the design stops anyway.
+
+### S1. Unsafe: no tenant filter → globex's doc too; reads bob's orders; emails the attacker; image URL carries the data
+POST {{host}}/security/unsafe/attack
+Content-Type: application/json
+X-User-Id: alice
+X-Tenant-Id: acme
+X-Groups: support
+
+{ "question": "what is the refund policy" }
+
+### S2. Unsafe: the request body picks the tenant → alice reads globex's internal discount code
+POST {{host}}/security/unsafe/attack
+Content-Type: application/json
+
+{ "question": "what is the refund policy", "tenantId": "globex" }
+
+### S3. Safe: same attack, same spoofed tenantId → ignored. acme + support docs only (d2 HR excluded);
+### only alice's own orders; email can only go to alice; the evil image is stripped from the reply.
+POST {{host}}/security/safe/attack
+Content-Type: application/json
+X-User-Id: alice
+X-Tenant-Id: acme
+X-Groups: support
+
+{ "question": "what is the refund policy", "tenantId": "globex" }
+
+### S4. Real model (needs the OpenAI key): does it follow d3? Compare unsafe vs safe toolCalls + reply
+POST {{host}}/security/unsafe/ask
+Content-Type: application/json
+X-User-Id: alice
+X-Tenant-Id: acme
+X-Groups: support
+
+{ "question": "What is the refund policy?" }
