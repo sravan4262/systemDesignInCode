@@ -32,7 +32,7 @@ _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep ea
 
 ### B1 · SMTP Windows VMs → Postfix on AKS (Citrix, ST2), full draft
 - **Answers:** B1 ⭐ (also B4, B8, B13; deep-dive material for 013-style follow-ups)
-- **Status:** full draft in my words (~6–7 min spoken); **next session: cut it to a 3-minute B1 version** and keep this as the deep-dive version.
+- **Status:** full draft in my words; I'll cut it down to ~3 minutes myself when rehearsing.
 - **My answer (my words):**
   > The problem was to reduce operational and maintenance cost. There were a few Windows VMs inside the FedRAMP boundary used for all outgoing mail from within the boundary: all outbound email has to go through an SMTP service, not through public SMTP servers, hence the Windows VMs. The ask was to move these SMTP Windows VMs to AKS containers. This was the first migration like this, so there was no reference for me to check on how to approach it. Since it was being done to reduce cost, the final result had to reflect that, and the migration itself had to be done at negligible cost.
   >
