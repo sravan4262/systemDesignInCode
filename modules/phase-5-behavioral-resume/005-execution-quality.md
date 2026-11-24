@@ -10,15 +10,11 @@ Amazon's Dive Deep and Insist on the Highest Standards. They test how you work w
 | G1 ⭐ | The hardest bug you've debugged | Method, depth, persistence | ST16 |
 | G2 ⭐ | A production incident you owned; a postmortem that led to a systemic change | Mitigation first, then root cause and prevention | ST7, ST15 |
 | G3 | Tech debt vs. features; a time you cut corners | Trade-off judgment, paying it back | ST18 |
-| G4 | Speed vs. quality; working under pressure | What you protect when time is short | ST1 |
-| G5 | A time you dove deep to find a root cause others missed | Dive deep | ST15, ST16, ST17 |
 
 ## From my resume
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| G6 | FedRAMP High: what was your part vs. the team's? Which control was hardest to meet? | 'I' vs. 'we', depth | ST1 |
-| G7 | The four vulnerabilities: how did you prioritise under SLA pressure? Root cause and fix, generically | Prioritisation under pressure (no confidential detail) | ST1 |
-| G8 | On-call for 10 services: what was it like? What broke worst? | Operational ownership | ST10 |
+| G7 | FedRAMP High and the four vulnerabilities: your part vs. the team's; how did you prioritise under SLA pressure? Root cause and fix, generically | Prioritisation under pressure (no confidential detail) | ST1 |
 
 ## Stories
 _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep each story under 3 minutes (Situation + Task ~20%, Action ~60%, Result + lesson ~20%)._

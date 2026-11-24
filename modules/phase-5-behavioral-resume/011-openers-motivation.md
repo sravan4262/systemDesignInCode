@@ -9,22 +9,14 @@ The first 5 minutes and the 'why' questions. They test whether you have a clear,
 |---|---|---|---|
 | A1 ⭐ | Tell me about yourself / walk me through your resume (90 s and 2 min versions) | A clear arc: who you are, what you're best at, why you're here | ❓ gap |
 | A2 ⭐ | Why this company? Why this role? | You researched them; your goals fit what they need | ❓ gap |
-| A3 ⭐ | Why are you leaving / why now? | Forward-looking, no blame | ❓ gap |
+| A3 ⭐ | Why are you leaving / why now? (incl. "why leave Citrix after about a year?") | Forward-looking, no blame | ❓ gap |
 | A4 | What are you looking for next? Where in 3–5 years? | Direction (staff engineer / architect: make it concrete) |  |
-| A5 ⭐ | Your proudest project / your most technically complex project | Depth, scope, your part | ST8, ST19 |
-| A6 | What would your manager or peers say about you? | Self-awareness, consistent with your stories |  |
 | A7 ⭐ | Strengths, and a real weakness | A current weakness + what you're doing about it (no 'perfectionist') | ❓ gap |
 
 ## From my resume
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| A8 | Citrix: why are you leaving after about a year? | Expected: a forward-looking answer that blames no one |  |
-| A9 | UPMC: about 8 years at one employer: how did your role grow? Why stay, and why leave? | Growth, not stagnation |  |
-| A10 | Why move from electrical engineering to software? | A coherent career story |  |
-| A11 | Why only one year at Accenture? | Honest, short, no blame |  |
-| A12 | Why the shift from application developer to cloud engineer, and which direction next? | A coherent direction |  |
-| A13 | How do you balance a full-time job with three side products? | Focus, burnout, commitment to the day job |  |
-| A14 | TrueSpend: are you planning to go full-time on it? How do you split your time? | A settled, honest answer (check IP and moonlighting policies first) | ST21 |
+| A13 | How do you balance a full-time job with three side products? Are you going full-time on TrueSpend? | Focus, burnout, commitment to the day job |  |
 
 ## Draft outline: tell me about yourself (90 s)
 Built from the resume; the ❓ parts are yours to fill. Present → past → why here.

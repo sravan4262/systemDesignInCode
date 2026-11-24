@@ -8,12 +8,7 @@ Amazon's Customer Obsession. They test whether the user is in your decisions, wi
 | # | Question | What they're testing | Story |
 |---|---|---|---|
 | H1 | Going out of your way for a user | Customer obsession | ST14, ST15 |
-| H2 | Using data or user feedback to change direction | Data-driven decisions | ST8 |
 
-## From my resume
-| # | Question | What they're testing | Story |
-|---|---|---|---|
-| H3 | Byte AI at about 50 DAU: how do you think about growth, or a product not taking off? | Honest framing, product thinking (never inflate the number) | ST19 |
 
 ## Stories
 _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep each story under 3 minutes (Situation + Task ~20%, Action ~60%, Result + lesson ~20%)._

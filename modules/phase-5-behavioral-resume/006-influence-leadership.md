@@ -8,18 +8,13 @@ The senior-vs-staff line. They test whether people follow you without being told
 | # | Question | What they're testing | Story |
 |---|---|---|---|
 | E1 ⭐ | Influencing without authority; getting a team to adopt something | Evidence, building allies | ST5, ST12, ST17 |
-| E2 | Setting technical direction / leading a design review | Technical leadership | ST4, ST7, ST9, ST18 |
-| E3 | Pushing back on scope, deadline or product | Saying no with alternatives |  |
 | E4 | How you raise the bar / ensure code quality on a team | Standards, reviews, automation | ST11 |
-| E5 | Handling a struggling team member; keeping a team motivated | People leadership | ST11 |
 | E6 | Mentoring someone; a junior stuck on a bug for hours | Growing others | ST11 |
 
 ## From my resume
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| E7 | UPMC coding standards: who pushed back, and how did you handle it? | Influence, handling resistance | ST11 |
 | E8 | Citrix: mentoring and leading reviews after less than a year: how did you earn credibility quickly? | Credibility in a new org | ST7 |
-| E9 | Policy-as-code automation (60 → 10 minutes): did anyone resist? How did you get adoption? | Adoption, change management | ST5 |
 
 ## Stories
 _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep each story under 3 minutes (Situation + Task ~20%, Action ~60%, Result + lesson ~20%)._

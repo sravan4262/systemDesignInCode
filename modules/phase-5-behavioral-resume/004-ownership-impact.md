@@ -8,23 +8,12 @@ Amazon's Ownership, Deliver Results, Bias for Action, Invent & Simplify, Frugali
 | # | Question | What they're testing | Story |
 |---|---|---|---|
 | B1 ⭐ | The largest-scope project you drove end to end | Scope, ownership, impact with numbers | B1 draft (VM migration, ST2) |
-| B2 | A time you went beyond your role | Ownership | ST3, ST17 |
 | B3 ⭐ | A missed deadline, or delivering under a tight one | Prioritisation, communication, honesty | ST1 |
-| B4 | A decision with incomplete data; a calculated risk | Bias for action, judgment | ST2, ST8, ST19 |
-| B5 | Something you did without your manager's approval | Judgment about when to act alone |  |
 | B6 | A process you simplified or automated | Invent & simplify, a measurable result | ST3, ST4, ST5, ST6, ST12 |
-| B7 | A feature that measurably improved users' lives | Customer impact, metrics | ST14 |
-| B8 | Delivering with fewer resources than you needed | Frugality, trade-offs | ST2, ST3 |
-| B9 | Choosing between two technologies | Criteria, evidence, the decision and its cost | ST4, ST9 |
 
 ## From my resume
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| B10 | Azure AI Search migration: how did you make the case? How did you validate with load tests? Any surprises? | Data-driven decision, risk reduction | ST8 |
-| B11 | Owning 10 services, 25 workers and 8 databases: how did you prioritise? What broke worst? | Ownership at scale | ST10 |
-| B12 | Cost-cleanup jobs: how did you find the waste, make deletion safe, and get buy-in? | Frugality, safety, influence | ST3 |
-| B13 | VM → Kubernetes migration: how did you reduce risk? Rollback plan? What went wrong? | De-risking, honesty | ST2 |
-| B14 | RegScale POC: how did you evaluate the vendor? Build vs. buy? | Evaluation criteria, judgment | ST4 |
 | B15 | Byte AI: why build it? How did you prioritise solo? Hardest call? What would you redo? | Bias for action, product sense | ST19 |
 
 ## Stories

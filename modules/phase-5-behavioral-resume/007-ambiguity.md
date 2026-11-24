@@ -8,15 +8,9 @@ Meta's and Google's favourite signal at senior level: can you create clarity whe
 | # | Question | What they're testing | Story |
 |---|---|---|---|
 | C1 ⭐ | Unclear or late-changing requirements | How you create clarity: questions, prototypes, decisions written down | ST19 |
-| C2 | A project with no clear owner or direction | Stepping up, setting direction | ST19 |
 | C3 | Conflicting business priorities: what did you drop, and why? | A prioritisation framework, saying no |  |
 
 
-## From my resume
-| # | Question | What they're testing | Story |
-|---|---|---|---|
-| C4 | Byte AI with no product manager: how did you decide what to build? | Creating direction alone | ST19 |
-| C5 | TrueSpend is still in development: how do you decide what goes into the first release? | Scoping under uncertainty | ST21 |
 
 ## Stories
 _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep each story under 3 minutes (Situation + Task ~20%, Action ~60%, Result + lesson ~20%)._

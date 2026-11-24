@@ -8,11 +8,7 @@ Factual questions, not stories. Answer in 1–2 minutes with your team's real pr
 | # | Question | What they're testing |
 |---|---|---|
 | K1 | Walk me through your release process (change requests, RC tags, load tests, feature flags, release-night monitoring) | Change control, safe releases |
-| K2 | How does code move from dev to production (CI → Lab → QA → prod)? | CI/CD, environments, gates |
 | K3 | How does your team plan work (SAFe PI planning, grooming, capacity, dependencies)? | Planning, estimation |
-| K4 | Team structure and your role in it | Where you sit, what you own |
-| K5 | Working with UX, QA and product owners on one work item | Collaboration flow |
-| K6 | Branching strategy; getting one commit into a release branch | Release hygiene |
 | K7 | Code-review rules, testing expectations, on-call rotation, incident process | Engineering culture |
 
 ## My answers

@@ -2,7 +2,7 @@
 
 Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, leveling) and M31 (resume and job search) as one set of numbered docs. Work through them **in number order**. Each section doc holds the general questions senior loops ask, the questions about my own resume that fit there, and the STAR stories that answer them (behavioral stories *are* the resume told as stories).
 
-⭐ = asked in almost every loop.
+⭐ = asked in almost every loop. **Trimmed 2026-11-24 (learner):** docs 004–011 keep only a few questions that cover each topic; near-duplicates were removed (stories still answer them if asked).
 
 ## The order, and why
 | # | Doc | Plan | ⭐ questions | Why this position |
@@ -17,7 +17,7 @@ Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, lev
 | 008 | [008-customer-focus](008-customer-focus.md) | M29 · H | — | Short; reuses stories |
 | 009 | [009-ai](009-ai.md) | M29 · I | I1, I2 | AI tools at work; ties to Phase 4 |
 | 010 | [010-team-process](010-team-process.md) | M29 · K | — | Facts, not stories: quick |
-| 011 | [011-openers-motivation](011-openers-motivation.md) | M29 · A + M30 | A1, A2, A3, A5, A7 | "Tell me about yourself" summarises all the stories, so write it last |
+| 011 | [011-openers-motivation](011-openers-motivation.md) | M29 · A + M30 | A1, A2, A3, A7 | "Tell me about yourself" summarises all the stories, so write it last |
 | 012 | [012-resume-deep-dive](012-resume-deep-dive.md) | M31 | — | Defend every resume line, technically |
 | 013 | [013-deep-dive-azure-ai-search](013-deep-dive-azure-ai-search.md) | M30 | — | 20-minute backend deep dive |
 | 014 | [014-deep-dive-byte-ai](014-deep-dive-byte-ai.md) | M30 | — | 20-minute AI deep dive |
