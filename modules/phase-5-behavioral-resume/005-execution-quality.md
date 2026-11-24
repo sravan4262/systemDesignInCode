@@ -28,6 +28,21 @@ _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep ea
 - **Result (numbers):** All 4 fixed ahead of SLA; ❓ how far ahead; ❓ any systemic change (a lint rule, a review checklist, a test)
 - **What I'd do differently:** ❓
 - **Follow-ups to prep:** Which one was hardest and why? How did you prove the fix worked? How do you stop the same class of bug coming back?
+- **My answer for G7 (my words, 2026-11-24, saved as is):**
+  > A few of the vulnerabilities involving our team were nearing SLA, which is not FedRAMP compliant. My job was to fix these vulnerabilities, or create DRs if they couldn't be fixed.
+  >
+  > I started looking into them and identified that three were related and the other one wasn't. I started with the three related ones, because if I could identify the fix I could knock out three instead of one; quantification mattered. It was a vulnerability reported in one of the .NET frameworks, and a few containers were using the same version, which caused it to be reported in those three containers. I looked at the patch fixes, saw it was fixed by Microsoft and not reported in the fixed version, so I updated the version for those three containers, deployed them to staging first, waited for the vulnerability scan to run and verified the fixes worked. They did, so I deployed to prod immediately with a high-priority prod deployment ticket.
+  >
+  > The other one had a vendor dependency and couldn't be fixed. It's a known CVE and had had a DR for a while. First I checked: if it had a DR, why was it showing up now? I looked at the data, it was normal; I looked at the DR, it seemed normal; then I checked whether the vulnerability scan was taking the DR into account, and it was. I looked at the DR once again and realised the scan only considers DRs created within a certain past period. So I let the team know immediately, created a new DR, waited for the run, and fixed this within the SLA.
+- **Grade (G7):** 7/10. Strong: grouping the 3 related findings first (one fix closes three), staging → scan-verified → expedited prod, and root-causing why the 4th reappeared (the scanner only honours DRs inside a time window).
+- **⚠️ Resume mismatch to resolve:** the resume line names TLS bypass, command injection, IDOR and authorization bypass (code-level flaws); this answer is framework CVEs in containers + a lapsed vendor-CVE DR. Either prep the code-level story too, or reword the resume line to match this one.
+- **To strengthen (❓):**
+  - Explain "DR" (deviation request: FedRAMP's formal risk acceptance, tracked in the POA&M).
+  - Numbers: the SLA (days), days left when you started, how far ahead you finished.
+  - Upgrade risk: what you checked beyond the scan (release notes, tests, smoke tests in staging).
+  - Systemic fix: a shared base image (one bump fixes all), automated dependency updates + image scanning in CI; DR expiry tracking with an alert before lapse.
+  - The DR justification (compensating control, vendor timeline).
+  - "I let the team know": who, and why (other DRs about to lapse?).
 
 ### ST15 · Weekend search-latency incident (0-character searches) (UPMC (notes))
 - **Answers:** G2, H1, G5

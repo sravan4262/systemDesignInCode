@@ -31,12 +31,12 @@ Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, lev
 - the two deep dives survive five levels of "why", and the motivation answers are clear (M30);
 - 2–3 reviewed resume variants, matching profiles, a target list with referrals requested, and the first applications sent (M31).
 
-**Privacy:** the repo is public. Personal stories are only pushed once the repo is private.
+**Privacy:** the repo is public, and the learner is fine with their career details being in it (2026-11-24). Never commit the resume file, secrets, compensation or colleagues' names.
 
 **Rules for every story:** numbers (scope, team size, metrics, impact), "I" not "we", a "what I'd do differently", under 3 minutes, follow-ups ready ("what exactly was *your* part?", "what would you do differently?").
 
 ## Story inventory (from the resume + notes)
-24 stories, pre-filled with what the resume and notes say; every ❓ is yours to fill. Each lives in one doc and can answer questions in others.
+25 stories, pre-filled with what the resume and notes say; every ❓ is yours to fill. Each lives in one doc and can answer questions in others.
 
 | Story | Where | Lives in | Answers |
 |---|---|---|---|
@@ -64,6 +64,7 @@ Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, lev
 | ST22 · Records missed by my migration tool | UPMC | [002-growth-mistakes](002-growth-mistakes.md) | F1, G3, G4 |
 | ST23 · Splunk Enterprise → Splunk Cloud ingestion in 5 weeks, inside the FedRAMP boundary | Citrix | [004-ownership-impact](004-ownership-impact.md) | B3, B1, B6 |
 | ST24 · On-call: queue consumer crashing on startup after a deploy (empty Redis secret) | ❓ | [005-execution-quality](005-execution-quality.md) | G2, G1, G5 |
+| ST25 · Two deadlines, one person: user-facing VDA launch feature vs. FedRAMP COGS reduction | Citrix | [007-ambiguity](007-ambiguity.md) | C3, D (managing up) |
 
 ## Gaps: questions with no story yet
 Find these first: they're asked in almost every loop, and the resume can't supply them.
