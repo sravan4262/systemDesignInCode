@@ -7,8 +7,8 @@ Amazon's Dive Deep and Insist on the Highest Standards. They test how you work w
 ## General questions
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| G1 ⭐ | The hardest bug you've debugged | Method, depth, persistence | ST16 |
-| G2 ⭐ | A production incident you owned; a postmortem that led to a systemic change | Mitigation first, then root cause and prevention | ST7, ST15 |
+| G1 ⭐ | The hardest bug you've debugged | Method, depth, persistence | ST22 (learner's pick 2026-11-24: Azure AI Search migration tool missing records), ST16 |
+| G2 ⭐ | A production incident you owned; a postmortem that led to a systemic change | Mitigation first, then root cause and prevention | ST24 (draft 8/10), ST7, ST15 |
 | G3 | Tech debt vs. features; a time you cut corners | Trade-off judgment, paying it back | ST18 |
 
 ## From my resume
@@ -68,6 +68,34 @@ _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep ea
 - **Result (numbers):** ❓ what improved
 - **What I'd do differently:** ❓
 - **Follow-ups to prep:** How did you balance this with feature work? How did you avoid a big-bang rewrite?
+
+### ST24 · On-call: queue consumer crashing on startup after a deploy (empty Redis connection-string secret) (❓ employer)
+- **Answers:** G2 ⭐ (also G1, G5; "a time you improved a process")
+- **Status:** first draft in my words, saved as is (2026-11-24).
+- **My answer (my words):**
+  > I received an alert that one of the message-queue consumers wasn't processing: the queue was growing and users weren't seeing the data. I was on call, so I got paged and jumped into the incident call.
+  >
+  > I started going through the logs. I didn't see any recent failures in App Insights. Then I checked the queue to see whether these were genuine failures or transient ones: there were no messages in the dead-letter queue, just messages piling up, with no clear indication of what was going on.
+  >
+  > I ran the health check first and saw failures. Then I looked at the server logs and understood that the service wasn't running: it was crashing on startup. It had retried a few times and then stopped completely. The logs showed a missing config that stopped it from starting.
+  >
+  > I immediately checked for a recent deployment and found one. I went through the commit history to see if there was something obvious I could mitigate quickly, and found the config that had been added. I checked it against the prod variable group and saw it there, but I couldn't see the actual value because it was a secret and I didn't have permission. So we brought in a member of the responsible team, and we found the value was empty: it was the Redis connection string. We immediately added it to Key Vault and redeployed the service. Meanwhile, messages kept piling up.
+  >
+  > Once it was redeployed, the messages started processing, and within a few minutes all of them were processed successfully.
+  >
+  > I put this in the incident response. When the incident was reviewed later, I provided all the information and suggested that we don't assume a completed deployment means the service is up and running: run health checks after the deployment, monitor the service for a few minutes and check for runtime issues, and only then mark the deployment as complete. This was later added to all release requests, so these steps are completed before a deployment is marked as done.
+- **Grade:** 8/10 (2026-11-24). Systematic narrowing (app logs → DLQ → health check → server logs → crash on startup → recent deploy → commit → config), brought in the right person, and a systemic change that was adopted for every release.
+- **To strengthen (❓):**
+  - **Mitigation first:** the interviewer will ask "why not roll back to the previous release right away?" The previous version didn't need the new config, so a rollback would likely have restored processing in minutes while you investigated. Either say why you didn't (e.g. the release had other changes that couldn't be rolled back, or a schema change), or make that your "what I'd do differently".
+  - **Numbers:** time from page to mitigation, how far the queue grew, how many users were affected, how long the drain took.
+  - **Communication:** who you updated during the incident, and how often.
+  - **Deeper prevention**, which is stronger than a release checklist:
+    - **fail fast on bad config:** validate required settings at startup (`ValidateOnStart`), so a missing value fails the deployment instead of crashing later;
+    - **gate the release on health:** readiness checks or a slot swap only after `/health` passes;
+    - **pipeline check:** a secret must have a value before it can be referenced.
+  - **Why the secret was empty:** a process gap (added to the variable group without a value?). Worth one sentence.
+  - **"I" vs. "we":** "we added it to Key Vault": say who did what.
+- **Follow-ups to prep:** Why not roll back? Why did the deployment report success while the service was crashing? How would you catch this before prod next time? What did users see, and was any data lost (no: messages waited in the queue, so durable queues saved you)?
 
 _New story: copy this template._
 

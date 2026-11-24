@@ -71,4 +71,5 @@ After step 7, have the learner write a short entry in the module README's **Conc
 - Never commit secrets: use user-secrets or `.env` files (gitignored).
 
 ## Privacy
-- The GitHub repo may be public. Do not write personal career details (employer specifics, behavioral stories, resume drafts, compensation, interview targets) into tracked files unless the learner confirms the repo is private.
+- **Learner's decision (2026-11-24): it's fine for the repo to be public with their career details in it.** Behavioral stories, employer and project specifics, and resume material (Phase 5 docs) may be written to tracked files, committed and pushed. Don't flag this again.
+- Still never commit: secrets (keys, connection strings, tokens), the resume file itself, compensation numbers or offer details, and other people's personal data (names of colleagues, customers' data). Keep stories free of confidential employer detail (describe vulnerabilities and incidents generically).

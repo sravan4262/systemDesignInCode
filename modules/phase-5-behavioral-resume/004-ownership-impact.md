@@ -8,8 +8,8 @@ Amazon's Ownership, Deliver Results, Bias for Action, Invent & Simplify, Frugali
 | # | Question | What they're testing | Story |
 |---|---|---|---|
 | B1 ⭐ | The largest-scope project you drove end to end | Scope, ownership, impact with numbers | B1 draft (VM migration, ST2) |
-| B3 ⭐ | A missed deadline, or delivering under a tight one | Prioritisation, communication, honesty | ST1 |
-| B6 | A process you simplified or automated | Invent & simplify, a measurable result | ST3, ST4, ST5, ST6, ST12 |
+| B3 ⭐ | A missed deadline, or delivering under a tight one | Prioritisation, communication, honesty | ST23 (draft 6/10), ST1 |
+| B6 | A process you simplified or automated | Invent & simplify, a measurable result | ST5 (draft 7/10, in 006), ST3, ST4, ST6, ST12 |
 
 ## From my resume
 | # | Question | What they're testing | Story |
@@ -120,6 +120,29 @@ _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep ea
 - **Follow-ups to prep:** Why build it? What would you redo? ~50 DAU: what does that tell you, and what would you try next?
 
 _New story: copy this template._
+
+### ST23 · Splunk Enterprise → Splunk Cloud ingestion in 5 weeks, inside the FedRAMP boundary (Citrix)
+- **Answers:** B3 ⭐ (also B1, B6; D-type "cross-team" follow-ups)
+- **Status:** first draft in my words, saved as is (2026-11-24).
+- **My answer (my words):**
+  > **Situation:** the team was migrating from Splunk Enterprise to Splunk Cloud. All the data needed a new type of ingestion, with a strict, tight deadline of 5 weeks.
+  >
+  > **Task:** I needed to create a new way of ingesting data, especially the government compliance data inside the FedRAMP boundary, without letting it out onto the internet.
+  >
+  > **Action:** I created Azure Automation runbooks that run on a VM inside the boundary. They pull millions of records across 50 different tables, all government PII data. I created 10 runbooks that run on different schedules, and each runbook pushes its data in parallel. Meeting the deadline mattered because we wanted to retire Splunk Enterprise, but I had to get the dev part ready and deployed as soon as possible: it involved a lot of test cases and different teams with their own dashboards and alerts, and they needed time to validate before we sent all traffic to the new instance.
+  >
+  > **Result:** I was able to push the data and the teams validated it. We hit a few hiccups along the way, which I fixed and re-validated. We finished well within the deadline, the teams had time to spare, and we retired the old Enterprise version.
+- **Grade:** 6/10 (2026-11-24). A better B3 story than ST1: a real hard deadline and a hard constraint, with other teams depending on it.
+- **To strengthen (❓):**
+  - **Prioritisation:** the core of B3. Turn "dev ready early so teams can validate" into a stated decision: did I phase it (tables behind critical alerts first), cut or defer anything, and what did week 1 look like compared with week 3?
+  - **Communication:** who did I update (manager, team owners), and how (status cadence, tracker, sign-off per team)? Any risk I flagged early?
+  - **One concrete hiccup:** what broke, how I caught it (team validation, row counts), and how I fixed it.
+  - **Numbers:** records per day, number of teams, how many days or weeks early, and how much validation time that left.
+  - **Lesson:** e.g. build reconciliation (counts per table) and a parallel run from day 1.
+- **Follow-ups to prep:**
+  - If the data can't leave the boundary, how does it reach Splunk Cloud? (One true sentence: a FedRAMP-authorised instance plus an approved, encrypted egress path, not the open internet.)
+  - Why Azure Automation on a VM rather than a forwarder or a function?
+  - How did you make sure no records were lost or duplicated?
 
 ### <Story title>
 - **Answers:**

@@ -28,6 +28,21 @@ _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep ea
 - **Result (numbers):** ~60 → under 10 min per update; ❓ how many updates per week/month; ❓ fewer mistakes?
 - **What I'd do differently:** ❓
 - **Follow-ups to prep:** Did anyone resist? How did you get adoption? What breaks if a bad policy ships through the pipeline?
+- **My answer for B6 (my words, 2026-11-24, saved as is):**
+  > I noticed a problem: applying Azure policies took a lot of manual intervention every time. The Azure policies for the gov subscriptions were stored as code, but they didn't follow a CI/CD process. To apply them inside the boundary, someone logged into one of the VMs in the boundary, pulled the repository, connected to Azure with a service account, and ran the policies. It was a very manual process, not automated.
+  >
+  > I suggested we automate it with pipelines. I proposed an approach, the team agreed, and I built the automation: CI/CD pipelines in Jenkins, inside the boundary, that pull the policies from the repository and apply them in Azure.
+  >
+  > Now when someone updates a policy, there's no manual process: they make the change and commit to the main branch, and the pipeline triggers and applies the policies. Manual intervention was removed completely, and applying a policy takes a few minutes instead of a few hours.
+- **Grade (B6):** 7/10. You noticed it, proposed it, built it, and the before and after is clear.
+- **To strengthen (❓):**
+  - **Match the resume:** "a few hours → a few minutes" here vs. "~60 → under 10 min" on the resume. Pick one defensible pair and use it everywhere.
+  - **Frequency:** how many policy updates per week or month, so the saving adds up (e.g. N × ~1 h).
+  - **Safety, which interviewers always ask about:** a commit to main auto-applies to gov subscriptions. Say what guards it: PR review, a what-if or validation step, dev → prod stages, an approval gate.
+  - **Credentials:** the service account's secret: where it lives now (Jenkins credentials or Key Vault), and is it better than a human logging in with it?
+  - **The compliance win to mention:** every change now has an audit trail (who, what, when, through Git and the pipeline logs). That's valuable under FedRAMP.
+  - **Adoption:** how you got the team to agree (a demo, a first policy shipped through it); the Splunk-as-code follow-on as proof it caught on.
+  - **What you'd do differently:** one line.
 
 ### ST7 · Earning credibility fast in a new org (Citrix)
 - **Answers:** E8, E2, G2
