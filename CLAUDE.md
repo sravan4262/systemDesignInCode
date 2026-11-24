@@ -31,6 +31,7 @@ How the steps adapt:
   - **Format (learner's preference):** start by giving ONLY the problem statement, the way an interviewer would (short, slightly ambiguous, no hints or solution). Then discuss back and forth: let the learner ask clarifying questions, propose requirements, entities, and design; answer as the interviewer, push back, and guide. Don't dump a full design up front.
 - **HLD case** (e.g., design Uber): steps 1–2 = the product and its core scaling/consistency problem; step 4 = high-level architecture; step 5 = alternative architectures; step 6 = over-engineered choices to avoid.
 - **Behavioral topic:** steps 1–2 = what the question is really testing (the signal); step 3 = an example of a strong vs. a weak answer.
+  - **Phase 5 loop (learner's preference):** one question at a time, in doc order. Give the question + how to frame the answer (structure, the signal, pitfalls, which story may fit) → the learner writes their answer → discuss, grade, push with follow-ups → update the doc with the agreed answer → next question. Don't write the learner's answer for them.
 
 After step 7, have the learner write a short entry in the module README's **Concepts** section in their own words, then proceed.
 

@@ -7,7 +7,7 @@ Amazon's Ownership, Deliver Results, Bias for Action, Invent & Simplify, Frugali
 ## General questions
 | # | Question | What they're testing | Story |
 |---|---|---|---|
-| B1 ⭐ | The largest-scope project you drove end to end | Scope, ownership, impact with numbers | ST8, ST10, ST14 |
+| B1 ⭐ | The largest-scope project you drove end to end | Scope, ownership, impact with numbers | B1 draft (VM migration, ST2) |
 | B2 | A time you went beyond your role | Ownership | ST3, ST17 |
 | B3 ⭐ | A missed deadline, or delivering under a tight one | Prioritisation, communication, honesty | ST1 |
 | B4 | A decision with incomplete data; a calculated risk | Bias for action, judgment | ST2, ST8, ST19 |
@@ -29,6 +29,26 @@ Amazon's Ownership, Deliver Results, Bias for Action, Invent & Simplify, Frugali
 
 ## Stories
 _Pre-filled from the resume and notes. Fill every ❓ in your own words; keep each story under 3 minutes (Situation + Task ~20%, Action ~60%, Result + lesson ~20%)._
+
+### B1 · SMTP Windows VMs → Postfix on AKS (Citrix, ST2), full draft
+- **Answers:** B1 ⭐ (also B4, B8, B13; deep-dive material for 013-style follow-ups)
+- **Status:** full draft in my words (~6–7 min spoken); **next session: cut it to a 3-minute B1 version** and keep this as the deep-dive version.
+- **My answer (my words):**
+  > The problem was to reduce operational and maintenance cost. There were a few Windows VMs inside the FedRAMP boundary used for all outgoing mail from within the boundary: all outbound email has to go through an SMTP service, not through public SMTP servers, hence the Windows VMs. The ask was to move these SMTP Windows VMs to AKS containers. This was the first migration like this, so there was no reference for me to check on how to approach it. Since it was being done to reduce cost, the final result had to reflect that, and the migration itself had to be done at negligible cost.
+  >
+  > First I looked into the Windows VMs and the services running on them, to set the scope of the migration: which services were running, checking the logs and identifying the dependencies, so it could be done with near-zero downtime and no users impacted. I found these VMs were used only as SMTP servers, in staging, test and prod.
+  >
+  > They had to move to AKS on Linux-based containers, and since no other services needed migrating, I only had to research Linux images for SMTP. There were a few candidates; I looked at how they differ and picked the one closest to the Windows VM. We needed email transfer, logs, FIPS and FedRAMP compliance, zero vulnerabilities and a retry mechanism. Postfix was the best candidate. I drafted a document on how the current process works and how the migration would work, set up ADRs, got them reviewed and created a POC.
+  >
+  > For the POC, I built the Postfix container image and pushed it to Artifactory. In FedRAMP no internet calls can be made, so the image is pushed to the commercial Artifactory and then replicated into the gov Artifactory. I created pipelines to pull the image from the gov Artifactory and deploy it to staging. The container deployed successfully, and I ran tests: emails being sent, the service up and running, logs being written and retained.
+  >
+  > Then the tricky part: making sure emails kept working without any change in the callers. I looked at all the dependent callers and found they use the SMTP domain name, so I only needed to point that domain name to the AKS cluster. Once the POC worked, I updated the deployment to build a prod-like image, deployed it to AKS with load balancing across multiple SMTP containers, and updated the DNS to point to the AKS cluster's load balancer IP. I triggered an email through the domain name: it reached the cluster, went to one of the containers, the email was sent, logs were retained in Splunk, and it was delivered. Along the way I learned a lot about networking.
+  >
+  > Then the rollback plan, in case the containers go down: I set up alerts for when all containers are down, and the step is to immediately change the DNS back to the VM load balancer IP. I tested it: I brought the containers down and triggered an email, which failed and was logged; I changed the DNS and triggered another one through the VM load balancer, which worked. Then I treated it like an incident, fixed the container issue and retried, and that worked too. So I had a tested rollback plan.
+  >
+  > After that I deployed to prod, changed the DNS, and monitored for 2 weeks. Once everything worked as expected, I brought the VMs down across the 3 environments and retired them: around $25,000 in realistic savings on the Azure subscription.
+- **Fix before using:** the savings number (here ~$25K; resume says ~$20K/year: use one defensible number, per year) · tell the Linux choice the same way as F2/D1 (teammate's question → you checked) · "zero vulnerabilities" → "a clean vulnerability scan" · "first migration like this in our team/org".
+- **Grade:** 8/10 on content (2026-11-24); too long for B1 (~6–7 min vs. 3).
 
 ### ST2 · 4 Windows VMs → Linux Kubernetes pods (~$20K/yr) (Citrix)
 - **Answers:** B13, B8, B4

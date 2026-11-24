@@ -36,7 +36,7 @@ Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, lev
 **Rules for every story:** numbers (scope, team size, metrics, impact), "I" not "we", a "what I'd do differently", under 3 minutes, follow-ups ready ("what exactly was *your* part?", "what would you do differently?").
 
 ## Story inventory (from the resume + notes)
-21 candidate stories, pre-filled with what the resume and notes say; every ❓ is yours to fill. Each lives in one doc and can answer questions in others.
+22 stories, pre-filled with what the resume and notes say; every ❓ is yours to fill. Each lives in one doc and can answer questions in others.
 
 | Story | Where | Lives in | Answers |
 |---|---|---|---|
@@ -61,15 +61,16 @@ Phase 5 covers M29 (stories and question bank), M30 (deep dives, motivation, lev
 | ST19 · Byte AI: building and launching a product solo | Side project | [004-ownership-impact](004-ownership-impact.md) | B15, C1, C2, B4, F3, H3, A5 |
 | ST20 · Infinity Finances: a FIRE planning app | Side project | [002-growth-mistakes](002-growth-mistakes.md) | F3, I1 |
 | ST21 · A disagreement with my TrueSpend co-founder | Side project | [003-conflict-collaboration](003-conflict-collaboration.md) | D8, D2, A14 |
+| ST22 · Records missed by my migration tool | UPMC | [002-growth-mistakes](002-growth-mistakes.md) | F1, G3, G4 |
 
 ## Gaps: questions with no story yet
 Find these first: they're asked in almost every loop, and the resume can't supply them.
 
 | Question | What's missing | Where to look |
 |---|---|---|
-| F1 ⭐ | Biggest mistake or failure | Something that went wrong partly because of you, plus the change it led to. Look at: an incident you caused, a migration that slipped, a design you had to undo. |
+| ~~F1 ⭐~~ ✅ ST22 | Biggest mistake or failure | Something that went wrong partly because of you, plus the change it led to. Look at: an incident you caused, a migration that slipped, a design you had to undo. |
 | D1 ⭐ / D2 ⭐ | A real conflict with a peer, or with a manager / senior engineer | Not the co-founder one only: interviewers want a work example. Look at: design reviews, the coding-standards pushback (ST11), Solr vs. Azure (ST9). |
-| D5 ⭐ | Critical feedback you received | A specific piece of feedback and what you changed. |
+| ~~D5 ⭐~~ ✅ D5 answer | Critical feedback you received | A specific piece of feedback and what you changed. |
 | D6 | Negative feedback you gave | Possibly from mentoring (ST11). |
 | C3 | Conflicting priorities: what you dropped | Possibly the FedRAMP deadlines (ST1) or owning 43 things (ST10). |
 | E3 | Pushing back on scope or a deadline |  |
