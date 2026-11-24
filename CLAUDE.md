@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-A self-paced interview-prep and distributed-systems learning repo. The learner is a senior .NET engineer working through `Senior_Engineer_Interview_Plan.html` (32 modules, 8 phases, a checkpoint mock after each phase). DSA is out of scope.
+A self-paced interview-prep and distributed-systems learning repo. The learner is a senior .NET engineer working through `Senior_Engineer_Interview_Plan.html` (31 modules, 7 phases; all checkpoint mocks run in Phase 7). DSA is out of scope.
 
 ## Start of every session
 1. Read `PROGRESS.md` to see the current module, the last session's summary, and open questions.
@@ -50,9 +50,10 @@ After step 7, have the learner write a short entry in the module README's **Conc
 ## Repo layout
 - `Senior_Engineer_Interview_Plan.html` is the plan (source of truth for scope). Its checkboxes are browser-only, so `PROGRESS.md` is the synced status.
 - `modules/phase-N-*/mNN-*/` has one folder per module: `README.md` (deliverable + journal), `src/`, and `designs/` for HLD write-ups.
+  - Exception: Phase 5 (`modules/phase-5-behavioral-resume/`) has no module folders; it is numbered docs `001-…`–`018-…` covering M29–M31, worked in number order (start at `001-start-here.md`). The learner's resume file is never stored in the repo.
 - No test projects by default. Create a `tests/` folder and test project only when the learner asks for one (for a module or a phase).
 - `capstone/` holds the distributed order platform. Started in M6; its finishing module (M28) was removed by the learner on 2026-11-23, so it stays as-is.
-- `modules/phase-8-mocks/checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores (all checkpoints run in Phase 8, session 1).
+- `modules/phase-7-mocks/checkpoints/` holds checkpoint mock logs (CP1–CP7) and final mock scores (all checkpoints run in Phase 7, session 1).
 - `notes/` holds corrected versions of the learner's Apple Notes, as Markdown.
 
 ## Concept code (patterns, principles, LLD snippets)
